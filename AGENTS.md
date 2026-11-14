@@ -12,6 +12,11 @@ PWA dosyaları + geliştirme sunucusu.
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler
   anında görünür), simgeler önbellek öncelikli.
 - `icons/` — Pillow ile üretilen PNG simgeler.
+- `img/` — kategori kutucuklarındaki gerçek fotoğraflar (`cat-<slug>.jpg`,
+  480x340). `tools/fetch_category_photos.py` bunları Openverse'ten indirir,
+  kırpar ve `img/CREDITS.md` içine kaynak/lisans bilgisi yazar. Türev yasak
+  (ND) lisanslı görseller atlanır. Yeni fotoğraf için: `python3
+  tools/fetch_category_photos.py [kategori-slug]`.
 - `server.py` — önizleme + `/upload` fotoğraf yükleme ucu (port 12000).
   `/upload` multipart/form-data alır, dosyayı `yuklenenler/` altına benzersiz
   adla yazar ve JSON döner: `{"ok":true,"files":[...],"url":"/yuklenenler/..."}`.
@@ -26,8 +31,12 @@ PWA dosyaları + geliştirme sunucusu.
   `android/build-apk.sh` web varlıklarını `assets/www/` altına kopyalar,
   Gradle ile derler ve `indir/Genc.apk` dosyasını üretir.
 - `indir/` — indirilebilir APK'lar (sürüm kontrolüne girmez).
-- Simgeler değişince `sw.js` içindeki `CACHE` sürümünü artırın; yoksa tarayıcı
-  eski simgeyi önbellekten göstermeye devam eder.
+- Simgeler veya `img/` fotoğrafları değişince `sw.js` içindeki `CACHE` sürümünü
+  artırın; yoksa tarayıcı eskisini önbellekten göstermeye devam eder.
+- Kategori kutucukları `.cats` ızgarasındadır (3 sütun, `Genc.html`). Her
+  kutuda `<img class="catimg">` gerçek fotoğrafı gösterir; fotoğraf
+  yüklenemezse `onerror` ile kaldırılır ve `CATC` renk geçişi yedek kalır.
+  Fotoğrafın üstünde okunurluk için `.cat::before` koyu katmanı vardır.
 
 ## Android (APK)
 

@@ -11,9 +11,10 @@ export ANDROID_HOME="${ANDROID_HOME:-/home/openhands/android-sdk}"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
 GRADLE="${GRADLE:-/home/openhands/gradle-8.7/bin/gradle}"
 
-mkdir -p "$ASSETS/icons"
+mkdir -p "$ASSETS/icons" "$ASSETS/img"
 cp "$ROOT/Genc.html" "$ROOT/manifest.json" "$ROOT/sw.js" "$ASSETS/"
 cp "$ROOT"/icons/*.png "$ASSETS/icons/"
+cp "$ROOT"/img/*.jpg "$ASSETS/img/"
 
 cd "$ANDROID_DIR"
 "$GRADLE" --no-daemon "${1:-assembleRelease}"
