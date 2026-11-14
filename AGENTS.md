@@ -61,7 +61,11 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
 
 ## Notlar
 
-- `localStorage` anahtarı: `genc.v1` (profil, biletler, kartlar, tema).
+- `localStorage` anahtarı: `genc.v1` (profil, biletler, kartlar, tema, sürüm).
+- Sürüm etiketi: `APP_VERSION` (Genc.html). Hesap sayfasının altında
+  "Genç sürüm X.Y (tarayıcı|uygulama)" olarak görünür ve `S.version`
+  alanına yazılır. Bir değişikliğin cihaza ulaşıp ulaşmadığını bu etiketle
+  doğrulayın; etiket eskiyse kullanıcı önbellekteki eski derlemeyi görüyor.
 - Bilet QR yükü: `GENÇ|etkinlikId|kod|adet|tür|koltuklar` (EC seviyesi M).
 - Uygulama kısayolu derin bağlantıları: `?git=yakin|videolar|ara|biletlerim|profil|bilet-al`.
   `git` parametresi çalıştıktan sonra adres çubuğundan silinir (yenilemede tekrar

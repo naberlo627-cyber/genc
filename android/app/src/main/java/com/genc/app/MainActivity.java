@@ -76,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
         s.setAllowFileAccess(true);
         s.setAllowContentAccess(true);
         s.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
+        // Varlıklar APK içinde gömülü; WebView'ın eski sürümü önbellekten
+        // göstermemesi için önbelleği kapat ve temizle.
+        s.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        web.clearCache(true);
 
         web.setWebViewClient(new WebViewClient() {
             @Override

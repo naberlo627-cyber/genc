@@ -398,6 +398,7 @@ svg.ic.f{fill:currentColor}
 .cardrow .cmain .txt span{display:block}
 .setdef{font-size:12px;font-weight:700;color:var(--brand);background:none;padding:4px 0;margin-left:auto}
 .logout{display:block;width:calc(100% - 40px);margin:6px 20px 0;padding:14px;text-align:center;font-weight:700;color:var(--coral-text);border-radius:16px;background:var(--card)}
+.ver{color:var(--mute);font-size:12.5px;text-align:center;padding:12px 20px 0}
 .sec button.more{color:var(--brand)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.vprog i.play{animation-duration:.01s}}
 
@@ -1065,19 +1066,24 @@ var S={
   cards:[{id:'c1',last4:'4821',exp:'09/28',def:true}],
   tickets:[],loggedIn:false,
   photo:'',
-  filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'kesfet',theme:'system'
+  filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'kesfet',theme:'system',
+  version:''
 };
+/* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
+   Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
+var APP_VERSION='1.3';
 
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,liked:S.liked,saved:S.saved,cards:S.cards,tickets:S.tickets,theme:S.theme,loggedIn:S.loggedIn,photo:S.photo}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,liked:S.liked,saved:S.saved,cards:S.cards,tickets:S.tickets,theme:S.theme,loggedIn:S.loggedIn,photo:S.photo,version:S.version}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
   if(!d)return;
   ['name','email','phone','theme'].forEach(function(k){if(typeof d[k]==='string')S[k]=d[k]});
   if(typeof d.photo==='string')S.photo=d.photo;
+  if(typeof d.version==='string')S.version=d.version;
   if(typeof d.locOn==='boolean')S.locOn=d.locOn;
   if(d.likes&&d.likes.length)S.likes=d.likes;
   if(typeof d.locLat==='number'&&typeof d.locLng==='number')S.loc={d:d.loc||'Konumum',lat:d.locLat,lng:d.locLng,geo:!!d.locGeo};
@@ -1779,7 +1785,10 @@ function editProfile(){
   h+='<div class="shsec"><h4 class="disp">Görünüm</h4></div><div class="themeseg" role="group" aria-label="Tema">'+[['system','Sistem'],['light','Açık'],['dark','Koyu']].map(function(x){return '<button type="button" data-act="theme" data-v="'+x[0]+'" aria-pressed="'+(S.theme===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>';
   if(!window.GENC_APP)h+='<div class="installrow">'+ic('install')+'<span><strong>Android kurulum dosyası (APK)</strong><small>Genç’i telefonuna kur.</small></span><button type="button" data-act="getapk">İndir</button></div>';
   h+='<button class="logout" type="button" data-act="logout">Çıkış yap</button>';
+  h+='<p class="ver" id="app-ver">Genç sürüm '+APP_VERSION+(window.GENC_APP?' (uygulama)':' (tarayıcı)')+'</p>';
   openSheet('Hesap',h);
+  /* Sürüm damgası: kullanıcı hangi derlemeyi gördüğünü doğrulayabilsin. */
+  S.version=APP_VERSION;persist();
 }
 /* Hesap sayfası açıksa yerinde yenile (kalemle açılan görünüm). */
 function refreshAccount(){
