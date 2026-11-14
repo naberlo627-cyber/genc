@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#F6F3FF">
+<meta name="theme-color" content="#E9E1FA">
 <title>Genç</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236D4AFF'/%3E%3Cstop offset='1' stop-color='%23FF4F8B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='45' font-size='38' font-weight='800' text-anchor='middle' fill='white' font-family='Arial'%3EG%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
@@ -20,20 +20,20 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#17112E;--on-ink:#FFFFFF;--paper:#F6F3FF;--card:#FFFFFF;
-  --brand:#5B3DF5;--on-brand:#FFFFFF;--sun:#FFC83D;--coral:#FF5A5F;--coral-text:#D92D4A;--mute:#6B6785;--line:#E4DFF6;--sw-off:#8F82B8;
+  --ink:#17112E;--on-ink:#FFFFFF;--paper:#E9E1FA;--card:#FFFFFF;
+  --brand:#5B3DF5;--on-brand:#FFFFFF;--sun:#FFC83D;--coral:#FF5A5F;--coral-text:#D92D4A;--mute:#625E7C;--line:#D5CBF0;--sw-off:#8F82B8;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
   --logo-c1:#6D4AFF;--logo-c2:#B44DE0;--logo-c3:#FF4F8B;--logo-fg:#FFFFFF;color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#1E1638;
-  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#35294F;--sw-off:#7E6FBD;
+  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
+  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
   --logo-c1:#A78BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-fg:#140D2E;color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#1E1638;
-  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#35294F;--sw-off:#7E6FBD;
+  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
+  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
   --logo-c1:#A78BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-fg:#140D2E;color-scheme:dark;
 }
@@ -213,6 +213,9 @@ svg.ic.f{fill:currentColor}
 /* ---------- Genç: yeni renkler ve düzen ---------- */
 .top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px}
 .brandlogo{width:104px;height:auto;display:block}
+.logobtn{display:block;padding:0;border-radius:12px;-webkit-tap-highlight-color:transparent}
+.logobtn:active{transform:scale(.97)}
+.logobtn:active .brandlogo{opacity:.85}
 .logo-lg{width:150px;height:auto;display:block;margin:calc(env(safe-area-inset-top,0px) + 8px) 20px 0}
 .avatar,.ph .big{background:var(--grad)}
 .avatar{border:0}
@@ -360,6 +363,8 @@ svg.ic.f{fill:currentColor}
 .vid{height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;color:#fff;flex:none}
 .vtop{position:absolute;left:0;right:0;top:0;z-index:3;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 46px;background:linear-gradient(180deg,rgba(6,8,24,.78),rgba(6,8,24,0));pointer-events:none}
 .vtop button{pointer-events:auto}
+.vbrand{pointer-events:auto;margin:0 0 12px}
+.vbrand .brandlogo{width:96px}
 .vinfo{position:absolute;left:20px;right:96px;bottom:26px}
 .vinfo h2{font-size:40px}
 .vprog i{width:0}
@@ -638,8 +643,8 @@ svg.ic.f{fill:currentColor}
         <p class="ob-sub">Önerileri buna göre sıralarız. Profilinden istediğin zaman değiştirebilirsin.</p>
         <div class="locrow">
           <svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg>
-          <div class="t"><span id="ob-locname">Torbalı, İzmir</span><small id="ob-locsub">Yakınındakileri önce göstereceğiz</small></div>
-          <button class="sw" id="ob-sw" type="button" role="switch" aria-checked="true" aria-label="Konumu kullan"></button>
+          <div class="t"><span id="ob-locname">Konum kapalı</span><small id="ob-locsub">Yakınındakileri görmek için konumunu aç</small></div>
+          <button class="sw" id="ob-sw" type="button" role="switch" aria-checked="false" aria-label="Konumu kullan"></button>
         </div>
         <div class="picks" id="picks"></div>
       </div>
@@ -665,10 +670,10 @@ svg.ic.f{fill:currentColor}
     <div class="pane" id="tab-kesfet">
       <div class="scroll" id="kscroll">
         <div class="top">
-          <svg class="brandlogo" viewBox="0 0 120 44" role="img" aria-label="Genç"><use href="#logo"/></svg>
+          <button class="logobtn" id="home-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 120 44" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
           <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
         </div>
-        <div class="locbar"><button class="loc" id="locbtn" type="button" aria-haspopup="dialog"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg><span id="locname">Torbalı, İzmir</span><svg class="ic" style="width:18px;height:18px"><use href="#i-chev-d"/></svg></button></div>
+        <div class="locbar"><button class="loc" id="locbtn" type="button" aria-haspopup="dialog"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg><span id="locname">Konum kapalı</span><svg class="ic" style="width:18px;height:18px"><use href="#i-chev-d"/></svg></button></div>
         <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Mekan, etkinlik veya sinema ara" aria-label="Ara" autocomplete="off"></label>
         <div class="chips" id="chips" role="group" aria-label="Tür filtresi"></div>
         <div id="klists"></div>
@@ -680,6 +685,7 @@ svg.ic.f{fill:currentColor}
     <div class="pane" id="tab-videolar" hidden>
       <div class="feed" id="feed" aria-label="Kısa videolar"></div>
       <div class="vtop">
+        <div class="vbrand"><button class="logobtn" id="feed-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 120 44" role="img" aria-label="Genç"><use href="#logo"/></svg></button></div>
         <div class="vtabs" id="vtabs">
           <button type="button" data-vtab="ozel" aria-pressed="true">Sana özel</button>
           <button type="button" data-vtab="yakin" aria-pressed="false">Yakınında</button>
@@ -719,7 +725,7 @@ svg.ic.f{fill:currentColor}
     <div class="whead">
       <button class="x" id="web-close" type="button" aria-label="Kapat"><svg class="ic"><use href="#i-close"/></svg></button>
       <div class="ti"><strong id="web-title">Biletini seç</strong><small><svg class="ic"><use href="#i-shield"/></svg><span id="web-seller"></span></small></div>
-      <svg class="brandlogo" viewBox="0 0 120 44" style="width:68px" role="img" aria-label="Genç"><use href="#logo"/></svg>
+      <button class="logobtn" id="web-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 120 44" style="width:68px" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
     </div>
     <div class="wbody" id="web-body"></div>
   </div>
@@ -1023,7 +1029,7 @@ var PAST=[
 ];
 var ALL={};EVENTS.concat(PAST).forEach(function(e){ALL[e.id]=e});
 CHIPS=['Tümü'].concat(TYPES.filter(function(t){return EVENTS.some(function(e){return e.type===t})}));
-var CATC={'Sinema':'#3B2A8F,#6D4AFF','Konser':'#8E2DE2,#FF4F8B','Tiyatro':'#B0125E,#FF7A45','Gezi turu':'#0E7A4B,#4CC38A','Festival':'#FF7A45,#FFC83D','Stand-up':'#FF4F8B,#FFB347','Çocuk etkinlikleri':'#2F9BFF,#7BDFF2','Spor':'#0B5E3C,#5EC98B','Sergi':'#B88A63,#F0C987','Dans':'#2B1055,#FF6B6B','Opera ve bale':'#4A1D7A,#C77DFF','Açık hava':'#1F8A70,#BEDB39'};
+var CATC={'Sinema':'#3B2A8F,#6D4AFF','Konser':'#8E2DE2,#E3004D','Tiyatro':'#B0125E,#D13C00','Gezi turu':'#0E7A4B,#2B8058','Festival':'#D13C00,#956A00','Stand-up':'#E3004D,#A66200','Çocuk etkinlikleri':'#0071DA,#0E7D93','Spor':'#0B5E3C,#2B8150','Sergi':'#946944,#9A6813','Dans':'#2B1055,#E60000','Opera ve bale':'#4A1D7A,#A42BFF','Açık hava':'#1D8068,#687916'};
 
 /* ---------- durum ---------- */
 var S={
@@ -1039,7 +1045,7 @@ var S={
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locOn:S.locOn,liked:S.liked,saved:S.saved,cards:S.cards,tickets:S.tickets,theme:S.theme,loggedIn:S.loggedIn}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,liked:S.liked,saved:S.saved,cards:S.cards,tickets:S.tickets,theme:S.theme,loggedIn:S.loggedIn}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
@@ -1047,7 +1053,8 @@ function restore(){
   ['name','email','phone','theme'].forEach(function(k){if(typeof d[k]==='string')S[k]=d[k]});
   if(typeof d.locOn==='boolean')S.locOn=d.locOn;
   if(d.likes&&d.likes.length)S.likes=d.likes;
-  if(d.loc){var p=PLACES.filter(function(x){return x.d===d.loc})[0];if(p)S.loc=p}
+  if(typeof d.locLat==='number'&&typeof d.locLng==='number')S.loc={d:d.loc||'Konumum',lat:d.locLat,lng:d.locLng,geo:!!d.locGeo};
+  else if(d.loc){var p=PLACES.filter(function(x){return x.d===d.loc})[0];if(p)S.loc=p}
   if(d.liked&&typeof d.liked==='object')S.liked=d.liked;
   if(d.saved&&typeof d.saved==='object')S.saved=d.saved;
   if(d.cards&&d.cards.length)S.cards=d.cards;
@@ -1125,6 +1132,23 @@ function kmTo(e){
   var a=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(S.loc.lat*t)*Math.cos(e.lat*t)*Math.sin(dn/2)*Math.sin(dn/2);
   return 2*R*Math.asin(Math.sqrt(a));
 }
+/* Konum cihazdan alınır; il/ilçe seçtirmeyiz. */
+function geoAsk(cb){
+  if(!navigator.geolocation){toast('Bu tarayıcı konumu desteklemiyor.');if(cb)cb(false);return}
+  toast('Konumun alınıyor…');
+  navigator.geolocation.getCurrentPosition(function(p){
+    S.loc={d:'Konumum',lat:p.coords.latitude,lng:p.coords.longitude,geo:true};
+    S.locOn=true;persist();paintObLoc();renderKesfet();
+    if(S.tab==='profil')renderProfile();
+    if(!$('#main').hidden&&S.tab==='videolar')renderFeed();
+    toast('Konumun kullanılıyor.');
+    if(cb)cb(true);
+  },function(err){
+    toast(err&&err.code===1?'Konum izni verilmedi.':'Konum alınamadı. Tekrar dene.');
+    if(cb)cb(false);
+  },{enableHighAccuracy:false,timeout:8000,maximumAge:600000});
+}
+function locLabel(){return S.loc.geo?'Konumum':S.loc.d}
 function distLabel(e){var k=kmTo(e);return (e.district===S.loc.d||k<1)?e.district+(k>=1?', '+Math.round(k)+' km':''):Math.round(k)+' km'}
 function chipDist(e){var k=Math.round(kmTo(e));return e.district+', '+(k<1?'çok yakın':k+' km')}
 function priceLabel(e){
@@ -1145,6 +1169,27 @@ function toast(m){
   clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},2600);
 }
 
+/* ---------- geri tuşu / geçmiş yönetimi ---------- */
+/* Her açılan katman (sekme, alt sayfa, satıcı sayfası) geçmişe yazılır.
+   Geri tuşu önce katmanları kapatır; kök seviyede uygulamadan çıkar. */
+var histStack=[],expectPop=0;
+function layerPush(l){histStack.push(l);try{history.pushState({d:histStack.length},'')}catch(e){}}
+function hideLayer(l){
+  if(l.t==='sheet')hideSheet();
+  else if(l.t==='web')hideWeb();
+}
+function closeTopLayer(type){
+  var top=histStack[histStack.length-1];
+  if(!top||(type&&top.t!==type))return;
+  histStack.pop();expectPop++;
+  try{history.back()}catch(e){}
+}
+window.addEventListener('popstate',function(ev){
+  if(expectPop>0){expectPop--;return}
+  var want=(ev.state&&ev.state.d)||0;
+  while(histStack.length>want)hideLayer(histStack.pop());
+});
+
 /* ---------- alt sayfa ---------- */
 var lastFocus=null,sheetT;
 function openSheet(title,body,mount){
@@ -1154,12 +1199,14 @@ function openSheet(title,body,mount){
   requestAnimationFrame(function(){ov.classList.add('open')});
   if(mount)mount($('#sh-body'));
   $('#sh-close').focus();
+  if(!histStack.length||histStack[histStack.length-1].t!=='sheet')layerPush({t:'sheet'});
 }
-function closeSheet(){
+function hideSheet(){
   var ov=$('#sheet');ov.classList.remove('open');
   sheetT=setTimeout(function(){ov.hidden=true},200);
   if(lastFocus&&document.body.contains(lastFocus)&&lastFocus.focus)lastFocus.focus();
 }
+function closeSheet(){closeTopLayer('sheet');hideSheet();}
 $('#sh-close').addEventListener('click',closeSheet);
 $('#sheet').addEventListener('click',function(e){if(e.target===this)closeSheet()});
 
@@ -1188,8 +1235,8 @@ function showStep(n){
   }
 }
 function paintObLoc(){
-  $('#ob-locname').textContent=S.locOn?S.loc.d+', İzmir':'Konum kapalı';
-  $('#ob-locsub').textContent=S.locOn?'Yakınındakileri önce göstereceğiz':'Şehrini Keşfet ekranından seçebilirsin';
+  $('#ob-locname').textContent=S.locOn?(S.loc.geo?'Konumun kullanılıyor':'Konum kapalı'):'Konum kapalı';
+  $('#ob-locsub').textContent=S.locOn?(S.loc.geo?'Yakınındakileri önce göstereceğiz':'Konumunu kullanmak için dokun'):'Yakınındakileri görmek için konumunu aç';
   $('#ob-sw').setAttribute('aria-checked',S.locOn?'true':'false');
 }
 function countPicks(){
@@ -1201,7 +1248,10 @@ $('#picks').addEventListener('click',function(e){
   var p=e.target.closest('[data-pick]');if(!p)return;
   p.setAttribute('aria-pressed',p.getAttribute('aria-pressed')==='true'?'false':'true');countPicks();
 });
-$('#ob-sw').addEventListener('click',function(){S.locOn=!S.locOn;paintObLoc()});
+$('#ob-sw').addEventListener('click',function(){
+  if(S.locOn){S.locOn=false;persist();paintObLoc();return}
+  geoAsk(function(ok){if(!ok){S.locOn=false;paintObLoc()}});
+});
 $('#ob-back').addEventListener('click',function(){if(step>1)showStep(step-1)});
 function submit1(){
   var n=$('#in-name').value.trim(),m=$('#in-mail').value.trim(),er=$('#err1');
@@ -1215,18 +1265,22 @@ $('#pickgo').addEventListener('click',function(){
   var s=selectedPicks($('#picks'));if(!s.length)return;S.likes=s;showStep(3);
 });
 $('#go3').addEventListener('click',enterMain);
+$('#home-logo').addEventListener('click',goHome);
+$('#web-logo').addEventListener('click',goHome);
+$('#feed-logo').addEventListener('click',goHome);
 function enterMain(){
   $('#onb').hidden=true;$('#main').hidden=false;
   S.loggedIn=true;persist();
   renderChips();renderAll();setTab('kesfet');
-  applyDeepLink();openSharedTicket();
+  if(pendingShortcut){runShortcut(pendingShortcut);pendingShortcut=null}else applyDeepLink();
+  openSharedTicket();
 }
 
 /* ---------- tema (sistem / açık / koyu) ---------- */
 var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
 function isDark(){return S.theme==='dark'||(S.theme==='system'&&mq&&mq.matches)}
 function paintChrome(){
-  var c=(S.tab==='videolar'&&!$('#main').hidden)?'#150E2E':(isDark()?'#120C26':'#F6F3FF');
+  var c=(S.tab==='videolar'&&!$('#main').hidden)?'#150E2E':(isDark()?'#120C26':'#E9E1FA');
   document.querySelector('meta[name=theme-color]').setAttribute('content',c);
 }
 function applyTheme(){
@@ -1237,7 +1291,13 @@ function applyTheme(){
 if(mq){if(mq.addEventListener)mq.addEventListener('change',paintChrome);else if(mq.addListener)mq.addListener(paintChrome)}
 
 /* ---------- sekmeler ---------- */
-function setTab(t){
+function goHome(){
+  closeTopLayer('sheet');hideSheet();
+  closeTopLayer('web');hideWeb();
+  setTab('kesfet');
+  var sc=$('#kscroll');if(sc)sc.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+}
+function setTab(t,fromHistory){
   S.tab=t;
   ['kesfet','videolar','biletler','profil'].forEach(function(x){$('#tab-'+x).hidden=(x!==t)});
   $$('#nav button').forEach(function(b){
@@ -1282,7 +1342,7 @@ function thumbHTML(e){
   return '<button class="thumb" type="button" data-vid="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><em>'+ic('play','f')+esc(e.vlabel)+'</em></button>';
 }
 function renderKesfet(){
-  $('#locname').textContent=S.loc.d+', İzmir';
+  $('#locname').textContent=S.locOn?locLabel():'Konum kapalı';
   $$('.ini').forEach(function(x){x.textContent=initials(S.name)});
   var browsing=!S.q.trim()&&S.filter==='Tümü';
   var list=EVENTS.filter(matches).sort(function(a,b){return kmTo(a)-kmTo(b)});
@@ -1324,9 +1384,17 @@ function renderKesfet(){
 $('#q').addEventListener('input',function(){S.q=this.value;renderKesfet()});
 $('#chips').addEventListener('click',function(e){var c=e.target.closest('[data-chip]');if(!c)return;setChip(c.getAttribute('data-chip'));renderKesfet()});
 $('#locbtn').addEventListener('click',function(){
-  openSheet('Konum seç',PLACES.map(function(p){
-    return '<button class="opt-row" type="button" data-loc="'+esc(p.d)+'" aria-pressed="'+(p.d===S.loc.d)+'">'+ic('pin')+'<span>'+esc(p.d)+'<small>İzmir</small></span><span class="tick">'+ic('check')+'</span></button>';
-  }).join('')+'<p class="hint" style="padding:0">Mesafeler seçtiğin yere göre hesaplanır.</p>');
+  openSheet('Konum', '<div class="locrow" style="margin:0 0 12px"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg>'+
+    '<div class="t"><span id="ls-name">'+esc(S.locOn?locLabel():'Konum kapalı')+'</span><small id="ls-sub">'+esc(S.locOn&&S.loc.geo?'Yakınındakiler önce gösteriliyor':'Konumunu kullanarak yakınındaki etkinlikleri öne çıkar')+'</small></div>'+
+    '<button class="sw" id="ls-sw" type="button" role="switch" aria-checked="'+(S.locOn?'true':'false')+'" aria-label="Konumu kullan"></button></div>'+
+    '<button class="cta" type="button" data-act="geoloc">Konumumu kullan</button>'+
+    '<p class="hint" style="padding:0">Konumun yalnızca mesafe hesaplamak için cihazında kullanılır; sunucuya gönderilmez.</p>',
+  function(root){
+    $('#ls-sw',root).addEventListener('click',function(){
+      if(S.locOn){S.locOn=false;persist();$('#ls-sw').setAttribute('aria-checked','false');$('#ls-name').textContent='Konum kapalı';$('#ls-sub').textContent='Konumunu kullanarak yakınındaki etkinlikleri öne çıkar';renderKesfet();return}
+      geoAsk(function(ok){if(ok)closeSheet()});
+    });
+  });
 });
 
 /* ---------- etkinlik ayrıntısı ---------- */
@@ -1363,14 +1431,17 @@ function openWeb(e){
    '<div class="wrow wtot"><span>Toplam</span><b id="wt"></b></div>'+
    '<button class="btn" type="button" data-act="pay">'+(e.prices[0][1]===0&&e.prices.length===1?'Satıcıda devam et':'Satıcıda ödemeye geç')+'</button>'+
    '<p class="wnote">'+ic('shield')+'<span>Bu sayfa uygulamanın içinde açılır. Satın alma, satıcının güvenli sayfasında tamamlanır.</span></p>';
-  updWeb();$('#web').hidden=false;$('#web-close').focus();
+  updWeb();$('#web').hidden=false;
+  if(!histStack.length||histStack[histStack.length-1].t!=='web')layerPush({t:'web'});
+  $('#web-close').focus();
 }
 function updWeb(){
   if(!W)return;
   var p=W.e.prices[W.opt][1];$('#wq').textContent=W.qty;$('#wt').textContent=fmt(p*W.qty);
   $$('[data-wopt]').forEach(function(b){var on=(+b.getAttribute('data-wopt')===W.opt);b.setAttribute('aria-pressed',on);b.setAttribute('aria-checked',on)});
 }
-function closeWeb(){$('#web').hidden=true;W=null}
+function hideWeb(){$('#web').hidden=true;W=null}
+function closeWeb(){closeTopLayer('web');hideWeb()}
 $('#web-close').addEventListener('click',closeWeb);
 $('#web-body').addEventListener('click',function(ev){
   var o=ev.target.closest('[data-wopt]');
@@ -1404,11 +1475,11 @@ function videoList(){
   function sc(e){return (S.likes.indexOf(e.type)>-1?50:0)+(boost[e.type]||0)*20-kmTo(e)}
   return v.sort(function(a,b){return sc(b)-sc(a)});
 }
-function region(e){return e.district===S.loc.d?0:1}
+function region(e){return (e.district===S.loc.d||(S.loc.geo&&kmTo(e)<10))?0:1}
 function renderReach(i,list){
-  var r=(list[i]?region(list[i]):3),L=[S.loc.d,'İzmir','Ege','Türkiye'];
+  var r=(list[i]?region(list[i]):3),L=[S.locOn?locLabel():'Çevren','İzmir','Ege','Türkiye'];
   $('#reach').innerHTML=L.map(function(n,k){return '<div'+(k===r?' class="now"':'')+'>'+esc(n)+'</div>'}).join('');
-  $('#reach').setAttribute('aria-label','Önce '+S.loc.d+', sonra İzmir, Ege ve Türkiye');
+  $('#reach').setAttribute('aria-label','Önce '+(S.locOn?locLabel():'çevren')+', sonra İzmir, Ege ve Türkiye');
 }
 function renderFeed(startId){
   var feed=$('#feed'),list=videoList();
@@ -1570,7 +1641,7 @@ function upSend(files){
 /* ---------- profil ---------- */
 function renderProfile(){
   var saved=EVENTS.filter(function(e){return S.saved[e.id]&&e.video});
-  var h='<div class="ph"><div class="big" aria-hidden="true">'+esc(initials(S.name))+'</div><div><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.loc.d)+', İzmir</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
+  var h='<div class="ph"><div class="big" aria-hidden="true">'+esc(initials(S.name))+'</div><div><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.locOn?locLabel()+' · İzmir':'Konum kapalı')+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
   var nl=Object.keys(S.liked).filter(function(k){return S.liked[k]}).length,ns=Object.keys(S.saved).filter(function(k){return S.saved[k]}).length;
   h+='<div class="stats"><div><b>'+S.tickets.length+'</b><small>Bilet</small></div><div><b>'+ns+'</b><small>Kaydedilen</small></div><div><b>'+nl+'</b><small>Beğenilen</small></div></div>';
   h+='<div class="actgrid">'+
@@ -1669,8 +1740,7 @@ document.addEventListener('click',function(ev){
   if(cat){setChip(cat.getAttribute('data-cat'));S.q='';$('#q').value='';renderKesfet();$('#kscroll').scrollTop=0;return}
   var ven=t.closest('[data-venue]');
   if(ven){S.q=ven.getAttribute('data-venue');$('#q').value=S.q;setChip('Tümü');renderKesfet();$('#kscroll').scrollTop=0;return}
-  var loc=t.closest('[data-loc]');
-  if(loc){S.loc=PLACES.filter(function(p){return p.d===loc.getAttribute('data-loc')})[0];persist();closeSheet();renderKesfet();if(!$('#feed').hidden&&S.tab==='videolar')renderFeed();toast('Konum '+S.loc.d+' olarak ayarlandı.');return}
+  if(t.closest('[data-act="geoloc"]')){geoAsk(function(ok){if(ok)closeSheet()});return}
   var tab=t.closest('[data-tab]');
   if(tab){setTab(tab.getAttribute('data-tab'));return}
   var vid=t.closest('[data-vid]');
@@ -1729,6 +1799,7 @@ function openSharedTicket(){
 }
 
 /* ---------- uygulama kısayolları ve derin bağlantılar ---------- */
+var pendingShortcut=null;
 function firstMissingEvent(){
   return EVENTS.filter(function(e){return !S.tickets.some(function(t){return t.e.id===e.id})}).sort(function(a,b){return kmTo(a)-kmTo(b)})[0]||EVENTS[0];
 }
@@ -1736,13 +1807,23 @@ function runShortcut(git){
   if(git==='videolar'){setTab('videolar');return}
   if(git==='profil'){setTab('profil');return}
   if(git==='biletlerim'){setTab('biletler');return}
+  if(git==='yakin'){setTab('kesfet');if(!S.locOn)geoAsk();return}
   if(git==='ara'){setTab('kesfet');setTimeout(function(){var q=$('#q');if(q)q.focus()},120);return}
   if(git==='bilet-al'){var e=firstMissingEvent();if(e)openWeb(e);return}
   setTab('kesfet');
 }
 function applyDeepLink(){
   var m=/[?&]git=([^&]+)/.exec(location.search);
-  if(m)runShortcut(decodeURIComponent(m[1]));
+  if(m){
+    pendingShortcut=decodeURIComponent(m[1]);
+    /* Kısayol bir kez çalışsın; adres çubuğunda kalırsa yenilemede tekrar tetiklenir. */
+    try{
+      var u=new URL(location.href);u.searchParams.delete('git');
+      history.replaceState(history.state,'',u.pathname+(u.search||'')+u.hash);
+    }catch(e){}
+    if(S.loggedIn){runShortcut(pendingShortcut);pendingShortcut=null;return true}
+  }
+  return false;
 }
 
 /* ---------- çevrimdışı destek ---------- */
@@ -1753,7 +1834,7 @@ if('serviceWorker' in navigator){
 function renderAll(){renderKesfet();renderTickets();renderProfile()}
 restore();applyTheme();renderChips();
 if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab('kesfet');applyDeepLink();openSharedTicket()}
-else showStep(1);
+else{applyDeepLink();showStep(1)}
 })();
 </script>
 </body>

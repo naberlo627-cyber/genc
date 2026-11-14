@@ -16,6 +16,8 @@ PWA dosyaları + geliştirme sunucusu.
 - `yuklenenler/` — yüklenen dosyalar (sürüm kontrolüne girmez).
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
 - `tools/generate_icons.py` — simge üretici.
+- `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
+  glifi; Android ve masaüstünde aynı ikon tekrar etmesin).
 
 ## Geliştirme komutları
 
@@ -32,5 +34,14 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
 
 - `localStorage` anahtarı: `genc.v1` (profil, biletler, kartlar, tema).
 - Bilet QR yükü: `GENÇ|etkinlikId|kod|adet|tür|koltuklar` (EC seviyesi M).
-- Uygulama kısayolu derin bağlantıları: `?git=videolar|ara|biletlerim|profil|bilet-al`.
+- Uygulama kısayolu derin bağlantıları: `?git=yakin|videolar|ara|biletlerim|profil|bilet-al`.
+  `git` parametresi çalıştıktan sonra adres çubuğundan silinir (yenilemede tekrar
+  tetiklenmesin). Kullanıcı giriş yapmamışsa kısayol `pendingShortcut` olarak
+  saklanır ve onboarding bitince uygulanır.
 - Paylaşılan bilet bağlantısı: `?bilet=KOD`.
+- Geri tuşu yönetimi: `histStack` + `popstate`. Açılan her katman (alt sayfa,
+  satıcı sayfası) geçmişe yazılır; geri tuşu önce katmanı kapatır, kök
+  seviyede uygulamadan çıkar. Katmanı kod içinden kapatırken `closeTopLayer`
+  çağrılır, yoksa fazladan geçmiş girdisi kalır.
+- Logoya basmak ana sayfaya döner (`#home-logo`, `#web-logo`, `#feed-logo` →
+  `goHome()`): üst katmanları kapatır, Keşfet sekmesine geçer, başa kaydırır.

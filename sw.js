@@ -1,5 +1,5 @@
 /* Genç - çevrimdışı desteği ve hızlı açılış için servis çalışanı. */
-var CACHE = "genc-v4";
+var CACHE = "genc-v5";
 var ASSETS = [
   "./",
   "./Genc.html",
@@ -8,7 +8,13 @@ var ASSETS = [
   "./icons/icon-512.png",
   "./icons/maskable-512.png",
   "./icons/apple-touch-icon.png",
-  "./icons/favicon-32.png"
+  "./icons/favicon-32.png",
+  "./icons/shortcut-bilet-al.png",
+  "./icons/shortcut-yakin.png",
+  "./icons/shortcut-videolar.png",
+  "./icons/shortcut-ara.png",
+  "./icons/shortcut-biletlerim.png",
+  "./icons/shortcut-profil.png"
 ];
 
 self.addEventListener("install", function (e) {
