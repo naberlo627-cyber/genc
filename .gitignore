@@ -2,3 +2,13 @@ server.log
 yuklenenler/
 __pycache__/
 *.pyc
+
+# Android derleme çıktıları ve yerel imzalama anahtarı
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/app/genc-release.jks
+android/app/src/main/assets/www/
+indir/
+.gradle/

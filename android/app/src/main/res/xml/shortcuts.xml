@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:shortcutId="bilet_al"
+        android:enabled="true"
+        android:icon="@drawable/sc_bilet_al"
+        android:shortcutShortLabel="@string/sc_bilet_al">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=bilet-al" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="yakin"
+        android:enabled="true"
+        android:icon="@drawable/sc_yakin"
+        android:shortcutShortLabel="@string/sc_yakin">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=yakin" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="videolar"
+        android:enabled="true"
+        android:icon="@drawable/sc_videolar"
+        android:shortcutShortLabel="@string/sc_videolar">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=videolar" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="ara"
+        android:enabled="true"
+        android:icon="@drawable/sc_ara"
+        android:shortcutShortLabel="@string/sc_ara">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=ara" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="biletlerim"
+        android:enabled="true"
+        android:icon="@drawable/sc_biletlerim"
+        android:shortcutShortLabel="@string/sc_biletlerim">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=biletlerim" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="profil"
+        android:enabled="true"
+        android:icon="@drawable/sc_profil"
+        android:shortcutShortLabel="@string/sc_profil">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=profil" />
+    </shortcut>
+</shortcuts>

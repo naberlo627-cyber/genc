@@ -1,0 +1,57 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.genc.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.genc.app"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    signingConfigs {
+        release {
+            // Yerel geliştirme anahtarı; depoya eklenmez (.gitignore).
+            storeFile file("genc-release.jks")
+            storePassword "genc12345"
+            keyAlias "genc"
+            keyPassword "genc12345"
+        }
+    }
+
+    buildTypes {
+        debug {
+            // Hata ayıklama derlemesi; imzalama için hata ayıklama anahtarı kullanılır.
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'androidx.webkit:webkit:1.11.0'
+}
+
+// androidx.webkit, kotlin-stdlib-jdk8'in eski sürümünü getiriyor; jdk7/jdk8
+// sınıfları 1.8'den itibaren kotlin-stdlib içinde birleştiği için çakışma olur.
+configurations.all {
+    resolutionStrategy {
+        force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+    }
+}

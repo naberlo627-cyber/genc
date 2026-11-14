@@ -357,6 +357,9 @@ svg.ic.f{fill:currentColor}
 .uplist .up-ok .us{color:#1E9E63}
 .uplist .up-err .us{color:var(--coral-text)}
 .avimg{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+/* Profil fotoğrafı düğmesi: avatara dokununca doğrudan fotoğraf seçilir. */
+.ppset{padding:0;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ppset:active{opacity:.85}
 .sh-body .err{color:var(--coral-text);font-size:13px;font-weight:600;padding:0 0 4px}
 
 /* videolar */
@@ -749,6 +752,7 @@ svg.ic.f{fill:currentColor}
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"><svg class="ic"><use href="#i-check"/></svg><span id="toast-t"></span></div>
+  <input id="gphoto" type="file" accept="image/*" hidden aria-hidden="true" tabindex="-1">
 </div>
 
 <script>
@@ -1147,6 +1151,13 @@ function doInstall(){
   deferredPrompt.prompt();
   deferredPrompt.userChoice.then(function(){deferredPrompt=null;if(S.tab==='biletler')renderTickets()});
 }
+/* Android kurulum dosyasını (APK) indirir; yalnızca tarayıcıda sunulur. */
+function getApk(){
+  var a=document.createElement('a');
+  a.href='indir/Genc.apk';a.setAttribute('download','Genc.apk');
+  document.body.appendChild(a);a.click();a.remove();
+  toast('Genç kurulum dosyası indiriliyor.');
+}
 function kmTo(e){
   var R=6371,t=Math.PI/180,dl=(e.lat-S.loc.lat)*t,dn=(e.lng-S.loc.lng)*t;
   var a=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(S.loc.lat*t)*Math.cos(e.lat*t)*Math.sin(dn/2)*Math.sin(dn/2);
@@ -1182,7 +1193,7 @@ function initials(n){
 }
 /* Profil fotoğrafı varsa onu, yoksa baş harfleri gösterir. */
 function avatarHTML(){
-  return S.photo?'<img class="avimg" src="'+esc(S.photo)+'" alt="">':'<span class="ini">'+esc(initials(S.name))+'</span>';
+  return S.photo?'<img class="avimg" src="'+esc(S.photo)+'" alt="Profil fotoğrafı">':'<span class="ini">'+esc(initials(S.name))+'</span>';
 }
 function paintAvatars(){
   $$('.avatar').forEach(function(b){b.innerHTML=avatarHTML()});
@@ -1219,7 +1230,7 @@ window.addEventListener('popstate',function(ev){
 });
 
 /* ---------- alt sayfa ---------- */
-var lastFocus=null,sheetT,camStream=null,uploadBackToAccount=false;
+var lastFocus=null,sheetT,camStream=null;
 function openSheet(title,body,mount){
   lastFocus=document.activeElement;
   $('#sh-title').textContent=title;$('#sh-body').innerHTML=body;
@@ -1590,7 +1601,6 @@ function renderTickets(){
   h+='<div class="actgrid">'+
     '<button type="button" data-tab="kesfet">'+ic('compass2')+'Etkinlik keşfet</button>'+
     '<button type="button" data-act="scan">'+ic('qr')+'Bilet kodu sorgula</button>'+
-    '<button type="button" data-act="upload">'+ic('camera')+'Fotoğraf yükle</button>'+
   '</div>';
   if(deferredPrompt)h+='<div class="installrow">'+ic('install')+'<span><strong>Genç’i ana ekrana ekle</strong><small>Tek dokunuşla açılsın, çevrimdışı da çalışsın.</small></span><button type="button" data-act="install">Ekle</button></div>';
   if(!S.tickets.length){
@@ -1632,26 +1642,17 @@ function scanGo(){
   closeSheet();showBigQR(t.id);
 }
 
-/* ---------- dosya / fotoğraf yükleme ---------- */
+/* ---------- fotoğraf seçme ---------- */
+/* Profil fotoğrafı için iki yol sunar; dosya yöneticisi açılmaz. */
 function uploadSheet(){
-  openSheet('Fotoğraf yükle','<div class="up" id="up-zone"><svg class="upic"><use href="#i-image"/></svg>'+
-    '<strong>Fotoğrafını seç</strong><small>Galeriden seç veya kamerayla çek. (JPEG/PNG, en fazla 10 MB)</small>'+
-    '<input id="up-file" type="file" accept="image/*" multiple hidden aria-label="Yüklenecek fotoğraflar"></div>'+
-    '<div class="pickrows"><button class="opt-row" type="button" data-act="pickcam">'+ic('camera')+'<span class="t"><strong>Kamerayla çek</strong><small>Fotoğraf çekme iznini ister</small></span></button>'+
+  openSheet('Profil fotoğrafı','<div class="pickrows">'+
+    '<button class="opt-row" type="button" data-act="pickcam">'+ic('camera')+'<span class="t"><strong>Kamerayla çek</strong><small>Fotoğraf çekme iznini ister</small></span></button>'+
     '<button class="opt-row" type="button" data-act="pickgal">'+ic('image')+'<span class="t"><strong>Galeriden seç</strong><small>Cihazındaki fotoğraflar</small></span></button></div>'+
-    '<ul class="uplist" id="up-list"></ul><p class="err" id="up-err" role="alert"></p>',
-  function(root){
-    var input=$('#up-file',root),zone=$('#up-zone',root);
-    input.addEventListener('change',function(){upSend(input.files);input.value=''});
-    ['dragenter','dragover'].forEach(function(ev){zone.addEventListener(ev,function(e){e.preventDefault();zone.classList.add('over')})});
-    ['dragleave','drop'].forEach(function(ev){zone.addEventListener(ev,function(e){e.preventDefault();zone.classList.remove('over')})});
-    zone.addEventListener('drop',function(e){if(e.dataTransfer&&e.dataTransfer.files.length)upSend(e.dataTransfer.files)});
-    zone.addEventListener('click',function(e){if(e.target!==input)input.click()});
-  });
+    '<ul class="uplist" id="up-list"></ul><p class="err" id="up-err" role="alert"></p>');
 }
 /* Kamera veya galeriden fotoğraf alır; seçilen görseli yükleyip profil fotoğrafı yapar. */
 function pickPhoto(kind){
-  if(kind==='gal'){var f=$('#up-file');if(f)f.click();return}
+  if(kind==='gal'){var f=$('#gphoto');if(f)f.click();return}
   openCamSheet();
 }
 function openCamSheet(){
@@ -1687,14 +1688,39 @@ function upRow(name,state){
   var list=$('#up-list');if(list)list.appendChild(li);
   return li;
 }
-/* makeAvatar: yüklenen ilk fotoğrafı profil fotoğrafı yapar. */
+/* Fotoğrafı ortadan kareye kırpar ve en fazla 512 px'e küçültür; data URL döner. */
+function cropSquare(file){
+  return new Promise(function(res,rej){
+    var img=new Image(),url=URL.createObjectURL(file);
+    img.onload=function(){
+      URL.revokeObjectURL(url);
+      var side=Math.min(img.width,img.height),out=Math.min(side,512);
+      var c=document.createElement('canvas');c.width=out;c.height=out;
+      c.getContext('2d').drawImage(img,(img.width-side)/2,(img.height-side)/2,side,side,0,0,out,out);
+      res(c.toDataURL('image/jpeg',0.85));
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);rej()};
+    img.src=url;
+  });
+}
+/* makeAvatar: yüklenen fotoğrafı profil fotoğrafı yapar.
+   Uygulama içinde (APK) fotoğraf sunucuya gönderilmez; kırpılıp cihazda saklanır. */
 function upSend(files,makeAvatar){
   if(!files||!files.length)return;
   var er=$('#up-err');if(er)er.textContent='';
-  var made=false;
-  Array.prototype.forEach.call(files,function(f){
+  var list=Array.prototype.slice.call(files),made=false;
+  list.forEach(function(f,i){
+    if(f.type.indexOf('image/')!==0){if(er)er.textContent='Yalnızca fotoğraf yükleyebilirsin.';return}
     if(f.size>10*1024*1024){if(er)er.textContent='“'+f.name+'” 10 MB sınırını aşıyor.';upRow(f.name,'err');return}
-    var row=upRow(f.name,'wait'),fd=new FormData();fd.append('file',f,f.name);
+    var row=upRow(f.name,'wait');
+    if(window.GENC_APP){
+      cropSquare(f).then(function(data){
+        row.className='up-ok';$('.us',row).textContent='hazır';
+        if((makeAvatar||(!made&&i===0))){made=true;S.photo=data;persist();paintAvatars();toast('Profil fotoğrafın güncellendi.')}
+      }).catch(function(){row.className='up-err';$('.us',row).textContent='hata';if(er)er.textContent='Fotoğraf açılamadı.'});
+      return;
+    }
+    var fd=new FormData();fd.append('file',f,f.name);
     fetch('upload',{method:'POST',body:fd}).then(function(r){
       if(!r.ok)throw 0;
       return r.json().catch(function(){return {}});
@@ -1704,7 +1730,6 @@ function upSend(files,makeAvatar){
         var a=document.createElement('a');a.href=d.url;a.textContent='gör';a.setAttribute('download','');row.appendChild(a);
         if((makeAvatar||!made)&&(f.type.indexOf('image/')===0)){
           made=true;S.photo=d.url;persist();paintAvatars();
-          if(uploadBackToAccount){uploadBackToAccount=false;editProfile()}
           toast('Profil fotoğrafın güncellendi.');
         }
       }
@@ -1718,7 +1743,7 @@ function upSend(files,makeAvatar){
 /* ---------- profil ---------- */
 function renderProfile(){
   var saved=EVENTS.filter(function(e){return S.saved[e.id]&&e.video});
-  var h='<div class="ph"><div class="big" aria-hidden="true">'+avatarHTML()+'</div><div><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.locOn?locLabel()+' · İzmir':'Konum kapalı')+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
+  var h='<div class="ph"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><div><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.locOn?locLabel()+' · İzmir':'Konum kapalı')+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
   var nl=Object.keys(S.liked).filter(function(k){return S.liked[k]}).length,ns=Object.keys(S.saved).filter(function(k){return S.saved[k]}).length;
   h+='<div class="stats"><div><b>'+S.tickets.length+'</b><small>Bilet</small></div><div><b>'+ns+'</b><small>Kaydedilen</small></div><div><b>'+nl+'</b><small>Beğenilen</small></div></div>';
   h+='<div class="actgrid">'+
@@ -1740,8 +1765,7 @@ function renderProfile(){
 }
 /* Kalemin açtığı hesap sayfası: profil bilgileri, kartlar, görünüm, çıkış. */
 function editProfile(){
-  var h='<div class="acctop"><span class="big" aria-hidden="true">'+avatarHTML()+'</span><span class="acctxt"><strong>'+esc(S.name||'Misafir')+'</strong><small>'+esc(S.email||'E-posta ekle')+'</small></span></div>';
-  h+='<div class="pickrows"><button class="opt-row" type="button" data-act="uploadacct">'+ic('camera')+'<span class="t"><strong>Profil fotoğrafı</strong><small>Kamerayla çek veya galeriden seç</small></span></button></div>';
+  var h='<div class="acctop"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><span class="acctxt"><strong>'+esc(S.name||'Misafir')+'</strong><small>'+esc(S.email||'E-posta ekle')+'</small></span></div>';
   h+='<div class="field"><label for="e-name">Ad soyad</label><input id="e-name" type="text" autocomplete="name" value="'+esc(S.name)+'"></div>';
   h+='<div class="field"><label for="e-mail">E-posta</label><input id="e-mail" type="email" autocomplete="email" value="'+esc(S.email)+'"></div>';
   h+='<div class="field"><label for="e-tel">Telefon</label><input id="e-tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="0 5•• ••• •• ••" value="'+esc(S.phone)+'"></div>';
@@ -1750,6 +1774,7 @@ function editProfile(){
     return '<div class="cardrow" data-card="'+c.id+'"><button class="cmain" type="button" data-act="defcard" aria-label="Varsayılan yap: •••• '+c.last4+'"><span class="plastic" aria-hidden="true"></span><span class="txt"><strong>Banka kartı</strong><span>•••• '+c.last4+', son kullanma '+esc(c.exp)+'</span></span>'+(c.def?'<span class="def">Varsayılan</span>':'<span class="setdef">Varsayılan yap</span>')+'</button><button class="cdel" type="button" data-act="delcard" aria-label="Kartı sil: •••• '+c.last4+'">'+ic('close')+'</button></div>';
   }).join(''):'<div class="empty">Kayıtlı kartın yok.</div>';
   h+='<div class="shsec"><h4 class="disp">Görünüm</h4></div><div class="themeseg" role="group" aria-label="Tema">'+[['system','Sistem'],['light','Açık'],['dark','Koyu']].map(function(x){return '<button type="button" data-act="theme" data-v="'+x[0]+'" aria-pressed="'+(S.theme===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>';
+  if(!window.GENC_APP)h+='<div class="installrow">'+ic('install')+'<span><strong>Android kurulum dosyası (APK)</strong><small>Genç’i telefonuna kur.</small></span><button type="button" data-act="getapk">İndir</button></div>';
   h+='<button class="logout" type="button" data-act="logout">Çıkış yap</button>';
   openSheet('Hesap',h);
 }
@@ -1846,8 +1871,9 @@ document.addEventListener('click',function(ev){
     case 'scan':scanTicket();break;
     case 'scango':scanGo();break;
     case 'install':doInstall();break;
-    case 'upload':uploadBackToAccount=false;uploadSheet();break;
-    case 'uploadacct':uploadBackToAccount=true;uploadSheet();break;
+    case 'getapk':getApk();break;
+    case 'upload':uploadSheet();break;
+    case 'setphoto':uploadSheet();break;
     case 'pickcam':pickPhoto('cam');break;
     case 'pickgal':pickPhoto('gal');break;
     case 'camsnap':camSnap();break;
@@ -1871,7 +1897,7 @@ document.addEventListener('click',function(ev){
     case 'logout':
       closeSheet();
       $('#main').hidden=true;$('#onb').hidden=false;setTab('kesfet');$('#main').hidden=true;
-      S.name='';S.email='';S.phone='';S.loggedIn=false;
+      S.name='';S.email='';S.phone='';S.loggedIn=false;S.photo='';
       try{localStorage.removeItem(STORE)}catch(x){}
       $('#in-name').value='';$('#in-mail').value='';
       showStep(1);break;
@@ -1926,6 +1952,9 @@ if('serviceWorker' in navigator){
 
 function renderAll(){renderKesfet();renderTickets();renderProfile()}
 restore();applyTheme();
+/* Profil fotoğrafı için kalıcı gizli seçici: avatara dokununca doğrudan açılır. */
+var gphoto=$('#gphoto');
+gphoto.addEventListener('change',function(){if(gphoto.files.length)upSend(gphoto.files,true);gphoto.value=''});
 if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab('kesfet');applyDeepLink();openSharedTicket()}
 else{applyDeepLink();showStep(1)}
 })();
