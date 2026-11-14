@@ -82,6 +82,9 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
   `/upload` ucuna gönderilir ve dönen `/yuklenenler/...` yolu kullanılır.
 - `S.photo` boşsa avatarlar baş harfleri gösterir (`initials()`); doluysa
   `<img class="avimg">` gösterilir (`avatarHTML()`).
+- Yuvarlak avatarlar (`avatar`, `ph .big`, `acctop .big`, `.back`, `.x`) `aspect-ratio:1`
+  ve `flex:none` kullanır; böylece dar ekranda veya uzun adlarda esneyip oval olmazlar.
+  `.ph` başlığı `flex-wrap` ile sarar, ad `overflow-wrap:anywhere` ile kırılır.
 - Geri tuşu yönetimi: `histStack` + `popstate`. Açılan her katman (alt sayfa,
   satıcı sayfası) geçmişe yazılır; geri tuşu önce katmanı kapatır, kök
   seviyede uygulamadan çıkar. Katmanı kod içinden kapatırken `closeTopLayer`
