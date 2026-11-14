@@ -1,0 +1,58 @@
+{
+  "id": "genc-etkinlik",
+  "name": "Genç",
+  "short_name": "Genç",
+  "description": "Çevrendeki konser, sinema, tiyatro ve gezileri keşfet; kısa videolarla izle ve biletini al.",
+  "lang": "tr",
+  "dir": "ltr",
+  "start_url": "./Genc.html?kaynak=uygulama",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#F6F3FF",
+  "theme_color": "#5B3DF5",
+  "categories": ["entertainment", "events", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Bilet al",
+      "short_name": "Bilet al",
+      "description": "Yakındaki bir etkinlik için hemen bilet al",
+      "url": "./Genc.html?git=bilet-al",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Kısa videolar",
+      "short_name": "Videolar",
+      "description": "Kısa videolarla etkinlikleri izle",
+      "url": "./Genc.html?git=videolar",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Etkinlik ara",
+      "short_name": "Ara",
+      "description": "Konser, sinema ve etkinlik ara",
+      "url": "./Genc.html?git=ara",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Biletlerim",
+      "short_name": "Biletlerim",
+      "description": "Aldığın biletleri göster",
+      "url": "./Genc.html?git=biletlerim",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Profilim",
+      "short_name": "Profil",
+      "description": "Profilini, kartlarını ve tercihlerini yönet",
+      "url": "./Genc.html?git=profil",
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}

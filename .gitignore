@@ -1,0 +1,4 @@
+server.log
+yuklenenler/
+__pycache__/
+*.pyc

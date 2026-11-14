@@ -1,0 +1,1761 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#F6F3FF">
+<title>Genç</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236D4AFF'/%3E%3Cstop offset='1' stop-color='%23FF4F8B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='45' font-size='38' font-weight='800' text-anchor='middle' fill='white' font-family='Arial'%3EG%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Genç">
+<meta name="application-name" content="Genç">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#17112E;--on-ink:#FFFFFF;--paper:#F6F3FF;--card:#FFFFFF;
+  --brand:#5B3DF5;--sun:#FFC83D;--coral:#FF5A5F;--mute:#6B6785;--line:#E4DFF6;--sw-off:var(--sw-off);
+  --grad:linear-gradient(135deg,#7B5CFF 0%,#5B3DF5 100%);
+  --logo-bg:#5B3DF5;--logo-fg:#FFFFFF;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#1E1638;
+  --brand:#9A85FF;--sun:#FFC83D;--coral:#FF7A7F;--mute:#A9A0CE;--line:#35294F;--sw-off:#4A3F73;
+  --grad:linear-gradient(135deg,#8B73FF 0%,#6D4AFF 100%);
+  --logo-bg:#9A85FF;--logo-fg:#140D2E;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#1E1638;
+  --brand:#9A85FF;--sun:#FFC83D;--coral:#FF7A7F;--mute:#A9A0CE;--line:#35294F;--sw-off:#4A3F73;
+  --grad:linear-gradient(135deg,#8B73FF 0%,#6D4AFF 100%);
+  --logo-bg:#9A85FF;--logo-fg:#140D2E;color-scheme:dark;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.35;color:var(--ink);background:var(--paper);overflow:hidden;transition:background-color .2s}
+body.night{background:#150E2E}
+[hidden]{display:none!important}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;text-align:left;-webkit-tap-highlight-color:transparent}
+input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.dark-ui :focus-visible,.night :focus-visible{outline-color:var(--sun)}
+svg.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.ic.f{fill:currentColor}
+.disp{font-stretch:75%;font-weight:800;line-height:1.02;letter-spacing:-.005em}
+
+/* ---------- uygulama kabuğu ---------- */
+#app{position:fixed;inset:0;margin:0 auto;max-width:480px;width:100%;background:var(--paper);overflow:hidden}
+.view{position:absolute;inset:0;display:flex;flex-direction:column}
+.pane{flex:1;min-height:0;position:relative;display:flex;flex-direction:column}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--paper)}
+
+/* ---------- ortak ---------- */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--paper)}
+.scroll{flex:1;overflow-y:auto;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.top{display:flex;align-items:center;justify-content:space-between;padding:28px 20px 12px}
+.loc{display:flex;align-items:center;gap:6px;font-weight:700;font-size:17px;padding:6px 8px 6px 0;border-radius:10px}
+.avatar{width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}
+.search{margin:0 20px;height:50px;border-radius:15px;background:var(--card);display:flex;align-items:center;gap:10px;padding:0 14px;color:var(--mute)}
+.search input{flex:1;border:0;outline:0;background:none;font-size:15px;min-width:0}
+.search input::placeholder{color:var(--mute);opacity:1}
+.search:focus-within{box-shadow:0 0 0 3px var(--brand)}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:14px 20px 6px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:38px;padding:0 16px;border-radius:19px;background:var(--card);font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;transition:background-color .15s,color .15s}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--on-ink)}
+.sec{display:flex;align-items:baseline;justify-content:space-between;padding:22px 20px 12px}
+.sec h2{font-size:25px}
+.sec a,.sec button{color:var(--brand);font-weight:700;font-size:14px;text-decoration:none;padding:6px 0}
+
+.art{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,34,0) 45%,rgba(8,12,34,.78) 100%)}
+
+.nav{height:86px;background:var(--card);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px 22px;border-top:1px solid var(--line);flex:none}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:600;font-size:12px;color:var(--mute)}
+.nav .ico{width:58px;height:32px;border-radius:16px;display:grid;place-items:center;transition:background-color .15s}
+.nav .on{color:var(--ink)}
+.nav .on .ico{background:var(--sun);color:#17112E}
+.nav.night{background:#150E2E;border-top:0}
+.nav.night button{color:#C9C1EA}
+.nav.night .on{color:#fff}
+.nav.night .on .ico{background:var(--sun);color:#17112E}
+
+/* ---------- kayıt ---------- */
+.steps{display:flex;gap:6px;flex:1;margin-left:14px}
+.steps i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.steps i.d{background:var(--brand)}
+.back{width:44px;height:44px;border-radius:50%;background:var(--card);display:grid;place-items:center}
+.ob-title{font-size:38px;padding:18px 20px 8px}
+.ob-sub{padding:0 20px;color:var(--mute);max-width:34ch}
+.locrow{margin:20px 20px 4px;background:var(--card);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.locrow .t{flex:1;font-weight:700}
+.locrow .t small{display:block;font-weight:500;color:var(--mute);font-size:13px}
+.sw{width:50px;height:30px;border-radius:15px;background:var(--sw-off);position:relative;transition:background-color .15s;flex:none}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .15s}
+.sw[aria-checked="true"]{background:var(--brand)}
+.sw[aria-checked="true"]::after{transform:translateX(20px)}
+.picks{display:flex;flex-wrap:wrap;gap:10px;padding:16px 20px}
+.pick{height:46px;padding:0 18px;border-radius:23px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:background-color .15s,color .15s}
+.pick svg{width:18px;height:18px;display:none}
+.pick[aria-pressed="true"]{background:var(--brand);color:#fff;box-shadow:none}
+.pick[aria-pressed="true"] svg{display:block}
+.cta{margin:8px 20px 28px;height:54px;border-radius:16px;background:var(--brand);color:#fff;font-weight:700;font-size:16px;text-align:center;display:block;width:calc(100% - 40px);transition:opacity .15s}
+.cta[disabled]{opacity:.4;cursor:not-allowed}
+
+/* ---------- bilet satırı ---------- */
+.tk{display:flex;background:var(--card);border-radius:16px;position:relative;margin:0 20px 12px;width:calc(100% - 40px);text-align:left}
+.tk::before,.tk::after{content:"";position:absolute;left:62px;width:20px;height:20px;border-radius:50%;background:var(--paper)}
+.tk::before{top:-10px}
+.tk::after{bottom:-10px}
+.tk .stub{width:72px;flex:none;padding:14px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:2px dashed var(--line);gap:0}
+.tk .stub b{font-stretch:75%;font-weight:800;font-size:32px;line-height:1}
+.tk .stub span{font-size:13px;font-weight:600;color:var(--mute)}
+.tk .info{flex:1;padding:14px 14px 14px 16px;min-width:0}
+.tk .info strong{display:block;font-size:16px;line-height:1.2;margin-bottom:3px}
+.tk .info .v{color:var(--mute);font-size:13.5px}
+.tk .info .row{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.dist{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:600;color:var(--mute)}
+.dist svg{width:15px;height:15px}
+.price{font-weight:800;font-size:15px}
+.stub.hot{background:var(--sun);border-radius:16px 0 0 16px}
+.stub.hot span,.stub.hot b{color:#17112E}
+
+/* ---------- afişler ---------- */
+.hrail{display:flex;gap:12px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.hrail::-webkit-scrollbar{display:none}
+.poster{flex:none;width:150px}
+.poster .pic{position:relative;height:214px;border-radius:16px;overflow:hidden;display:block}
+.poster .tag{position:absolute;left:8px;top:8px;background:rgba(23,17,46,.82);color:#fff;font-size:12px;font-weight:700;padding:4px 9px 4px 6px;border-radius:12px;display:inline-flex;align-items:center;gap:4px}
+.poster .tag svg{width:13px;height:13px}
+.poster strong{display:block;margin-top:9px;font-size:15px;line-height:1.2}
+.poster span.m{display:block;color:var(--mute);font-size:13px;margin-top:2px}
+.thumb{flex:none;width:104px;height:170px;border-radius:14px;position:relative;overflow:hidden;display:block}
+.thumb em{position:absolute;left:9px;right:9px;bottom:9px;color:#fff;font-style:normal;font-weight:700;font-size:13px;line-height:1.2;display:flex;align-items:flex-end;gap:5px}
+.thumb em svg{width:14px;height:14px;flex:none;margin-bottom:1px}
+
+/* ---------- kısa videolar ---------- */
+.vid{flex:1;position:relative;overflow:hidden;color:#fff}
+.vtop{position:absolute;left:0;right:0;top:0;padding:28px 20px 46px;background:linear-gradient(180deg,rgba(6,8,24,.78),rgba(6,8,24,0))}
+.vtabs{display:flex;gap:22px;justify-content:center}
+.vtabs button{font-weight:700;font-size:17px;padding:6px 2px 8px;color:#D5DAF0;border-bottom:3px solid transparent}
+.vtabs button[aria-pressed="true"]{color:#fff;border-color:var(--sun)}
+.reach{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
+.reach div{font-size:12px;color:#DDE1F4;font-weight:600}
+.reach div::before{content:"";display:block;height:3px;border-radius:2px;background:rgba(255,255,255,.32);margin-bottom:5px}
+.reach div.now{color:#fff;font-weight:800}
+.reach div.now::before{background:var(--sun)}
+.vscrim{position:absolute;inset:auto 0 0 0;height:62%;background:linear-gradient(180deg,rgba(6,8,24,0),rgba(6,8,24,.86))}
+.vinfo{position:absolute;left:20px;right:96px;bottom:26px}
+.vchip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);padding:5px 11px 5px 8px;border-radius:14px;font-size:13px;font-weight:600}
+.vchip svg{width:15px;height:15px}
+.vinfo h2{font-size:42px;margin:12px 0 8px}
+.vinfo .when{font-weight:700;font-size:16px}
+.vinfo .where{font-size:15px;color:#E7EAF8}
+.vinfo .src{font-size:12.5px;color:#D5DAF0;margin-top:12px}
+.vact{position:absolute;right:14px;bottom:28px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.vact button{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#fff;text-align:center}
+.vact .c{width:54px;height:54px;border-radius:50%;background:rgba(8,12,34,.55);display:grid;place-items:center;transition:background-color .15s,color .15s,transform .15s}
+.vact .c svg{width:27px;height:27px}
+.vact button[aria-pressed="true"] .c{background:#fff}
+.vact .like[aria-pressed="true"] .c{color:var(--coral)}
+.vact .like[aria-pressed="true"] .c svg{fill:var(--coral)}
+.vact .save[aria-pressed="true"] .c{color:#17112E}
+.vact .save[aria-pressed="true"] .c svg{fill:var(--sun)}
+.vact .buy .c{width:62px;height:62px;background:var(--sun);color:#17112E}
+.vact .buy .c svg{width:32px;height:32px;stroke-width:2.4}
+.vprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.28)}
+.vprog i{display:block;height:100%;width:34%;background:var(--card)}
+.toast{position:absolute;left:20px;right:20px;top:118px;background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;font-weight:600;font-size:14px;display:flex;gap:10px;align-items:center;opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 14px 30px -12px rgba(0,0,0,.5)}
+.toast.show{opacity:1;transform:none}
+.toast svg{color:var(--brand)}
+
+
+
+/* ---------- profil ---------- */
+.ph{display:flex;align-items:center;gap:14px;padding:28px 20px 8px}
+.ph .big{width:68px;height:68px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:800;font-size:24px;flex:none}
+.ph h1{font-size:30px}
+.ph .dist{margin-top:4px}
+.ph .ed{margin-left:auto;width:44px;height:44px;border-radius:50%;background:var(--card);display:grid;place-items:center}
+.likes{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px}
+.likes span{height:36px;padding:0 15px;border-radius:18px;background:var(--brand);color:#fff;font-weight:600;font-size:14px;display:inline-flex;align-items:center}
+.likes span.o{background:var(--card);color:var(--ink)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px}
+.grid3 .thumb{width:100%;height:146px}
+.att{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:10px;width:calc(100% - 40px)}
+.att .mini-art{width:46px;height:58px;border-radius:10px;position:relative;overflow:hidden;flex:none}
+.att strong{display:block;font-size:15px;line-height:1.2}
+.att span{color:var(--mute);font-size:13px}
+.att .done{margin-left:auto;display:inline-flex;gap:4px;align-items:center;color:var(--mute);font-size:13px;font-weight:600;flex:none}
+.att .done svg{width:16px;height:16px;color:var(--brand)}
+.cardrow{display:flex;gap:14px;align-items:center;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:12px 14px;width:calc(100% - 40px)}
+.cardrow .plastic{width:56px;height:38px;border-radius:8px;background:var(--brand);position:relative;flex:none}
+.cardrow .plastic::after{content:"";position:absolute;left:7px;top:9px;width:11px;height:8px;border-radius:2px;background:var(--sun)}
+.cardrow strong{display:block;font-size:15px}
+.cardrow span{color:var(--mute);font-size:13px}
+.cardrow .def{margin-left:auto;font-size:12px;font-weight:700;background:var(--paper);padding:4px 9px;border-radius:10px}
+.acc{display:flex;align-items:center;justify-content:space-between;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:14px;width:calc(100% - 40px)}
+.acc small{display:block;color:var(--mute);font-size:12.5px}
+.acc b{font-size:15px}
+.acc svg{color:var(--mute)}
+.pad{height:24px}
+
+
+/* ---------- Genç: yeni renkler ve düzen ---------- */
+.top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px}
+.brandlogo{width:104px;height:auto;display:block}
+.logo-lg{width:150px;height:auto;display:block;margin:calc(env(safe-area-inset-top,0px) + 8px) 20px 0}
+.avatar,.ph .big{background:var(--grad)}
+.avatar{border:0}
+.locbar{padding:0 20px 12px}
+.loc{padding:4px 8px 4px 0}
+.cta{background:var(--grad);box-shadow:0 12px 24px -14px rgba(91,61,245,.8)}
+.cta[disabled]{box-shadow:none}
+.cardrow .plastic{background:var(--grad)}
+.nav{height:auto;min-height:86px;padding-bottom:max(22px,env(safe-area-inset-bottom))}
+.nav .on .ico{background:var(--sun);color:#17112E}
+.back{box-shadow:0 0 0 1px var(--line)}
+.sw[aria-checked="true"]{background:var(--brand)}
+.thumb,.poster .pic,.tk,.search,.chip{transition:transform .12s}
+.poster:active .pic,.tk:active,.thumb:active{transform:scale(.98)}
+.empty{margin:0 20px 8px;padding:18px;border-radius:16px;background:var(--card);color:var(--mute);text-align:center;font-size:14px}
+.sec .more{color:var(--brand);font-weight:700;font-size:14px;padding:6px 0}
+.hint{padding:0 20px;color:var(--mute);font-size:13px;margin-top:8px}
+
+/* formlar */
+.field{margin:14px 20px 0}
+.field label{display:block;font-size:13px;font-weight:600;color:var(--mute);margin-bottom:6px}
+.field input{width:100%;height:52px;border-radius:15px;border:0;background:var(--card);padding:0 14px;font-size:16px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.field input:focus{outline:0;box-shadow:0 0 0 3px var(--brand)}
+.field .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.err{margin:10px 20px 0;color:#D32F4D;font-weight:600;font-size:14px;min-height:20px}
+.sh-body .err{margin:10px 0 0}
+.fin{padding:0 20px}
+.cta.sm{margin:12px 0 0;width:100%}
+
+/* hazır ekranı */
+.done-logo{width:190px;height:auto;margin:34px auto 8px;display:block}
+.done-chips{justify-content:center;padding:14px 20px 0}
+
+/* alt sayfa (sheet) */
+.ov{position:fixed;inset:0;z-index:50;display:flex;align-items:flex-end;justify-content:center;background:rgba(23,17,46,.55);opacity:0;transition:opacity .2s}
+.ov.open{opacity:1}
+.sheet{width:100%;max-width:480px;max-height:90%;background:var(--paper);border-radius:28px 28px 0 0;display:flex;flex-direction:column;transform:translateY(28px);transition:transform .22s}
+.ov.open .sheet{transform:none}
+.sh-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px 6px;gap:12px}
+.sh-head h3{font-size:26px}
+.x{width:44px;height:44px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none;box-shadow:0 0 0 1px var(--line)}
+.sh-body{overflow-y:auto;padding:8px 20px calc(24px + env(safe-area-inset-bottom,0px))}
+.sh-body .field{margin:12px 0 0}
+.sh-body .picks{padding:6px 0 4px}
+.sh-body .cta{margin:14px 0 0;width:100%}
+.opt-row{display:flex;align-items:center;gap:12px;width:100%;background:var(--card);border-radius:16px;padding:14px;margin-bottom:10px;font-weight:700;box-shadow:inset 0 0 0 1.5px var(--line)}
+.opt-row[aria-pressed="true"]{box-shadow:inset 0 0 0 2.5px var(--brand)}
+.opt-row .ic{color:var(--brand)}
+.opt-row small{display:block;color:var(--mute);font-weight:500;font-size:13px}
+.opt-row .tick{margin-left:auto;display:none}
+.opt-row[aria-pressed="true"] .tick{display:block}
+
+/* etkinlik ayrıntısı */
+.dhero{position:relative;height:190px;border-radius:20px;overflow:hidden}
+.dhero .poster-tag{position:absolute;left:12px;top:12px;display:flex;gap:6px}
+.dhero .poster-tag span{background:rgba(23,17,46,.82);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:12px;display:inline-flex;align-items:center;gap:4px}
+.dhero .poster-tag svg{width:13px;height:13px}
+.dtitle{font-size:32px;margin:16px 0 8px}
+.dline{display:flex;gap:8px;align-items:center;color:var(--mute);font-weight:600;font-size:15px;margin-top:5px}
+.dline svg{width:18px;height:18px;color:var(--brand)}
+.dprice{display:flex;align-items:baseline;gap:10px;margin:16px 0 0}
+.dprice b{font-stretch:75%;font-weight:800;font-size:34px;line-height:1}
+.dprice small{color:var(--mute);font-size:13px}
+.dacts{display:flex;gap:10px;margin-top:16px}
+.btn{flex:1;min-height:54px;border-radius:16px;background:var(--grad);color:#fff;font-weight:700;font-size:16px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.iconbtn{flex:none;width:54px;height:54px;border-radius:16px;background:var(--card);display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--line)}
+.iconbtn[aria-pressed="true"]{background:var(--sun);box-shadow:none;color:#17112E}
+.iconbtn[aria-pressed="true"] svg{fill:#17112E}
+
+/* uygulama içi satıcı sayfası */
+.webv{position:fixed;inset:0;margin:0 auto;max-width:480px;width:100%;z-index:60;background:var(--paper);display:flex;flex-direction:column}
+.whead{display:flex;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 10px;border-bottom:1px solid var(--line);background:var(--card)}
+.whead .ti{flex:1;min-width:0}
+.whead strong{display:block;font-size:16px}
+.whead small{display:flex;align-items:center;gap:5px;color:var(--mute);font-size:12.5px}
+.whead small svg{width:14px;height:14px;color:#1F9D61}
+.wbody{flex:1;overflow-y:auto;padding:16px 20px calc(24px + env(safe-area-inset-bottom,0px))}
+.wtitle{font-size:30px;margin:16px 0 4px}
+.wsub{color:var(--mute);font-weight:600;margin-bottom:16px}
+.wrow{display:flex;align-items:center;justify-content:space-between;margin:14px 0 6px;font-weight:700}
+.qty{display:flex;align-items:center;gap:14px}
+.qty button{width:42px;height:42px;border-radius:50%;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);display:grid;place-items:center;font-size:24px;font-weight:700;text-align:center;line-height:1}
+.qty output{min-width:20px;text-align:center;font-weight:800;font-size:18px}
+.wtot b{font-stretch:75%;font-weight:800;font-size:34px}
+.wbody .btn{width:100%;margin-top:12px}
+.wnote{display:flex;gap:10px;color:var(--mute);font-size:13px;margin-top:14px}
+.wnote svg{width:18px;height:18px;color:var(--brand);margin-top:1px}
+.wdone{text-align:center;padding:40px 10px}
+.wdone .ok{width:72px;height:72px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;margin:0 auto 18px}
+.wdone .ok svg{width:36px;height:36px;stroke-width:2.6}
+.wdone h2{font-size:30px;margin-bottom:8px}
+.wdone p{color:var(--mute);margin-bottom:20px}
+.wdone .bigqr{max-width:230px;margin:0 auto}
+
+/* ---------- biletlerim ---------- */
+.actgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 20px 4px}
+.actgrid button{display:flex;align-items:center;gap:10px;padding:15px 14px;border-radius:16px;background:var(--card);border:1px solid var(--line);font-weight:700;font-size:14px;text-align:left}
+.actgrid svg{width:20px;height:20px;color:var(--brand);flex:none}
+.installrow{display:flex;align-items:center;gap:12px;margin:8px 20px;padding:14px;border-radius:16px;background:var(--grad);color:#fff}
+.installrow>svg{width:24px;height:24px;flex:none}
+.installrow span{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.installrow strong{font-size:14px}
+.installrow small{font-size:12px;opacity:.85}
+.installrow button{background:#fff;color:#17112E;border:0;border-radius:11px;padding:9px 16px;font-weight:800;font-size:13px}
+.tkt{position:relative;margin:14px 20px 0;border-radius:20px;background:var(--card);border:1px solid var(--line);overflow:hidden}
+.tkt .top2{display:flex;gap:12px;align-items:flex-start;padding:16px}
+.tkt .mini-art{position:relative;width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none}
+.tkt .top2>span:nth-child(2){display:flex;flex-direction:column;gap:3px}
+.tkt .top2 strong{font-size:16px;font-stretch:82%}
+.tkt .top2 .m{font-size:13px;color:var(--mute)}
+.tkt .top2 .o{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--mute)}
+.tkt .top2 .o svg{width:14px;height:14px;flex:none}
+.tkt .code{display:flex;flex-direction:column;align-items:flex-end;gap:2px;flex:none}
+.tkt .code small{font-size:9px;letter-spacing:.08em;color:var(--mute);font-weight:700}
+.tkt .code b{font-size:15px;letter-spacing:.05em;font-stretch:75%}
+.tkt .stub2{display:flex;gap:14px;align-items:center;padding:14px 16px 16px;border-top:1px dashed var(--line)}
+.tkt .qr{width:88px;height:88px;flex:none;background:#fff;border-radius:10px;padding:5px;display:block}
+.tkt .qr svg,.bigqr svg{width:100%;height:100%;display:block}
+.tkt .st{display:flex;flex-direction:column;gap:3px;font-size:13px;color:var(--mute);min-width:0}
+.tkt .st b{font-size:14px;color:var(--ink)}
+.tkt .st .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tkt .st .acts button{display:inline-flex;align-items:center;gap:5px;padding:7px 11px;border-radius:11px;background:var(--paper);border:1px solid var(--line);font-weight:700;font-size:12px;color:var(--ink)}
+.tkt .st .acts svg{width:14px;height:14px;color:var(--brand)}
+.bigqr{width:100%;max-width:260px;aspect-ratio:1;margin:14px auto;background:#fff;border-radius:16px;padding:10px}
+
+/* ---------- dosya yükleme ---------- */
+.up{margin:2px 0 12px;padding:26px 16px;border-radius:18px;border:2px dashed var(--line);background:var(--card);display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;transition:border-color .15s,background-color .15s}
+.up.over{border-color:var(--brand);background:var(--paper)}
+.upic{width:32px;height:32px;color:var(--brand)}
+.up strong{font-size:15px}
+.up small{font-size:12px;color:var(--mute)}
+.up input{margin-top:8px;font-size:13px;max-width:100%}
+.uplist{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.uplist li{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:12px;background:var(--paper);font-size:13px}
+.uplist .un{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.uplist .us{flex:none;color:var(--mute);font-weight:700}
+.uplist .up-ok .us{color:#1E9E63}
+.uplist .up-err .us{color:var(--coral)}
+.sh-body .err{color:var(--coral);font-size:13px;font-weight:600;padding:0 0 4px}
+
+/* videolar */
+.feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:#0B0820;color:#fff}
+.feed::-webkit-scrollbar{display:none}
+.vid{height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;color:#fff;flex:none}
+.vtop{position:absolute;left:0;right:0;top:0;z-index:3;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 46px;background:linear-gradient(180deg,rgba(6,8,24,.78),rgba(6,8,24,0));pointer-events:none}
+.vtop button{pointer-events:auto}
+.vinfo{position:absolute;left:20px;right:96px;bottom:26px}
+.vinfo h2{font-size:40px}
+.vprog i{width:0}
+.vprog i.play{animation:prog 10s linear forwards}
+.feed.paused .vprog i.play{animation-play-state:paused}
+@keyframes prog{from{width:0}to{width:100%}}
+.pausemark{position:absolute;left:50%;top:44%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:rgba(8,12,34,.6);display:grid;place-items:center;opacity:0;transition:opacity .15s;pointer-events:none;color:#fff}
+.pausemark svg{width:38px;height:38px;stroke-width:2.6}
+.feed.paused .pausemark{opacity:1}
+.vend{background:linear-gradient(180deg,#1B1147,#3B1D7A 60%,#7A2A8E);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;gap:12px}
+.vend h2{font-size:38px}
+.vend p{color:#E4DFF6;max-width:30ch}
+.vend .btn{flex:none;width:100%;max-width:300px;background:var(--sun);color:#17112E}
+.vend .btn.ghost{background:rgba(255,255,255,.14);color:#fff;box-shadow:none}
+.toast{position:fixed;left:50%;right:auto;top:calc(env(safe-area-inset-top,0px) + 14px);width:min(440px,calc(100% - 40px));z-index:90;transform:translate(-50%,-10px)}
+.toast.show{transform:translate(-50%,0)}
+
+/* profil */
+.cardrow{padding:8px 8px 8px 14px}
+.cardrow .cmain{display:flex;gap:14px;align-items:center;flex:1;min-width:0;text-align:left}
+.cardrow .cdel{width:40px;height:40px;display:grid;place-items:center;color:var(--mute);flex:none;border-radius:50%}
+.cardrow .def{margin-left:auto}
+.cardrow .cmain .txt{min-width:0}
+.cardrow .cmain .txt span{display:block}
+.setdef{font-size:12px;font-weight:700;color:var(--brand);background:none;padding:4px 0;margin-left:auto}
+.logout{display:block;width:calc(100% - 40px);margin:6px 20px 0;padding:14px;text-align:center;font-weight:700;color:var(--coral);border-radius:16px;background:var(--card)}
+.sec button.more{color:var(--brand)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.vprog i.play{animation-duration:.01s}}
+
+.wide{flex:none;width:300px;height:176px;border-radius:20px;position:relative;overflow:hidden;display:block}
+.wide.sm{width:250px;height:150px}
+.wide .wb{position:absolute;left:12px;top:12px;background:rgba(23,17,46,.82);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:12px}
+.wide .wt{position:absolute;left:14px;right:14px;bottom:12px;color:#fff}
+.wide .wt strong{display:block;font-stretch:75%;font-weight:800;font-size:25px;line-height:1.05}
+.wide .wt span{display:block;font-size:13px;margin-top:4px;color:#F1EEFF}
+.wide:active{transform:scale(.98)}
+.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px}
+.cat{border-radius:16px;min-height:78px;padding:11px 12px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;transition:transform .12s}
+.cat:active{transform:scale(.97)}
+.cat b{font-size:14px;line-height:1.15}
+.cat small{font-size:12px;opacity:.9}
+.venue{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:12px 14px;width:calc(100% - 40px)}
+.venue>.ic:first-child{color:var(--brand)}
+.venue span{flex:1;min-width:0}
+.venue strong{display:block;font-size:15px}
+.venue small{color:var(--mute);font-size:13px}
+.venue>.ic:last-child{color:var(--mute)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:8px 20px 0}
+.stats div{background:var(--card);border-radius:16px;padding:12px;text-align:center}
+.stats b{display:block;font-stretch:75%;font-weight:800;font-size:28px;line-height:1}
+.stats small{color:var(--mute);font-size:12.5px}
+
+.themeseg{margin:0 20px 10px;background:var(--card);border-radius:16px;padding:4px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.themeseg button{height:42px;border-radius:12px;font-weight:700;font-size:14px;text-align:center;color:var(--mute);transition:background-color .15s,color .15s}
+.themeseg button[aria-pressed="true"]{background:var(--brand);color:#fff}
+:root[data-theme="dark"] .themeseg button[aria-pressed="true"],:root:not([data-theme="light"]) .themeseg button[aria-pressed="true"]{color:#140D2E}
+
+/* ---------- biletlerim ---------- */
+.tkt{display:flex;background:var(--card);border-radius:20px;position:relative;margin:0 20px 14px;width:calc(100% - 40px);text-align:left;overflow:hidden;box-shadow:0 12px 26px -20px rgba(23,17,46,.55)}
+.tkt .top2{display:flex;gap:14px;padding:14px;align-items:center}
+.tkt .mini-art{width:64px;height:80px;border-radius:12px;position:relative;overflow:hidden;flex:none}
+.tkt .top2 strong{display:block;font-size:17px;line-height:1.2}
+.tkt .top2 .m{color:var(--mute);font-size:13px;margin-top:3px}
+.tkt .top2 .o{color:var(--mute);font-size:12.5px;margin-top:6px;display:flex;align-items:center;gap:5px}
+.tkt .top2 .o svg{width:15px;height:15px}
+.tkt .code{flex:1;text-align:right}
+.tkt .code small{display:block;color:var(--mute);font-size:11.5px;font-weight:700;letter-spacing:.06em}
+.tkt .code b{font-stretch:75%;font-weight:800;font-size:22px;letter-spacing:.04em}
+.tkt .stub2{border-top:2px dashed var(--line);padding:12px 14px 16px;display:flex;align-items:center;gap:12px}
+.tkt .stub2 .qr{width:78px;height:78px;border-radius:12px;background:var(--paper);flex:none;padding:7px}
+.tkt .stub2 .qr svg{width:100%;height:100%;display:block}
+.tkt .stub2 .st{flex:1;min-width:0}
+.tkt .stub2 .st b{display:block;font-size:14.5px}
+.tkt .stub2 .st span{color:var(--mute);font-size:12.5px;display:block;margin-top:2px}
+.tkt .acts{display:flex;gap:8px;margin-top:10px}
+.tkt .acts button{height:40px;padding:0 14px;border-radius:12px;background:var(--paper);font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
+.tkt .acts button svg{width:17px;height:17px}
+.tkt .used{position:absolute;right:14px;top:14px;background:var(--sun);color:#17112E;font-weight:800;font-size:12px;padding:4px 10px;border-radius:10px}
+.tkt.past{opacity:.72}
+.bigqr{background:#fff;border-radius:20px;padding:18px;margin:14px auto 6px;width:min(260px,70vw)}
+.bigqr svg{width:100%;height:auto;display:block}
+.actgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:4px 20px 0}
+.actgrid button{background:var(--card);border-radius:16px;padding:14px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.actgrid button svg{width:20px;height:20px;color:var(--brand)}
+.installrow{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:14px;width:calc(100% - 40px);box-shadow:inset 0 0 0 1.5px var(--line)}
+.installrow .ic{color:var(--brand);flex:none}
+.installrow span{flex:1;min-width:0}
+.installrow strong{display:block;font-size:15px}
+.installrow small{color:var(--mute);font-size:12.5px}
+.installrow button{background:var(--grad);color:#fff;font-weight:700;font-size:13.5px;padding:10px 14px;border-radius:12px;flex:none}
+@media (max-width:380px){.nav button{font-size:10.5px}}
+</style>
+</head>
+<body>
+
+<!-- ikonlar, çizimler ve logo -->
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+<defs>
+  <linearGradient id="gc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1147"/><stop offset=".55" stop-color="#5B21B6"/><stop offset="1" stop-color="#E8436B"/></linearGradient>
+  <linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E1B3D"/><stop offset=".5" stop-color="#4A2F8F"/><stop offset=".78" stop-color="#FF7A45"/><stop offset="1" stop-color="#FFC400"/></linearGradient>
+  <linearGradient id="gt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FF"/><stop offset="1" stop-color="#FFE9A8"/></linearGradient>
+  <linearGradient id="gs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2F6BFF"/><stop offset="1" stop-color="#0E3FA8"/></linearGradient>
+  <linearGradient id="gl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFC400" stop-opacity=".5"/><stop offset="1" stop-color="#FFC400" stop-opacity=".05"/></linearGradient>
+</defs>
+
+<symbol id="art-concert" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#gc)"/>
+  <path d="M28 0h22l120 345H55z" fill="url(#gb)"/>
+  <path d="M188 0h22L190 345H70z" fill="url(#gb)" opacity=".8"/>
+  <path d="M112 0h16l70 345H42z" fill="url(#gb)" opacity=".7"/>
+  <ellipse cx="120" cy="338" rx="130" ry="38" fill="#FFC400" opacity=".38"/>
+  <circle cx="120" cy="246" r="11" fill="#0B0820"/>
+  <path d="M98 342c0-48 8-78 22-82 14 4 22 34 22 82z" fill="#0B0820"/>
+  <path d="M135 272l12-14" stroke="#0B0820" stroke-width="3" stroke-linecap="round"/>
+  <path d="M26 366l-8-34M70 372l6-38M168 370l-4-40M214 364l10-36" stroke="#0B0820" stroke-width="6" stroke-linecap="round"/>
+  <rect x="14" y="324" width="6" height="9" rx="1.5" fill="#fff" opacity=".9"/>
+  <rect x="73" y="326" width="6" height="9" rx="1.5" fill="#fff" opacity=".9"/>
+  <rect x="161" y="322" width="6" height="9" rx="1.5" fill="#fff" opacity=".9"/>
+  <rect x="224" y="320" width="6" height="9" rx="1.5" fill="#fff" opacity=".9"/>
+  <g fill="#0B0820"><ellipse cx="0" cy="398" rx="30" ry="36"/><ellipse cx="42" cy="400" rx="30" ry="34"/><ellipse cx="86" cy="398" rx="30" ry="36"/><ellipse cx="130" cy="402" rx="30" ry="34"/><ellipse cx="172" cy="398" rx="30" ry="36"/><ellipse cx="214" cy="400" rx="30" ry="34"/><ellipse cx="248" cy="398" rx="30" ry="36"/></g>
+</symbol>
+
+<symbol id="art-film" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#gf)"/>
+  <circle cx="120" cy="206" r="64" fill="#FFC400" opacity=".92"/>
+  <g fill="#fff" opacity=".7"><circle cx="30" cy="40" r="1.4"/><circle cx="196" cy="62" r="1.6"/><circle cx="84" cy="88" r="1.2"/><circle cx="160" cy="30" r="1.2"/><circle cx="218" cy="130" r="1.3"/><circle cx="50" cy="130" r="1.3"/></g>
+  <g fill="#0A1130">
+    <rect x="0" y="262" width="34" height="138"/><rect x="30" y="232" width="26" height="168"/><rect x="54" y="284" width="40" height="116"/>
+    <rect x="92" y="218" width="30" height="182"/><rect x="120" y="272" width="44" height="128"/><rect x="162" y="240" width="28" height="160"/><rect x="188" y="274" width="52" height="126"/>
+  </g>
+  <g fill="#FFC400" opacity=".85"><rect x="37" y="246" width="4" height="5"/><rect x="45" y="260" width="4" height="5"/><rect x="99" y="232" width="4" height="5"/><rect x="108" y="250" width="4" height="5"/><rect x="99" y="272" width="4" height="5"/><rect x="168" y="254" width="4" height="5"/><rect x="176" y="272" width="4" height="5"/><rect x="8" y="282" width="4" height="5"/><rect x="200" y="294" width="4" height="5"/><rect x="130" y="292" width="4" height="5"/></g>
+</symbol>
+
+<symbol id="art-tour" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#gt)"/>
+  <circle cx="176" cy="96" r="34" fill="#FFC400"/>
+  <rect y="190" width="240" height="64" fill="url(#gs)"/>
+  <path d="M30 206h40M120 220h54M60 236h36M170 240h44" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".45"/>
+  <rect y="254" width="240" height="146" fill="#0F8F6A"/>
+  <rect y="300" width="240" height="26" fill="#2A3350"/>
+  <path d="M0 313h240" stroke="#fff" stroke-width="2.4" stroke-dasharray="14 12" opacity=".8"/>
+  <rect x="58" y="268" width="96" height="40" rx="8" fill="#FFC400"/>
+  <g fill="#fff" opacity=".9"><rect x="66" y="276" width="16" height="12" rx="2"/><rect x="86" y="276" width="16" height="12" rx="2"/><rect x="106" y="276" width="16" height="12" rx="2"/><rect x="126" y="276" width="20" height="12" rx="2"/></g>
+  <circle cx="82" cy="310" r="8" fill="#0E1B3D"/><circle cx="132" cy="310" r="8" fill="#0E1B3D"/>
+  <path d="M20 254l22-46 22 46zM182 254l18-40 18 40z" fill="#0B6B52"/>
+</symbol>
+
+<symbol id="art-theatre" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="#1B1147"/>
+  <path d="M96 0h48L214 340H26z" fill="url(#gl)"/>
+  <rect y="338" width="240" height="62" fill="#6B3B1E"/>
+  <path d="M0 362h240M0 384h240" stroke="#4A2812" stroke-width="2"/>
+  <ellipse cx="120" cy="340" rx="64" ry="9" fill="#FFC400" opacity=".5"/>
+  <g fill="#A8143A"><rect x="0" y="0" width="22" height="342"/><rect x="44" y="0" width="22" height="342"/><rect x="174" y="0" width="22" height="342"/><rect x="218" y="0" width="22" height="342"/></g>
+  <g fill="#7A0F2B"><rect x="22" y="0" width="22" height="342"/><rect x="66" y="0" width="20" height="342"/><rect x="154" y="0" width="20" height="342"/><rect x="196" y="0" width="22" height="342"/></g>
+  <rect y="0" width="240" height="34" fill="#5E0A22"/>
+  <g fill="#5E0A22"><circle cx="15" cy="34" r="15"/><circle cx="45" cy="34" r="15"/><circle cx="75" cy="34" r="15"/><circle cx="105" cy="34" r="15"/><circle cx="135" cy="34" r="15"/><circle cx="165" cy="34" r="15"/><circle cx="195" cy="34" r="15"/><circle cx="225" cy="34" r="15"/></g>
+  <circle cx="120" cy="300" r="9" fill="#FFE9A8"/><path d="M106 340c0-26 5-36 14-38 9 2 14 12 14 38z" fill="#FFE9A8"/>
+</symbol>
+
+<symbol id="art-festival" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="#FFC400"/>
+  <circle cx="86" cy="130" r="72" fill="#3347FF"/>
+  <path d="M240 0V160A160 160 0 0 1 80 0z" fill="#FF5B3C" opacity=".95"/>
+  <path d="M0 400A120 120 0 0 1 240 400z" fill="#0E1B3D"/>
+  <polygon points="150,300 214,300 182,244" fill="#FFC400"/>
+  <circle cx="50" cy="330" r="14" fill="#fff"/><circle cx="92" cy="350" r="8" fill="#FF5B3C"/>
+  <path d="M20 232h90M20 246h60M20 260h74" stroke="#0E1B3D" stroke-width="5" stroke-linecap="round"/>
+</symbol>
+
+<symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></symbol>
+<symbol id="i-ticket" viewBox="0 0 24 24"><path d="M3 7h18v3a2 2 0 0 0 0 4v3H3v-3a2 2 0 0 0 0-4z"/><path d="M14.5 7v10" stroke-dasharray="2 2.4"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.8-4 3.8-6 7.5-6s6.7 2 7.5 6"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></symbol>
+<symbol id="i-chev-d" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.2a4.3 4.3 0 0 1 7.5 2.6C19.5 15.4 12 20 12 20z"/></symbol>
+<symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3.6L7 20z"/></symbol>
+<symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v7h14v-7"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+<symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
+
+<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6D4AFF"/><stop offset=".55" stop-color="#B44DE0"/><stop offset="1" stop-color="#FF4F8B"/></linearGradient>
+<symbol id="logo" viewBox="0 0 120 44">
+  <path d="M8 0H112a8 8 0 0 1 8 8v8a6 6 0 0 0 0 12v8a8 8 0 0 1-8 8H8a8 8 0 0 1-8-8v-8a6 6 0 0 0 0-12V8a8 8 0 0 1 8-8z" fill="var(--logo-bg)"/>
+  <text x="60" y="31" text-anchor="middle" font-family="Archivo,system-ui,sans-serif" font-weight="800" font-size="27" fill="var(--logo-fg)" textLength="82" lengthAdjust="spacingAndGlyphs">Genç</text>
+</symbol>
+
+<linearGradient id="ga1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF7A45"/><stop offset="1" stop-color="#B0125E"/></linearGradient>
+<linearGradient id="ga2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CCBFF"/><stop offset="1" stop-color="#FFF1B0"/></linearGradient>
+<linearGradient id="ga3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B5E3C"/><stop offset="1" stop-color="#5EC98B"/></linearGradient>
+<linearGradient id="ga4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E7D3"/><stop offset="1" stop-color="#D9B48F"/></linearGradient>
+<linearGradient id="ga5" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B1055"/><stop offset=".6" stop-color="#9B2C7E"/><stop offset="1" stop-color="#FF6B6B"/></linearGradient>
+<symbol id="art-standup" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#ga1)"/>
+  <path d="M0 0h50l-30 400H0zM190 0h50v400h-20z" fill="#7A0B43" opacity=".55"/>
+  <ellipse cx="120" cy="330" rx="120" ry="40" fill="#FFC83D" opacity=".4"/>
+  <circle cx="120" cy="170" r="30" fill="#17112E"/><rect x="116" y="196" width="8" height="120" rx="4" fill="#17112E"/>
+  <path d="M84 316h72" stroke="#17112E" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="60" cy="70" r="6" fill="#FFC83D"/><circle cx="190" cy="110" r="4" fill="#fff" opacity=".8"/><circle cx="170" cy="50" r="5" fill="#FFC83D"/>
+</symbol>
+<symbol id="art-kids" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#ga2)"/>
+  <path d="M0 330q60-50 120-20t120-30v120H0z" fill="#3FB27F"/>
+  <g stroke="#17112E" stroke-width="2" opacity=".6"><path d="M70 170 110 330M120 130l0 200M170 190l-40 140"/></g>
+  <circle cx="70" cy="140" r="34" fill="#FF5A5F"/><circle cx="120" cy="100" r="38" fill="#6D4AFF"/><circle cx="172" cy="160" r="32" fill="#FFC83D"/>
+  <circle cx="60" cy="130" r="8" fill="#fff" opacity=".5"/><circle cx="108" cy="88" r="9" fill="#fff" opacity=".5"/><circle cx="163" cy="150" r="8" fill="#fff" opacity=".5"/>
+  <circle cx="200" cy="60" r="22" fill="#fff" opacity=".7"/>
+</symbol>
+<symbol id="art-sport" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#ga3)"/>
+  <g fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3"><rect x="20" y="230" width="200" height="150" rx="6"/><path d="M20 305h200"/><circle cx="120" cy="305" r="28"/></g>
+  <circle cx="120" cy="140" r="56" fill="#fff"/><path d="M120 108l24 18-9 28h-30l-9-28z" fill="#17112E"/>
+  <path d="M120 84v24M144 126l24-8M135 154l14 22M105 154l-14 22M96 126l-24-8" stroke="#17112E" stroke-width="5" stroke-linecap="round"/>
+  <path d="M30 0v70M210 0v70" stroke="#fff" stroke-opacity=".6" stroke-width="4"/><circle cx="30" cy="70" r="9" fill="#FFC83D"/><circle cx="210" cy="70" r="9" fill="#FFC83D"/>
+</symbol>
+<symbol id="art-expo" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#ga4)"/>
+  <rect y="320" width="240" height="80" fill="#B88A63"/>
+  <rect x="26" y="80" width="86" height="120" fill="#fff" stroke="#17112E" stroke-width="5"/><circle cx="69" cy="130" r="22" fill="#FF5A5F"/><path d="M26 200l34-40 26 24 26-30v46z" fill="#6D4AFF"/>
+  <rect x="136" y="60" width="78" height="78" fill="#fff" stroke="#17112E" stroke-width="5"/><path d="M146 128l24-50 34 50z" fill="#FFC83D"/>
+  <rect x="136" y="170" width="78" height="110" fill="#fff" stroke="#17112E" stroke-width="5"/><circle cx="175" cy="225" r="26" fill="#3FB27F"/>
+  <rect x="26" y="240" width="86" height="60" fill="#fff" stroke="#17112E" stroke-width="5"/><path d="M36 290q20-40 40-10t26-20" fill="none" stroke="#FF4F8B" stroke-width="6"/>
+</symbol>
+<symbol id="art-dance" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
+  <rect width="240" height="400" fill="url(#ga5)"/>
+  <circle cx="120" cy="150" r="110" fill="#FFC83D" opacity=".18"/><circle cx="120" cy="150" r="70" fill="#FFC83D" opacity=".18"/>
+  <path d="M0 340q120-60 240 0v60H0z" fill="#17112E" opacity=".75"/>
+  <circle cx="98" cy="210" r="14" fill="#17112E"/><path d="M98 224c-20 40-24 80-14 110h30c4-30-4-70-16-110z" fill="#17112E"/>
+  <circle cx="148" cy="190" r="14" fill="#17112E"/><path d="M148 204c26 36 34 76 26 130h-34c-4-50 2-90 8-130z" fill="#17112E"/>
+  <path d="M104 236q22-14 40-26" stroke="#17112E" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <circle cx="40" cy="60" r="5" fill="#fff"/><circle cx="196" cy="90" r="4" fill="#fff"/><circle cx="190" cy="40" r="6" fill="#FFC83D"/>
+</symbol>
+<symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+<symbol id="i-qr" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="6" height="6" rx="1"/><rect x="14.5" y="3.5" width="6" height="6" rx="1"/><rect x="3.5" y="14.5" width="6" height="6" rx="1"/><path d="M14.5 14.5h2.5v2.5M20.5 14.5v6M14.5 20.5h3"/></symbol>
+<symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3.5v3M16 3.5v3"/></symbol>
+<symbol id="i-install" viewBox="0 0 24 24"><path d="M12 3v9M8.5 8.5L12 12l3.5-3.5M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></symbol>
+<symbol id="i-compass2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M15 9l-1.8 4.2L9 15l1.8-4.2z"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+</svg>
+
+<div id="app">
+
+  <!-- ===== KAYIT ===== -->
+  <section class="view" id="onb" aria-label="Kayıt">
+    <div class="top" style="padding-bottom:0">
+      <button class="back" id="ob-back" type="button" aria-label="Geri" style="visibility:hidden"><svg class="ic"><use href="#i-back"/></svg></button>
+      <div class="steps" id="steps" aria-label="Adım 1 / 3"><i class="d"></i><i></i><i></i></div>
+    </div>
+
+    <!-- adım 1: hesap -->
+    <div class="ostep pane" id="ob1">
+      <div class="scroll">
+        <svg class="logo-lg" viewBox="0 0 120 44" role="img" aria-label="Genç"><use href="#logo"/></svg>
+        <h2 class="ob-title disp">Hoş geldin</h2>
+        <p class="ob-sub">Çevrendeki konser, sinema ve gezileri keşfetmek için iki bilgi yeterli.</p>
+        <div class="field"><label for="in-name">Ad soyad</label><input id="in-name" type="text" autocomplete="name" placeholder="Örn. Emre Yıldız"></div>
+        <div class="field"><label for="in-mail">E-posta</label><input id="in-mail" type="email" autocomplete="email" inputmode="email" placeholder="ornek@eposta.com"></div>
+        <p class="err" id="err1" role="alert"></p>
+      </div>
+      <button class="cta" id="go1" type="button">Devam et</button>
+    </div>
+
+    <!-- adım 2: zevkler -->
+    <div class="ostep pane" id="ob2" hidden>
+      <div class="scroll">
+        <h2 class="ob-title disp">Ne tür şeylerden hoşlanırsın?</h2>
+        <p class="ob-sub">Önerileri buna göre sıralarız. Profilinden istediğin zaman değiştirebilirsin.</p>
+        <div class="locrow">
+          <svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg>
+          <div class="t"><span id="ob-locname">Torbalı, İzmir</span><small id="ob-locsub">Yakınındakileri önce göstereceğiz</small></div>
+          <button class="sw" id="ob-sw" type="button" role="switch" aria-checked="true" aria-label="Konumu kullan"></button>
+        </div>
+        <div class="picks" id="picks"></div>
+      </div>
+      <button class="cta" id="pickgo" type="button">Devam et</button>
+    </div>
+
+    <!-- adım 3: hazır -->
+    <div class="ostep pane" id="ob3" hidden>
+      <div class="scroll" style="text-align:center">
+        <svg class="done-logo" viewBox="0 0 120 44" role="img" aria-label="Genç"><use href="#logo"/></svg>
+        <h2 class="ob-title disp" id="done-title" style="padding-top:12px">Hazırsın!</h2>
+        <p class="ob-sub" id="done-sub" style="margin:0 auto"></p>
+        <div class="likes done-chips" id="done-likes"></div>
+      </div>
+      <button class="cta" id="go3" type="button">Keşfetmeye başla</button>
+    </div>
+  </section>
+
+  <!-- ===== ANA UYGULAMA ===== -->
+  <section class="view" id="main" hidden aria-label="Genç">
+
+    <!-- KEŞFET -->
+    <div class="pane" id="tab-kesfet">
+      <div class="scroll" id="kscroll">
+        <div class="top">
+          <svg class="brandlogo" viewBox="0 0 120 44" role="img" aria-label="Genç"><use href="#logo"/></svg>
+          <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
+        </div>
+        <div class="locbar"><button class="loc" id="locbtn" type="button" aria-haspopup="dialog"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg><span id="locname">Torbalı, İzmir</span><svg class="ic" style="width:18px;height:18px"><use href="#i-chev-d"/></svg></button></div>
+        <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Mekan, etkinlik veya sinema ara" aria-label="Ara" autocomplete="off"></label>
+        <div class="chips" id="chips" role="group" aria-label="Tür filtresi"></div>
+        <div id="klists"></div>
+        <div class="pad"></div>
+      </div>
+    </div>
+
+    <!-- VİDEOLAR -->
+    <div class="pane" id="tab-videolar" hidden>
+      <div class="feed" id="feed" aria-label="Kısa videolar"></div>
+      <div class="vtop">
+        <div class="vtabs" id="vtabs">
+          <button type="button" data-vtab="ozel" aria-pressed="true">Sana özel</button>
+          <button type="button" data-vtab="yakin" aria-pressed="false">Yakınında</button>
+        </div>
+        <div class="reach" id="reach"></div>
+      </div>
+    </div>
+
+    <!-- BİLETLERİM -->
+    <div class="pane" id="tab-biletler" hidden>
+      <div class="scroll" id="tscroll"></div>
+    </div>
+
+    <!-- PROFİL -->
+    <div class="pane" id="tab-profil" hidden>
+      <div class="scroll" id="pscroll"></div>
+    </div>
+
+    <nav class="nav" id="nav" aria-label="Ana menü">
+      <button type="button" data-tab="kesfet" class="on" aria-current="page"><span class="ico"><svg class="ic"><use href="#i-compass"/></svg></span>Keşfet</button>
+      <button type="button" data-tab="videolar"><span class="ico"><svg class="ic"><use href="#i-play"/></svg></span>Videolar</button>
+      <button type="button" data-tab="biletler"><span class="ico"><svg class="ic"><use href="#i-ticket"/></svg></span>Biletlerim</button>
+      <button type="button" data-tab="profil"><span class="ico"><svg class="ic"><use href="#i-user"/></svg></span>Profil</button>
+    </nav>
+  </section>
+
+  <!-- alt sayfa -->
+  <div class="ov" id="sheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title">
+      <div class="sh-head"><h3 class="disp" id="sh-title"></h3><button class="x" id="sh-close" type="button" aria-label="Kapat"><svg class="ic"><use href="#i-close"/></svg></button></div>
+      <div class="sh-body" id="sh-body"></div>
+    </div>
+  </div>
+
+  <!-- uygulama içi satıcı sayfası -->
+  <div class="webv" id="web" role="dialog" aria-modal="true" aria-label="Bilet sayfası" hidden>
+    <div class="whead">
+      <button class="x" id="web-close" type="button" aria-label="Kapat"><svg class="ic"><use href="#i-close"/></svg></button>
+      <div class="ti"><strong id="web-title">Biletini seç</strong><small><svg class="ic"><use href="#i-shield"/></svg><span id="web-seller"></span></small></div>
+      <svg class="brandlogo" viewBox="0 0 120 44" style="width:68px" role="img" aria-label="Genç"><use href="#logo"/></svg>
+    </div>
+    <div class="wbody" id="web-body"></div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"><svg class="ic"><use href="#i-check"/></svg><span id="toast-t"></span></div>
+</div>
+
+<script>
+/* Genç - küçük QR kod üretici (bayt kipi, sürüm 1-5, L/M/Q/H). */
+(function (root) {
+  var EXP = new Array(512), LOG = new Array(256);
+  (function () {
+    var x = 1;
+    for (var i = 0; i < 255; i++) { EXP[i] = x; LOG[x] = i; x <<= 1; if (x & 0x100) x ^= 0x11d; }
+    for (var j = 255; j < 512; j++) EXP[j] = EXP[j - 255];
+  })();
+  function mul(a, b) { return (a === 0 || b === 0) ? 0 : EXP[LOG[a] + LOG[b]]; }
+  function polyMul(a, b) {
+    var r = new Array(a.length + b.length - 1);
+    for (var i = 0; i < r.length; i++) r[i] = 0;
+    for (i = 0; i < a.length; i++) for (var j = 0; j < b.length; j++) r[i + j] ^= mul(a[i], b[j]);
+    return r;
+  }
+  function rsGen(n) { var p = [1]; for (var i = 0; i < n; i++) p = polyMul(p, [1, EXP[i]]); return p; }
+  function rsEncode(data, nec) {
+    var gen = rsGen(nec), res = data.concat(new Array(nec));
+    for (var i = 0; i < res.length; i++) res[i] = res[i] || 0;
+    for (i = 0; i < data.length; i++) {
+      var coef = res[i];
+      if (coef) for (var j = 0; j < gen.length; j++) res[i + j] ^= mul(gen[j], coef);
+    }
+    return res.slice(data.length);
+  }
+
+  var EC_BITS = { L: 1, M: 0, Q: 3, H: 2 };
+  var RS = {
+    1: { L: [[1, 26, 19]], M: [[1, 26, 16]], Q: [[1, 26, 13]], H: [[1, 26, 9]] },
+    2: { L: [[1, 44, 34]], M: [[1, 44, 28]], Q: [[1, 44, 22]], H: [[1, 44, 16]] },
+    3: { L: [[1, 70, 55]], M: [[1, 70, 44]], Q: [[2, 35, 17]], H: [[2, 35, 13]] },
+    4: { L: [[1, 100, 80]], M: [[2, 50, 32]], Q: [[2, 50, 24]], H: [[4, 25, 9]] },
+    5: { L: [[1, 134, 108]], M: [[2, 67, 43]], Q: [[2, 33, 15], [2, 34, 16]], H: [[2, 33, 11], [2, 34, 12]] }
+  };
+  var ALIGN = { 1: [], 2: [6, 18], 3: [6, 22], 4: [6, 26], 5: [6, 30] };
+  var FORMAT_EC = { L: 1, M: 0, Q: 3, H: 2 };
+
+  function utf8Bytes(s) {
+    var out = [];
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      if (c < 0x80) out.push(c);
+      else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 63));
+      else if (c >= 0xd800 && c < 0xdc00) {
+        var c2 = s.charCodeAt(++i);
+        c = 0x10000 + ((c - 0xd800) << 10) + (c2 - 0xdc00);
+        out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 63), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+      } else out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 63), 0x80 | (c & 63));
+    }
+    return out;
+  }
+
+  function dataCodewords(version, level) {
+    var g = RS[version][level], n = 0;
+    for (var i = 0; i < g.length; i++) n += g[i][0] * g[i][2];
+    return n;
+  }
+
+  function pickVersion(len, level) {
+    for (var v = 1; v <= 5; v++) {
+      if (4 + 8 + len * 8 <= dataCodewords(v, level) * 8) return v;
+    }
+    return 0;
+  }
+
+  function encode(text, level) {
+    var bytes = utf8Bytes(text);
+    var version = pickVersion(bytes.length, level);
+    if (!version) throw new Error("QR: veri bu sürüme sığmıyor");
+    var cap = dataCodewords(version, level);
+    var bits = [];
+    function put(val, len) { for (var i = len - 1; i >= 0; i--) bits.push((val >> i) & 1); }
+    put(4, 4);
+    put(bytes.length, 8);
+    for (var i = 0; i < bytes.length; i++) put(bytes[i], 8);
+    var maxBits = cap * 8;
+    for (i = 0; i < 4 && bits.length < maxBits; i++) bits.push(0);
+    while (bits.length % 8) bits.push(0);
+    var pads = [0xEC, 0x11], pi = 0;
+    while (bits.length < maxBits) { put(pads[pi++ % 2], 8); }
+    var cw = [];
+    for (i = 0; i < bits.length; i += 8) {
+      var b = 0;
+      for (var j = 0; j < 8; j++) b = (b << 1) | bits[i + j];
+      cw.push(b);
+    }
+    // bloklara ayır
+    var groups = RS[version][level], blocks = [], ecLen = 0, k = 0;
+    for (i = 0; i < groups.length; i++) {
+      for (var c = 0; c < groups[i][0]; c++) {
+        var data = cw.slice(k, k + groups[i][2]); k += groups[i][2];
+        blocks.push({ data: data, ec: rsEncode(data, groups[i][1] - groups[i][2]) });
+        ecLen = groups[i][1] - groups[i][2];
+      }
+    }
+    var maxData = Math.max.apply(null, blocks.map(function (b) { return b.data.length; }));
+    var final = [];
+    for (i = 0; i < maxData; i++) for (j = 0; j < blocks.length; j++) if (i < blocks[j].data.length) final.push(blocks[j].data[i]);
+    for (i = 0; i < ecLen; i++) for (j = 0; j < blocks.length; j++) final.push(blocks[j].ec[i]);
+    return { version: version, level: level, codewords: final };
+  }
+
+  // Biçim bilgisi modülleri, LSB'den başlayarak (satır, sütun) sırasıyla.
+  function formatCells(size) {
+    var c = [];
+    for (var i = 0; i < 15; i++) {
+      if (i < 6) c.push([i, 8]);
+      else if (i < 8) c.push([i + 1, 8]);
+      else c.push([size - 15 + i, 8]);
+    }
+    for (i = 0; i < 15; i++) {
+      if (i < 8) c.push([8, size - 1 - i]);
+      else if (i < 9) c.push([8, 7]);
+      else c.push([8, 14 - i]);
+    }
+    return c;
+  }
+
+  function matrix(text, level) {
+    level = level || "M";
+    var enc = encode(text, level), version = enc.version;
+    var size = version * 4 + 17;
+    var m = [], reserved = [];
+    for (var i = 0; i < size; i++) { m.push(new Array(size)); reserved.push(new Array(size)); }
+    for (i = 0; i < size; i++) for (var j = 0; j < size; j++) { m[i][j] = 0; reserved[i][j] = 0; }
+
+    function set(r, c, v, res) { if (r < 0 || c < 0 || r >= size || c >= size) return; m[r][c] = v; if (res) reserved[r][c] = 1; }
+
+    function finder(r, c) {
+      for (var dr = -1; dr <= 7; dr++) for (var dc = -1; dc <= 7; dc++) {
+        var rr = r + dr, cc = c + dc;
+        if (rr < 0 || cc < 0 || rr >= size || cc >= size) continue;
+        var inRing = dr >= 0 && dr <= 6 && dc >= 0 && dc <= 6;
+        var dark = inRing && (dr === 0 || dr === 6 || dc === 0 || dc === 6 || (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4));
+        set(rr, cc, dark ? 1 : 0, true);
+      }
+    }
+    finder(0, 0); finder(0, size - 7); finder(size - 7, 0);
+
+    for (i = 8; i < size - 8; i++) { var t = (i % 2 === 0) ? 1 : 0; set(6, i, t, true); set(i, 6, t, true); }
+
+    var centers = ALIGN[version];
+    for (var a = 0; a < centers.length; a++) for (var b = 0; b < centers.length; b++) {
+      var cr = centers[a], cc2 = centers[b];
+      if ((cr <= 8 && cc2 <= 8) || (cr <= 8 && cc2 >= size - 9) || (cr >= size - 9 && cc2 <= 8)) continue;
+      for (var dr2 = -2; dr2 <= 2; dr2++) for (var dc2 = -2; dc2 <= 2; dc2++) {
+        var dark2 = Math.max(Math.abs(dr2), Math.abs(dc2)) !== 1;
+        set(cr + dr2, cc2 + dc2, dark2 ? 1 : 0, true);
+      }
+    }
+
+    set(size - 8, 8, 1, true); // koyu modül
+    var fmtCells = formatCells(size);
+    for (i = 0; i < fmtCells.length; i++) { set(fmtCells[i][0], fmtCells[i][1], 0, true); }
+
+    // veri yerleştirme (zikzak)
+    var bitIdx = 0, total = enc.codewords.length * 8;
+    function nextBit() { var byte = enc.codewords[bitIdx >> 3]; var bit = (byte >> (7 - (bitIdx & 7))) & 1; bitIdx++; return bit; }
+    var up = true;
+    for (var col = size - 1; col > 0; col -= 2) {
+      if (col === 6) col--;
+      for (var row = 0; row < size; row++) {
+        var r2 = up ? size - 1 - row : row;
+        for (var c2 = 0; c2 < 2; c2++) {
+          var cc3 = col - c2;
+          if (!reserved[r2][cc3]) m[r2][cc3] = bitIdx < total ? nextBit() : 0;
+        }
+      }
+      up = !up;
+    }
+
+    function maskFn(id, r, c) {
+      switch (id) {
+        case 0: return (r + c) % 2 === 0;
+        case 1: return r % 2 === 0;
+        case 2: return c % 3 === 0;
+        case 3: return (r + c) % 3 === 0;
+        case 4: return (Math.floor(r / 2) + Math.floor(c / 3)) % 2 === 0;
+        case 5: return ((r * c) % 2) + ((r * c) % 3) === 0;
+        case 6: return (((r * c) % 2) + ((r * c) % 3)) % 2 === 0;
+        default: return (((r + c) % 2) + ((r * c) % 3)) % 2 === 0;
+      }
+    }
+    function applyMask(id) {
+      for (var r = 0; r < size; r++) for (var c = 0; c < size; c++) if (!reserved[r][c] && maskFn(id, r, c)) m[r][c] ^= 1;
+    }
+    function penalty() {
+      var p = 0, r, c, run, dark = 0;
+      for (r = 0; r < size; r++) {
+        run = 1;
+        for (c = 1; c < size; c++) { if (m[r][c] === m[r][c - 1]) run++; else { if (run >= 5) p += run - 2; run = 1; } }
+        if (run >= 5) p += run - 2;
+      }
+      for (c = 0; c < size; c++) {
+        run = 1;
+        for (r = 1; r < size; r++) { if (m[r][c] === m[r - 1][c]) run++; else { if (run >= 5) p += run - 2; run = 1; } }
+        if (run >= 5) p += run - 2;
+      }
+      for (r = 0; r < size - 1; r++) for (c = 0; c < size - 1; c++) {
+        var s = m[r][c] + m[r][c + 1] + m[r + 1][c] + m[r + 1][c + 1];
+        if (s === 0 || s === 4) p += 3;
+      }
+      var pat = [1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0];
+      function hasPat(get, len) {
+        var n = 0;
+        for (var s = 0; s + 11 <= len; s++) {
+          var ok = true, ok2 = true;
+          for (var k = 0; k < 11; k++) { if (get(s + k) !== pat[k]) ok = false; }
+          for (k = 0; k < 11; k++) { if (get(s + k) !== pat[10 - k]) ok2 = false; }
+          if (ok || ok2) n++;
+        }
+        return n;
+      }
+      for (r = 0; r < size; r++) p += 40 * hasPat((function (rr) { return function (i) { return m[rr][i]; }; })(r), size);
+      for (c = 0; c < size; c++) p += 40 * hasPat((function (cc) { return function (i) { return m[i][cc]; }; })(c), size);
+      for (r = 0; r < size; r++) for (c = 0; c < size; c++) if (m[r][c]) dark++;
+      var pct = dark * 100 / (size * size);
+      p += 10 * Math.floor(Math.abs(pct - 50) / 5);
+      return p;
+    }
+
+    var best = 0, bestScore = Infinity, snapshot;
+    for (var mid = 0; mid < 8; mid++) {
+      applyMask(mid);
+      var sc = penalty();
+      if (sc < bestScore) { bestScore = sc; best = mid; }
+      applyMask(mid);
+    }
+    applyMask(best);
+
+    // biçim bilgisi
+    var fmtData = (FORMAT_EC[level] << 3) | best, rem = fmtData;
+    for (i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >> 9) * 0x537);
+    var fmt = ((fmtData << 10) | rem) ^ 0x5412;
+    for (i = 0; i < fmtCells.length; i++) set(fmtCells[i][0], fmtCells[i][1], (fmt >> (i % 15)) & 1, true);
+    set(size - 8, 8, 1, true);
+
+    return m;
+  }
+
+  root.QRCodeLite = { matrix: matrix, encode: encode };
+})(window);
+
+</script>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function ic(n,c){return '<svg class="ic '+(c||'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>'}
+function fmt(n){return n===0?'Ücretsiz':n.toLocaleString('tr-TR')+' ₺'}
+function norm(s){return String(s).toLocaleLowerCase('tr-TR').replace(/[’']/g,'')}
+
+/* ---------- veri ---------- */
+var TYPES=['Konser','Sinema','Tiyatro','Stand-up','Festival','Çocuk etkinlikleri','Gezi turu','Spor','Sergi','Dans','Opera ve bale','Açık hava'];
+var CHIPS=[];
+var PLACES=[
+  {d:'Torbalı',lat:38.150,lng:27.360},
+  {d:'Bornova',lat:38.468,lng:27.220},
+  {d:'Konak',lat:38.419,lng:27.128},
+  {d:'Karşıyaka',lat:38.460,lng:27.110}
+];
+var EVENTS=[
+ {id:'celik',type:'Sinema',title:'Çelik Şafak',short:'Bugün 4 seans, Kipa Sinema',venue:'Kipa Sinema',district:'Torbalı',lat:38.170,lng:27.370,date:'2026-11-14',when:'Bugün, 4 seans',wd:'Bugün',art:'art-film',video:true,tag:'Fragman',vlabel:'Çelik Şafak fragmanı',src:'Fragman: Kipa Sinema',prices:[['Tam',140],['Öğrenci',110]]},
+ {id:'minik',type:'Çocuk etkinlikleri',title:'Minik Kaşifler: çocuk tiyatrosu',venue:'Torbalı Kültür Merkezi',district:'Torbalı',lat:38.168,lng:27.358,date:'2026-11-15',when:'Pazar 15 Kas, 11.00',wd:'Paz',art:'art-kids',video:true,prices:[['Çocuk',120],['Yetişkin',150]]},
+ {id:'sessiz',type:'Sinema',title:'Sessiz Dalgalar',venue:'Kipa Sinema',district:'Torbalı',lat:38.170,lng:27.370,date:'2026-11-15',when:'Pazar 15 Kas, 5 seans',wd:'Paz',art:'art-theatre',video:true,tag:'Fragman',vlabel:'Sessiz Dalgalar fragmanı',src:'Fragman: Kipa Sinema',prices:[['Tam',140],['Öğrenci',110]]},
+ {id:'foto',type:'Sergi',title:'Ege’de Işık: fotoğraf sergisi',venue:'Konak Sanat Galerisi',district:'Konak',lat:38.422,lng:27.131,date:'2026-11-17',when:'Salı 17 Kas, 10.00–18.00',wd:'Sal',art:'art-expo',video:false,prices:[['Giriş',0]]},
+ {id:'gulmece',type:'Stand-up',title:'Gülmece Gecesi',venue:'Karşıyaka Sanat Merkezi',district:'Karşıyaka',lat:38.461,lng:27.112,date:'2026-11-19',when:'Perşembe 19 Kas, 20.30',wd:'Per',art:'art-standup',video:true,prices:[['Standart',300],['Ön sıra',400]]},
+ {id:'yaz',type:'Tiyatro',title:'Bir Yaz Gecesi Rüyası',venue:'Bornova Sahne',district:'Bornova',lat:38.468,lng:27.222,date:'2026-11-20',when:'Cuma 20 Kas, 20.30',wd:'Cum',art:'art-theatre',video:true,prices:[['Tam',280],['Öğrenci',200]]},
+ {id:'kardelen',type:'Konser',title:'Kardelen: canlı konser',venue:'Torbalı Kültür Merkezi',district:'Torbalı',lat:38.168,lng:27.358,date:'2026-11-21',when:'Cumartesi 21 Kas, 21.00',wd:'Cmt',hot:true,feat:true,art:'art-concert',video:true,vlabel:'Kardelen konserinden',vtitle:'Kardelen canlı konser',prices:[['Standart',350],['Ön sıra',550]]},
+ {id:'yuruyus',type:'Açık hava',title:'Gün doğumu yürüyüşü',venue:'Torbalı’dan kalkış, Karagöl',district:'Torbalı',lat:38.150,lng:27.360,date:'2026-11-21',when:'Cumartesi 21 Kas, 06.00',wd:'Cmt',art:'art-tour',video:false,prices:[['Kişi başı',350]]},
+ {id:'kaz',type:'Gezi turu',title:'Kaz Dağları’nda bir gün',venue:'Torbalı’dan kalkan tur',district:'Torbalı',lat:38.150,lng:27.360,date:'2026-11-22',when:'Pazar 22 Kas, 07.00',wd:'Paz',feat:true,art:'art-tour',video:true,src:'Video: tur organizatörü',prices:[['Kişi başı',1250]]},
+ {id:'derbi',type:'Spor',title:'Amatör Lig derbisi',venue:'Bornova Stadı',district:'Bornova',lat:38.470,lng:27.228,date:'2026-11-22',when:'Pazar 22 Kas, 14.00',wd:'Paz',art:'art-sport',video:false,prices:[['Tribün',90],['Kapalı',150]]},
+ {id:'pazar',type:'Festival',title:'Torbalı Kış Pazarı',venue:'Torbalı Meydanı',district:'Torbalı',lat:38.152,lng:27.362,date:'2026-11-22',when:'Pazar 22 Kas, 10.00',wd:'Paz',art:'art-festival',video:false,prices:[['Giriş',0]]},
+ {id:'caz',type:'Konser',title:'Ege Caz Akşamı',venue:'Karşıyaka Sanat Merkezi',district:'Karşıyaka',lat:38.461,lng:27.112,date:'2026-11-26',when:'Perşembe 26 Kas, 20.00',wd:'Per',art:'art-concert',video:true,prices:[['Standart',450],['Öğrenci',320]]},
+ {id:'tango',type:'Dans',title:'Tango Gecesi',venue:'Alsancak Kültür Salonu',district:'Konak',lat:38.436,lng:27.145,date:'2026-11-27',when:'Cuma 27 Kas, 21.00',wd:'Cum',feat:true,art:'art-dance',video:true,prices:[['Çift',500],['Tek kişi',250]]},
+ {id:'festival',type:'Festival',title:'Ege Sokak Festivali',venue:'Konak Meydanı',district:'Konak',lat:38.419,lng:27.128,date:'2026-11-28',when:'Cumartesi 28 Kas, 14.00',wd:'Cmt',art:'art-festival',video:false,prices:[['Giriş',0]]},
+ {id:'efes',type:'Gezi turu',title:'Efes ve Şirince günübirlik',venue:'Torbalı’dan kalkan tur',district:'Torbalı',lat:38.150,lng:27.360,date:'2026-11-29',when:'Pazar 29 Kas, 08.00',wd:'Paz',art:'art-tour',video:true,src:'Video: tur organizatörü',prices:[['Kişi başı',1100]]},
+ {id:'kugu',type:'Opera ve bale',title:'Kuğu Gölü balesi',venue:'Konak Opera Sahnesi',district:'Konak',lat:38.423,lng:27.138,date:'2026-12-05',when:'Cumartesi 5 Ara, 20.00',wd:'Cmt',feat:true,art:'art-dance',video:true,prices:[['Üst kat',600],['Alt kat',900]]}
+];
+var MON=['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+EVENTS.forEach(function(e){
+  e.day=+e.date.slice(8,10);e.mon=MON[+e.date.slice(5,7)-1];
+  if(!e.short)e.short=e.wd+' '+e.day+' '+e.mon+', '+e.district;
+  if(!e.vlabel)e.vlabel=e.title;if(!e.vtitle)e.vtitle=e.title;
+  if(!e.tag)e.tag='Video';if(!e.src)e.src='Video: '+e.venue;
+});
+var PAST=[
+ {id:'p-festival',past:true,type:'Festival',title:'Ege Sokak Festivali',venue:'Konak Meydanı',district:'Konak',lat:38.419,lng:27.128,when:'12 Eki 2026',art:'art-festival',prices:[]},
+ {id:'p-celik3',past:true,type:'Sinema',title:'Çelik Şafak 3',venue:'Kipa Sinema',district:'Torbalı',lat:38.170,lng:27.370,when:'26 Eyl 2026',art:'art-film',prices:[]}
+];
+var ALL={};EVENTS.concat(PAST).forEach(function(e){ALL[e.id]=e});
+CHIPS=['Tümü'].concat(TYPES.filter(function(t){return EVENTS.some(function(e){return e.type===t})}));
+var CATC={'Sinema':'#3B2A8F,#6D4AFF','Konser':'#8E2DE2,#FF4F8B','Tiyatro':'#B0125E,#FF7A45','Gezi turu':'#0E7A4B,#4CC38A','Festival':'#FF7A45,#FFC83D','Stand-up':'#FF4F8B,#FFB347','Çocuk etkinlikleri':'#2F9BFF,#7BDFF2','Spor':'#0B5E3C,#5EC98B','Sergi':'#B88A63,#F0C987','Dans':'#2B1055,#FF6B6B','Opera ve bale':'#4A1D7A,#C77DFF','Açık hava':'#1F8A70,#BEDB39'};
+
+/* ---------- durum ---------- */
+var S={
+  name:'',email:'',phone:'',
+  likes:['Konser','Sinema','Gezi turu'],
+  locOn:true,loc:PLACES[0],
+  liked:{},saved:{},
+  cards:[{id:'c1',last4:'4821',exp:'09/28',def:true}],
+  tickets:[],loggedIn:false,
+  filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'kesfet',theme:'system'
+};
+
+/* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
+var STORE='genc.v1';
+function persist(){
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locOn:S.locOn,liked:S.liked,saved:S.saved,cards:S.cards,tickets:S.tickets,theme:S.theme,loggedIn:S.loggedIn}))}catch(e){}
+}
+function restore(){
+  var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
+  if(!d)return;
+  ['name','email','phone','theme'].forEach(function(k){if(typeof d[k]==='string')S[k]=d[k]});
+  if(typeof d.locOn==='boolean')S.locOn=d.locOn;
+  if(d.likes&&d.likes.length)S.likes=d.likes;
+  if(d.loc){var p=PLACES.filter(function(x){return x.d===d.loc})[0];if(p)S.loc=p}
+  if(d.liked&&typeof d.liked==='object')S.liked=d.liked;
+  if(d.saved&&typeof d.saved==='object')S.saved=d.saved;
+  if(d.cards&&d.cards.length)S.cards=d.cards;
+  if(d.tickets&&d.tickets.length)S.tickets=d.tickets;
+  S.loggedIn=!!d.loggedIn;
+}
+
+/* ---------- biletler ---------- */
+var CODE_CHARS='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newCode(){
+  var s='';for(var i=0;i<6;i++)s+=CODE_CHARS[Math.floor(Math.random()*CODE_CHARS.length)];
+  return 'G-'+s;
+}
+function seatLabel(e,n){
+  var h=0;for(var i=0;i<e.id.length;i++)h=(h*31+e.id.charCodeAt(i))>>>0;
+  return String.fromCharCode(65+(h%8))+(1+(h%9)+n);
+}
+function seatsFor(t){
+  var out=[];for(var i=0;i<t.qty;i++)out.push(seatLabel(t.e,t.seat0+i));
+  return out.join(', ');
+}
+function qrSVG(text){
+  var m;try{m=QRCodeLite.matrix(text,'M')}catch(e){return '<svg viewBox="0 0 1 1" role="img" aria-label="Kod üretilemedi"></svg>'}
+  var n=m.length,d='';
+  for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(m[r][c])d+='M'+c+' '+r+'h1v1h-1z';
+  return '<svg viewBox="-1 -1 '+(n+2)+' '+(n+2)+'" shape-rendering="crispEdges" role="img" aria-label="Bilet QR kodu"><rect x="-1" y="-1" width="'+(n+2)+'" height="'+(n+2)+'" fill="#fff"/><path d="'+d+'" fill="#17112E"/></svg>';
+}
+function ticketPayload(t){
+  return ['GENÇ',t.e.id,t.code,String(t.qty),t.opt,seatsFor(t)].join('|');
+}
+function icsTime(e){
+  var m=/(\d{1,2})[.](\d{2})/.exec(e.when||'');
+  return m?(('0'+m[1]).slice(-2)+m[2]+'00'):'200000';
+}
+function icsText(e){
+  var dt=e.date.replace(/-/g,'')+'T'+icsTime(e);
+  var end=e.date.replace(/-/g,'')+'T'+icsTime(e);
+  return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Genc//Etkinlik//TR','BEGIN:VEVENT',
+    'UID:genc-'+e.id+'@genc.app','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z',
+    'DTSTART:'+dt,'DTEND:'+end,'SUMMARY:'+e.title,'LOCATION:'+e.venue+', '+e.district+', İzmir',
+    'DESCRIPTION:'+e.when+' · biletler '+priceLabel(e),'END:VEVENT','END:VCALENDAR'].join('\r\n');
+}
+function download(name,text,mime){
+  try{
+    var blob=new Blob([text],{type:(mime||'text/plain')+';charset=utf-8'});
+    var url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+    setTimeout(function(){URL.revokeObjectURL(url)},1500);
+    return true;
+  }catch(e){return false}
+}
+function addTicket(e,opt,qty){
+  var t={id:'t'+Date.now()+Math.floor(Math.random()*999),code:newCode(),e:e,opt:e.prices[opt][0],qty:qty,seat0:Math.floor(Math.random()*4),at:new Date().toISOString()};
+  S.tickets.push(t);persist();return t;
+}
+function findTicket(code){
+  return S.tickets.filter(function(t){return t.code===code||String(t.id)===code})[0];
+}
+
+/* ---------- kurulum (ana ekrana ekle) ---------- */
+var deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',function(e){
+  e.preventDefault();deferredPrompt=e;
+  if(S.tab==='biletler')renderTickets();
+  if(S.tab==='profil')renderProfile();
+});
+window.addEventListener('appinstalled',function(){deferredPrompt=null;toast('Genç ana ekranına eklendi.');if(S.tab==='biletler')renderTickets()});
+function doInstall(){
+  if(!deferredPrompt){toast('Tarayıcı menüsünden “Ana ekrana ekle”yi kullanabilirsin.');return}
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(){deferredPrompt=null;if(S.tab==='biletler')renderTickets()});
+}
+function kmTo(e){
+  var R=6371,t=Math.PI/180,dl=(e.lat-S.loc.lat)*t,dn=(e.lng-S.loc.lng)*t;
+  var a=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(S.loc.lat*t)*Math.cos(e.lat*t)*Math.sin(dn/2)*Math.sin(dn/2);
+  return 2*R*Math.asin(Math.sqrt(a));
+}
+function distLabel(e){var k=kmTo(e);return (e.district===S.loc.d||k<1)?e.district+(k>=1?', '+Math.round(k)+' km':''):Math.round(k)+' km'}
+function chipDist(e){var k=Math.round(kmTo(e));return e.district+', '+(k<1?'çok yakın':k+' km')}
+function priceLabel(e){
+  var p=e.prices.map(function(x){return x[1]}),m=Math.min.apply(null,p),M=Math.max.apply(null,p);
+  return m===M?fmt(m):fmt(m).replace(' ₺','')+' ₺’den';
+}
+function initials(n){
+  var w=String(n||'').trim().split(/\s+/).filter(Boolean);
+  if(!w.length)return 'G';
+  return ((w[0][0]||'')+(w.length>1?w[w.length-1][0]:'')).toLocaleUpperCase('tr-TR');
+}
+function firstName(n){return String(n||'').trim().split(/\s+/)[0]||''}
+
+/* ---------- bildirim ---------- */
+var toastT;
+function toast(m){
+  $('#toast-t').textContent=m;var t=$('#toast');t.classList.add('show');
+  clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show')},2600);
+}
+
+/* ---------- alt sayfa ---------- */
+var lastFocus=null,sheetT;
+function openSheet(title,body,mount){
+  lastFocus=document.activeElement;
+  $('#sh-title').textContent=title;$('#sh-body').innerHTML=body;
+  var ov=$('#sheet');clearTimeout(sheetT);ov.hidden=false;
+  requestAnimationFrame(function(){ov.classList.add('open')});
+  if(mount)mount($('#sh-body'));
+  $('#sh-close').focus();
+}
+function closeSheet(){
+  var ov=$('#sheet');ov.classList.remove('open');
+  sheetT=setTimeout(function(){ov.hidden=true},200);
+  if(lastFocus&&document.body.contains(lastFocus)&&lastFocus.focus)lastFocus.focus();
+}
+$('#sh-close').addEventListener('click',closeSheet);
+$('#sheet').addEventListener('click',function(e){if(e.target===this)closeSheet()});
+
+/* ---------- ortak parçalar ---------- */
+function pickHTML(sel){
+  return TYPES.map(function(t){
+    return '<button class="pick" type="button" data-pick aria-pressed="'+(sel.indexOf(t)>-1)+'">'+ic('check')+esc(t)+'</button>';
+  }).join('');
+}
+function selectedPicks(root){return $$('[data-pick][aria-pressed="true"]',root).map(function(b){return b.textContent.trim()})}
+
+/* ---------- kayıt ---------- */
+var step=1;
+function showStep(n){
+  step=n;
+  $$('.ostep').forEach(function(s,i){s.hidden=(i+1!==n)});
+  $$('#steps i').forEach(function(d,i){d.classList.toggle('d',i<n)});
+  $('#steps').setAttribute('aria-label','Adım '+n+' / 3');
+  $('#ob-back').style.visibility=n>1?'visible':'hidden';
+  if(n===2){paintObLoc();countPicks()}
+  if(n===3){
+    var f=firstName(S.name);
+    $('#done-title').textContent=f?'Hazırsın, '+f+'!':'Hazırsın!';
+    $('#done-sub').textContent=S.likes.length+' ilgi alanına göre öneriler hazırlandı. Beğendikçe kendini düzeltir.';
+    $('#done-likes').innerHTML=S.likes.map(function(l){return '<span>'+esc(l)+'</span>'}).join('');
+  }
+}
+function paintObLoc(){
+  $('#ob-locname').textContent=S.locOn?S.loc.d+', İzmir':'Konum kapalı';
+  $('#ob-locsub').textContent=S.locOn?'Yakınındakileri önce göstereceğiz':'Şehrini Keşfet ekranından seçebilirsin';
+  $('#ob-sw').setAttribute('aria-checked',S.locOn?'true':'false');
+}
+function countPicks(){
+  var n=selectedPicks($('#picks')).length,b=$('#pickgo');
+  b.textContent=n?'Devam et, '+n+' seçili':'En az bir tür seç';b.disabled=!n;
+}
+$('#picks').innerHTML=pickHTML(S.likes);
+$('#picks').addEventListener('click',function(e){
+  var p=e.target.closest('[data-pick]');if(!p)return;
+  p.setAttribute('aria-pressed',p.getAttribute('aria-pressed')==='true'?'false':'true');countPicks();
+});
+$('#ob-sw').addEventListener('click',function(){S.locOn=!S.locOn;paintObLoc()});
+$('#ob-back').addEventListener('click',function(){if(step>1)showStep(step-1)});
+function submit1(){
+  var n=$('#in-name').value.trim(),m=$('#in-mail').value.trim(),er=$('#err1');
+  if(n.length<2){er.textContent='Adını yazar mısın?';$('#in-name').focus();return}
+  if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='E-posta adresi geçerli görünmüyor.';$('#in-mail').focus();return}
+  er.textContent='';S.name=n;S.email=m;showStep(2);
+}
+$('#go1').addEventListener('click',submit1);
+['#in-name','#in-mail'].forEach(function(s){$(s).addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submit1()}})});
+$('#pickgo').addEventListener('click',function(){
+  var s=selectedPicks($('#picks'));if(!s.length)return;S.likes=s;showStep(3);
+});
+$('#go3').addEventListener('click',enterMain);
+function enterMain(){
+  $('#onb').hidden=true;$('#main').hidden=false;
+  S.loggedIn=true;persist();
+  renderChips();renderAll();setTab('kesfet');
+  applyDeepLink();openSharedTicket();
+}
+
+/* ---------- tema (sistem / açık / koyu) ---------- */
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+function isDark(){return S.theme==='dark'||(S.theme==='system'&&mq&&mq.matches)}
+function paintChrome(){
+  var c=(S.tab==='videolar'&&!$('#main').hidden)?'#150E2E':(isDark()?'#120C26':'#F6F3FF');
+  document.querySelector('meta[name=theme-color]').setAttribute('content',c);
+}
+function applyTheme(){
+  var r=document.documentElement;
+  if(S.theme==='system')r.removeAttribute('data-theme');else r.setAttribute('data-theme',S.theme);
+  paintChrome();
+}
+if(mq){if(mq.addEventListener)mq.addEventListener('change',paintChrome);else if(mq.addListener)mq.addListener(paintChrome)}
+
+/* ---------- sekmeler ---------- */
+function setTab(t){
+  S.tab=t;
+  ['kesfet','videolar','biletler','profil'].forEach(function(x){$('#tab-'+x).hidden=(x!==t)});
+  $$('#nav button').forEach(function(b){
+    var on=b.getAttribute('data-tab')===t;
+    b.classList.toggle('on',on);
+    if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
+  });
+  var night=(t==='videolar');
+  $('#nav').classList.toggle('night',night);document.body.classList.toggle('night',night);
+  $('#main').classList.toggle('dark-ui',night);
+  paintChrome();
+  if(t==='videolar'){renderFeed();}
+  else{$('#feed').classList.add('paused');}
+  if(t==='biletler')renderTickets();
+  if(t==='profil')renderProfile();
+}
+
+/* ---------- keşfet ---------- */
+function renderChips(){
+  $('#chips').innerHTML=CHIPS.map(function(c){return '<button class="chip" type="button" data-chip="'+esc(c)+'" aria-pressed="'+(S.filter===c)+'">'+esc(c)+'</button>'}).join('');
+}
+function setChip(c){S.filter=c;$$('#chips .chip').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-chip')===c?'true':'false')})}
+function matches(e){
+  if(S.filter!=='Tümü'&&e.type!==S.filter)return false;
+  var q=norm(S.q).trim();if(!q)return true;
+  var hay=norm([e.title,e.venue,e.district,e.type].join(' '));
+  return hay.indexOf(q)>-1||q.indexOf(norm(e.type))>-1;
+}
+function secHead(t,more){return '<div class="sec"><h2 class="disp">'+t+'</h2>'+(more||'')+'</div>'}
+function posterHTML(e){
+  return '<button class="poster" type="button" data-open="'+e.id+'"><span class="pic"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg>'+
+    (e.video?'<span class="tag">'+ic('play','f')+esc(e.tag)+'</span>':'')+'</span><strong>'+esc(e.title)+'</strong><span class="m">'+esc(e.short)+'</span></button>';
+}
+function wideHTML(e,cls){
+  return '<button class="wide '+(cls||'')+'" type="button" data-open="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><span class="wb">'+esc(e.type)+'</span><span class="wt"><strong>'+esc(e.title)+'</strong><span>'+esc(e.short.replace(/^Bugün 4 seans, /,'Bugün, '))+' · '+esc(priceLabel(e))+'</span></span></button>';
+}
+function tkHTML(e){
+  return '<button class="tk" type="button" data-open="'+e.id+'"><span class="stub'+(e.hot?' hot':'')+'"><span>'+esc(e.wd)+'</span><b>'+e.day+'</b><span>'+e.mon+'</span></span>'+
+    '<span class="info"><strong>'+esc(e.title)+'</strong><span class="v">'+esc(e.venue)+'</span><span class="row"><span class="dist">'+ic('pin')+esc(distLabel(e))+'</span><span class="price">'+esc(priceLabel(e))+'</span></span></span></button>';
+}
+function thumbHTML(e){
+  return '<button class="thumb" type="button" data-vid="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><em>'+ic('play','f')+esc(e.vlabel)+'</em></button>';
+}
+function renderKesfet(){
+  $('#locname').textContent=S.loc.d+', İzmir';
+  $$('.ini').forEach(function(x){x.textContent=initials(S.name)});
+  var browsing=!S.q.trim()&&S.filter==='Tümü';
+  var list=EVENTS.filter(matches).sort(function(a,b){return kmTo(a)-kmTo(b)});
+  var byDate=list.slice().sort(function(a,b){return a.date<b.date?-1:1});
+  var h='';
+  if(!list.length){
+    h+=secHead('Sonuçlar')+'<div class="empty">“'+esc(S.q||S.filter)+'” için sonuç bulunamadı. Başka bir arama dene.</div>';
+    $('#klists').innerHTML=h;return;
+  }
+  if(browsing){
+    var feat=EVENTS.filter(function(e){return e.feat});
+    h+=secHead('Öne çıkanlar')+'<div class="hrail">'+feat.map(function(e){return wideHTML(e)}).join('')+'</div>';
+    h+=secHead('Türe göre')+'<div class="cats">'+CHIPS.slice(1).map(function(t){
+      var n=EVENTS.filter(function(e){return e.type===t}).length,c=(CATC[t]||'#6D4AFF,#FF4F8B').split(',');
+      return '<button class="cat" type="button" data-cat="'+esc(t)+'" style="background:linear-gradient(135deg,'+c[0]+','+c[1]+')"><b>'+esc(t)+'</b><small>'+n+' etkinlik</small></button>';
+    }).join('')+'</div>';
+  }
+  h+=secHead(browsing?'Çevrende yapılacak gösteriler':'Sonuçlar')+'<div class="hrail">'+list.map(posterHTML).join('')+'</div>';
+  var week=byDate.filter(function(e){return e.date<='2026-11-22'});
+  var shown=(browsing&&!S.showAll)?week:byDate;
+  var more=(browsing&&byDate.length>week.length)?'<button class="more" type="button" id="moreBtn">'+(S.showAll?'Daha az':'Tümü ('+byDate.length+')')+'</button>':'';
+  h+=secHead(browsing?(S.showAll?'Yaklaşanlar':'Bu hafta'):'Tarihe göre',more)+shown.map(tkHTML).join('');
+  var vids=list.filter(function(e){return e.video});
+  h+=secHead('Kısa videolar','<button class="more" type="button" data-tab="videolar">Hepsini izle</button>');
+  h+=vids.length?'<div class="hrail">'+vids.map(thumbHTML).join('')+'</div>':'<div class="empty">Bu aramada video yok. Etkinlikleri yukarıdan açabilirsin.</div>';
+  if(browsing){
+    var tours=EVENTS.filter(function(e){return e.type==='Gezi turu'});
+    h+=secHead('Gezi turları')+'<div class="hrail">'+tours.map(function(e){return wideHTML(e,'sm')}).join('')+'</div>';
+    var free=EVENTS.filter(function(e){return e.prices.every(function(p){return p[1]===0})});
+    h+=secHead('Ücretsiz etkinlikler')+'<div class="hrail">'+free.map(posterHTML).join('')+'</div>';
+    var vm={};EVENTS.forEach(function(e){(vm[e.venue]=vm[e.venue]||{e:e,n:0}).n++});
+    var vs=Object.keys(vm).map(function(k){return vm[k]}).sort(function(a,b){return kmTo(a.e)-kmTo(b.e)}).slice(0,6);
+    h+=secHead('Yakındaki mekanlar')+vs.map(function(v){
+      return '<button class="venue" type="button" data-venue="'+esc(v.e.venue)+'">'+ic('pin')+'<span><strong>'+esc(v.e.venue)+'</strong><small>'+esc(distLabel(v.e))+' · '+v.n+' etkinlik</small></span>'+ic('chev-r')+'</button>';
+    }).join('');
+  }
+  $('#klists').innerHTML=h;
+}
+$('#q').addEventListener('input',function(){S.q=this.value;renderKesfet()});
+$('#chips').addEventListener('click',function(e){var c=e.target.closest('[data-chip]');if(!c)return;setChip(c.getAttribute('data-chip'));renderKesfet()});
+$('#locbtn').addEventListener('click',function(){
+  openSheet('Konum seç',PLACES.map(function(p){
+    return '<button class="opt-row" type="button" data-loc="'+esc(p.d)+'" aria-pressed="'+(p.d===S.loc.d)+'">'+ic('pin')+'<span>'+esc(p.d)+'<small>İzmir</small></span><span class="tick">'+ic('check')+'</span></button>';
+  }).join('')+'<p class="hint" style="padding:0">Mesafeler seçtiğin yere göre hesaplanır.</p>');
+});
+
+/* ---------- etkinlik ayrıntısı ---------- */
+function openDetail(id){
+  var e=ALL[id];if(!e)return;
+  var body='<div data-id="'+e.id+'"><div class="dhero"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><div class="poster-tag"><span>'+esc(e.type)+'</span>'+(e.video?'<span>'+ic('play','f')+esc(e.tag)+'</span>':'')+'</div></div>'+
+   '<h3 class="dtitle disp">'+esc(e.title)+'</h3>'+
+   '<div class="dline">'+ic('clock')+esc(e.when)+'</div>'+
+   '<div class="dline">'+ic('pin')+esc(e.venue)+' · '+esc(distLabel(e))+'</div>';
+  if(e.past){
+    body+='<div class="dline">'+ic('check')+'Bu etkinliğe gittin</div><div class="dacts"><button class="btn" type="button" data-act="similar">Benzer etkinlikleri göster</button></div></div>';
+  }else{
+    body+='<div class="dprice"><b>'+esc(priceLabel(e))+'</b><small>Bilet satıcının sayfasında alınır</small></div><div class="dacts">'+
+     '<button class="btn" type="button" data-act="buy">Bilet al</button>'+
+     (e.video?'<button class="btn ghost" type="button" data-act="watch">'+ic('play','f')+'Videoyu izle</button>':'')+
+     '<button class="iconbtn" type="button" data-act="save" aria-label="Kaydet" aria-pressed="'+!!S.saved[e.id]+'">'+ic('bookmark')+'</button></div></div>';
+  }
+  openSheet(e.past?'Geçmiş etkinlik':'Etkinlik',body);
+}
+
+/* ---------- satıcı sayfası ---------- */
+var W=null;
+function openWeb(e){
+  W={e:e,opt:0,qty:1};
+  $('#web-title').textContent='Biletini seç';
+  $('#web-seller').textContent='Satıcı: '+e.venue;
+  $('#web-body').innerHTML=
+   '<div class="dhero"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span></div>'+
+   '<h2 class="wtitle disp">'+esc(e.title)+'</h2><p class="wsub">'+esc(e.when)+' · '+esc(e.venue)+'</p>'+
+   '<div role="radiogroup" aria-label="Bilet türü">'+e.prices.map(function(p,i){
+     return '<button class="opt-row" type="button" role="radio" data-wopt="'+i+'" aria-pressed="'+(i===0)+'" aria-checked="'+(i===0)+'">'+esc(p[0])+'<span style="margin-left:auto">'+esc(fmt(p[1]))+'</span></button>';
+   }).join('')+'</div>'+
+   '<div class="wrow"><span>Adet</span><div class="qty"><button type="button" data-qty="-1" aria-label="Azalt">−</button><output id="wq" aria-live="polite">1</output><button type="button" data-qty="1" aria-label="Artır">+</button></div></div>'+
+   '<div class="wrow wtot"><span>Toplam</span><b id="wt"></b></div>'+
+   '<button class="btn" type="button" data-act="pay">'+(e.prices[0][1]===0&&e.prices.length===1?'Satıcıda devam et':'Satıcıda ödemeye geç')+'</button>'+
+   '<p class="wnote">'+ic('shield')+'<span>Bu sayfa uygulamanın içinde açılır. Satın alma, satıcının güvenli sayfasında tamamlanır.</span></p>';
+  updWeb();$('#web').hidden=false;$('#web-close').focus();
+}
+function updWeb(){
+  if(!W)return;
+  var p=W.e.prices[W.opt][1];$('#wq').textContent=W.qty;$('#wt').textContent=fmt(p*W.qty);
+  $$('[data-wopt]').forEach(function(b){var on=(+b.getAttribute('data-wopt')===W.opt);b.setAttribute('aria-pressed',on);b.setAttribute('aria-checked',on)});
+}
+function closeWeb(){$('#web').hidden=true;W=null}
+$('#web-close').addEventListener('click',closeWeb);
+$('#web-body').addEventListener('click',function(ev){
+  var o=ev.target.closest('[data-wopt]');
+  if(o){W.opt=+o.getAttribute('data-wopt');updWeb();return}
+  var q=ev.target.closest('[data-qty]');
+  if(q){W.qty=Math.max(1,Math.min(10,W.qty+(+q.getAttribute('data-qty'))));updWeb();return}
+  var a=ev.target.closest('[data-act]');
+  if(a&&a.getAttribute('data-act')==='pay'){
+    var t=addTicket(W.e,W.opt,W.qty),amount=W.e.prices[W.opt][1]*W.qty;
+    W=null;
+    $('#web-title').textContent='Biletin hazır';
+    $('#web-body').innerHTML='<div class="wdone"><div class="ok">'+ic('check')+'</div><h2 class="disp">Biletin hazır</h2>'+
+      '<p>'+esc(t.e.title)+'<br>'+t.qty+' × '+esc(t.opt)+' · '+esc(fmt(amount))+'</p>'+
+      '<div class="bigqr">'+qrSVG(ticketPayload(t))+'</div>'+
+      '<p style="font-weight:800;font-size:22px;letter-spacing:.06em;margin:10px 0 0">'+esc(t.code)+'</p>'+
+      '<p class="hint">Kapıda bu QR kodu veya kodu göster. Koltuk: '+esc(seatsFor(t))+'</p>'+
+      '<button class="btn" type="button" data-act="gotickets">Biletlerime git</button>'+
+      '<button class="btn ghost" type="button" data-act="back" style="margin-top:10px">Kapat</button></div>';
+    return;
+  }
+  if(a&&a.getAttribute('data-act')==='gotickets'){closeWeb();setTab('biletler');return}
+  if(a&&a.getAttribute('data-act')==='back')closeWeb();
+});
+
+/* ---------- videolar ---------- */
+var io=null,active=-1;
+function videoList(){
+  var v=EVENTS.filter(function(e){return e.video});
+  if(S.vtab==='yakin')return v.sort(function(a,b){return kmTo(a)-kmTo(b)});
+  var boost={};Object.keys(S.liked).forEach(function(id){if(S.liked[id]){var t=ALL[id].type;boost[t]=(boost[t]||0)+1}});
+  function sc(e){return (S.likes.indexOf(e.type)>-1?50:0)+(boost[e.type]||0)*20-kmTo(e)}
+  return v.sort(function(a,b){return sc(b)-sc(a)});
+}
+function region(e){return e.district===S.loc.d?0:1}
+function renderReach(i,list){
+  var r=(list[i]?region(list[i]):3),L=[S.loc.d,'İzmir','Ege','Türkiye'];
+  $('#reach').innerHTML=L.map(function(n,k){return '<div'+(k===r?' class="now"':'')+'>'+esc(n)+'</div>'}).join('');
+  $('#reach').setAttribute('aria-label','Önce '+S.loc.d+', sonra İzmir, Ege ve Türkiye');
+}
+function renderFeed(startId){
+  var feed=$('#feed'),list=videoList();
+  feed.classList.remove('paused');
+  feed.innerHTML=list.map(function(e){
+    return '<article class="vid" data-id="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><div class="vscrim"></div>'+
+     '<div class="pausemark">'+ic('pause')+'</div>'+
+     '<div class="vinfo"><span class="vchip">'+ic('pin')+esc(chipDist(e))+'</span><h2 class="disp">'+esc(e.vtitle)+'</h2><div class="when">'+esc(e.when)+'</div><div class="where">'+esc(e.venue)+', biletler '+esc(priceLabel(e))+'</div><div class="src">'+esc(e.src)+'</div></div>'+
+     '<div class="vact">'+
+       '<button class="like tog" type="button" data-act="like" aria-pressed="'+!!S.liked[e.id]+'"><span class="c">'+ic('heart')+'</span>Beğen</button>'+
+       '<button class="save tog" type="button" data-act="save" aria-pressed="'+!!S.saved[e.id]+'"><span class="c">'+ic('bookmark')+'</span>Kaydet</button>'+
+       '<button type="button" data-act="share"><span class="c">'+ic('share')+'</span>Paylaş</button>'+
+       '<button class="buy" type="button" data-act="buy"><span class="c">'+ic('plus')+'</span>Bilet al</button>'+
+     '</div><div class="vprog"><i></i></div></article>';
+  }).join('')+
+  '<article class="vid vend"><h2 class="disp">Şimdilik hepsi bu</h2><p>Videosu olmayan etkinliklerin biletleri de uygulamada. Keşfet’te hepsine göz at.</p><button class="btn" type="button" data-tab="kesfet">Keşfet’e dön</button><button class="btn ghost" type="button" data-act="restart">Baştan izle</button></article>';
+  if(io)io.disconnect();
+  active=-1;
+  io=new IntersectionObserver(function(es){
+    es.forEach(function(en){
+      if(en.isIntersecting&&en.intersectionRatio>=.6){
+        var items=$$('.vid',feed),i=items.indexOf(en.target);
+        if(i!==active)activate(i,items,list);
+      }
+    });
+  },{root:feed,threshold:[.6]});
+  $$('.vid',feed).forEach(function(v){io.observe(v)});
+  var idx=0;
+  if(startId){idx=Math.max(0,list.map(function(e){return e.id}).indexOf(startId))}
+  feed.scrollTop=idx*feed.clientHeight;
+  $$('#vtabs button').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-vtab')===S.vtab?'true':'false')});
+  renderReach(idx,list);
+}
+function activate(i,items,list){
+  active=i;
+  $$('.vprog i',$('#feed')).forEach(function(b){b.classList.remove('play');b.style.width=''});
+  renderReach(i,list);
+  var bar=$('.vprog i',items[i]);
+  if(bar){void bar.offsetWidth;bar.classList.add('play')}
+}
+$('#feed').addEventListener('animationend',function(ev){
+  if(reduce||!ev.target.matches('.vprog i'))return;
+  var cur=ev.target.closest('.vid'),nx=cur&&cur.nextElementSibling;
+  if(nx)$('#feed').scrollTo({top:nx.offsetTop,behavior:'smooth'});
+});
+$('#feed').addEventListener('click',function(ev){
+  if(ev.target.closest('button'))return;
+  this.classList.toggle('paused');
+});
+$('#vtabs').addEventListener('click',function(ev){
+  var b=ev.target.closest('[data-vtab]');if(!b)return;
+  S.vtab=b.getAttribute('data-vtab');renderFeed();
+});
+function goVideo(id){setTab('videolar');renderFeed(id)}
+
+/* ---------- biletlerim ---------- */
+function ticketHTML(t){
+  var e=t.e,price=e.prices.filter(function(p){return p[0]===t.opt})[0];
+  var amount=price?price[1]:e.prices[0][1];
+  return '<article class="tkt" data-ticket="'+t.id+'">'+
+   '<div class="top2"><span class="mini-art"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg></span>'+
+    '<span style="flex:1;min-width:0"><strong>'+esc(e.title)+'</strong>'+
+    '<span class="m">'+esc(e.when)+'</span>'+
+    '<span class="o">'+ic('pin')+esc(e.venue)+'</span></span>'+
+    '<span class="code"><small>BİLET KODU</small><b>'+esc(t.code)+'</b></span></div>'+
+   '<div class="stub2"><span class="qr">'+qrSVG(ticketPayload(t))+'</span>'+
+    '<span class="st"><b>'+t.qty+' × '+esc(t.opt)+'</b>'+
+    '<span>Koltuk: '+esc(seatsFor(t))+'</span>'+
+    '<span>Toplam: '+esc(fmt(amount*t.qty))+'</span>'+
+    '<span class="acts"><button type="button" data-act="showqr">'+ic('qr')+'Büyük göster</button>'+
+    '<button type="button" data-act="addcal">'+ic('calendar')+'Takvime ekle</button></span></span></div>'+
+  '</article>';
+}
+function renderTickets(){
+  var h='<div class="top"><h1 class="disp" style="font-size:34px">Biletlerim</h1>'+
+    '<button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">'+esc(initials(S.name))+'</span></button></div>';
+  h+='<div class="actgrid">'+
+    '<button type="button" data-tab="kesfet">'+ic('compass2')+'Etkinlik keşfet</button>'+
+    '<button type="button" data-act="scan">'+ic('qr')+'Bilet kodu sorgula</button>'+
+    '<button type="button" data-act="upload">'+ic('install')+'Dosya yükle</button>'+
+  '</div>';
+  if(deferredPrompt)h+='<div class="installrow">'+ic('install')+'<span><strong>Genç’i ana ekrana ekle</strong><small>Tek dokunuşla açılsın, çevrimdışı da çalışsın.</small></span><button type="button" data-act="install">Ekle</button></div>';
+  if(!S.tickets.length){
+    h+='<div class="sec"><h2 class="disp">Geçerli biletler</h2></div>'+
+      '<div class="empty">Henüz biletin yok. Bir etkinliği açıp “Bilet al” ile başlayabilirsin.</div>';
+  }else{
+    var up=S.tickets.slice().sort(function(a,b){return a.e.date<b.e.date?-1:1});
+    h+='<div class="sec"><h2 class="disp">Geçerli biletler</h2><span class="more">'+up.length+' bilet</span></div>';
+    h+=up.map(ticketHTML).join('');
+  }
+  h+='<div class="pad"></div>';
+  $('#tscroll').innerHTML=h;
+  $$('.ini').forEach(function(x){x.textContent=initials(S.name)});
+}
+function showBigQR(id){
+  var t=findTicket(id);if(!t)return;
+  openSheet('Bilet kodu','<div style="text-align:center"><h3 class="dtitle disp" style="font-size:26px;margin-top:4px">'+esc(t.e.title)+'</h3>'+
+    '<p class="wsub">'+esc(t.e.when)+' · '+esc(t.e.venue)+'</p>'+
+    '<div class="bigqr">'+qrSVG(ticketPayload(t))+'</div>'+
+    '<p style="font-weight:800;font-size:22px;letter-spacing:.06em;margin:10px 0 0">'+esc(t.code)+'</p>'+
+    '<p class="hint" style="margin-top:8px">'+t.qty+' × '+esc(t.opt)+' · Koltuk: '+esc(seatsFor(t))+'</p>'+
+    '<button class="cta" type="button" data-act="addcal" data-tk="'+t.id+'">Takvime ekle</button></div>');
+}
+function addCal(id){
+  var t=findTicket(id);if(!t)return;
+  var ok=download('genc-'+t.e.id+'.ics',icsText(t.e),'text/calendar');
+  toast(ok?'Takvim dosyası indirildi.':'Takvim dosyası oluşturulamadı.');
+}
+function scanTicket(){
+  openSheet('Bilet kodu sorgula','<div class="field"><label for="sc-code">Bilet kodu</label><input id="sc-code" type="text" placeholder="G-XXXXXX" autocapitalize="characters" autocomplete="off"></div><p class="hint" style="padding:0">Kod, biletin üzerindeki QR’ın altında yazar.</p><p class="err" id="sc-err" role="alert"></p><button class="cta" type="button" data-act="scango">Sorgula</button>',function(root){
+    $('#sc-code',root).addEventListener('input',function(){this.value=this.value.toUpperCase()});
+  });
+}
+function scanGo(){
+  var v=$('#sc-code').value.trim().toUpperCase(),er=$('#sc-err');
+  if(!v){er.textContent='Bilet kodunu yaz.';return}
+  var t=findTicket(v);
+  if(!t){er.textContent='Bu koda ait bilet bulunamadı.';return}
+  closeSheet();showBigQR(t.id);
+}
+
+/* ---------- dosya yükleme ---------- */
+function uploadSheet(){
+  openSheet('Dosya yükle','<div class="up" id="up-zone"><svg class="upic"><use href="#i-install"/></svg>'+
+    '<strong>Dosya seç veya sürükle</strong><small>Belge, bilet görseli, ödeme dekontu… (en fazla 10 MB)</small>'+
+    '<input id="up-file" type="file" multiple aria-label="Yüklenecek dosyalar"></div>'+
+    '<ul class="uplist" id="up-list"></ul><p class="err" id="up-err" role="alert"></p>',
+  function(root){
+    var input=$('#up-file',root),zone=$('#up-zone',root);
+    input.addEventListener('change',function(){upSend(input.files)});
+    ['dragenter','dragover'].forEach(function(ev){zone.addEventListener(ev,function(e){e.preventDefault();zone.classList.add('over')})});
+    ['dragleave','drop'].forEach(function(ev){zone.addEventListener(ev,function(e){e.preventDefault();zone.classList.remove('over')})});
+    zone.addEventListener('drop',function(e){if(e.dataTransfer&&e.dataTransfer.files.length)upSend(e.dataTransfer.files)});
+  });
+}
+function upRow(name,state){
+  var li=document.createElement('li');li.className='up-'+state;
+  li.innerHTML='<span class="un"></span><span class="us"></span>';
+  $('.un',li).textContent=name;
+  $('.us',li).textContent=state==='ok'?'yüklendi':state==='err'?'hata':'yükleniyor…';
+  $('#up-list').appendChild(li);return li;
+}
+function upSend(files){
+  if(!files||!files.length)return;
+  var er=$('#up-err');er.textContent='';
+  Array.prototype.forEach.call(files,function(f){
+    if(f.size>10*1024*1024){er.textContent='“'+f.name+'” 10 MB sınırını aşıyor.';upRow(f.name,'err');return}
+    var row=upRow(f.name,'wait'),fd=new FormData();fd.append('file',f,f.name);
+    fetch('upload',{method:'POST',body:fd}).then(function(r){
+      if(!r.ok)throw 0;
+      row.className='up-ok';$('.us',row).textContent='yüklendi';
+    }).catch(function(){
+      row.className='up-err';$('.us',row).textContent='hata';
+      er.textContent='Sunucuya ulaşılamadı. Dosya yüklenemedi.';
+    });
+  });
+}
+
+/* ---------- profil ---------- */
+function renderProfile(){
+  var saved=EVENTS.filter(function(e){return S.saved[e.id]&&e.video});
+  var h='<div class="ph"><div class="big" aria-hidden="true">'+esc(initials(S.name))+'</div><div><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.loc.d)+', İzmir</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
+  var nl=Object.keys(S.liked).filter(function(k){return S.liked[k]}).length,ns=Object.keys(S.saved).filter(function(k){return S.saved[k]}).length;
+  h+='<div class="stats"><div><b>'+S.tickets.length+'</b><small>Bilet</small></div><div><b>'+ns+'</b><small>Kaydedilen</small></div><div><b>'+nl+'</b><small>Beğenilen</small></div></div>';
+  h+='<div class="actgrid">'+
+    '<button type="button" data-tab="biletler">'+ic('ticket')+'Biletlerim</button>'+
+    '<button type="button" data-act="editlikes">'+ic('heart')+'Hoşlandıklarım</button>'+
+    '<button type="button" data-tab="videolar">'+ic('play')+'Kısa videolar</button>'+
+    '<button type="button" data-act="addcard">'+ic('shield')+'Kart ekle</button>'+
+  '</div>';
+  if(deferredPrompt)h+='<div class="installrow">'+ic('install')+'<span><strong>Genç’i ana ekrana ekle</strong><small>Tek dokunuşla açılsın.</small></span><button type="button" data-act="install">Ekle</button></div>';
+  h+='<div class="sec"><h2 class="disp">Hoşlandıkların</h2><button type="button" data-act="editlikes">Düzenle</button></div>';
+  h+='<div class="likes">'+S.likes.map(function(l){return '<span>'+esc(l)+'</span>'}).join('')+'</div>';
+  h+='<div class="sec"><h2 class="disp">Kaydettiklerin</h2></div>';
+  h+=saved.length?'<div class="grid3">'+saved.map(function(e){return '<button class="thumb" type="button" data-vid="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><em>'+esc(e.title)+'</em></button>'}).join('')+'</div>'
+        :'<div class="empty">Henüz bir şey kaydetmedin. Videolarda yer imi simgesine dokun.</div>';
+  h+='<div class="sec"><h2 class="disp">Gittiğin etkinlikler</h2></div>';
+  h+=PAST.map(function(e){return '<button class="att" type="button" data-open="'+e.id+'"><span class="mini-art"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg></span><span><strong>'+esc(e.title)+'</strong><span>'+esc(e.when)+'</span></span><span class="done">'+ic('check')+'Gittin</span></button>'}).join('');
+  h+='<div class="sec"><h2 class="disp">Kayıtlı kartlar</h2><button type="button" data-act="addcard">Ekle</button></div>';
+  h+=S.cards.length?S.cards.map(function(c){
+    return '<div class="cardrow" data-card="'+c.id+'"><button class="cmain" type="button" data-act="defcard" aria-label="Varsayılan yap: •••• '+c.last4+'"><span class="plastic" aria-hidden="true"></span><span class="txt"><strong>Banka kartı</strong><span>•••• '+c.last4+', son kullanma '+esc(c.exp)+'</span></span>'+(c.def?'<span class="def">Varsayılan</span>':'<span class="setdef">Varsayılan yap</span>')+'</button><button class="cdel" type="button" data-act="delcard" aria-label="Kartı sil: •••• '+c.last4+'">'+ic('close')+'</button></div>';
+  }).join(''):'<div class="empty">Kayıtlı kartın yok.</div>';
+  h+='<div class="sec"><h2 class="disp">Hesap</h2></div>';
+  h+='<button class="acc" type="button" data-act="editprofile"><span><small>E-posta</small><b>'+esc(S.email||'Ekle')+'</b></span>'+ic('chev-r')+'</button>';
+  h+='<button class="acc" type="button" data-act="editprofile"><span><small>Telefon</small><b>'+esc(S.phone||'Ekle')+'</b></span>'+ic('chev-r')+'</button>';
+  h+='<div class="sec"><h2 class="disp">Görünüm</h2></div><div class="themeseg" role="group" aria-label="Tema">'+[['system','Sistem'],['light','Açık'],['dark','Koyu']].map(function(x){return '<button type="button" data-act="theme" data-v="'+x[0]+'" aria-pressed="'+(S.theme===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>';
+  h+='<button class="logout" type="button" data-act="logout">Çıkış yap</button><div class="pad"></div>';
+  $('#pscroll').innerHTML=h;
+}
+function editProfile(){
+  openSheet('Profili düzenle',
+   '<div class="field"><label for="e-name">Ad soyad</label><input id="e-name" type="text" autocomplete="name" value="'+esc(S.name)+'"></div>'+
+   '<div class="field"><label for="e-mail">E-posta</label><input id="e-mail" type="email" autocomplete="email" value="'+esc(S.email)+'"></div>'+
+   '<div class="field"><label for="e-tel">Telefon</label><input id="e-tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="0 5•• ••• •• ••" value="'+esc(S.phone)+'"></div>'+
+   '<p class="err" id="e-err" role="alert"></p><button class="cta" type="button" data-act="saveprofile">Kaydet</button>');
+}
+function saveProfile(){
+  var n=$('#e-name').value.trim(),m=$('#e-mail').value.trim(),t=$('#e-tel').value.trim(),er=$('#e-err');
+  if(n.length<2){er.textContent='Adını yazar mısın?';return}
+  if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='E-posta adresi geçerli görünmüyor.';return}
+  if(t&&t.replace(/\D/g,'').length<10){er.textContent='Telefon numarası eksik görünüyor.';return}
+  S.name=n;S.email=m;S.phone=t;persist();closeSheet();renderProfile();renderKesfet();toast('Profilin güncellendi.');
+}
+function editLikes(){
+  openSheet('Hoşlandıkların','<div class="picks" id="lk-picks">'+pickHTML(S.likes)+'</div><button class="cta" id="lk-save" type="button" data-act="savelikes"></button>',function(root){
+    function cnt(){var n=selectedPicks(root).length,b=$('#lk-save',root);b.textContent=n?'Kaydet, '+n+' seçili':'En az bir tür seç';b.disabled=!n}
+    cnt();
+    $('#lk-picks',root).addEventListener('click',function(ev){var p=ev.target.closest('[data-pick]');if(!p)return;p.setAttribute('aria-pressed',p.getAttribute('aria-pressed')==='true'?'false':'true');cnt()});
+  });
+}
+function addCard(){
+  openSheet('Kart ekle',
+   '<div class="field"><label for="k-no">Kart numarası</label><input id="k-no" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23"></div>'+
+   '<div class="field"><div class="two"><div><label for="k-exp">Son kullanma</label><input id="k-exp" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="AA/YY" maxlength="5"></div><div><label for="k-cvv">Güvenlik kodu</label><input id="k-cvv" type="password" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4"></div></div></div>'+
+   '<p class="hint" style="padding:0">Bu taslakta kart bilgisi saklanmaz; yalnızca son 4 hane gösterilir.</p>'+
+   '<p class="err" id="k-err" role="alert"></p><button class="cta" type="button" data-act="savecard">Kartı kaydet</button>',function(root){
+    $('#k-no',root).addEventListener('input',function(){var d=this.value.replace(/\D/g,'').slice(0,19);this.value=d.replace(/(.{4})/g,'$1 ').trim()});
+    $('#k-exp',root).addEventListener('input',function(){var d=this.value.replace(/\D/g,'').slice(0,4);this.value=d.length>2?d.slice(0,2)+'/'+d.slice(2):d});
+    $('#k-cvv',root).addEventListener('input',function(){this.value=this.value.replace(/\D/g,'').slice(0,4)});
+  });
+}
+function saveCard(){
+  var d=$('#k-no').value.replace(/\D/g,''),ex=$('#k-exp').value,cv=$('#k-cvv').value,er=$('#k-err');
+  if(d.length<13){er.textContent='Kart numarası eksik görünüyor.';$('#k-no').focus();return}
+  var m=/^(\d{2})\/(\d{2})$/.exec(ex);
+  if(!m||+m[1]<1||+m[1]>12){er.textContent='Son kullanma tarihini AA/YY yaz.';$('#k-exp').focus();return}
+  var now=new Date(),y=now.getFullYear()%100,mo=now.getMonth()+1;
+  if(+m[2]<y||(+m[2]===y&&+m[1]<mo)){er.textContent='Bu kartın süresi dolmuş.';$('#k-exp').focus();return}
+  if(cv.length<3){er.textContent='Güvenlik kodu 3 veya 4 hane olmalı.';$('#k-cvv').focus();return}
+  S.cards.forEach(function(c){c.def=false});
+  S.cards.push({id:'c'+Date.now(),last4:d.slice(-4),exp:ex,def:true});persist();
+  closeSheet();renderProfile();toast('Kart eklendi ve varsayılan yapıldı.');
+}
+
+/* ---------- ortak tıklama yönetimi ---------- */
+function toggleLike(id,btn){
+  S.liked[id]=!S.liked[id];persist();
+  $$('[data-id="'+id+'"] [data-act="like"]').forEach(function(b){b.setAttribute('aria-pressed',!!S.liked[id])});
+  if(S.liked[id])toast('Beğendin, buna benzer etkinlikleri daha sık göstereceğiz.');
+}
+function toggleSave(id){
+  S.saved[id]=!S.saved[id];persist();
+  $$('[data-id="'+id+'"] [data-act="save"]').forEach(function(b){b.setAttribute('aria-pressed',!!S.saved[id])});
+  if(S.saved[id])toast('Kaydedildi, profilinde bulabilirsin.');else toast('Kayıttan çıkarıldı.');
+  if(S.tab==='profil')renderProfile();
+}
+function share(e){
+  var data={title:e.title,text:e.title+' · '+e.when+' · '+e.venue,url:location.href};
+  if(navigator.share){navigator.share(data).catch(function(){});return}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(data.text).then(function(){toast('Etkinlik bilgisi panoya kopyalandı.')},function(){toast('Kopyalanamadı. Bilgiyi elle paylaşabilirsin.')});
+  }else toast('Bu tarayıcıda paylaşım desteklenmiyor.');
+}
+document.addEventListener('click',function(ev){
+  var t=ev.target;
+  if(t.closest('#moreBtn')){S.showAll=!S.showAll;renderKesfet();return}
+  var cat=t.closest('[data-cat]');
+  if(cat){setChip(cat.getAttribute('data-cat'));S.q='';$('#q').value='';renderKesfet();$('#kscroll').scrollTop=0;return}
+  var ven=t.closest('[data-venue]');
+  if(ven){S.q=ven.getAttribute('data-venue');$('#q').value=S.q;setChip('Tümü');renderKesfet();$('#kscroll').scrollTop=0;return}
+  var loc=t.closest('[data-loc]');
+  if(loc){S.loc=PLACES.filter(function(p){return p.d===loc.getAttribute('data-loc')})[0];persist();closeSheet();renderKesfet();if(!$('#feed').hidden&&S.tab==='videolar')renderFeed();toast('Konum '+S.loc.d+' olarak ayarlandı.');return}
+  var tab=t.closest('[data-tab]');
+  if(tab){setTab(tab.getAttribute('data-tab'));return}
+  var vid=t.closest('[data-vid]');
+  if(vid){goVideo(vid.getAttribute('data-vid'));return}
+  var op=t.closest('[data-open]');
+  if(op){openDetail(op.getAttribute('data-open'));return}
+  var tk=t.closest('[data-ticket]');
+  if(tk&&!t.closest('[data-act]')){showBigQR(tk.getAttribute('data-ticket'));return}
+  var a=t.closest('[data-act]');
+  if(!a||a.closest('#web'))return;
+  var act=a.getAttribute('data-act'),host=a.closest('[data-id]'),id=host&&host.getAttribute('data-id'),e=id&&ALL[id];
+  var tkid=a.getAttribute('data-tk')||(a.closest('[data-ticket]')&&a.closest('[data-ticket]').getAttribute('data-ticket'));
+  switch(act){
+    case 'showqr':showBigQR(tkid);break;
+    case 'addcal':addCal(tkid);break;
+    case 'scan':scanTicket();break;
+    case 'scango':scanGo();break;
+    case 'install':doInstall();break;
+    case 'upload':uploadSheet();break;
+    case 'like':toggleLike(id);break;
+    case 'save':toggleSave(id);break;
+    case 'share':share(e||(tkid&&findTicket(tkid)&&findTicket(tkid).e));break;
+    case 'buy':openWeb(e);break;
+    case 'watch':closeSheet();goVideo(id);break;
+    case 'similar':closeSheet();setChip(CHIPS.indexOf(e.type)>-1?e.type:'Tümü');S.q='';$('#q').value='';renderKesfet();setTab('kesfet');break;
+    case 'restart':$('#feed').scrollTo({top:0,behavior:reduce?'auto':'smooth'});break;
+    case 'editprofile':editProfile();break;
+    case 'saveprofile':saveProfile();break;
+    case 'editlikes':editLikes();break;
+    case 'savelikes':var s=selectedPicks($('#lk-picks'));if(s.length){S.likes=s;persist();closeSheet();renderProfile();toast('Zevklerin güncellendi.')}break;
+    case 'addcard':addCard();break;
+    case 'savecard':saveCard();break;
+    case 'defcard':var cid=a.closest('[data-card]').getAttribute('data-card');S.cards.forEach(function(c){c.def=(c.id===cid)});persist();renderProfile();toast('Varsayılan kart değişti.');break;
+    case 'delcard':var did=a.closest('[data-card]').getAttribute('data-card');S.cards=S.cards.filter(function(c){return c.id!==did});if(S.cards.length&&!S.cards.some(function(c){return c.def}))S.cards[0].def=true;persist();renderProfile();toast('Kart silindi.');break;
+    case 'theme':S.theme=a.getAttribute('data-v');applyTheme();persist();renderProfile();break;
+    case 'logout':
+      $('#main').hidden=true;$('#onb').hidden=false;setTab('kesfet');$('#main').hidden=true;
+      S.name='';S.email='';S.phone='';S.loggedIn=false;
+      try{localStorage.removeItem(STORE)}catch(x){}
+      $('#in-name').value='';$('#in-mail').value='';
+      showStep(1);break;
+  }
+});
+document.addEventListener('keydown',function(ev){
+  if(ev.key!=='Escape')return;
+  if(!$('#web').hidden)closeWeb();else if(!$('#sheet').hidden)closeSheet();
+});
+
+/* ---------- paylaşılan bağlantı (?bilet=KOD) ---------- */
+function openSharedTicket(){
+  var m=/(?:^|[?&])bilet=([^&]+)/.exec(location.search);
+  if(!m)return false;
+  var t=findTicket(decodeURIComponent(m[1]));
+  if(!t){toast('Bu bağlantıdaki bilet bulunamadı.');return false}
+  setTab('biletler');showBigQR(t.id);return true;
+}
+
+/* ---------- uygulama kısayolları ve derin bağlantılar ---------- */
+function firstMissingEvent(){
+  return EVENTS.filter(function(e){return !S.tickets.some(function(t){return t.e.id===e.id})}).sort(function(a,b){return kmTo(a)-kmTo(b)})[0]||EVENTS[0];
+}
+function runShortcut(git){
+  if(git==='videolar'){setTab('videolar');return}
+  if(git==='profil'){setTab('profil');return}
+  if(git==='biletlerim'){setTab('biletler');return}
+  if(git==='ara'){setTab('kesfet');setTimeout(function(){var q=$('#q');if(q)q.focus()},120);return}
+  if(git==='bilet-al'){var e=firstMissingEvent();if(e)openWeb(e);return}
+  setTab('kesfet');
+}
+function applyDeepLink(){
+  var m=/[?&]git=([^&]+)/.exec(location.search);
+  if(m)runShortcut(decodeURIComponent(m[1]));
+}
+
+/* ---------- çevrimdışı destek ---------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+}
+
+function renderAll(){renderKesfet();renderTickets();renderProfile()}
+restore();applyTheme();renderChips();
+if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab('kesfet');applyDeepLink();openSharedTicket()}
+else showStep(1);
+})();
+</script>
+</body>
+</html>
