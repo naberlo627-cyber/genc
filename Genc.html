@@ -21,21 +21,21 @@
 <style>
 :root{
   --ink:#17112E;--on-ink:#FFFFFF;--paper:#F6F3FF;--card:#FFFFFF;
-  --brand:#5B3DF5;--sun:#FFC83D;--coral:#FF5A5F;--mute:#6B6785;--line:#E4DFF6;--sw-off:var(--sw-off);
-  --grad:linear-gradient(135deg,#7B5CFF 0%,#5B3DF5 100%);
-  --logo-bg:#5B3DF5;--logo-fg:#FFFFFF;color-scheme:light;
+  --brand:#5B3DF5;--on-brand:#FFFFFF;--sun:#FFC83D;--coral:#FF5A5F;--coral-text:#D92D4A;--mute:#6B6785;--line:#E4DFF6;--sw-off:#8F82B8;
+  --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
+  --logo-c1:#6D4AFF;--logo-c2:#B44DE0;--logo-c3:#FF4F8B;--logo-fg:#FFFFFF;color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#1E1638;
-  --brand:#9A85FF;--sun:#FFC83D;--coral:#FF7A7F;--mute:#A9A0CE;--line:#35294F;--sw-off:#4A3F73;
-  --grad:linear-gradient(135deg,#8B73FF 0%,#6D4AFF 100%);
-  --logo-bg:#9A85FF;--logo-fg:#140D2E;color-scheme:dark;
+  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#35294F;--sw-off:#7E6FBD;
+  --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
+  --logo-c1:#A78BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-fg:#140D2E;color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#1E1638;
-  --brand:#9A85FF;--sun:#FFC83D;--coral:#FF7A7F;--mute:#A9A0CE;--line:#35294F;--sw-off:#4A3F73;
-  --grad:linear-gradient(135deg,#8B73FF 0%,#6D4AFF 100%);
-  --logo-bg:#9A85FF;--logo-fg:#140D2E;color-scheme:dark;
+  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#35294F;--sw-off:#7E6FBD;
+  --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
+  --logo-c1:#A78BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-fg:#140D2E;color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -106,7 +106,7 @@ svg.ic.f{fill:currentColor}
 .picks{display:flex;flex-wrap:wrap;gap:10px;padding:16px 20px}
 .pick{height:46px;padding:0 18px;border-radius:23px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:background-color .15s,color .15s}
 .pick svg{width:18px;height:18px;display:none}
-.pick[aria-pressed="true"]{background:var(--brand);color:#fff;box-shadow:none}
+.pick[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);box-shadow:none}
 .pick[aria-pressed="true"] svg{display:block}
 .cta{margin:8px 20px 28px;height:54px;border-radius:16px;background:var(--brand);color:#fff;font-weight:700;font-size:16px;text-align:center;display:block;width:calc(100% - 40px);transition:opacity .15s}
 .cta[disabled]{opacity:.4;cursor:not-allowed}
@@ -187,7 +187,7 @@ svg.ic.f{fill:currentColor}
 .ph .dist{margin-top:4px}
 .ph .ed{margin-left:auto;width:44px;height:44px;border-radius:50%;background:var(--card);display:grid;place-items:center}
 .likes{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px}
-.likes span{height:36px;padding:0 15px;border-radius:18px;background:var(--brand);color:#fff;font-weight:600;font-size:14px;display:inline-flex;align-items:center}
+.likes span{height:36px;padding:0 15px;border-radius:18px;background:var(--brand);color:var(--on-brand);font-weight:600;font-size:14px;display:inline-flex;align-items:center}
 .likes span.o{background:var(--card);color:var(--ink)}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px}
 .grid3 .thumb{width:100%;height:146px}
@@ -351,8 +351,8 @@ svg.ic.f{fill:currentColor}
 .uplist .un{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .uplist .us{flex:none;color:var(--mute);font-weight:700}
 .uplist .up-ok .us{color:#1E9E63}
-.uplist .up-err .us{color:var(--coral)}
-.sh-body .err{color:var(--coral);font-size:13px;font-weight:600;padding:0 0 4px}
+.uplist .up-err .us{color:var(--coral-text)}
+.sh-body .err{color:var(--coral-text);font-size:13px;font-weight:600;padding:0 0 4px}
 
 /* videolar */
 .feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:#0B0820;color:#fff}
@@ -385,7 +385,7 @@ svg.ic.f{fill:currentColor}
 .cardrow .cmain .txt{min-width:0}
 .cardrow .cmain .txt span{display:block}
 .setdef{font-size:12px;font-weight:700;color:var(--brand);background:none;padding:4px 0;margin-left:auto}
-.logout{display:block;width:calc(100% - 40px);margin:6px 20px 0;padding:14px;text-align:center;font-weight:700;color:var(--coral);border-radius:16px;background:var(--card)}
+.logout{display:block;width:calc(100% - 40px);margin:6px 20px 0;padding:14px;text-align:center;font-weight:700;color:var(--coral-text);border-radius:16px;background:var(--card)}
 .sec button.more{color:var(--brand)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}.vprog i.play{animation-duration:.01s}}
 
@@ -414,8 +414,7 @@ svg.ic.f{fill:currentColor}
 
 .themeseg{margin:0 20px 10px;background:var(--card);border-radius:16px;padding:4px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
 .themeseg button{height:42px;border-radius:12px;font-weight:700;font-size:14px;text-align:center;color:var(--mute);transition:background-color .15s,color .15s}
-.themeseg button[aria-pressed="true"]{background:var(--brand);color:#fff}
-:root[data-theme="dark"] .themeseg button[aria-pressed="true"],:root:not([data-theme="light"]) .themeseg button[aria-pressed="true"]{color:#140D2E}
+.themeseg button[aria-pressed="true"]{background:var(--brand);color:var(--on-brand)}
 
 /* ---------- biletlerim ---------- */
 .tkt{display:flex;background:var(--card);border-radius:20px;position:relative;margin:0 20px 14px;width:calc(100% - 40px);text-align:left;overflow:hidden;box-shadow:0 12px 26px -20px rgba(23,17,46,.55)}
@@ -550,10 +549,10 @@ svg.ic.f{fill:currentColor}
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
 
-<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6D4AFF"/><stop offset=".55" stop-color="#B44DE0"/><stop offset="1" stop-color="#FF4F8B"/></linearGradient>
+<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--logo-c1)"/><stop offset=".55" stop-color="var(--logo-c2)"/><stop offset="1" stop-color="var(--logo-c3)"/></linearGradient>
 <symbol id="logo" viewBox="0 0 120 44">
-  <path d="M8 0H112a8 8 0 0 1 8 8v8a6 6 0 0 0 0 12v8a8 8 0 0 1-8 8H8a8 8 0 0 1-8-8v-8a6 6 0 0 0 0-12V8a8 8 0 0 1 8-8z" fill="var(--logo-bg)"/>
-  <text x="60" y="31" text-anchor="middle" font-family="Archivo,system-ui,sans-serif" font-weight="800" font-size="27" fill="var(--logo-fg)" textLength="82" lengthAdjust="spacingAndGlyphs">Genç</text>
+  <path d="M8 0H112a8 8 0 0 1 8 8v8a6 6 0 0 0 0 12v8a8 8 0 0 1-8 8H8a8 8 0 0 1-8-8v-8a6 6 0 0 0 0-12V8a8 8 0 0 1 8-8z" fill="url(#lg)"/>
+  <text x="60" y="28.7" text-anchor="middle" font-family="Archivo,system-ui,sans-serif" font-weight="800" font-size="27" fill="var(--logo-fg)">Genç</text>
 </symbol>
 
 <linearGradient id="ga1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF7A45"/><stop offset="1" stop-color="#B0125E"/></linearGradient>
