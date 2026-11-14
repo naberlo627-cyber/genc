@@ -8,8 +8,12 @@ import os
 from PIL import Image, ImageDraw
 
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "icons")
-C1 = (109, 74, 255)   # #6D4AFF
-C2 = (255, 79, 139)   # #FF4F8B
+# Uygulama içi logo gradyanıyla aynı duraklar (bkz. Genc.html --logo-c*).
+STOPS = [
+    (0.00, (109, 74, 255)),   # #6D4AFF
+    (0.55, (180, 77, 224)),   # #B44DE0
+    (1.00, (255, 79, 139)),   # #FF4F8B
+]
 SIZE = 192
 PAD = 34
 
@@ -20,11 +24,14 @@ def gradient(size):
     for y in range(size):
         for x in range(size):
             t = (x + y) / (2 * (size - 1))
-            px[x, y] = (
-                round(C1[0] + (C2[0] - C1[0]) * t),
-                round(C1[1] + (C2[1] - C1[1]) * t),
-                round(C1[2] + (C2[2] - C1[2]) * t),
-            )
+            lo, hi = STOPS[0], STOPS[-1]
+            for i in range(len(STOPS) - 1):
+                if STOPS[i][0] <= t <= STOPS[i + 1][0]:
+                    lo, hi = STOPS[i], STOPS[i + 1]
+                    break
+            span = (hi[0] - lo[0]) or 1
+            k = (t - lo[0]) / span
+            px[x, y] = tuple(round(lo[1][c] + (hi[1][c] - lo[1][c]) * k) for c in range(3))
     return img
 
 

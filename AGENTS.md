@@ -15,9 +15,13 @@ PWA dosyaları + geliştirme sunucusu.
 - `server.py` — önizleme + `/upload` dosya yükleme ucu (port 12000).
 - `yuklenenler/` — yüklenen dosyalar (sürüm kontrolüne girmez).
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
-- `tools/generate_icons.py` — simge üretici.
+- `tools/generate_icons.py` — simge üretici. İkon, uygulama içi logonun
+  kutusuz halidir: köşegen gradyan zemin + beyaz dört uçlu ışıltı işareti
+  (eski "G" harfi kaldırıldı).
 - `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
   glifi; Android ve masaüstünde aynı ikon tekrar etmesin).
+- Simgeler değişince `sw.js` içindeki `CACHE` sürümünü artırın; yoksa tarayıcı
+  eski simgeyi önbellekten göstermeye devam eder.
 
 ## Geliştirme komutları
 
