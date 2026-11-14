@@ -5,10 +5,11 @@ Aynı klasördeki dosyaları yayınlar, /upload adresine gelen dosyaları
 proje klasörüne kaydeder. Geliştirme sırasında canlı önizleme için.
 """
 import http.server
+import json
 import os
 import re
-import shutil
 import socketserver
+import time
 import urllib.parse
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -90,17 +91,24 @@ ul{{background:#fff;padding:14px 14px 14px 32px;border-radius:16px}} a{{color:#5
         length = int(self.headers.get("Content-Length", "0"))
         body = self.rfile.read(length)
         os.makedirs(UPLOAD_DIR, exist_ok=True)
+        saved = []
         for name, content in parse_multipart(body, m.group(1).encode()):
             if not name:
                 continue
             safe = os.path.basename(name).replace("\x00", "")
-            if not safe:
-                continue
-            with open(os.path.join(UPLOAD_DIR, safe), "wb") as fh:
+            safe = re.sub(r"[^0-9A-Za-z._-]+", "-", safe).strip("-") or "dosya"
+            unique = f"{int(time.time())}-{os.urandom(3).hex()}-{safe}"
+            with open(os.path.join(UPLOAD_DIR, unique), "wb") as fh:
                 fh.write(content)
-        self.send_response(303)
-        self.send_header("Location", "/upload")
+            saved.append(unique)
+        # Uygulama JSON bekler (görsel bağlantısını göstermek için).
+        data = json.dumps({"ok": True, "files": saved,
+                           "url": f"/yuklenenler/{urllib.parse.quote(saved[-1])}" if saved else None}).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(data)))
         self.end_headers()
+        self.wfile.write(data)
 
     def log_message(self, fmt, *args):
         pass

@@ -12,8 +12,10 @@ PWA dosyaları + geliştirme sunucusu.
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler
   anında görünür), simgeler önbellek öncelikli.
 - `icons/` — Pillow ile üretilen PNG simgeler.
-- `server.py` — önizleme + `/upload` dosya yükleme ucu (port 12000).
-- `yuklenenler/` — yüklenen dosyalar (sürüm kontrolüne girmez).
+- `server.py` — önizleme + `/upload` fotoğraf yükleme ucu (port 12000).
+  `/upload` multipart/form-data alır, dosyayı `yuklenenler/` altına benzersiz
+  adla yazar ve JSON döner: `{"ok":true,"files":[...],"url":"/yuklenenler/..."}`.
+- `yuklenenler/` — yüklenen fotoğraflar (sürüm kontrolüne girmez).
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
 - `tools/generate_icons.py` — simge üretici. İkon, uygulama içi logonun
   kutusuz halidir: köşegen gradyan zemin + beyaz dört uçlu ışıltı işareti
@@ -43,6 +45,14 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
   tetiklenmesin). Kullanıcı giriş yapmamışsa kısayol `pendingShortcut` olarak
   saklanır ve onboarding bitince uygulanır.
 - Paylaşılan bilet bağlantısı: `?bilet=KOD`.
+- Fotoğraf yükleme: Biletlerim > "Fotoğraf yükle" (`data-act="upload"`).
+  Katman iki yol sunar: **Kamerayla çek** (uygulama içi canlı önizleme,
+  `getUserMedia`, izin reddedilirse galeri önerilir) ve **Galeriden seç**
+  (`accept="image/*"`). Yüklenen ilk görsel otomatik olarak profil fotoğrafı
+  olur (`S.photo`, `localStorage`'da saklanır) ve tüm avatarlarda görünür
+  (`paintAvatars()`). Kamera akışı katman kapanınca `stopCam()` ile durdurulur.
+- `S.photo` boşsa avatarlar baş harfleri gösterir (`initials()`); doluysa
+  `<img class="avimg">` gösterilir (`avatarHTML()`).
 - Geri tuşu yönetimi: `histStack` + `popstate`. Açılan her katman (alt sayfa,
   satıcı sayfası) geçmişe yazılır; geri tuşu önce katmanı kapatır, kök
   seviyede uygulamadan çıkar. Katmanı kod içinden kapatırken `closeTopLayer`
