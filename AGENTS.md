@@ -51,6 +51,8 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
 - Keşfet üst şeridi: solda logo, sağda profil avatarı. Tür seçimi yalnızca
   "Türe göre" ızgarasından yapılır (seçili kart `.cat.on` ile çerçevelenir).
   Logoya basmak (`goHome()`) filtreyi ve aramayı sıfırlar, Keşfet'e döner.
+- Alt menü üç sekme: Keşfet, Videolar, Biletlerim. Profil sekmesi yok;
+  profile erişim yalnızca sağ üstteki avatardan (`data-tab="profil"`).
 - Profildeki kalem (`data-act="editprofile"`) hesap sayfasını açar
   (`openSheet('Hesap', …)`): profil alanları, kart yönetimi, tema seçici ve
   çıkış burada. Bu sayfadaki işlemler sayfayı kapatmaz; `refreshAccount()`
