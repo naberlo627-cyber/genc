@@ -45,3 +45,8 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
   çağrılır, yoksa fazladan geçmiş girdisi kalır.
 - Logoya basmak ana sayfaya döner (`#home-logo`, `#web-logo`, `#feed-logo` →
   `goHome()`): üst katmanları kapatır, Keşfet sekmesine geçer, başa kaydırır.
+- Profildeki kalem (`data-act="editprofile"`) hesap sayfasını açar
+  (`openSheet('Hesap', …)`): profil alanları, kart yönetimi, tema seçici ve
+  çıkış burada. Bu sayfadaki işlemler sayfayı kapatmaz; `refreshAccount()`
+  içeriği yerinde yeniler. Kart ekleme alt sayfası `fromAccount` ile geri döner.
+  Profil sayfası yalnızca kişisel içerik gösterir (bilet, kayıt, beğeni).
