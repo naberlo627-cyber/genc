@@ -212,8 +212,6 @@ svg.ic.f{fill:currentColor}
 .avatar,.ph .big{background:var(--grad)}
 .avatar{border:0}
 .locbar{padding:0 20px 12px}
-.allbtn{height:38px;padding:0 17px;border-radius:19px;background:var(--card);border:1.5px solid var(--line);font-weight:700;font-size:14px;color:var(--ink);margin-left:14px;margin-right:auto;transition:background-color .15s,color .15s,border-color .15s}
-.allbtn[aria-pressed="true"]{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
 .loc{padding:4px 8px 4px 0}
 .cta{background:var(--grad);box-shadow:0 12px 24px -14px rgba(91,61,245,.8)}
 .cta[disabled]{box-shadow:none}
@@ -681,7 +679,6 @@ svg.ic.f{fill:currentColor}
       <div class="scroll" id="kscroll">
         <div class="top">
           <button class="logobtn" id="home-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 134 44" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
-          <button class="allbtn" id="allbtn" type="button" aria-pressed="true" aria-label="Tüm etkinlikleri göster">Tümü</button>
           <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
         </div>
         <div class="locbar"><button class="loc" id="locbtn" type="button" aria-haspopup="dialog"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg><span id="locname">Konum kapalı</span><svg class="ic" style="width:18px;height:18px"><use href="#i-chev-d"/></svg></button></div>
@@ -1281,7 +1278,7 @@ $('#feed-logo').addEventListener('click',goHome);
 function enterMain(){
   $('#onb').hidden=true;$('#main').hidden=false;
   S.loggedIn=true;persist();
-  renderAllBtn();renderAll();setTab('kesfet');
+  renderAll();setTab('kesfet');
   if(pendingShortcut){runShortcut(pendingShortcut);pendingShortcut=null}else applyDeepLink();
   openSharedTicket();
 }
@@ -1304,7 +1301,9 @@ if(mq){if(mq.addEventListener)mq.addEventListener('change',paintChrome);else if(
 function goHome(){
   closeTopLayer('sheet');hideSheet();
   closeTopLayer('web');hideWeb();
+  S.filter='Tümü';S.q='';$('#q').value='';
   setTab('kesfet');
+  renderKesfet();
   var sc=$('#kscroll');if(sc)sc.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
 }
 function setTab(t,fromHistory){
@@ -1326,15 +1325,7 @@ function setTab(t,fromHistory){
 }
 
 /* ---------- keşfet ---------- */
-/* "Tümü" düğmesi filtreyi sıfırlar; kategori ızgarası ayrıntıyı verir. */
-function renderAllBtn(){
-  var b=$('#allbtn');if(b)b.setAttribute('aria-pressed',S.filter==='Tümü'?'true':'false');
-}
-function showAllEvents(){
-  S.filter='Tümü';S.q='';$('#q').value='';renderKesfet();renderAllBtn();
-  $('#kscroll').scrollTo({top:0,behavior:reduce?'auto':'smooth'});
-}
-function setChip(c){S.filter=c;renderAllBtn()}
+function setChip(c){S.filter=c}
 function matches(e){
   if(S.filter!=='Tümü'&&e.type!==S.filter)return false;
   var q=norm(S.q).trim();if(!q)return true;
@@ -1401,7 +1392,6 @@ function renderKesfet(){
   $('#klists').innerHTML=h;
 }
 $('#q').addEventListener('input',function(){S.q=this.value;renderKesfet()});
-$('#allbtn').addEventListener('click',showAllEvents);
 $('#locbtn').addEventListener('click',function(){
   openSheet('Konum', '<div class="locrow" style="margin:0 0 12px"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg>'+
     '<div class="t"><span id="ls-name">'+esc(S.locOn?locLabel():'Konum kapalı')+'</span><small id="ls-sub">'+esc(S.locOn&&S.loc.geo?'Yakınındakiler önce gösteriliyor':'Konumunu kullanarak yakınındaki etkinlikleri öne çıkar')+'</small></div>'+
@@ -1862,7 +1852,7 @@ if('serviceWorker' in navigator){
 }
 
 function renderAll(){renderKesfet();renderTickets();renderProfile()}
-restore();applyTheme();renderAllBtn();
+restore();applyTheme();
 if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab('kesfet');applyDeepLink();openSharedTicket()}
 else{applyDeepLink();showStep(1)}
 })();

@@ -48,11 +48,9 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
   Logo artık kutu + ışıltı işareti + "Genç" kelime işaretinden oluşur (`#logo`,
   viewBox `0 0 134 44`); kelime rengi `var(--ink)` olduğu için her iki temada
   okunur, kutu gradyanı `--logo-c1..c3` ile temaya uyar.
-- Keşfet üst şeridi: solda logo, ortada `#allbtn` ("Tümü"), sağda profil avatarı.
-  "Tümü" düğmesi filtreyi sıfırlar (`showAllEvents()`), başa kaydırır; filtre
-  `Tümü` iken dolu görünür. Eski yatay kategori şeridi kaldırıldı; tür seçimi
-  yalnızca "Türe göre" ızgarasından yapılır (seçili kart `.cat.on` ile
-  çerçevelenir).
+- Keşfet üst şeridi: solda logo, sağda profil avatarı. Tür seçimi yalnızca
+  "Türe göre" ızgarasından yapılır (seçili kart `.cat.on` ile çerçevelenir).
+  Logoya basmak (`goHome()`) filtreyi ve aramayı sıfırlar, Keşfet'e döner.
 - Profildeki kalem (`data-act="editprofile"`) hesap sayfasını açar
   (`openSheet('Hesap', …)`): profil alanları, kart yönetimi, tema seçici ve
   çıkış burada. Bu sayfadaki işlemler sayfayı kapatmaz; `refreshAccount()`
