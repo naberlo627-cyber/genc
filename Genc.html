@@ -358,7 +358,8 @@ svg.ic.f{fill:currentColor}
 .uplist a{color:var(--brand);font-weight:700;text-decoration:none;flex:none}
 .uplist .up-ok .us{color:#1E9E63}
 .uplist .up-err .us{color:var(--coral-text)}
-.avimg{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.avimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.avatar,.ph .big,.acctop .big{position:relative;overflow:hidden}
 /* Profil fotoğrafı düğmesi: avatara dokununca doğrudan fotoğraf seçilir. */
 .ppset{padding:0;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ppset:active{opacity:.85}
@@ -1871,12 +1872,24 @@ document.addEventListener('click',function(ev){
   var t=ev.target;
   if(t.closest('#moreBtn')){S.showAll=!S.showAll;renderKesfet();return}
   var cat=t.closest('[data-cat]');
-  if(cat){setChip(cat.getAttribute('data-cat'));S.q='';$('#q').value='';renderKesfet();$('#kscroll').scrollTop=0;return}
+  if(cat){
+    var sec=cat.getAttribute('data-cat');
+    /* Seçili kategoriye tekrar dokununca filtre kalkar, "Tümü"ye döner. */
+    setChip(S.filter===sec?'Tümü':sec);
+    S.q='';$('#q').value='';renderKesfet();$('#kscroll').scrollTop=0;return
+  }
   var ven=t.closest('[data-venue]');
   if(ven){S.q=ven.getAttribute('data-venue');$('#q').value=S.q;setChip('Tümü');renderKesfet();$('#kscroll').scrollTop=0;return}
   if(t.closest('[data-act="geoloc"]')){geoAsk(function(ok){if(ok)closeSheet()});return}
   var tab=t.closest('[data-tab]');
-  if(tab){setTab(tab.getAttribute('data-tab'));return}
+  if(tab){
+    var tb=tab.getAttribute('data-tab');
+    /* Keşfet zaten açıkken sekmedeki simgeye tekrar dokununca filtre sıfırlanır. */
+    if(tb==='kesfet'&&S.tab==='kesfet'&&(S.filter!=='Tümü'||S.q)){
+      S.filter='Tümü';S.q='';$('#q').value='';renderKesfet();$('#kscroll').scrollTop=0;
+    }
+    setTab(tb);return
+  }
   var vid=t.closest('[data-vid]');
   if(vid){goVideo(vid.getAttribute('data-vid'));return}
   var op=t.closest('[data-open]');
