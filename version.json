@@ -1,6 +1,6 @@
 {
-  "version": "1.6",
-  "versionCode": 10600,
-  "notes": "Yeni bilet logosu, harmanlanmış mor-pembe-kırmızı-sarı renk ve gerçek fotoğraflarla yenilenen kısa videolar bölümü.",
+  "version": "1.7",
+  "versionCode": 10700,
+  "notes": "Logo işareti yenilendi: üst-alt çentikli ve perforasyonlu, her boyutta net okunan bilet.",
   "apk": "indir/Genc.apk"
 }

@@ -24,11 +24,13 @@ PWA dosyaları + geliştirme sunucusu.
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
 - `tools/brand.py` — ortak marka yardımcıları. Logo gradyanı (`STOPS`: mor
   `#6D4AFF` → orkide `#B44DE0` → gül `#F0477E` → sarı `#FFC83D`; eski palet
-  ile yeni paletin harmanı) ve beyaz bilet işareti (`TICKET`, `ticket_mask`,
+  ile yeni paletin harmanı) ve beyaz yatay bilet işareti (`TICKET`, `NOTCH_CX`,
+  `NOTCH_R`, `PERF_CX`, `PERF_Y`, `PERF_W`, `PERF_HH`, `ticket_mask`,
   `draw_ticket`) burada tanımlıdır; tüm simge üreticileri bu modülü kullanır.
 - `tools/generate_icons.py` — PWA simge üretici. İkon, uygulama içi logonun
-  kutusuz halidir: köşegen gradyan zemin + beyaz bilet işareti
-  (eski "G" harfi, dört uçlu ışıltı ve konum iğnesi kaldırıldı).
+  kutusuz halidir: köşegen gradyan zemin + beyaz yatay bilet işareti
+  (eski "G" harfi, dört uçlu ışıltı, konum iğnesi ve yan çentikli/dikey
+  perforasyonlu ilk bilet denemesi kaldırıldı).
 - `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
   glifi; Android ve masaüstünde aynı ikon tekrar etmesin).
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
@@ -129,9 +131,11 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   Logo kutu + bilet işareti + "Genç" kelime işaretinden oluşur (`#logo`,
   viewBox `0 0 134 44`); kelime rengi `var(--ink)` olduğu için her iki temada
   okunur, kutu gradyanı mor→orkide→gül→sarı (`--logo-c1..c4`, dört durak) ile
-  temaya uyar. Bilet işareti SVG'de tek `path` (`fill-rule="evenodd"`): gövde
-  + iki yan çentik + üç delikli perforasyon; Python tarafında `brand.TICKET`
-  ile birebir aynı koordinatlar kullanılır.
+  temaya uyar. Bilet işareti SVG'de tek `path` (`fill-rule="evenodd"`): yatay
+  bilet gövdesi + üst/alt kenarın ortasındaki iki çentik + yatay perforasyon
+  (üç yuvarlatılmış kesik). Çentik/perforasyon oyulur, bu yüzden evenodd ile
+  gövdeyle aynı `path` içinde birleşir. Python tarafında `brand.TICKET` +
+  `NOTCH_*`/`PERF_*` sabitleri aynı koordinatları kullanır.
 - Keşfet üst şeridi: solda logo, sağda profil avatarı. Tür seçimi yalnızca
   "Türe göre" ızgarasından yapılır (seçili kart `.cat.on` ile çerçevelenir).
   Logoya basmak (`goHome()`) filtreyi ve aramayı sıfırlar, Keşfet'e döner.

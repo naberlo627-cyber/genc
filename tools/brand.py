@@ -18,15 +18,16 @@ STOPS = [
     (1.00, (255, 200, 61)),   # #FFC83D altın sarısı
 ]
 
-# Logo işareti (44x44 kutu): bilet gövdesi + yan çentikler + perforasyon.
+# Logo işareti (44x44 kutu): yatay bilet — gövde + üst/alt orta çentik +
+# yatay perforasyon (kesik çizgi). Genc.html #logo ile birebir aynı olmalı.
 BOX = 44.0
-# Gövde ve detaylar; Genc.html #logo maskesi ile birebir aynı olmalı.
-TICKET = {"x0": 9.0, "y0": 12.0, "x1": 35.0, "y1": 32.0, "r": 4.5}
-NOTCH_CX = (9.0, 35.0)   # çentik merkezleri (gövde kenarlarında)
-NOTCH_R = 3.0
-PERF_X = 27.5            # perforasyon (koçan) sütunu
-PERF_Y = (16.5, 22.0, 27.5)
-PERF_R = 1.1
+TICKET = {"x0": 7.0, "y0": 13.0, "x1": 37.0, "y1": 31.0, "r": 4.0}
+NOTCH_CX = 22.0          # üst ve alt kenarın ortasındaki çentik
+NOTCH_R = 4.0
+PERF_Y = 22.0            # yatay perforasyonun dikey merkezi
+PERF_CX = (13.5, 22.0, 30.5)   # kesik çizgi parçalarının merkezleri
+PERF_W = 1.1             # parça yarı genişliği
+PERF_HH = 1.5            # parça yarı yüksekliği
 INSET = 4.7
 INSET_RADIUS = 9.4
 
@@ -94,17 +95,19 @@ def ticket_mask(size, scale=1.0):
     x1, y1 = T(TICKET["x1"], TICKET["y1"])
     d.rounded_rectangle([x0, y0, x1, y1], radius=TICKET["r"] * s * scale, fill=255)
 
-    # Yan çentikler (oyulur): merkezler gövde kenarlarında.
-    for cx in NOTCH_CX:
-        a = T(cx, 22.0)
-        rr = NOTCH_R * s * scale
+    # Üst/alt orta çentikler (oyulur); daire kenarın üzerinde olduğu için
+    # gövde içinde kalan yarısı ısırık oluşturur.
+    rr = NOTCH_R * s * scale
+    for cy in (TICKET["y0"], TICKET["y1"]):
+        a = T(NOTCH_CX, cy)
         d.ellipse([a[0] - rr, a[1] - rr, a[0] + rr, a[1] + rr], fill=0)
 
-    # Dikey perforasyon (oyulur): koçanı ayıran üç delik.
-    for cy in PERF_Y:
-        a = T(PERF_X, cy)
-        rr = PERF_R * s * scale
-        d.ellipse([a[0] - rr, a[1] - rr, a[0] + rr, a[1] + rr], fill=0)
+    # Yatay perforasyon (oyulur): üç yuvarlatılmış kesik.
+    for cx in PERF_CX:
+        a = T(cx, PERF_Y)
+        w = PERF_W * s * scale
+        hh = PERF_HH * s * scale
+        d.rounded_rectangle([a[0] - w, a[1] - hh, a[0] + w, a[1] + hh], radius=w, fill=0)
 
     return mask
 
