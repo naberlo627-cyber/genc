@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Genç marka yardımcıları: logo gradyanı ve logo işareti.
+"""Genç marka yardımcıları: logo gradyanı ve uygulama işareti.
 
-Logo işareti 44x44'lük kutuda tanımlıdır (bkz. Genc.html #logo): eski mor-pembe
-ile yeni kırmızı-sarının harmanlandığı gradyan zemin üzerinde beyaz bilet
-(bkz. TICKET). Tüm ikon üreticileri bu modülü kullanır.
+Marka artık ayrı bir kutu + bilet simgesi değil; "Genç" kelime markası
+(bkz. Genc.html #logo) ve onun monogramı olan "G". Uygulama ikonlarında
+gradyan zemin üzerine beyaz "G" monogramı basılır (bkz. tools/assets/
+gmono_mask.png; Genc.html #gmono ile aynı form). Tüm ikon üreticileri bu
+modülü kullanır.
 """
 
+import os
 from PIL import Image, ImageDraw
 
 # Uygulama içi logo gradyanıyla aynı duraklar (bkz. Genc.html --logo-c*).
@@ -20,16 +23,11 @@ STOPS = [
     (1.00, (217, 70, 239)),   # #D946EF fuşya
 ]
 
-# Logo işareti (44x44 kutu): yatay bilet — gövde + üst/alt orta çentik +
-# yatay perforasyon (kesik çizgi). Genc.html #logo ile birebir aynı olmalı.
+# İşaret kutusu (Genc.html #gmono ile aynı 44x44 ölçüsü).
 BOX = 44.0
-TICKET = {"x0": 7.0, "y0": 13.0, "x1": 37.0, "y1": 31.0, "r": 4.0}
-NOTCH_CX = 22.0          # üst ve alt kenarın ortasındaki çentik
-NOTCH_R = 4.0
-PERF_Y = 22.0            # yatay perforasyonun dikey merkezi
-PERF_CX = (13.5, 22.0, 30.5)   # kesik çizgi parçalarının merkezleri
-PERF_W = 1.1             # parça yarı genişliği
-PERF_HH = 1.5            # parça yarı yüksekliği
+# "G" monogramının yüksek çözünürlüklü alfa maskesi (tools/assets/gmono_mask.png).
+_MASK_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "gmono_mask.png")
+_GLYPH_MASK = None
 INSET = 4.7
 INSET_RADIUS = 9.4
 
@@ -99,47 +97,29 @@ def circle(img):
     return _apply_mask(img, mask)
 
 
-def ticket_mask(size, scale=1.0):
-    """Beyaz bilet işaretinin alfa maskesi (verilen piksel boyutunda).
+def monogram_mask(size, scale=1.0):
+    """Beyaz "G" monogramının alfa maskesi (verilen piksel boyutunda).
 
     `scale` işareti kutunun merkezine göre küçültür; uyarlanabilir simgelerin
     güvenli alanına sığdırmak için kullanılır.
     """
-    s = size / BOX
-    mask = Image.new("L", (size, size), 0)
-    d = ImageDraw.Draw(mask)
-    mid = (size / 2.0, size / 2.0)
-
-    def T(x, y):
-        return (mid[0] + (x * s - mid[0]) * scale, mid[1] + (y * s - mid[1]) * scale)
-
-    # Gövde (yuvarlatılmış dikdörtgen).
-    x0, y0 = T(TICKET["x0"], TICKET["y0"])
-    x1, y1 = T(TICKET["x1"], TICKET["y1"])
-    d.rounded_rectangle([x0, y0, x1, y1], radius=TICKET["r"] * s * scale, fill=255)
-
-    # Üst/alt orta çentikler (oyulur); daire kenarın üzerinde olduğu için
-    # gövde içinde kalan yarısı ısırık oluşturur.
-    rr = NOTCH_R * s * scale
-    for cy in (TICKET["y0"], TICKET["y1"]):
-        a = T(NOTCH_CX, cy)
-        d.ellipse([a[0] - rr, a[1] - rr, a[0] + rr, a[1] + rr], fill=0)
-
-    # Yatay perforasyon (oyulur): üç yuvarlatılmış kesik.
-    for cx in PERF_CX:
-        a = T(cx, PERF_Y)
-        w = PERF_W * s * scale
-        hh = PERF_HH * s * scale
-        d.rounded_rectangle([a[0] - w, a[1] - hh, a[0] + w, a[1] + hh], radius=w, fill=0)
-
-    return mask
+    global _GLYPH_MASK
+    if _GLYPH_MASK is None:
+        _GLYPH_MASK = Image.open(_MASK_PATH).convert("L")
+    m = _GLYPH_MASK
+    if scale != 1.0:
+        box = [0, 0, m.width, m.height]
+        m = m.resize((max(1, int(m.width * scale)), max(1, int(m.height * scale))), Image.LANCZOS)
+        layer = Image.new("L", (size, size), 0)
+        layer.paste(m, ((size - m.width) // 2, (size - m.height) // 2))
+        m = layer
+    return m.resize((size, size), Image.LANCZOS)
 
 
-def draw_ticket(img, border=False, scale=1.0):
-    """Gradyan zemin üzerine beyaz bilet işareti çizer."""
+def draw_monogram(img, border=False, scale=1.0):
+    """Gradyan zemin üzerine beyaz "G" monogramını çizer."""
     size = img.width
-    ss = 4  # kenar yumuşatma için üst örnekleme
-    mask = ticket_mask(size * ss, scale).resize((size, size), Image.LANCZOS)
+    mask = monogram_mask(size, scale)
     img.paste((255, 255, 255, 255), (0, 0), mask)
     if border:
         s = size / BOX

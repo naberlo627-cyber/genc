@@ -75,7 +75,7 @@ svg.ic.f{fill:currentColor}
 .art{position:absolute;inset:0;width:100%;height:100%;display:block}
 .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,12,34,0) 45%,rgba(8,12,34,.78) 100%)}
 
-.nav{height:86px;background:var(--card);display:grid;grid-template-columns:repeat(3,1fr);padding:8px 6px 22px;border-top:1px solid var(--line);flex:none}
+.nav{height:86px;background:var(--card);display:grid;grid-template-columns:repeat(4,1fr);padding:8px 6px 22px;border-top:1px solid var(--line);flex:none}
 .nav button{display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:600;font-size:12px;color:var(--mute)}
 .nav .ico{width:58px;height:32px;border-radius:16px;display:grid;place-items:center;transition:background-color .15s}
 .nav .on{color:var(--ink)}
@@ -364,6 +364,7 @@ svg.ic.f{fill:currentColor}
 /* videolar */
 .feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:linear-gradient(160deg,#241056,#4A1D7A 55%,#7A2A6E);color:#fff}
 .feed::-webkit-scrollbar{display:none}
+.feed.sliding{scroll-snap-type:none}
 .vid{height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;flex:none}
 .vtop{padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 40px}
 .vpanel{padding-bottom:calc(26px + env(safe-area-inset-bottom,0px))}
@@ -564,20 +565,13 @@ svg.ic.f{fill:currentColor}
 <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3.6L7 20z"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v7h14v-7"/></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="gmono" viewBox="0 0 44 44"><g transform="translate(7.417 34.561) scale(0.03656)"><path d="M388 12Q221.93505859375 12.0 135.293701171875 -75.945556640625Q48.65234375 -163.89111328125 48.65234375 -343.54345703125Q48.65234375 -462.9130859375 91.510986328125 -541.684814453125Q134.36962890625 -620.45654296875 215.858642578125 -659.771728515625Q297.34765625 -699.0869140625 412.23876953125 -699.0869140625Q481.49951171875 -699.0869140625 542.488525390625 -683.271728515625Q603.4775390625 -667.45654296875 650.1513671875 -635.86962890625Q696.8251953125 -604.28271484375 722.912109375 -556.65234375Q748.9990234375 -509.02197265625 748.9990234375 -444.93505859375H573.15283203125Q573.15283203125 -471.95703125 560.82666015625 -493.381103515625Q548.50048828125 -514.80517578125 527.076416015625 -529.587890625Q505.65234375 -544.37060546875 477.815185546875 -551.78369140625Q449.97802734375 -559.19677734375 418.9560546875 -559.19677734375Q372.6513671875 -559.19677734375 337.401123046875 -546.87060546875Q302.15087890625 -534.54443359375 278.99853515625 -509.663818359375Q255.84619140625 -484.783203125 244.248291015625 -448.93505859375Q232.650390625 -413.0869140625 232.650390625 -365.49951171875V-321.130859375Q232.650390625 -256.97802734375 252.661376953125 -213.945068359375Q272.67236328125 -170.912109375 313.1943359375 -149.401123046875Q353.71630859375 -127.89013671875 413.4775390625 -127.89013671875Q459.4345703125 -127.89013671875 495.78271484375 -141.814208984375Q532.130859375 -155.73828125 553.554931640625 -182.358154296875Q574.97900390625 -208.97802734375 574.97900390625 -245.93505859375V-251.3046875H390.216796875V-376.6953125H748.9990234375V0.0H644.58642578125L627.6083984375 -71.65234375Q597.06494140625 -43.826171875 561.4345703125 -25.141357421875Q525.80419921875 -6.45654296875 483.173828125 2.771728515625Q440.54345703125 12.0 388 12Z" fill="currentColor"/></g></symbol>
 <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
 
-<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--logo-c1)"/><stop offset=".38" stop-color="var(--logo-c2)"/><stop offset=".72" stop-color="var(--logo-c3)"/><stop offset="1" stop-color="var(--logo-c4)"/></linearGradient>
-<radialGradient id="lgloss" cx=".3" cy=".22" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset=".55" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
-<symbol id="logo" viewBox="0 0 134 44">
-  <rect x="0" y="0" width="44" height="44" rx="13" fill="url(#lg)"/>
-  <rect x="0" y="0" width="44" height="44" rx="13" fill="url(#lgloss)"/>
-  <rect x="4.7" y="4.7" width="34.6" height="34.6" rx="9.4" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1.2"/>
-  <path fill-rule="evenodd" fill="var(--logo-fg)" d="M11 13H33A4 4 0 0 1 37 17V27A4 4 0 0 1 33 31H11A4 4 0 0 1 7 27V17A4 4 0 0 1 11 13ZM18.0 13A4.0 4.0 0 0 0 26.0 13ZM18.0 31A4.0 4.0 0 0 1 26.0 31ZM12.4 21.6A1.1 1.1 0 0 1 14.6 21.6V22.4A1.1 1.1 0 0 1 12.4 22.4ZM20.9 21.6A1.1 1.1 0 0 1 23.1 21.6V22.4A1.1 1.1 0 0 1 20.9 22.4ZM29.4 21.6A1.1 1.1 0 0 1 31.6 21.6V22.4A1.1 1.1 0 0 1 29.4 22.4Z"/>
-  <text x="54" y="31.4" font-family="Archivo,system-ui,sans-serif" font-weight="800" font-size="30" letter-spacing="-.6" fill="var(--ink)">Genç</text>
-</symbol>
+<symbol id="logo" viewBox="0 0 2585.39 896.85"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--logo-c1)"/><stop offset=".38" stop-color="var(--logo-c2)"/><stop offset=".72" stop-color="var(--logo-c3)"/><stop offset="1" stop-color="var(--logo-c4)"/></linearGradient></defs><g transform="translate(-48.652,699.087)"><path d="M388 12Q221.93505859375 12.0 135.293701171875 -75.945556640625Q48.65234375 -163.89111328125 48.65234375 -343.54345703125Q48.65234375 -462.9130859375 91.510986328125 -541.684814453125Q134.36962890625 -620.45654296875 215.858642578125 -659.771728515625Q297.34765625 -699.0869140625 412.23876953125 -699.0869140625Q481.49951171875 -699.0869140625 542.488525390625 -683.271728515625Q603.4775390625 -667.45654296875 650.1513671875 -635.86962890625Q696.8251953125 -604.28271484375 722.912109375 -556.65234375Q748.9990234375 -509.02197265625 748.9990234375 -444.93505859375H573.15283203125Q573.15283203125 -471.95703125 560.82666015625 -493.381103515625Q548.50048828125 -514.80517578125 527.076416015625 -529.587890625Q505.65234375 -544.37060546875 477.815185546875 -551.78369140625Q449.97802734375 -559.19677734375 418.9560546875 -559.19677734375Q372.6513671875 -559.19677734375 337.401123046875 -546.87060546875Q302.15087890625 -534.54443359375 278.99853515625 -509.663818359375Q255.84619140625 -484.783203125 244.248291015625 -448.93505859375Q232.650390625 -413.0869140625 232.650390625 -365.49951171875V-321.130859375Q232.650390625 -256.97802734375 252.661376953125 -213.945068359375Q272.67236328125 -170.912109375 313.1943359375 -149.401123046875Q353.71630859375 -127.89013671875 413.4775390625 -127.89013671875Q459.4345703125 -127.89013671875 495.78271484375 -141.814208984375Q532.130859375 -155.73828125 553.554931640625 -182.358154296875Q574.97900390625 -208.97802734375 574.97900390625 -245.93505859375V-251.3046875H390.216796875V-376.6953125H748.9990234375V0.0H644.58642578125L627.6083984375 -71.65234375Q597.06494140625 -43.826171875 561.4345703125 -25.141357421875Q525.80419921875 -6.45654296875 483.173828125 2.771728515625Q440.54345703125 12.0 388 12Z" transform="translate(0.0,0)" fill="currentColor"/><path d="M320.3466796875 12.0Q230.36865234375 12.0 167.031982421875 -17.5Q103.6953125 -47.0 70.532470703125 -108.0Q37.36962890625 -169.0 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.2607421875 -418.228271484375Q103.15185546875 -479.0 164.858154296875 -509.04345703125Q226.564453125 -539.0869140625 313.8251953125 -539.0869140625Q400.15087890625 -539.0869140625 459.802734375 -510.04345703125Q519.45458984375 -481.0 550.345703125 -420.9130859375Q581.23681640625 -360.826171875 581.23681640625 -266.28271484375V-231.36962890625H202.58544921875Q203.49853515625 -189.4345703125 215.139892578125 -160.010498046875Q226.78125 -130.58642578125 252.107421875 -115.716796875Q277.43359375 -100.84716796875 318.62939453125 -100.84716796875Q343.80322265625 -100.84716796875 362.988037109375 -106.84716796875Q382.1728515625 -112.84716796875 395.270751953125 -124.26025390625Q408.36865234375 -135.67333984375 414.966552734375 -151.9560546875Q421.564453125 -168.23876953125 421.564453125 -188.34765625H581.23681640625Q581.23681640625 -139.97802734375 563.465087890625 -102.4345703125Q545.693359375 -64.89111328125 511.747802734375 -39.532470703125Q477.80224609375 -14.173828125 429.552490234375 -1.0869140625Q381.302734375 12.0 320.3466796875 12.0ZM204.0419921875 -321.71728515625H414.02099609375Q414.02099609375 -348.19580078125 407.336181640625 -367.663330078125Q400.6513671875 -387.130859375 388.23828125 -400.228759765625Q375.8251953125 -413.32666015625 358.183837890625 -419.554931640625Q340.54248046875 -425.783203125 318.1728515625 -425.783203125Q282.43359375 -425.783203125 258.379150390625 -413.8701171875Q234.32470703125 -401.95703125 221.41162109375 -379.032958984375Q208.49853515625 -356.10888671875 204.0419921875 -321.71728515625Z" transform="translate(815.0,0)" fill="currentColor"/><path d="M62.28271484375 0.0V-527.0869140625H197.43359375L209.06396484375 -451.65234375H216.06396484375Q235.6943359375 -479.45654296875 262.096435546875 -499.04345703125Q288.49853515625 -518.63037109375 321.357177734375 -528.858642578125Q354.2158203125 -539.0869140625 391.12890625 -539.0869140625Q448.19384765625 -539.0869140625 487.78076171875 -518.097900390625Q527.36767578125 -497.10888671875 548.28076171875 -454.93505859375Q569.19384765625 -412.76123046875 569.19384765625 -347.93505859375V0.0H404.89111328125V-324.84814453125Q404.89111328125 -346.8701171875 399.47802734375 -362.65283203125Q394.06494140625 -378.435546875 384.010498046875 -389.120361328125Q373.9560546875 -399.80517578125 358.945068359375 -405.076904296875Q343.93408203125 -410.3486328125 324.6513671875 -410.3486328125Q295.9990234375 -410.3486328125 273.8466796875 -396.794189453125Q251.6943359375 -383.23974609375 238.91162109375 -360.402587890625Q226.12890625 -337.5654296875 226.12890625 -308.173828125V0.0Z" transform="translate(1434.0,0)" fill="currentColor"/><path d="M310.62939453125 12.0Q224.28173828125 12.0 163.26025390625 -18.04345703125Q102.23876953125 -48.0869140625 69.80419921875 -109.358642578125Q37.36962890625 -170.63037109375 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.032470703125 -418.5Q102.6953125 -479.54345703125 163.716796875 -509.5869140625Q224.73828125 -539.63037109375 310.62939453125 -539.63037109375Q367.43359375 -539.63037109375 414.955078125 -526.63037109375Q462.4765625 -513.63037109375 497.682861328125 -486.858642578125Q532.88916015625 -460.0869140625 551.965087890625 -418.9130859375Q571.041015625 -377.7392578125 571.041015625 -321.3916015625H409.54248046875Q409.54248046875 -355.130859375 398.270751953125 -376.95703125Q386.9990234375 -398.783203125 364.770751953125 -409.65283203125Q342.54248046875 -420.5224609375 309.71630859375 -420.5224609375Q271.97705078125 -420.5224609375 248.422607421875 -404.511474609375Q224.8681640625 -388.50048828125 213.726806640625 -357.52197265625Q202.58544921875 -326.54345703125 202.58544921875 -281.49951171875V-244.58740234375Q202.58544921875 -200.0 213.99853515625 -169.06494140625Q225.41162109375 -138.1298828125 249.966064453125 -122.34716796875Q274.5205078125 -106.564453125 314.1728515625 -106.564453125Q347.62939453125 -106.564453125 370.12939453125 -117.43408203125Q392.62939453125 -128.3037109375 404.62939453125 -150.858154296875Q416.62939453125 -173.41259765625 416.62939453125 -206.7822265625H571.041015625Q571.041015625 -151.80419921875 551.965087890625 -110.358642578125Q532.88916015625 -68.9130859375 497.9111328125 -41.9130859375Q462.93310546875 -14.9130859375 415.183349609375 -1.45654296875Q367.43359375 12.0 310.62939453125 12.0ZM118.390625 197.76025390625Q88.49951171875 197.76025390625 55.249755859375 194.401611328125Q22.0 191.04296875 0.0 185.41259765625V132.06494140625H99.06494140625Q117.97802734375 132.06494140625 129.206298828125 128.15185546875Q140.4345703125 124.23876953125 140.4345703125 109.15185546875Q140.4345703125 95.521484375 132.206298828125 90.336669921875Q123.97802734375 85.15185546875 101.06494140625 85.15185546875H59.23876953125L76.49951171875 -26.216796875H164.28173828125L155.564453125 31.28271484375Q177.216796875 32.826171875 197.858154296875 41.4130859375Q218.49951171875 50.0 231.49951171875 66.445556640625Q244.49951171875 82.89111328125 244.49951171875 110.23876953125Q244.49951171875 136.869140625 231.771240234375 154.227783203125Q219.04296875 171.58642578125 199.58642578125 180.901611328125Q180.1298828125 190.216796875 158.445068359375 193.988525390625Q136.76025390625 197.76025390625 118.390625 197.76025390625Z" transform="translate(2063.0,0)" fill="url(#lg)"/></g></symbol>
 
 <linearGradient id="ga1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF7A45"/><stop offset="1" stop-color="#B0125E"/></linearGradient>
 <linearGradient id="ga2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CCBFF"/><stop offset="1" stop-color="#FFF1B0"/></linearGradient>
@@ -647,7 +641,7 @@ svg.ic.f{fill:currentColor}
     <!-- adım 1: hesap -->
     <div class="ostep pane" id="ob1">
       <div class="scroll">
-        <svg class="logo-lg" viewBox="0 0 134 44" role="img" aria-label="Genç"><use href="#logo"/></svg>
+        <svg class="logo-lg" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg>
         <h2 class="ob-title disp">Hoş geldin</h2>
         <p class="ob-sub">Çevrendeki konser, sinema ve gezileri keşfetmek için iki bilgi yeterli.</p>
         <div class="field"><label for="in-name">Ad soyad</label><input id="in-name" type="text" autocomplete="name" placeholder="Örn. Emre Yıldız"></div>
@@ -675,7 +669,7 @@ svg.ic.f{fill:currentColor}
     <!-- adım 3: hazır -->
     <div class="ostep pane" id="ob3" hidden>
       <div class="scroll" style="text-align:center">
-        <svg class="done-logo" viewBox="0 0 134 44" role="img" aria-label="Genç"><use href="#logo"/></svg>
+        <svg class="done-logo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg>
         <h2 class="ob-title disp" id="done-title" style="padding-top:12px">Hazırsın!</h2>
         <p class="ob-sub" id="done-sub" style="margin:0 auto"></p>
         <div class="likes done-chips" id="done-likes"></div>
@@ -687,14 +681,26 @@ svg.ic.f{fill:currentColor}
   <!-- ===== ANA UYGULAMA ===== -->
   <section class="view" id="main" hidden aria-label="Genç">
 
-    <!-- KEŞFET -->
-    <div class="pane" id="tab-kesfet">
-      <div class="scroll" id="kscroll">
+    <!-- ANA SAYFA (logo) -->
+    <div class="pane" id="tab-home">
+      <div class="scroll" id="hscroll">
         <div class="top">
-          <button class="logobtn" id="home-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 134 44" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
+          <button class="logobtn" id="home-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
           <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
         </div>
         <div class="locbar"><button class="loc" id="locbtn" type="button" aria-haspopup="dialog"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg><span id="locname">Konum kapalı</span><svg class="ic" style="width:18px;height:18px"><use href="#i-chev-d"/></svg></button></div>
+        <div id="hlists"></div>
+        <div class="pad"></div>
+      </div>
+    </div>
+
+    <!-- KEŞFET -->
+    <div class="pane" id="tab-kesfet" hidden>
+      <div class="scroll" id="kscroll">
+        <div class="top">
+          <button class="logobtn" id="kesfet-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
+          <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
+        </div>
         <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Mekan, etkinlik veya sinema ara" aria-label="Ara" autocomplete="off"></label>
         <div id="klists"></div>
         <div class="pad"></div>
@@ -705,7 +711,7 @@ svg.ic.f{fill:currentColor}
     <div class="pane" id="tab-videolar" hidden>
       <div class="feed" id="feed" aria-label="Kısa videolar"></div>
       <div class="vtop">
-        <div class="vbrand"><button class="logobtn" id="feed-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 134 44" role="img" aria-label="Genç"><use href="#logo"/></svg></button></div>
+        <div class="vbrand"><button class="logobtn" id="feed-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button></div>
         <div class="vtabs" id="vtabs">
           <button type="button" data-vtab="ozel" aria-pressed="true">Sana özel</button>
           <button type="button" data-vtab="yakin" aria-pressed="false">Yakınında</button>
@@ -731,7 +737,8 @@ svg.ic.f{fill:currentColor}
     </div>
 
     <nav class="nav" id="nav" aria-label="Ana menü">
-      <button type="button" data-tab="kesfet" class="on" aria-current="page"><span class="ico"><svg class="ic"><use href="#i-compass"/></svg></span>Keşfet</button>
+      <button type="button" data-tab="home" class="on" aria-current="page"><span class="ico"><svg class="ic mono"><use href="#gmono"/></svg></span>Ana Sayfa</button>
+      <button type="button" data-tab="kesfet"><span class="ico"><svg class="ic"><use href="#i-compass"/></svg></span>Keşfet</button>
       <button type="button" data-tab="videolar"><span class="ico"><svg class="ic"><use href="#i-play"/></svg></span>Videolar</button>
       <button type="button" data-tab="biletler"><span class="ico"><svg class="ic"><use href="#i-ticket"/></svg></span>Biletlerim</button>
     </nav>
@@ -750,7 +757,7 @@ svg.ic.f{fill:currentColor}
     <div class="whead">
       <button class="x" id="web-close" type="button" aria-label="Kapat"><svg class="ic"><use href="#i-close"/></svg></button>
       <div class="ti"><strong id="web-title">Biletini seç</strong><small><svg class="ic"><use href="#i-shield"/></svg><span id="web-seller"></span></small></div>
-      <button class="logobtn" id="web-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 134 44" style="width:74px" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
+      <button class="logobtn" id="web-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" style="width:74px" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
     </div>
     <div class="wbody" id="web-body"></div>
   </div>
@@ -1077,7 +1084,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.8';
+var APP_VERSION='1.9';
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
    (server.py) veya kurulumun yayınlandığı uzak adreste sunulur. Uygulama içinde
    gömülü kopya güncel olmayacağı için denetim uzak adresten yapılır. */
@@ -1248,7 +1255,7 @@ function geoAsk(cb){
   navigator.geolocation.getCurrentPosition(function(p){
     clearTimeout(zamanAsimi);
     S.loc={d:'Konumum',lat:p.coords.latitude,lng:p.coords.longitude,geo:true};
-    S.locOn=true;persist();paintObLoc();renderKesfet();
+    S.locOn=true;persist();paintObLoc();renderBrowse();
     if(S.tab==='profil')renderProfile();
     if(!$('#main').hidden&&S.tab==='videolar')renderFeed();
     bitir(true,'Konumun kullanılıyor.');
@@ -1387,12 +1394,13 @@ $('#pickgo').addEventListener('click',function(){
 });
 $('#go3').addEventListener('click',enterMain);
 $('#home-logo').addEventListener('click',goHome);
+$('#kesfet-logo').addEventListener('click',goHome);
 $('#web-logo').addEventListener('click',goHome);
 $('#feed-logo').addEventListener('click',goHome);
 function enterMain(){
   $('#onb').hidden=true;$('#main').hidden=false;
   S.loggedIn=true;persist();
-  renderAll();setTab('kesfet');
+  renderAll();setTab('home');
   if(pendingShortcut){runShortcut(pendingShortcut);pendingShortcut=null}else applyDeepLink();
   openSharedTicket();
 }
@@ -1416,13 +1424,12 @@ function goHome(){
   closeTopLayer('sheet');hideSheet();
   closeTopLayer('web');hideWeb();
   S.filter='Tümü';S.q='';$('#q').value='';
-  setTab('kesfet');
-  renderKesfet();
-  var sc=$('#kscroll');if(sc)sc.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
+  setTab('home');
+  var sc=$('#hscroll');if(sc)sc.scrollTo({top:0,behavior:reduce?'auto':'smooth'});
 }
 function setTab(t,fromHistory){
   S.tab=t;
-  ['kesfet','videolar','biletler','profil'].forEach(function(x){$('#tab-'+x).hidden=(x!==t)});
+  ['home','kesfet','videolar','biletler','profil'].forEach(function(x){$('#tab-'+x).hidden=(x!==t)});
   $$('#nav button').forEach(function(b){
     var on=b.getAttribute('data-tab')===t;
     b.classList.toggle('on',on);
@@ -1434,6 +1441,8 @@ function setTab(t,fromHistory){
   paintChrome();
   if(t==='videolar'){renderFeed();}
   else{$('#feed').classList.add('paused');}
+  if(t==='home')renderHome();
+  if(t==='kesfet')renderKesfet();
   if(t==='biletler')renderTickets();
   if(t==='profil')renderProfile();
 }
@@ -1461,41 +1470,35 @@ function tkHTML(e){
 function thumbHTML(e){
   return '<button class="thumb" type="button" data-vid="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><em>'+ic('play','f')+esc(e.vlabel)+'</em></button>';
 }
-function renderKesfet(){
-  $('#locname').textContent=S.locOn?locLabel():'Konum kapalı';
+function renderBrowse(){renderHome();renderKesfet()}
+function catsHTML(){
+  return '<div class="cats">'+CHIPS.slice(1).map(function(t){
+    var n=EVENTS.filter(function(e){return e.type===t}).length,c=(CATC[t]||'#6D4AFF,#FF4F8B').split(',');
+    var img='img/cat-'+catSlug(t)+'.jpg';
+    return '<button class="cat'+(S.filter===t?' on':'')+'" type="button" data-cat="'+esc(t)+'" aria-pressed="'+(S.filter===t)+'" style="background:linear-gradient(135deg,'+c[0]+','+c[1]+')"><img class="catimg" src="'+img+'" alt="" loading="lazy" onerror="this.remove()"><b>'+esc(t)+'</b><small>'+n+' etkinlik</small></button>';
+  }).join('')+'</div>';
+}
+/* ---------- ana sayfa (logo) ---------- */
+function renderHome(){
   paintAvatars();
-  var browsing=!S.q.trim()&&S.filter==='Tümü';
   var list=EVENTS.filter(matches).sort(function(a,b){return kmTo(a)-kmTo(b)});
   var byDate=list.slice().sort(function(a,b){return a.date<b.date?-1:1});
   var h='';
   if(!list.length){
     h+=secHead('Sonuçlar')+'<div class="empty">“'+esc(S.q||S.filter)+'” için sonuç bulunamadı. Başka bir arama dene.</div>';
-    $('#klists').innerHTML=h;return;
+    $('#hlists').innerHTML=h;return;
   }
+  var browsing=S.filter==='Tümü'&&!S.q.trim();
   if(browsing){
     var feat=EVENTS.filter(function(e){return e.feat});
     h+=secHead('Öne çıkanlar')+'<div class="hrail">'+feat.map(function(e){return wideHTML(e)}).join('')+'</div>';
   }
-  h+=secHead('Türe göre')+'<div class="cats">'+CHIPS.slice(1).map(function(t){
-    var n=EVENTS.filter(function(e){return e.type===t}).length,c=(CATC[t]||'#6D4AFF,#FF4F8B').split(',');
-    var img='img/cat-'+catSlug(t)+'.jpg';
-    return '<button class="cat'+(S.filter===t?' on':'')+'" type="button" data-cat="'+esc(t)+'" aria-pressed="'+(S.filter===t)+'" style="background:linear-gradient(135deg,'+c[0]+','+c[1]+')"><img class="catimg" src="'+img+'" alt="" loading="lazy" onerror="this.remove()"><b>'+esc(t)+'</b><small>'+n+' etkinlik</small></button>';
-  }).join('')+'</div>';
-  if(browsing){
-    h+=secHead('Çevrende yapılacak gösteriler')+'<div class="hrail">'+list.map(posterHTML).join('')+'</div>';
-  }else{
-    h+=secHead('Sonuçlar')+'<div class="hrail">'+list.map(posterHTML).join('')+'</div>';
-  }
+  h+=secHead('Türe göre')+catsHTML();
   var week=byDate.filter(function(e){return e.date<='2026-11-22'});
   var shown=(browsing&&!S.showAll)?week:byDate;
   var more=(browsing&&byDate.length>week.length)?'<button class="more" type="button" id="moreBtn">'+(S.showAll?'Daha az':'Tümü ('+byDate.length+')')+'</button>':'';
   h+=secHead(browsing?(S.showAll?'Yaklaşanlar':'Bu hafta'):'Tarihe göre',more)+shown.map(tkHTML).join('');
-  var vids=list.filter(function(e){return e.video});
-  h+=secHead('Kısa videolar','<button class="more" type="button" data-tab="videolar">Hepsini izle</button>');
-  h+=vids.length?'<div class="hrail">'+vids.map(thumbHTML).join('')+'</div>':'<div class="empty">Bu aramada video yok. Etkinlikleri yukarıdan açabilirsin.</div>';
   if(browsing){
-    var tours=EVENTS.filter(function(e){return e.type==='Gezi turu'});
-    h+=secHead('Gezi turları')+'<div class="hrail">'+tours.map(function(e){return wideHTML(e,'sm')}).join('')+'</div>';
     var free=EVENTS.filter(function(e){return e.prices.every(function(p){return p[1]===0})});
     h+=secHead('Ücretsiz etkinlikler')+'<div class="hrail">'+free.map(posterHTML).join('')+'</div>';
     var vm={};EVENTS.forEach(function(e){(vm[e.venue]=vm[e.venue]||{e:e,n:0}).n++});
@@ -1504,9 +1507,29 @@ function renderKesfet(){
       return '<button class="venue" type="button" data-venue="'+esc(v.e.venue)+'">'+ic('pin')+'<span><strong>'+esc(v.e.venue)+'</strong><small>'+esc(distLabel(v.e))+' · '+v.n+' etkinlik</small></span>'+ic('chev-r')+'</button>';
     }).join('');
   }
+  $('#hlists').innerHTML=h;
+}
+/* ---------- keşfet (arama + vitrin bölümleri) ---------- */
+function renderKesfet(){
+  $('#locname').textContent=S.locOn?locLabel():'Konum kapalı';
+  paintAvatars();
+  var list=EVENTS.filter(matches).sort(function(a,b){return kmTo(a)-kmTo(b)});
+  var h='';
+  var searching=S.filter!=='Tümü'||!!S.q.trim();
+  if(searching){
+    h+=secHead('Sonuçlar');
+    h+=list.length?'<div class="hrail">'+list.map(posterHTML).join('')+'</div>':'<div class="empty">“'+esc(S.q||S.filter)+'” için sonuç bulunamadı. Başka bir arama dene.</div>';
+    $('#klists').innerHTML=h;return;
+  }
+  var vids=EVENTS.filter(function(e){return e.video});
+  h+=secHead('Kısa videolar','<button class="more" type="button" data-tab="videolar">Hepsini izle</button>');
+  h+=vids.length?'<div class="hrail">'+vids.map(thumbHTML).join('')+'</div>':'<div class="empty">Şu an video yok.</div>';
+  var tours=EVENTS.filter(function(e){return e.type==='Gezi turu'});
+  h+=secHead('Gezi turları')+'<div class="hrail">'+tours.map(function(e){return wideHTML(e,'sm')}).join('')+'</div>';
+  h+=secHead('Çevrende yapılacak gösteriler')+'<div class="hrail">'+list.map(posterHTML).join('')+'</div>';
   $('#klists').innerHTML=h;
 }
-$('#q').addEventListener('input',function(){S.q=this.value;renderKesfet()});
+$('#q').addEventListener('input',function(){S.q=this.value;renderBrowse()});
 $('#locbtn').addEventListener('click',function(){
   openSheet('Konum', '<div class="locrow" style="margin:0 0 12px"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg>'+
     '<div class="t"><span id="ls-name">'+esc(S.locOn?locLabel():'Konum kapalı')+'</span><small id="ls-sub">'+esc(S.locOn&&S.loc.geo?'Yakınındakiler önce gösteriliyor':'Konumunu kullanarak yakınındaki etkinlikleri öne çıkar')+'</small></div>'+
@@ -1515,7 +1538,7 @@ $('#locbtn').addEventListener('click',function(){
     '<p class="hint" style="padding:0">Konumun yalnızca mesafe hesaplamak için cihazında kullanılır; sunucuya gönderilmez.</p>',
   function(root){
     $('#ls-sw',root).addEventListener('click',function(){
-      if(S.locOn){S.locOn=false;persist();$('#ls-sw').setAttribute('aria-checked','false');$('#ls-name').textContent='Konum kapalı';$('#ls-sub').textContent='Konumunu kullanarak yakınındaki etkinlikleri öne çıkar';renderKesfet();return}
+      if(S.locOn){S.locOn=false;persist();$('#ls-sw').setAttribute('aria-checked','false');$('#ls-name').textContent='Konum kapalı';$('#ls-sub').textContent='Konumunu kullanarak yakınındaki etkinlikleri öne çıkar';renderBrowse();return}
       geoAsk(function(ok){if(ok)closeSheet()});
     });
   });
@@ -1635,14 +1658,38 @@ function activate(i,items,list){
   var bar=$('.vprog i',items[i]);
   if(bar){void bar.offsetWidth;bar.classList.add('play')}
 }
+/* Kaydırma animasyonu: WebView'de behavior:'smooth' güvenilmez, rAF ile kendim
+   yapıyorum. Böylece video bitince bir sonraki videoya akıcı biçimde geçilir. */
+var slideRAF=null;
+function slideTo(top){
+  var feed=$('#feed'),from=feed.scrollTop,d=top-from,t0=null,DUR=520;
+  if(slideRAF)cancelAnimationFrame(slideRAF);
+  if(reduce||Math.abs(d)<1){feed.scrollTop=top;return}
+  /* Snap açıkken programatik kaydırma anında zıplıyor; animasyon boyunca kapat. */
+  feed.classList.add('sliding');
+  function step(ts){
+    if(t0===null)t0=ts;
+    var p=Math.min(1,(ts-t0)/DUR);
+    var e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;   /* easeInOutCubic */
+    feed.scrollTop=from+d*e;
+    if(p<1)slideRAF=requestAnimationFrame(step);
+    else{slideRAF=null;feed.classList.remove('sliding')}
+  }
+  slideRAF=requestAnimationFrame(step);
+}
 $('#feed').addEventListener('animationend',function(ev){
   if(reduce||!ev.target.matches('.vprog i'))return;
+  if($('#feed').classList.contains('paused'))return;
   var cur=ev.target.closest('.vid'),nx=cur&&cur.nextElementSibling;
-  if(nx)$('#feed').scrollTo({top:nx.offsetTop,behavior:'smooth'});
+  if(nx&&nx.classList.contains('vid'))slideTo(nx.offsetTop);
 });
 $('#feed').addEventListener('click',function(ev){
   if(ev.target.closest('button'))return;
   this.classList.toggle('paused');
+});
+/* Kullanıcı elle kaydırırsa süren geçiş animasyonunu iptal et. */
+['wheel','touchstart','pointerdown'].forEach(function(evt){
+  $('#feed').addEventListener(evt,function(){if(slideRAF){cancelAnimationFrame(slideRAF);slideRAF=null;$('#feed').classList.remove('sliding')}},{passive:true});
 });
 $('#vtabs').addEventListener('click',function(ev){
   var b=ev.target.closest('[data-vtab]');if(!b)return;
@@ -1857,7 +1904,7 @@ function saveProfile(){
   if(n.length<2){er.textContent='Adını yazar mısın?';return}
   if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='E-posta adresi geçerli görünmüyor.';return}
   if(t&&t.replace(/\D/g,'').length<10){er.textContent='Telefon numarası eksik görünüyor.';return}
-  S.name=n;S.email=m;S.phone=t;persist();renderProfile();renderKesfet();
+  S.name=n;S.email=m;S.phone=t;persist();renderProfile();renderBrowse();
   refreshAccount();toast('Profilin güncellendi.');
 }
 function editLikes(){
@@ -1931,23 +1978,23 @@ function share(e){
 }
 document.addEventListener('click',function(ev){
   var t=ev.target;
-  if(t.closest('#moreBtn')){S.showAll=!S.showAll;renderKesfet();return}
+  if(t.closest('#moreBtn')){S.showAll=!S.showAll;renderBrowse();return}
   var cat=t.closest('[data-cat]');
   if(cat){
     var sec=cat.getAttribute('data-cat');
     /* Seçili kategoriye tekrar dokununca filtre kalkar, "Tümü"ye döner. */
     setChip(S.filter===sec?'Tümü':sec);
-    S.q='';$('#q').value='';renderKesfet();$('#kscroll').scrollTop=0;return
+    S.q='';$('#q').value='';renderBrowse();setTab('kesfet');$('#kscroll').scrollTop=0;return
   }
   var ven=t.closest('[data-venue]');
-  if(ven){S.q=ven.getAttribute('data-venue');$('#q').value=S.q;setChip('Tümü');renderKesfet();$('#kscroll').scrollTop=0;return}
+  if(ven){S.q=ven.getAttribute('data-venue');$('#q').value=S.q;setChip('Tümü');renderBrowse();setTab('kesfet');$('#kscroll').scrollTop=0;return}
   if(t.closest('[data-act="geoloc"]')){geoAsk(function(ok){if(ok)closeSheet()});return}
   var tab=t.closest('[data-tab]');
   if(tab){
     var tb=tab.getAttribute('data-tab');
     /* Keşfet zaten açıkken sekmedeki simgeye tekrar dokununca filtre sıfırlanır. */
     if(tb==='kesfet'&&S.tab==='kesfet'&&(S.filter!=='Tümü'||S.q)){
-      S.filter='Tümü';S.q='';$('#q').value='';renderKesfet();$('#kscroll').scrollTop=0;
+      S.filter='Tümü';S.q='';$('#q').value='';renderBrowse();$('#kscroll').scrollTop=0;
     }
     setTab(tb);return
   }
@@ -1979,7 +2026,7 @@ document.addEventListener('click',function(ev){
     case 'share':share(e||(tkid&&findTicket(tkid)&&findTicket(tkid).e));break;
     case 'buy':openWeb(e);break;
     case 'watch':closeSheet();goVideo(id);break;
-    case 'similar':closeSheet();setChip(CHIPS.indexOf(e.type)>-1?e.type:'Tümü');S.q='';$('#q').value='';renderKesfet();setTab('kesfet');break;
+    case 'similar':closeSheet();setChip(CHIPS.indexOf(e.type)>-1?e.type:'Tümü');S.q='';$('#q').value='';renderBrowse();setTab('kesfet');break;
     case 'restart':$('#feed').scrollTo({top:0,behavior:reduce?'auto':'smooth'});break;
     case 'editprofile':editProfile();break;
     case 'saveprofile':saveProfile();break;
@@ -1992,7 +2039,7 @@ document.addEventListener('click',function(ev){
     case 'theme':S.theme=a.getAttribute('data-v');applyTheme();persist();renderProfile();refreshAccount();break;
     case 'logout':
       closeSheet();
-      $('#main').hidden=true;$('#onb').hidden=false;setTab('kesfet');$('#main').hidden=true;
+      $('#main').hidden=true;$('#onb').hidden=false;setTab('home');$('#main').hidden=true;
       S.name='';S.email='';S.phone='';S.loggedIn=false;S.photo='';
       try{localStorage.removeItem(STORE)}catch(x){}
       $('#in-name').value='';$('#in-mail').value='';
@@ -2046,14 +2093,14 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
 }
 
-function renderAll(){renderKesfet();renderTickets();renderProfile()}
+function renderAll(){renderBrowse();renderTickets();renderProfile()}
 restore();applyTheme();
 /* Açılışta bir kez yeni sürüm var mı diye sor (ağ yoksa sessizce geç). */
 setTimeout(checkUpdate,1500);
 /* Profil fotoğrafı için kalıcı gizli seçici: avatara dokununca doğrudan açılır. */
 var gphoto=$('#gphoto');
 gphoto.addEventListener('change',function(){if(gphoto.files.length)upSend(gphoto.files,true);gphoto.value=''});
-if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab('kesfet');applyDeepLink();openSharedTicket()}
+if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab('home');applyDeepLink();openSharedTicket()}
 else{applyDeepLink();showStep(1)}
 })();
 </script>

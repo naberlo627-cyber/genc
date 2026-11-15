@@ -24,19 +24,20 @@ PWA dosyaları + geliştirme sunucusu.
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
 - `tools/brand.py` — ortak marka yardımcıları. Logo gradyanı (`STOPS`: premium
   "Aurora" paleti — indigo `#4338CA` → menekşe `#7C3AED` → mor `#A855F7` →
-  fuşya `#D946EF`; tek renk ailesi, ~57° dar ton aralığı) ve beyaz yatay bilet
-  işareti (`TICKET`, `NOTCH_CX`, `NOTCH_R`, `PERF_CX`, `PERF_Y`, `PERF_W`,
-  `PERF_HH`, `ticket_mask`, `draw_ticket`) burada tanımlıdır; `gloss()`
-  simgelere sol üstten düşen yumuşak beyaz parlama (cam hissi) ekler. Tüm
-  simge üreticileri bu modülü kullanır.
-- `tools/generate_icons.py` — PWA simge üretici. İkon, uygulama içi logonun
-  kutusuz halidir: köşegen gradyan zemin + beyaz yatay bilet işareti
-  (eski "G" harfi, dört uçlu ışıltı, konum iğnesi ve yan çentikli/dikey
-  perforasyonlu ilk bilet denemesi kaldırıldı).
+  fuşya `#D946EF`; tek renk ailesi, ~57° dar ton aralığı) ve beyaz "G"
+  monogramı (`monogram_mask`, `draw_monogram`; maske `tools/assets/gmono_mask.png`)
+  burada tanımlıdır; `gloss()` simgelere sol üstten düşen yumuşak beyaz parlama
+  (cam hissi) ekler. Tüm simge üreticileri bu modülü kullanır.
+- `tools/assets/gmono_mask.png` — "G" monogramının yüksek çözünürlüklü alfa
+  maskesi. `Genc.html #gmono` ile aynı form (Archivo 800 "G"); ikon üreticileri
+  bu maskeyi kullanır. Monogram değişirse burası ve `#gmono` birlikte güncellenir.
+- `tools/generate_icons.py` — PWA simge üretici. İkon, uygulama içi markanın
+  monogram halidir: köşegen gradyan zemin + beyaz "G" monogramı (eski kutu +
+  bilet işareti kaldırıldı).
 - `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
   glifi; Android ve masaüstünde aynı ikon tekrar etmesin).
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
-  kare, daire ve uyarlanabilir ön katman üretir; ön katmandaki bilet güvenli
+  kare, daire ve uyarlanabilir ön katman üretir; ön katmandaki monogram güvenli
   alana sığması için `scale=0.6` ile küçültülür.
 - `android/` — PWA'yı saran Android kabuğu (Gradle, paket `com.genc.app`).
   `android/build-apk.sh` web varlıklarını `assets/www/` altına kopyalar,
@@ -128,21 +129,27 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   satıcı sayfası) geçmişe yazılır; geri tuşu önce katmanı kapatır, kök
   seviyede uygulamadan çıkar. Katmanı kod içinden kapatırken `closeTopLayer`
   çağrılır, yoksa fazladan geçmiş girdisi kalır.
-- Logoya basmak ana sayfaya döner (`#home-logo`, `#web-logo`, `#feed-logo` →
-  `goHome()`): üst katmanları kapatır, Keşfet sekmesine geçer, başa kaydırır.
-  Logo kutu + bilet işareti + "Genç" kelime işaretinden oluşur (`#logo`,
-  viewBox `0 0 134 44`); kelime rengi `var(--ink)` olduğu için her iki temada
-  okunur, kutu gradyanı mor→orkide→gül→sarı (`--logo-c1..c4`, dört durak) ile
-  temaya uyar. Bilet işareti SVG'de tek `path` (`fill-rule="evenodd"`): yatay
-  bilet gövdesi + üst/alt kenarın ortasındaki iki çentik + yatay perforasyon
-  (üç yuvarlatılmış kesik). Çentik/perforasyon oyulur, bu yüzden evenodd ile
-  gövdeyle aynı `path` içinde birleşir. Python tarafında `brand.TICKET` +
-  `NOTCH_*`/`PERF_*` sabitleri aynı koordinatları kullanır.
-- Keşfet üst şeridi: solda logo, sağda profil avatarı. Tür seçimi yalnızca
-  "Türe göre" ızgarasından yapılır (seçili kart `.cat.on` ile çerçevelenir).
-  Logoya basmak (`goHome()`) filtreyi ve aramayı sıfırlar, Keşfet'e döner.
-- Alt menü üç sekme: Keşfet, Videolar, Biletlerim. Profil sekmesi yok;
-  profile erişim yalnızca sağ üstteki avatardan (`data-tab="profil"`).
+- Marka, ayrı bir kutu + simge değil, doğrudan **"Genç" kelime markasıdır**
+  (`#logo`, viewBox `0 0 2585.39 896.85`). Harfler Archivo 800'ün dış
+  çizgilerinden (fontTools ile) SVG `path`'e çevrilmiştir: "G","e","n"
+  `currentColor` (her iki temada okunur), Türkçeye özgü **"ç"** ise marka
+  gradyanıyla (`url(#lg)`) boyanır — ismin içine gömülü tek marka izi
+  (Amazon gülümsemesi / FedEx oku gibi). Gradyan `#logo` içinde tanımlıdır
+  (`--logo-c1..c4`). Uygulama ikonları için monogram `#gmono` (44x44 beyaz "G").
+- Logoya basmak **Ana Sayfa**'ya döner (`#home-logo`, `#kesfet-logo`,
+  `#web-logo`, `#feed-logo` → `goHome()`): üst katmanları kapatır, `home`
+  sekmesine geçer, `#hscroll`'u başa kaydırır.
+- Alt menü dört sekme: **Ana Sayfa** (`home`, monogram simgesi), **Keşfet**
+  (`kesfet`), Videolar (`videolar`), Biletlerim (`biletler`). Profil sekmesi
+  yok; profile erişim yalnızca sağ üstteki avatardan (`data-tab="profil"`).
+- Ana Sayfa (`#tab-home`, `renderHome()`): logo, konum şeridi, "Öne çıkanlar",
+  "Türe göre" ızgarası, "Bu hafta/Yaklaşanlar" bilet listesi, "Ücretsiz
+  etkinlikler", "Yakındaki mekanlar". Aramasız/ışıksız varsayılan vitrin burada.
+- Keşfet (`#tab-kesfet`, `renderKesfet()`): yalnızca arama kutusu + vitrin
+  bölümleri. Aramasız durumda üç bölüm gösterir: **Kısa videolar**, **Gezi
+  turları**, **Çevrende yapılacak gösteriler**. Arama/filtre varken tek
+  "Sonuçlar" bölümüne düşer. Kategori kartına veya mekana dokunmak Keşfet'e
+  geçip sonuçları gösterir (`renderBrowse()` ikisini birden tazeler).
 - Videolar sekmesi tam ekran, kaydırmalı kısa video akışıdır (`#feed`, her kart
   `.vid`). Her kartın zemini gerçek fotoğraftır (`.vphoto`, `img/vid-<id>.jpg`,
   dikey 720x1280, `loading="lazy"`); fotoğraf yüklenmezse `onerror` ile kaldırılır
@@ -151,7 +158,12 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   tarih/yer satırları `.vrow`). Video kartlarında beğen/kaydet/paylaş/bilet al
   düğmeleri ve bilet/kaydedilen/beğenilen sayaçları yoktur; kullanıcı bunları
   istemedi. İlerleme çubuğu (`.vprog`) aktif kartta döner, `IntersectionObserver`
-  ile yönetilir; kaydırma sonunda `.vend` kapanış kartı gelir.
+  ile yönetilir; kaydırma sonunda `.vend` kapanış kartı gelir. Video bitince
+  bir sonraki videoya **akıcı kaydırma** ile geçilir (`slideTo()`: rAF +
+  easeInOutCubic, ~520 ms). WebView'de `behavior:'smooth'` güvenilmez; ayrıca
+  `scroll-snap-type:y mandatory` programatik kaydırmayı anında zıplattığı için
+  animasyon boyunca `.feed.sliding` ile snap kapatılır. Kullanıcı elle
+  kaydırırsa (`wheel`/`touchstart`/`pointerdown`) süren animasyon iptal edilir.
 - Video fotoğrafları Wikimedia Commons'tan `tools/fetch_video_photos.py` ile
   indirilir (açık lisanslı, dikey, renkli; kaynak listesi `img/VID-CREDITS.md`).
 - Video akışındaki "Sana özel" sıralaması `S.likes` tür uyumuna ve konuma göre

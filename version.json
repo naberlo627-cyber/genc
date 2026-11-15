@@ -1,6 +1,6 @@
 {
-  "version": "1.8",
-  "versionCode": 10800,
-  "notes": "Logo kalitesi yükseltildi: uyumlu komşu tonlardan oluşan premium Aurora gradyanı ve cam parlaması; tüm ikonlar güncellendi.",
+  "version": "1.9",
+  "versionCode": 10900,
+  "notes": "Marka yenilendi: logo artık ayrı kutu değil, doğrudan 'Genç' kelime markası (Türkçeye özgü 'ç' gradyan imza). Logo tuşu Ana Sayfa oldu, Keşfet ayrı görünüm; Keşfet'te kısa videolar, gezi turları ve çevrede gösteriler bölümleri var. Video bitince akıcı biçimde sonraki videoya kayıyor.",
   "apk": "indir/Genc.apk"
 }
