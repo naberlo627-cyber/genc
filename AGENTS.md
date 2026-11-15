@@ -97,7 +97,7 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
 
 ## Notlar
 
-- `localStorage` anahtarı: `genc.v1` (profil, biletler, kartlar, tema, sürüm).
+- `localStorage` anahtarı: `genc.v1` (profil, biletler, kartlar, sürüm).
 - Sürüm etiketi: `APP_VERSION` (Genc.html). Hesap sayfasının altında
   "Genç sürüm X.Y (tarayıcı|uygulama)" olarak görünür ve `S.version`
   alanına yazılır. Bir değişikliğin cihaza ulaşıp ulaşmadığını bu etiketle
@@ -166,12 +166,19 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
 - Video akışındaki "Sana özel" sıralaması `S.likes` tür uyumuna ve konuma göre
   yapılır (`videoList()`); beğeni verisi artık tutulmaz.
 - Profildeki kalem (`data-act="editprofile"`) hesap sayfasını açar
-  (`openSheet('Hesap', …)`): profil alanları, kart yönetimi, tema seçici ve
-  çıkış burada. Bu sayfadaki işlemler sayfayı kapatmaz; `refreshAccount()`
+  (`openSheet('Hesap', …)`): profil alanları, kart yönetimi ve çıkış burada. Bu sayfadaki işlemler sayfayı kapatmaz; `refreshAccount()`
   içeriği yerinde yeniler. Kart ekleme alt sayfası `fromAccount` ile geri döner.
   Profil sayfası yalnızca kişisel içerik gösterir (bilet, kayıt, beğeni).
   Hesap sayfasının altında (yalnızca tarayıcıda) APK indirme satırı bulunur
   (`data-act="getapk"` → `getApk()`, `indir/Genc.apk`).
+
+## Tema (yalnızca sistem)
+- Uygulama yalnızca **telefonun temasını** izler; uygulama içi "Sistem / Açık /
+  Koyu" seçicisi kaldırıldı. Açık/koyu geçişi `prefers-color-scheme` ile
+  CSS'ten yapılır; `data-theme` özniteliği hiçbir zaman zorlanmaz
+  (`applyTheme()` yalnızca `theme-color` meta etiketini tazeler).
+- `isDark()` = `prefers-color-scheme: dark` eşleşmesi. Tema tercihi artık
+  `localStorage`'a yazılmaz.
 
 ## Reklam alanları (profil hariç)
 - Sponsor alanları gerçek bir reklam ağına bağlı **değildir**; yalnızca yerleşimi
@@ -179,11 +186,10 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   adRowHTML/adVideoHTML`). Uygulamanın kendi kart diliyle aynı tipografi ve
   yuvarlak köşeleri kullanır, "Reklam" etiketi taşır, tam ekran kaplamaz ve
   otomatik oynamaz/animasyonlu değildir.
-- Reklamların **rengi normal kartlardan farklıdır**: sıcak/amber bir zemin
-  (`--ad-bg` gradyanı), amber kenarlık (`--ad-line`) ve amber etiket/CTA
-  (`--ad-label-bg/fg`, `--ad-cta`). Açık ve koyu tema için ayrı değerler tanımlı
-  olduğundan koyu temada da ayrışır. Satır reklamının perdesi ve ok butonu da
-  amber tonludur.
+- Reklamlar uygulamanın **kendi rengini** kullanır: zemin `--card` (beyaz),
+  kenarlık `--line`, etiket `--line/--mute`, CTA `--brand`. Böylece arayüzle
+  bütünleşir; ayrımı yalnızca "Reklam" etiketi sağlar (`--ad-*` belirteçleri
+  `--card/--line/--mute/--brand`a bağlıdır, tema ile birlikte değişir).
 - Reklamlar diğer bölümlerle **çakışmaz**: kartlarda `margin-top:16px` ile
   üstteki bölümden ayrılır, bölüm başlıkları (`secHead`, 22px üst boşluk) ile
   yeterli nefes alanı bırakır; yatay taşma yoktur.

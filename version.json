@@ -1,6 +1,6 @@
 {
-  "version": "1.11",
-  "versionCode": 11100,
-  "notes": "Reklam alanları yenilendi: artık normal kartlardan ayrı, sıcak/amber bir renkte; diğer bölümlerle çakışmıyor ve daha ferah yerleşiyor. Ana Sayfa'da 'Öne çıkanlar' karuselinin arasına da bir sponsor kartı eklendi.",
+  "version": "1.13",
+  "versionCode": 11300,
+  "notes": "Tema artık yalnızca telefonu takip ediyor: uygulama içindeki Sistem/Açık/Koyu seçicisi kaldırıldı. Reklam alanları uygulamanın kendi rengini (beyaz kart) kullanıyor ve diğer bölümlerle çakışmıyor.",
   "apk": "indir/Genc.apk"
 }
