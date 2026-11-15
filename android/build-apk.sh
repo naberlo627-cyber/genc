@@ -11,10 +11,18 @@ export ANDROID_HOME="${ANDROID_HOME:-/home/openhands/android-sdk}"
 export ANDROID_SDK_ROOT="$ANDROID_HOME"
 GRADLE="${GRADLE:-/home/openhands/gradle-8.7/bin/gradle}"
 
-mkdir -p "$ASSETS/icons" "$ASSETS/img"
+# Gerçek bilet verisi: isteğe bağlı tazeleme (COLLECT=1) ve her zaman gömme.
+# Böylece APK, data/tickets.json içindeki gerçek etkinlik/fiyatlarla derlenir.
+if [ "${COLLECT:-0}" = "1" ]; then
+  python3 "$ROOT/tools/collect_tickets.py" || echo "uyarı: bilet toplama başarısız, mevcut veri kullanılacak" >&2
+fi
+python3 "$ROOT/tools/embed_data.py"
+
+mkdir -p "$ASSETS/icons" "$ASSETS/img" "$ASSETS/img/ev"
 cp "$ROOT/Genc.html" "$ROOT/manifest.json" "$ROOT/sw.js" "$ASSETS/"
 cp "$ROOT"/icons/*.png "$ASSETS/icons/"
-cp "$ROOT"/img/*.jpg "$ASSETS/img/"
+cp "$ROOT"/img/*.jpg "$ROOT"/img/*.webp "$ASSETS/img/" 2>/dev/null || true
+cp "$ROOT"/img/ev/*.webp "$ASSETS/img/ev/" 2>/dev/null || true
 
 # Sürüm tek kaynaktan yönetilir: Genc.html içindeki APP_VERSION.
 # versionName buradan alınır, versionCode türetilir ve version.json üretilir.

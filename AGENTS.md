@@ -7,6 +7,61 @@ PWA dosyaları + geliştirme sunucusu.
 
 - `Genc.html` — uygulamanın tamamı (HTML + CSS + JS tek dosyada). QR kodu
   üreticisi de dosyanın içine gömülüdür (`QRCodeLite` global'i).
+- **Bölüm durumu.** Alt menü: Ana Sayfa, Keşfet, Salonlar, Profil. Kısa videolar
+  bölümü geçici olarak kapalıdır (`var VIDEO_ON=false`); `true` yapınca menü
+  butonu, Keşfet bölümü ve kısayollar geri gelir. Biletler ayrı sekme değildir;
+  Profil sayfasının içinde `ticketsSectionHTML()` ile gösterilir (eski `biletler`
+  hedefleri `setTab` içinde profile yönlenir).
+- **Keşfet > Etkinlikler.** Referans uygulamadaki (Biletinial) "Etkinlikler"
+  bölümünün karşılığı: `evHead` (el yazısı şehir etiketi + şehir seçici),
+  `evFilterBar` (kategori hızlı seçimi + filtre düğmesi), `evSection` (2 sütunlu
+  kart ızgarası + "Daha fazla göster"), `evCard` (afiş, kategori, mekan, tarih,
+  başlangıç fiyatı, "Tükendi" rozeti) ve `evFilterSheet` (Kategori, Tarih,
+  Sırala, Mekan). Filtre durumu `S.evCat`, `S.evVenue`, `S.evDate`, `S.evSort`,
+  `S.evShow` alanlarında tutulur.
+- **Etkinlik gruplama.** `groupEvents`/`groupKey` aynı oyunun (normalize edilmiş
+  başlık) tüm seanslarını tek karta indirir; kart `rep.sessions` taşır ve tarih
+  aralığı (`rangeLabel`) gösterir. Detayda `sessionListHTML` seansları salon
+  salon listeler; seans düğmesi `data-url` ile o seansın gerçek satıcı sayfasını
+  `se.url`'e yazar, böylece "Bileti satın al" doğru gösterime gider.
+- **Etkinlik detayı sekmeleri.** `openDetail` sekmeli bir ekran açar:
+  `detailTabsHTML` + `DTABS` ile Detay · Biletler · Kadro · Yorumlar · Etkinlik
+  Kuralları. Sekme düğmeleri `data-dtab`, panolar `data-dpane` taşır;
+  `switchDetailTab` seçimi `aria-selected`/`hidden` ile yönetir (dokunma
+  işleyicisi `data-dtab`'ı yakalar). Panolar: `paneDetay` (açıklama + bilgi
+  kartları + tür rozetleri), `paneBiletler` (`sessionListHTML` + satın al),
+  `paneKadro` (`cast` kartları), `paneYorumlar` (puan + boş durum), `paneKurallar`
+  (numaralı kurallar). Geçmiş etkinlikte "Biletler" sekmesi gizlenir. Veri yoksa
+  `emptyState` zarif bir boş durum basar.
+- **Uzun metin katlama.** Detayda `about` 320 karakterden, kural listesi 3
+  maddeden uzunsa `.clamp` ile katlanır ve `.dmore` düğmesi çizilir ("Devamını
+  oku" / "Tüm kuralları göster"); dokunma `expandMore()` ile `.clamp` sınıfını
+  kaldırır ve düğmeyi siler. Detaydaki tarih/mekan/şehir satırları `.dmeta`
+  kartında toplanır; başlık altında dağınık satırlar yerine tek bilgi kutusu
+  görünür.
+- **Bilet ekranı (`openWeb`).** Etkinlik görselli `.dhero` başlık, `.opt-row`
+  radyo düğmeleriyle bilet türü seçimi (seçili olanda `.tick`) ve adet/toplam
+  satırları. Ödeme sonrası ekran bir bilet koçanıdır (`.wstub`): etkinlik
+  görseli, tarih/mekan, koltuk ve QR ile bilet kodu. Biletlerim'de bilete
+  dokununca açılan kod ekranı (`showBigQR`) da aynı `.wstub` düzenini kullanır.
+- **Salonlar vs. mekanlar.** `venueKind(name)` mekanı `hall` (sahne, salon,
+  tiyatro, opera, gösteri merkezi, sanat merkezi, arena) veya `gather` (kültür
+  merkezi, kongre merkezi, AVM, meydan, park, kafe) olarak sınıflar. Salonlar
+  sekmesi (`renderVenues`) yalnızca `hall` mekanlarını listeler; salona dokunmak
+  `openVenue()` ile o salonun gün gün programını alt sayfada açar. Ana Sayfa
+  "Yakındaki mekanlar" bölümü `gather` alanlarını öne alır, kalanı en yakın
+  mekanlarla tamamlar.
+- **Sekme ve kaydırma kalıcılığı.** `S.tab` ve `S.scrolls` (sekme başına
+  kaydırma konumu) `persist()`/`restore()` ile saklanır; uygulama yeniden
+  açıldığında son sekme ve konum geri yüklenir (`restoreScroll`). Kaydırma
+  dinleyicileri `pagehide`/`beforeunload` ile diske yazılır.
+- **"Tükendi" rozeti.** `refreshLive()` rozeti yalnızca konumlandırılmış görsel
+  kabına (`.evpic`, `.tkpic`, `.poster .pic`, `.wide`, `.thumb`) ekler; düz
+  satırlara (ör. `.calrow`) eklenirse sayfanın sol üstüne kaçardı.
+- **Çok şehir.** Veri beş ili kapsar (İzmir, Ankara, İstanbul, Bursa, Antalya).
+  `S.city` seçili şehri tutar (`nearestCity` konumdan tahmin eder, onboarding 2.
+  adım ve `#locbtn` şehir sayfası ayarlar); Keşfet listesi seçili şehre göre
+  süzülür. İstanbul Anadolu/Avrupa yakaları `İstanbul`'a normalize edilir.
 - `manifest.json` — PWA manifest'i; `shortcuts` dizisi ana ekran kısayollarını
   tanımlar (`?git=...` derin bağlantıları).
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler
@@ -39,6 +94,28 @@ PWA dosyaları + geliştirme sunucusu.
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
   kare, daire ve uyarlanabilir ön katman üretir; ön katmandaki monogram güvenli
   alana sığması için `scale=0.6` ile küçültülür.
+- `tools/collect_tickets.py` — **gerçek bilet toplayıcı**. Birden çok satıcıyı
+  tarar, etkinlik adı/mekan/tarih/**fiyat** bilgisini toplar, aynı etkinliği
+  satan kaynakları eşleştirip **en ucuzunu** işaretler. Çıktı: `data/tickets.json`.
+  Kaynaklar: Biletinial (halka açık JSON-LD `Event`+`Offer`) ve Passo (halka
+  açık `ticketingweb.passo.com.tr/api/passoweb` web API'si; fiyatlar kategori
+  bazında açık). Yeni kaynak için `SOURCES` listesine toplayıcı ekleyin.
+  `--sehir İzmir` (varsayılan), `--limit N` (kaynak başına detay sınırı).
+- `tools/embed_data.py` — `data/tickets.json` içeriğini `Genc.html` içindeki
+  `var GENC_DATA=...;` satırına gömer. Veri yoksa `null` kalır ve uygulama örnek
+  veriyle çalışır. `android/build-apk.sh` bu adımı her derlemede çalıştırır;
+  `COLLECT=1` verilirse önce taze veri toplanır.
+- `data/tickets.json` — toplanan gerçek etkinlik/fiyat verisi (uygulamaya gömülür).
+  Her etkinlik detay alanları da taşır: `description` (açıklama), `cast`
+  (`{name,role}` listesi), `runtime` (dakika), `genres`/`genre_label`, `age`
+  (yaş sınırı), `rules` (kural maddeleri) ve `organizer`. Bu alanlar Biletinial
+  detay sayfasından okunur (JSON-LD `description`/`organizer`, sayfadaki
+  `trackingInfo` JSON'u ve `event-rules-v2__content` bloğu).
+- `tools/enrich_events.py` — mevcut `data/tickets.json`'u detay alanlarıyla
+  zenginleştirir: benzersiz satıcı sayfalarını çeker, alanları aynı URL'yi
+  paylaşan tüm seanslara yazar. `--force` ile hepsini yeniden çeker. Yorum verisi
+  satıcının turnstile'lı ucu arkasında olduğundan toplanmaz; uygulama yorumlar
+  sekmesinde bilgilendirici bir boş durum gösterir.
 - `android/` — PWA'yı saran Android kabuğu (Gradle, paket `com.genc.app`).
   `android/build-apk.sh` web varlıklarını `assets/www/` altına kopyalar,
   Gradle ile derler ve `indir/Genc.apk` dosyasını üretir.
@@ -49,6 +126,11 @@ PWA dosyaları + geliştirme sunucusu.
   kutuda `<img class="catimg">` gerçek fotoğrafı gösterir; fotoğraf
   yüklenemezse `onerror` ile kaldırılır ve `CATC` renk geçişi yedek kalır.
   Fotoğrafın üstünde okunurluk için `.cat::before` koyu katmanı vardır.
+  Kutucuğa dokunmak Keşfet'in "Etkinlikler" ızgarasını (`S.evCat`) o türe
+  süzer; ana sayfanın genel filtresi (`S.filter`) **kurulmaz**, aksi halde ana
+  sayfa "kilitleniyor" (Öne çıkanlar/Bu hafta/Ücretsiz/Mekanlar bölümleri
+  kayboluyor) ve Keşfet afiş şeridine düşüyordu. Aynı kutucuğa tekrar dokunmak
+  filtreyi kaldırır. Detaydaki "Benzer etkinlikler" de aynı yolu kullanır.
 
 ## Android (APK)
 
@@ -103,7 +185,8 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   alanına yazılır. Bir değişikliğin cihaza ulaşıp ulaşmadığını bu etiketle
   doğrulayın; etiket eskiyse kullanıcı önbellekteki eski derlemeyi görüyor.
 - Bilet QR yükü: `GENÇ|etkinlikId|kod|adet|tür|koltuklar` (EC seviyesi M).
-- Uygulama kısayolu derin bağlantıları: `?git=yakin|videolar|ara|biletlerim|profil|bilet-al`.
+- Uygulama kısayolu derin bağlantıları: `?git=yakin|videolar|ara|biletlerim|profil|bilet-al|hafta`.
+  `git=hafta` ana sayfayı açar ve "Bu hafta ne var?" paylaşım görselini üretir.
   `git` parametresi çalıştıktan sonra adres çubuğundan silinir (yenilemede tekrar
   tetiklenmesin). Kullanıcı giriş yapmamışsa kısayol `pendingShortcut` olarak
   saklanır ve onboarding bitince uygulanır.
@@ -143,8 +226,10 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   (`kesfet`), Videolar (`videolar`), Biletlerim (`biletler`). Profil sekmesi
   yok; profile erişim yalnızca sağ üstteki avatardan (`data-tab="profil"`).
 - Ana Sayfa (`#tab-home`, `renderHome()`): logo, konum şeridi, "Öne çıkanlar",
-  "Türe göre" ızgarası, "Bu hafta/Yaklaşanlar" bilet listesi, "Ücretsiz
-  etkinlikler", "Yakındaki mekanlar". Aramasız/ışıksız varsayılan vitrin burada.
+  "Türe göre" ızgarası, "Bu hafta/Yaklaşanlar" bilet listesi (`.tk` — solda
+  afiş `.tkpic`, üstünde gün/ay etiketi `.tkdate`, sağda başlık/mekan/fiyat),
+  "Ücretsiz etkinlikler", "Yakındaki mekanlar" (toplanma alanları önce).
+  Aramasız/ışıksız varsayılan vitrin burada.
 - Keşfet (`#tab-kesfet`, `renderKesfet()`): yalnızca arama kutusu + vitrin
   bölümleri. Aramasız durumda üç bölüm gösterir: **Kısa videolar**, **Gezi
   turları**, **Çevrende yapılacak gösteriler**. Arama/filtre varken tek
@@ -171,6 +256,48 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   Profil sayfası yalnızca kişisel içerik gösterir (bilet, kayıt, beğeni).
   Hesap sayfasının altında (yalnızca tarayıcıda) APK indirme satırı bulunur
   (`data-act="getapk"` → `getApk()`, `indir/Genc.apk`).
+
+## Gerçek bilet verisi ve "en ucuz" sistemi
+
+Etkinlikler artık **gerçek**: uygulama, toplanan gerçek etkinlik/mekan/tarih/fiyat
+verisini gösterir. Akış:
+
+1. `python3 tools/collect_tickets.py [--sehir İzmir]` → `data/tickets.json`.
+   Her kayıt; ad, mekan, il/ilçe, koordinat, tarih ve satıcı sayfasından alınan
+   **gerçek fiyatı** taşır. Aynı etkinliği (başlık+mekan+tarih) satan kaynaklar
+   `dedupe_and_cheapest` ile birleştirilir; `price_by_source`, `cheapest_source`
+   alanları üretilir ve **en ucuz kaynak** seçilir.
+2. `python3 tools/embed_data.py` → veri `Genc.html` içindeki `GENC_DATA`'ya gömülür.
+3. Açılışta `applyRealData()` `EVENTS` dizisini gerçek kayıtlarla değiştirir.
+   Gerçek kayıtlarda detay sayfası "Bileti satın al" gösterir ve
+   `openReal()` ile **satıcının gerçek bilet sayfası** açılır (uygulama ödeme
+   almaz). Birden çok kaynak eşleşirse fiyat "… ₺ · en ucuz" ve not
+   "En ucuz: <kaynak> · <kaynaklar> karşılaştırıldı" olur.
+
+Kaynak notları:
+
+- **Biletinial**: detay sayfaları schema.org `Event` + `Offer` JSON-LD yayınlar
+  (fiyat `offers.price`). `robots.txt` genel botlara izin verir; giriş gerekmez.
+- **Passo**: `POST ticketingweb.passo.com.tr/api/passoweb/allevents` listeler;
+  `GET …/geteventdetails/{seoUrl}/{eventId}/118` fiyatı (`categories[].price`,
+  `lowPrice`) verir. Yanıtlar `access-control-allow-origin: *` ile gelir.
+- **Etkinlik afişleri.** Kartlar ve detay, etkinliğin gerçek afişini (`image`)
+  gösterir; afiş yoksa salon fotoğrafına (`venue_image`), o da yoksa yerel
+  `VENUE_PHOTOS` kaydına düşer. `onerror="this.remove()"` ile kırık görsel
+  sessizce gizlenir.
+- **Passo görselleri yereldir.** `image.passo.com.tr`, Cloudflare + `nosniff`
+  nedeniyle görselleri tarayıcıdan çapraz kaynak olarak sunmuyor
+  (`net::ERR_BLOCKED_BY_ORB`); cURL ile erişilebilir ama `<img>` yüklenmez.
+  Bu yüzden Passo afişleri toplama sırasında `img/ev/<hash>.webp` olarak
+  indirilip `data/tickets.json` içinde yerel yolla saklanır. Yeni Passo verisi
+  çekilirse `tools/embed_data.py` öncesi bu indirme adımı tekrarlanmalı.
+  Biletinial afişleri (`merlincdn.net`) sorunsuz açılır, uzak kalır.
+- **Passo şehir filtresi uygulamaz**; `allevents` tüm yurdu döndürür, toplayıcı
+  `venueName`/`seoTitle` içinde "İzmir" arayıp detaydan `venueCity` ile doğrular.
+- Fiyatı yalnızca giriş/Cloudflare arkasında veren siteler (Biletix, Bubilet,
+  Mobilet) şimdilik kaynak değildir; `SOURCES` yapısı yeni kaynağa açıktır.
+- Toplama siteye saygılıdır: istekler paralel ama sınırlı (6 iş parçacığı),
+  aralarda gecikme, `fetch` yeniden dener.
 
 ## Tema (yalnızca sistem)
 - Uygulama yalnızca **telefonun temasını** izler; uygulama içi "Sistem / Açık /
@@ -236,3 +363,39 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   yeni APK eskisinin üzerine kurulamaz, kullanıcı uygulamayı silip yeniden kurar.
 - Servis çalışanı (`sw.js`) `version.json` ve `.apk` isteklerini önbelleğe almaz
   (her zaman ağdan); yoksa eski sürüm görünür.
+
+## Haftalık paylaşım görseli ("Bu hafta ne var?")
+- Yerel topluluklarda (mahalle/semt grupları, WhatsApp toplulukları, yerel haber
+  sayfaları) paylaşılmak üzere her hafta tekrar eden, cihazda üretilen bir görsel.
+- `buildWeeklyCanvas()` 1080×1350 dikey PNG çizer: marka logosu, şehir etiketi,
+  "Bu hafta ne var?" başlığı, haftanın 6 etkinliği ve alt bilgi. Şehir adı
+  `S.city`'den gelir, yani konuma/seçilen şehre göre değişir.
+- `wkPicks()` önce bu haftanın etkinliklerini (öne çıkanlar → en yakın), yetmezse
+  yaklaşanlardan 6'ya tamamlar. `wkWeekRange()` haftayı pazartesi–pazar gösterir.
+- Görsel yalnızca yerel varlıklarla çizilir: uzak satıcı fotoğrafları CORS
+  başlığı göndermediği için canvas'a çizilemez (`Access-Control-Allow-Origin`
+  yok → tuval "kirli" olur ve `toDataURL` hata verir). Bu yüzden fotoğraf yerine
+  türü simgeleyen renk geçişi (`WK_ART`) ve simge (`WK_GLYPH`) kullanılır.
+- Logo, gömülü `#logo` simgesinden `wkLogoURL()` ile yeniden üretilir: SVG yol
+  verisi alınır, tema değişkenleri (`--logo-c1..c4`) kart zemini için açık
+  tonlarla değiştirilir, `color:#FFFFFF` ile beyaza boyanır. Kopyalama değil,
+  uygulamanın kendi logosunu yeniden kullanma.
+- Giriş noktaları: ana sayfada `.wkcard` (`data-act="weekly"`) ve Profil'de
+  "Bu hafta ne var?" düğmesi. Sayfa `weeklyShareSheet()` ile açılır; `wkshare`
+  (Web Share API, dosya destekleniyorsa görseli ekler) ve `wksave`
+  (PNG indirir, ad `genc-bu-hafta-<şehir>.png`) düğmeleri vardır.
+- Yeni şehir/etkinlik türü eklenirse `WK_ART` ve `WK_GLYPH` tablolarına karşılık
+  eklenir; bilinmeyen türde güvenli varsayılan kullanılır.
+
+## Görsel katmanları (afiş / filigran)
+- Kart ve detay görsellerinde iki katman yan yana durur: gerçek fotoğraf
+  (`.photo` / `img`) ve dekoratif SVG (`.art`). Fotoğraf yüklenirse SVG
+  gizlenmelidir; yoksa SVG fotoğrafın üzerinde filigran gibi görünür.
+- Kural her konteynerde ayrı yazılır: `.poster .pic .photo~.art`,
+  `.wide .photo~.art`, `.dhero .photo~.art`, `.tk .tkpic .photo~.art` ve
+  `.evcard .evpic img~.art` (`display:none`). Yeni bir görsel konteyneri
+  eklerken bu kuralı da eklemek gerekir.
+- `evCard` görseli `<img>` etiketi kullanır (`onerror="this.remove()"`), bu
+  yüzden seçici `img~.art`'tır; diğerleri `.photo` sınıfını kullanır.
+- Fotoğraf üzerindeki kategori rozeti (`.evcat`) görselin altına yerleştirilir
+  ve `.evpic::after` gradyanı ile okunabilirlik sağlanır.

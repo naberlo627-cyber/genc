@@ -84,6 +84,26 @@ def draw_calendar(d):
     d.line([(r - w * 0.3, t - 10), (r - w * 0.3, t + 14)], fill="white", width=12)
 
 
+def draw_spark(d):
+    """Haftalık özet: marka yıldızı (dört uçlu parıltı)."""
+    c = SIZE / 2
+    r = (SIZE - 2 * PAD) / 2
+    inner = r * 0.30
+    d.polygon(
+        [
+            (c, c - r),
+            (c + inner, c - inner),
+            (c + r, c),
+            (c + inner, c + inner),
+            (c, c + r),
+            (c - inner, c + inner),
+            (c - r, c),
+            (c - inner, c - inner),
+        ],
+        fill="white",
+    )
+
+
 SHORTCUTS = {
     "shortcut-bilet-al": draw_ticket,
     "shortcut-videolar": draw_play,
@@ -91,6 +111,7 @@ SHORTCUTS = {
     "shortcut-biletlerim": draw_calendar,
     "shortcut-yakin": draw_pin,
     "shortcut-profil": draw_user,
+    "shortcut-hafta": draw_spark,
 }
 
 

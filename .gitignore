@@ -12,3 +12,6 @@ android/app/genc-release.jks
 android/app/src/main/assets/www/
 indir/
 .gradle/
+
+# Ajan geçici dosyaları (ekran görüntüleri, gözlemler)
+.agent_tmp/

@@ -2,6 +2,18 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
     <shortcut
+        android:shortcutId="hafta"
+        android:enabled="true"
+        android:icon="@drawable/sc_hafta"
+        android:shortcutShortLabel="@string/sc_hafta">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hafta" />
+    </shortcut>
+
+    <shortcut
         android:shortcutId="bilet_al"
         android:enabled="true"
         android:icon="@drawable/sc_bilet_al"
@@ -25,17 +37,6 @@
             android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=yakin" />
     </shortcut>
 
-    <shortcut
-        android:shortcutId="videolar"
-        android:enabled="true"
-        android:icon="@drawable/sc_videolar"
-        android:shortcutShortLabel="@string/sc_videolar">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=videolar" />
-    </shortcut>
 
     <shortcut
         android:shortcutId="ara"

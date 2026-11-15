@@ -1,5 +1,5 @@
 /* Genç - çevrimdışı desteği ve hızlı açılış için servis çalışanı. */
-var CACHE = "genc-v22";
+var CACHE = "genc-v32";
 var ASSETS = [
   "./",
   "./Genc.html",
@@ -10,6 +10,7 @@ var ASSETS = [
   "./icons/apple-touch-icon.png",
   "./icons/favicon-32.png",
   "./icons/shortcut-bilet-al.png",
+  "./icons/shortcut-hafta.png",
   "./icons/shortcut-yakin.png",
   "./icons/shortcut-videolar.png",
   "./icons/shortcut-ara.png",
@@ -37,7 +38,8 @@ var ASSETS = [
   "./img/vid-minik.jpg",
   "./img/vid-sessiz.jpg",
   "./img/vid-tango.jpg",
-  "./img/vid-yaz.jpg"
+  "./img/vid-yaz.jpg",
+  "./img/venue-istinyeart-100-performans-arena.jpg"
 ];
 
 self.addEventListener("install", function (e) {
@@ -92,6 +94,11 @@ self.addEventListener("fetch", function (e) {
   // Güncelleme denetimi ve APK her zaman ağdan gelir; önbellek sürümü gizlemesin.
   if (/(^|\/)version\.json$/.test(path) || /\.apk$/.test(path)) {
     e.respondWith(fetch(req));
+    return;
+  }
+  // Canlı durum her zaman ağdan denenir; hata olursa uygulama beklemeye geçer.
+  if (/(^|\/)live$/.test(path)) {
+    e.respondWith(fetch(req).catch(function () { return new Response("{}", { headers: { "Content-Type": "application/json" } }); }));
     return;
   }
   if (req.mode === "navigate" || /(^|\/)Genc\.html$/.test(path)) {
