@@ -1,5 +1,5 @@
 /* Genç - çevrimdışı desteği ve hızlı açılış için servis çalışanı. */
-var CACHE = "genc-v12";
+var CACHE = "genc-v13";
 var ASSETS = [
   "./",
   "./Genc.html",
@@ -78,6 +78,11 @@ self.addEventListener("fetch", function (e) {
   var req = e.request;
   if (req.method !== "GET" || new URL(req.url).origin !== location.origin) return;
   var path = new URL(req.url).pathname;
+  // Güncelleme denetimi ve APK her zaman ağdan gelir; önbellek sürümü gizlemesin.
+  if (/(^|\/)version\.json$/.test(path) || /\.apk$/.test(path)) {
+    e.respondWith(fetch(req));
+    return;
+  }
   if (req.mode === "navigate" || /(^|\/)Genc\.html$/.test(path)) {
     e.respondWith(networkFirst(req));
     return;

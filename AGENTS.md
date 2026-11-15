@@ -68,6 +68,21 @@ node --check tools/qr.js    # QR modülü sözdizimi
 JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
 çalıştırın; tarayıcı testi için herkese açık önizleme adresini kullanın.
 
+APK derleme ortamı (kabuk sıfırlanınca yeniden gerekebilir):
+
+```bash
+export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+export ANDROID_HOME=/home/openhands/android-sdk
+./android/build-apk.sh        # assets/www güncellenir, sürüm yazılır, imzalı APK üretilir
+apksigner verify indir/Genc.apk
+```
+
+Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle 8.7
+(`/home/openhands/gradle-8.7`), Android SDK cmdline-tools + `platforms;android-34` +
+`build-tools;34.0.0` (`ANDROID_HOME=/home/openhands/android-sdk`). İmza anahtarı
+`android/app/genc-release.jks` yerelde durur ve `.gitignore` ile dışlanır; parola
+`android/app/build.gradle` içindeki `signingConfigs.release` bloğundadır.
+
 ## Notlar
 
 - `localStorage` anahtarı: `genc.v1` (profil, biletler, kartlar, tema, sürüm).
@@ -119,3 +134,35 @@ JS sözdizimini denetlemek için `<script>` bloklarını ayırıp `node --check`
   Profil sayfası yalnızca kişisel içerik gösterir (bilet, kayıt, beğeni).
   Hesap sayfasının altında (yalnızca tarayıcıda) APK indirme satırı bulunur
   (`data-act="getapk"` → `getApk()`, `indir/Genc.apk`).
+
+## Kart doğrulama
+- Varsayılan kart yoktur; `S.cards` boş başlar (`[]`), kullanıcı kendi kartını
+  ekler. Kart yoksa hesap sayfası "Kayıtlı kartın yok." gösterir.
+- `cardBrand(d)` numaradan markayı bulur: Visa `^4`, Mastercard `^(5[1-5]|2[2-7])`,
+  Amex `^3[47]`. Marka başına uzunluk/CVV kuralı vardır (Amex 15 hane, 4 haneli CVV).
+- `addCard()` Luhn algoritmasıyla numarayı doğrular; geçmeyen kart reddedilir ve
+  `#k-err` alanında hata gösterilir. Marka adı kart satırında görünür.
+
+## Güncelleme (APK)
+- Sürüm tek kaynaktan yönetilir: `Genc.html` içindeki `var APP_VERSION='x.y'`.
+  `build-apk.sh` bunu okuyup `versionName`'i yazar, `versionCode`'u türetir
+  (`major*10000 + minor*100 + patch`) ve `version.json` üretir.
+- `version.json` (`{version, versionCode, notes, apk}`) güncelleme denetiminin
+  kaynağıdır. `build-apk.sh` bunu `assets/www/` içine de kopyalar.
+- Sayfa açılışında `checkUpdate()` (1.5 sn sonra) `version.json`'ı çeker;
+  sunucudaki sürüm `APP_VERSION`'dan büyükse `#upbar` güncelleme şeridi görünür.
+  `cmpVer()` sürümleri sayısal olarak karşılaştırır.
+- Şeritteki "Güncelle" (`data-act="update"` → `installUpdate()`): uygulama
+  içindeyse `window.GENC_INSTALL(url)` çağrılır, tarayıcıda APK indirilir.
+- `absUrl()` göreli `apk` yolunu uygulama modunda `REMOTE_BASE`'e bağlar;
+  uygulamanın gömülü kopyası eski olacağı için denetim uzaktan yapılır.
+- Android tarafı: `UpdateBridge` (`GencUpdate.install(url)`) APK'yı `cache/updates/`
+  altına indirir, `FileProvider` (`com.genc.app.fileprovider`) ile paylaşıp sistem
+  kurulum ekranını açar. `REQUEST_INSTALL_PACKAGES` izni ve `res/xml/file_paths.xml`
+  gereklidir. Android 8+ için `ACTION_MANAGE_UNKNOWN_APP_SOURCES` yönlendirmesi var.
+- İmza anahtarı (`android/app/genc-release.jks`) sabit kalmalı; aksi halde
+  güncelleme kurulamaz. APK imzası `apksigner verify` ile denetlenir.
+  Anahtar `.gitignore` ile dışlandığı için repoda yedeği yoktur; kaybolursa
+  yeni APK eskisinin üzerine kurulamaz, kullanıcı uygulamayı silip yeniden kurar.
+- Servis çalışanı (`sw.js`) `version.json` ve `.apk` isteklerini önbelleğe almaz
+  (her zaman ağdan); yoksa eski sürüm görünür.

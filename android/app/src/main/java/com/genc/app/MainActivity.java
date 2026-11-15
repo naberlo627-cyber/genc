@@ -5,7 +5,11 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.Settings;
+import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -14,11 +18,19 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.webkit.WebViewAssetLoader;
 
 /**
@@ -68,6 +80,9 @@ public class MainActivity extends AppCompatActivity {
         web = new WebView(this);
         setContentView(web);
 
+        // Güncelleme köprüsü: sayfa yeni APK adresini buraya iletir.
+        web.addJavascriptInterface(new UpdateBridge(), "GencUpdate");
+
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
         s.setDomStorageEnabled(true);
@@ -90,8 +105,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 // Uygulama, APK içinde çalıştığını bilsin: fotoğraflar sunucuya
-                // gönderilmez, cihazda saklanır.
-                view.evaluateJavascript("window.GENC_APP=true;", null);
+                // gönderilmez, cihazda saklanır. Güncelleme köprüsü de burada verilir.
+                view.evaluateJavascript(
+                        "window.GENC_APP=true;"
+                        + "window.GENC_INSTALL=function(u){window.GencUpdate.install(u)};",
+                        null);
             }
         });
 
@@ -123,6 +141,58 @@ public class MainActivity extends AppCompatActivity {
 
         Uri data = getIntent() != null ? getIntent().getData() : null;
         web.loadUrl(data != null ? data.toString() : BASE);
+    }
+
+    /* --- uygulama içi güncelleme ---
+       Sayfa, yeni APK adresini bu köprüye verir; APK önbelleğe indirilir ve
+       sistem kurulum ekranı açılır. İndirme ağ işi olduğu için ayrı iş parçacığında. */
+    private class UpdateBridge {
+        @JavascriptInterface
+        public void install(String url) {
+            runOnUiThread(() -> Toast.makeText(MainActivity.this,
+                    "Güncelleme indiriliyor…", Toast.LENGTH_SHORT).show());
+            new Thread(() -> downloadAndInstall(url)).start();
+        }
+    }
+
+    private void downloadAndInstall(String url) {
+        File dir = new File(getCacheDir(), "updates");
+        if (!dir.exists() && !dir.mkdirs()) return;
+        File apk = new File(dir, "Genc-update.apk");
+        try (InputStream in = openStream(url); FileOutputStream out = new FileOutputStream(apk)) {
+            if (in == null) throw new Exception("indirilemedi");
+            byte[] buf = new byte[16384];
+            int n;
+            while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+        } catch (Exception e) {
+            runOnUiThread(() -> Toast.makeText(this, "Güncelleme indirilemedi.",
+                    Toast.LENGTH_LONG).show());
+            return;
+        }
+        runOnUiThread(() -> promptInstall(apk));
+    }
+
+    private InputStream openStream(String url) throws Exception {
+        HttpURLConnection c = (HttpURLConnection) new URL(url).openConnection();
+        c.setConnectTimeout(15000);
+        c.setReadTimeout(30000);
+        c.setInstanceFollowRedirects(true);
+        return c.getResponseCode() == 200 ? c.getInputStream() : null;
+    }
+
+    private void promptInstall(File apk) {
+        // Android 8+ kullanıcıdan "bilinmeyen uygulama kurma" izni ister.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !getPackageManager().canRequestPackageInstalls()) {
+            Toast.makeText(this, "Kurulum için izin ver, sonra tekrar dene.", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                    Uri.parse("package:" + getPackageName())));
+            return;
+        }
+        Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", apk);
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setDataAndType(uri, "application/vnd.android.package-archive");
+        i.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
     }
 
     private boolean hasCameraPermission() {

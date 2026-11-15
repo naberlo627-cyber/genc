@@ -218,6 +218,13 @@ svg.ic.f{fill:currentColor}
 .cta[disabled]{box-shadow:none}
 .cardrow .plastic{background:var(--grad)}
 .nav{height:auto;min-height:86px;padding-bottom:max(22px,env(safe-area-inset-bottom))}
+/* Güncelleme şeridi: alt menünün hemen üstünde, yeni APK hazır olduğunda görünür. */
+.upbar{display:flex;align-items:center;gap:10px;margin:0 12px 8px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 24px -16px rgba(23,17,46,.5)}
+.upbar .uptxt{flex:1;min-width:0}
+.upbar .uptxt strong{display:block;font-size:14px}
+.upbar .uptxt small{display:block;color:var(--mute);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.upbar button[data-act="update"]{flex:none;background:var(--grad);color:#fff;font-weight:700;font-size:13px;padding:8px 14px;border-radius:12px;border:0}
+.upbar .upx{flex:none;width:32px;height:32px;display:grid;place-items:center;color:var(--mute);border-radius:50%;border:0;background:transparent}
 .nav .on .ico{background:var(--sun);color:#17112E}
 .back{box-shadow:0 0 0 1px var(--line)}
 .sw[aria-checked="true"]{background:var(--brand)}
@@ -733,6 +740,13 @@ svg.ic.f{fill:currentColor}
       <div class="scroll" id="pscroll"></div>
     </div>
 
+    <div class="upbar" id="upbar" hidden role="status" aria-live="polite">
+      <svg class="ic" style="color:var(--brand)"><use href="#i-install"/></svg>
+      <span class="uptxt"><strong id="upbar-v">Yeni sürüm hazır</strong><small id="upbar-n">Genç’i güncelle.</small></span>
+      <button type="button" data-act="update">Güncelle</button>
+      <button class="upx" type="button" data-act="hideupdate" aria-label="Güncelleme bildirimini kapat"><svg class="ic"><use href="#i-close"/></svg></button>
+    </div>
+
     <nav class="nav" id="nav" aria-label="Ana menü">
       <button type="button" data-tab="kesfet" class="on" aria-current="page"><span class="ico"><svg class="ic"><use href="#i-compass"/></svg></span>Keşfet</button>
       <button type="button" data-tab="videolar"><span class="ico"><svg class="ic"><use href="#i-play"/></svg></span>Videolar</button>
@@ -1073,7 +1087,7 @@ var S={
   likes:['Konser','Sinema','Gezi turu'],
   locOn:true,loc:PLACES[0],
   liked:{},saved:{},
-  cards:[{id:'c1',last4:'4821',exp:'09/28',def:true}],
+  cards:[],
   tickets:[],loggedIn:false,
   photo:'',
   filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'kesfet',theme:'system',
@@ -1081,7 +1095,62 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.3';
+var APP_VERSION='1.4';
+/* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
+   (server.py) veya kurulumun yayınlandığı uzak adreste sunulur. Uygulama içinde
+   gömülü kopya güncel olmayacağı için denetim uzak adresten yapılır. */
+var REMOTE_BASE='https://work-1-ttmfrnzgnbjhjyrn.prod-runtime.all-hands.dev/';
+function updateUrl(){return (window.GENC_APP?REMOTE_BASE:'')+'version.json'}
+function apkUrl(){return (window.GENC_APP?REMOTE_BASE:'')+'indir/Genc.apk'}
+/* Göreli adresi uygulama modunda uzak sunucuya bağlar; tarayıcıda olduğu gibi kalır. */
+function absUrl(u){
+  if(!u)return apkUrl();
+  if(/^https?:\/\//i.test(u))return u;
+  return (window.GENC_APP?REMOTE_BASE:'')+u.replace(/^\.?\//,'');
+}
+
+/* Sürüm dizelerini karşılaştırır: a>b için 1, a<b için -1, eşitse 0. */
+function cmpVer(a,b){
+  var x=String(a||'0').split('.').map(function(n){return parseInt(n,10)||0});
+  var y=String(b||'0').split('.').map(function(n){return parseInt(n,10)||0});
+  for(var i=0;i<Math.max(x.length,y.length);i++){
+    var p=x[i]||0,q=y[i]||0;
+    if(p>q)return 1;if(p<q)return -1;
+  }
+  return 0;
+}
+/* Yeni sürüm var mı diye sorar. Bulursa sayfadaki güncelleme şeridini gösterir. */
+function checkUpdate(){
+  if(!window.fetch)return;
+  fetch(updateUrl(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){
+    if(!d||!d.version)return;
+    window.GENC_LATEST=d;
+    if(cmpVer(d.version,APP_VERSION)>0){
+      var bar=$('#upbar');
+      if(bar){
+        $('#upbar-v').textContent='Sürüm '+d.version+' hazır';
+        $('#upbar-n').textContent=d.notes||'Yeni sürüm yayında.';
+        bar.hidden=false;
+      }
+    }
+  }).catch(function(){});
+}
+/* Güncellemeyi indirir. Uygulama içindeyse yerel kurulum başlatılır; tarayıcıda dosya iner. */
+function installUpdate(){
+  var d=window.GENC_LATEST||{};
+  var url=absUrl(d.apk);
+  if(window.GENC_INSTALL){window.GENC_INSTALL(url);return}
+  var a=document.createElement('a');
+  a.href=url;a.setAttribute('download','Genc.apk');
+  document.body.appendChild(a);a.click();a.remove();
+  toast('Genç güncellemesi indiriliyor.');
+}
+function getApk(){
+  var a=document.createElement('a');
+  a.href=apkUrl();a.setAttribute('download','Genc.apk');
+  document.body.appendChild(a);a.click();a.remove();
+  toast('Genç kurulum dosyası indiriliyor.');
+}
 
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
@@ -1791,7 +1860,7 @@ function editProfile(){
   h+='<div class="field"><label for="e-tel">Telefon</label><input id="e-tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="0 5•• ••• •• ••" value="'+esc(S.phone)+'"></div>';
   h+='<div class="shsec"><h4 class="disp">Kayıtlı kartlar</h4><button type="button" data-act="addcard">Ekle</button></div>';
   h+=S.cards.length?S.cards.map(function(c){
-    return '<div class="cardrow" data-card="'+c.id+'"><button class="cmain" type="button" data-act="defcard" aria-label="Varsayılan yap: •••• '+c.last4+'"><span class="plastic" aria-hidden="true"></span><span class="txt"><strong>Banka kartı</strong><span>•••• '+c.last4+', son kullanma '+esc(c.exp)+'</span></span>'+(c.def?'<span class="def">Varsayılan</span>':'<span class="setdef">Varsayılan yap</span>')+'</button><button class="cdel" type="button" data-act="delcard" aria-label="Kartı sil: •••• '+c.last4+'">'+ic('close')+'</button></div>';
+    return '<div class="cardrow" data-card="'+c.id+'"><button class="cmain" type="button" data-act="defcard" aria-label="Varsayılan yap: •••• '+c.last4+'"><span class="plastic" aria-hidden="true"></span><span class="txt"><strong>'+esc(c.brand||'Banka kartı')+'</strong><span>•••• '+c.last4+', son kullanma '+esc(c.exp)+'</span></span>'+(c.def?'<span class="def">Varsayılan</span>':'<span class="setdef">Varsayılan yap</span>')+'</button><button class="cdel" type="button" data-act="delcard" aria-label="Kartı sil: •••• '+c.last4+'">'+ic('close')+'</button></div>';
   }).join(''):'<div class="empty">Kayıtlı kartın yok.</div>';
   h+='<div class="shsec"><h4 class="disp">Görünüm</h4></div><div class="themeseg" role="group" aria-label="Tema">'+[['system','Sistem'],['light','Açık'],['dark','Koyu']].map(function(x){return '<button type="button" data-act="theme" data-v="'+x[0]+'" aria-pressed="'+(S.theme===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>';
   if(!window.GENC_APP)h+='<div class="installrow">'+ic('install')+'<span><strong>Android kurulum dosyası (APK)</strong><small>Genç’i telefonuna kur.</small></span><button type="button" data-act="getapk">İndir</button></div>';
@@ -1825,7 +1894,7 @@ function addCard(){
   openSheet('Kart ekle',
    '<div class="field"><label for="k-no">Kart numarası</label><input id="k-no" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="0000 0000 0000 0000" maxlength="23"></div>'+
    '<div class="field"><div class="two"><div><label for="k-exp">Son kullanma</label><input id="k-exp" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="AA/YY" maxlength="5"></div><div><label for="k-cvv">Güvenlik kodu</label><input id="k-cvv" type="password" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4"></div></div></div>'+
-   '<p class="hint" style="padding:0">Bu taslakta kart bilgisi saklanmaz; yalnızca son 4 hane gösterilir.</p>'+
+   '<p class="hint" style="padding:0">Kart numarası Luhn kontrolünden geçmeli; uygulama kartın geçerli olduğundan emin olur. Bu taslakta kart bilgisi saklanmaz, yalnızca son 4 hane ve marka gösterilir.</p>'+
    '<p class="err" id="k-err" role="alert"></p><button class="cta" type="button" data-act="savecard">Kartı kaydet</button>',function(root){
     $('#k-no',root).addEventListener('input',function(){var d=this.value.replace(/\D/g,'').slice(0,19);this.value=d.replace(/(.{4})/g,'$1 ').trim()});
     $('#k-exp',root).addEventListener('input',function(){var d=this.value.replace(/\D/g,'').slice(0,4);this.value=d.length>2?d.slice(0,2)+'/'+d.slice(2):d});
@@ -1834,16 +1903,41 @@ function addCard(){
 }
 /* Kart ekleme alt sayfasından mı gelindi? */
 var fromAccount=false;
+/* Kart markasını numara ön ekine (BIN) göre bulur. */
+function cardBrand(d){
+  if(/^4/.test(d))return {name:'Visa',len:[13,16,19],cvv:[3]};
+  if(/^(5[1-5]|2[2-7])/.test(d))return {name:'Mastercard',len:[16],cvv:[3]};
+  if(/^3[47]/.test(d))return {name:'American Express',len:[15],cvv:[4]};
+  if(/^(9792|65)/.test(d))return {name:'Troy',len:[16],cvv:[3]};
+  return {name:'',len:[16],cvv:[3,4]};
+}
+/* Luhn sağlama toplamı: numaranın matematiksel olarak geçerli olup olmadığını söyler. */
+function luhnOk(d){
+  var sum=0,alt=false;
+  for(var i=d.length-1;i>=0;i--){
+    var n=d.charCodeAt(i)-48;
+    if(alt){n*=2;if(n>9)n-=9}
+    sum+=n;alt=!alt;
+  }
+  return d.length>0&&sum%10===0;
+}
 function saveCard(){
   var d=$('#k-no').value.replace(/\D/g,''),ex=$('#k-exp').value,cv=$('#k-cvv').value,er=$('#k-err');
-  if(d.length<13){er.textContent='Kart numarası eksik görünüyor.';$('#k-no').focus();return}
+  if(!d){er.textContent='Kart numarasını yaz.';$('#k-no').focus();return}
+  var br=cardBrand(d);
+  if(br.len.indexOf(d.length)<0){
+    er.textContent=br.name?br.name+' kartı '+br.len.join(' veya ')+' haneli olmalı.'
+      :'Kart numarası 16 hane olmalı (şu an '+d.length+' hane).';
+    $('#k-no').focus();return;
+  }
+  if(!luhnOk(d)){er.textContent='Kart numarası geçersiz. Rakamları kontrol et.';$('#k-no').focus();return}
   var m=/^(\d{2})\/(\d{2})$/.exec(ex);
   if(!m||+m[1]<1||+m[1]>12){er.textContent='Son kullanma tarihini AA/YY yaz.';$('#k-exp').focus();return}
   var now=new Date(),y=now.getFullYear()%100,mo=now.getMonth()+1;
   if(+m[2]<y||(+m[2]===y&&+m[1]<mo)){er.textContent='Bu kartın süresi dolmuş.';$('#k-exp').focus();return}
-  if(cv.length<3){er.textContent='Güvenlik kodu 3 veya 4 hane olmalı.';$('#k-cvv').focus();return}
+  if(br.cvv.indexOf(cv.length)<0){er.textContent=br.name+' için güvenlik kodu '+br.cvv.join(' veya ')+' hane olmalı.';$('#k-cvv').focus();return}
   S.cards.forEach(function(c){c.def=false});
-  S.cards.push({id:'c'+Date.now(),last4:d.slice(-4),exp:ex,def:true});persist();
+  S.cards.push({id:'c'+Date.now(),last4:d.slice(-4),brand:br.name||'Kart',exp:ex,def:true});persist();
   renderProfile();
   if(fromAccount){fromAccount=false;editProfile()}else closeSheet();
   toast('Kart eklendi ve varsayılan yapıldı.');
@@ -1907,6 +2001,8 @@ document.addEventListener('click',function(ev){
     case 'scango':scanGo();break;
     case 'install':doInstall();break;
     case 'getapk':getApk();break;
+    case 'update':installUpdate();break;
+    case 'hideupdate':$('#upbar').hidden=true;break;
     case 'upload':uploadSheet();break;
     case 'setphoto':uploadSheet();break;
     case 'pickcam':pickPhoto('cam');break;
@@ -1987,6 +2083,8 @@ if('serviceWorker' in navigator){
 
 function renderAll(){renderKesfet();renderTickets();renderProfile()}
 restore();applyTheme();
+/* Açılışta bir kez yeni sürüm var mı diye sor (ağ yoksa sessizce geç). */
+setTimeout(checkUpdate,1500);
 /* Profil fotoğrafı için kalıcı gizli seçici: avatara dokununca doğrudan açılır. */
 var gphoto=$('#gphoto');
 gphoto.addEventListener('change',function(){if(gphoto.files.length)upSend(gphoto.files,true);gphoto.value=''});

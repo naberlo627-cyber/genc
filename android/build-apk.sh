@@ -16,6 +16,30 @@ cp "$ROOT/Genc.html" "$ROOT/manifest.json" "$ROOT/sw.js" "$ASSETS/"
 cp "$ROOT"/icons/*.png "$ASSETS/icons/"
 cp "$ROOT"/img/*.jpg "$ASSETS/img/"
 
+# Sürüm tek kaynaktan yönetilir: Genc.html içindeki APP_VERSION.
+# versionName buradan alınır, versionCode türetilir ve version.json üretilir.
+VER="$(sed -n "s/.*var APP_VERSION='\([0-9.]*\)'.*/\1/p" "$ROOT/Genc.html" | head -1)"
+if [ -z "$VER" ]; then echo "APP_VERSION bulunamadı" >&2; exit 1; fi
+IFS='.' read -r V_MAJOR V_MINOR V_PATCH <<< "$VER"
+V_MAJOR="${V_MAJOR:-0}"; V_MINOR="${V_MINOR:-0}"; V_PATCH="${V_PATCH:-0}"
+VCODE=$(( V_MAJOR * 10000 + V_MINOR * 100 + V_PATCH ))
+echo "Sürüm: $VER (versionCode $VCODE)"
+
+sed -i "s/versionCode [0-9]*/versionCode $VCODE/" "$ANDROID_DIR/app/build.gradle"
+sed -i "s/versionName \"[^\"]*\"/versionName \"$VER\"/" "$ANDROID_DIR/app/build.gradle"
+
+NOTES="$(sed -n 's/.*"notes": "\([^"]*\)".*/\1/p' "$ROOT/version.json" 2>/dev/null | head -1)"
+[ -z "$NOTES" ] && NOTES="Genç güncellemesi."
+cat > "$ROOT/version.json" <<JSON
+{
+  "version": "$VER",
+  "versionCode": $VCODE,
+  "notes": "$NOTES",
+  "apk": "indir/Genc.apk"
+}
+JSON
+cp "$ROOT/version.json" "$ASSETS/"
+
 cd "$ANDROID_DIR"
 "$GRADLE" --no-daemon "${1:-assembleRelease}"
 
