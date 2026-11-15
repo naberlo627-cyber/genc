@@ -1,6 +1,6 @@
 {
-  "version": "1.9",
-  "versionCode": 10900,
-  "notes": "Marka yenilendi: logo artık ayrı kutu değil, doğrudan 'Genç' kelime markası (Türkçeye özgü 'ç' gradyan imza). Logo tuşu Ana Sayfa oldu, Keşfet ayrı görünüm; Keşfet'te kısa videolar, gezi turları ve çevrede gösteriler bölümleri var. Video bitince akıcı biçimde sonraki videoya kayıyor.",
+  "version": "1.10",
+  "versionCode": 11000,
+  "notes": "Video bitince artık kendiliğinden kaymıyor; akışı sen kaydırıyorsun. Profil hariç tüm ekranlara uygulamanın kendi diliyle uyumlu, rahatsız etmeyen sponsor (reklam) alanları eklendi: Ana Sayfa, Keşfet, Biletlerim, etkinlik detayı ve video akışı.",
   "apk": "indir/Genc.apk"
 }

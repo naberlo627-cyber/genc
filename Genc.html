@@ -364,7 +364,6 @@ svg.ic.f{fill:currentColor}
 /* videolar */
 .feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:linear-gradient(160deg,#241056,#4A1D7A 55%,#7A2A6E);color:#fff}
 .feed::-webkit-scrollbar{display:none}
-.feed.sliding{scroll-snap-type:none}
 .vid{height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;flex:none}
 .vtop{padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 40px}
 .vpanel{padding-bottom:calc(26px + env(safe-area-inset-bottom,0px))}
@@ -418,6 +417,43 @@ svg.ic.f{fill:currentColor}
 .venue strong{display:block;font-size:15px}
 .venue small{color:var(--mute);font-size:13px}
 .venue>.ic:last-child{color:var(--mute)}
+/* ---------- reklam alanları (profil hariç) ----------
+   Uygulamanın kendi kart diliyle uyumlu, rahatsız etmeyen sponsor alanları:
+   vitrin içinde düz kart (.adcard), listeler arasında satır (.adrow) ve video
+   akışında tek, küçük, kapatılabilir şerit (.vad). Hiçbiri tam ekran kaplamaz,
+   otomatik oynayan/animasyonlu değildir ve "Reklam" etiketi taşır. */
+.adcard,.adrow{background:var(--card);border-radius:16px;width:calc(100% - 40px);margin:0 20px 12px;overflow:hidden;text-align:left}
+.adcard{display:flex;align-items:center;gap:12px;padding:12px;transition:transform .12s}
+.adcard:active{transform:scale(.99)}
+.adcard .adthumb{position:relative;width:56px;height:56px;flex:none;border-radius:14px;overflow:hidden}
+.adcard .adthumb .art{position:absolute;inset:0}
+.adcard .adbody{flex:1;min-width:0}
+.adcard strong{display:block;font-size:15px;line-height:1.2}
+.adcard p{margin:2px 0 0;color:var(--mute);font-size:13px;line-height:1.3}
+.adcard .adcta{flex:none;color:var(--brand);font-weight:800;font-size:13.5px;display:flex;align-items:center;gap:3px}
+.adcard .adcta svg{width:16px;height:16px}
+.adrow{position:relative;height:104px;display:block}
+.adrow .art{position:absolute;inset:0;width:100%;height:100%}
+.adrow .adscrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,6,28,.86) 0,rgba(10,6,28,.42) 58%,rgba(10,6,28,.12) 100%)}
+.adrow .adtxt{position:absolute;left:16px;right:16px;top:50%;transform:translateY(-50%);color:#fff;padding-right:64px}
+.adrow .adtxt strong{display:block;font-stretch:75%;font-weight:800;font-size:21px;line-height:1.08}
+.adrow .adtxt span{display:block;font-size:12.5px;margin-top:3px;color:#E9E4FF}
+.adrow .adgo{position:absolute;right:12px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center}
+.adrow .adgo svg{width:17px;height:17px}
+.adlabel{position:absolute;right:10px;top:10px;background:rgba(8,6,24,.72);color:#fff;font-size:10px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;padding:3px 8px;border-radius:999px}
+.adcard .adlabel{position:static;background:var(--line);color:var(--mute);flex:none}
+.sh-body .adcard{margin:14px 0 0;width:100%}
+/* Video akışındaki tek sponsor şeridi: küçük, alta yerleşik, kapatılabilir. */
+.vad{position:absolute;left:14px;right:14px;top:calc(96px + env(safe-area-inset-top,0px));z-index:6;display:flex;align-items:center;gap:10px;padding:9px 10px 9px 12px;border-radius:14px;background:rgba(16,11,38,.82);border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(12px);color:#fff;box-shadow:0 12px 26px -14px rgba(0,0,0,.6)}
+.vad .adtag{flex:none;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.16);padding:3px 7px;border-radius:6px}
+.vad .adbody{flex:1;min-width:0;text-align:left;color:inherit;background:none;border:0;padding:0}
+.vad strong{display:block;font-size:13.5px;line-height:1.2}
+.vad p{margin:1px 0 0;font-size:11.5px;color:#CFC8EA;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vad .adgo{flex:none;font-weight:800;font-size:12.5px;color:var(--sun);display:flex;align-items:center;gap:2px;background:none;border:0}
+.vad .adgo svg{width:15px;height:15px}
+.vad .adclose{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#CFC8EA;background:none;border:0}
+.vad .adclose svg{width:15px;height:15px}
+
 
 .themeseg{margin:0 20px 10px;background:var(--card);border-radius:16px;padding:4px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
 .themeseg button{height:42px;border-radius:12px;font-weight:700;font-size:14px;text-align:center;color:var(--mute);transition:background-color .15s,color .15s}
@@ -710,6 +746,7 @@ svg.ic.f{fill:currentColor}
     <!-- VİDEOLAR -->
     <div class="pane" id="tab-videolar" hidden>
       <div class="feed" id="feed" aria-label="Kısa videolar"></div>
+      <div class="vadslot" id="vadslot"></div>
       <div class="vtop">
         <div class="vbrand"><button class="logobtn" id="feed-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button></div>
         <div class="vtabs" id="vtabs">
@@ -1079,12 +1116,12 @@ var S={
   cards:[],
   tickets:[],loggedIn:false,
   photo:'',
-  filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'kesfet',theme:'system',
+  filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'kesfet',theme:'system',adOff:false,
   version:''
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.9';
+var APP_VERSION='1.10';
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
    (server.py) veya kurulumun yayınlandığı uzak adreste sunulur. Uygulama içinde
    gömülü kopya güncel olmayacağı için denetim uzak adresten yapılır. */
@@ -1440,7 +1477,7 @@ function setTab(t,fromHistory){
   $('#main').classList.toggle('dark-ui',night);
   paintChrome();
   if(t==='videolar'){renderFeed();}
-  else{$('#feed').classList.add('paused');}
+  else{$('#feed').classList.add('paused');paintVideoAd();}
   if(t==='home')renderHome();
   if(t==='kesfet')renderKesfet();
   if(t==='biletler')renderTickets();
@@ -1470,6 +1507,42 @@ function tkHTML(e){
 function thumbHTML(e){
   return '<button class="thumb" type="button" data-vid="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><em>'+ic('play','f')+esc(e.vlabel)+'</em></button>';
 }
+/* ---------- reklam alanları (profil hariç) ----------
+   Reklamlar gerçek bir reklam ağına bağlı değildir; yalnızca yerleşimi ve
+   görsel dilini göstermek için yerel örneklerdir. Sponsor alanları uygulamanın
+   kendi kartlarıyla aynı dili kullanır, "Reklam" etiketi taşır, tam ekran
+   kaplamaz ve kullanıcıyı rahatsız etmez. */
+var ADS=[
+  {id:'ad-sponsor-bilet',kind:'card',brand:'Biletix',title:'Bu haftanın konser biletleri',text:'Kardelen ve Ege Caz Akşamı için erken alım indirimi',cta:'İncele',art:'art-concert'},
+  {id:'ad-sponsor-kahve',kind:'card',brand:'Kahve Durağı',title:'Gösteri öncesi bir kahve',text:'Etkinlik bileti gösterene ikinci kahve bizden',cta:'Kupon',art:'art-standup'},
+  {id:'ad-sponsor-tur',kind:'row',brand:'Gezi Turu',title:'Hafta sonu kaçamağı',text:'Efes ve Şirince turlarında %15 indirim',cta:'İncele',art:'art-tour'},
+  {id:'ad-sponsor-video',kind:'video',brand:'Genç+',title:'Reklamsız Genç+',text:'Aylık 29,90 ₺ · istediğin zaman iptal',cta:'Dene',art:'art-concert'}
+];
+function adFor(kind,idx){
+  var m=ADS.filter(function(a){return a.kind===kind});
+  return m[(idx||0)%m.length];
+}
+function adCardHTML(a){
+  return '<button class="adcard" type="button" data-ad="'+a.id+'">'+
+    '<span class="adthumb"><svg class="art" aria-hidden="true"><use href="#'+a.art+'"/></svg></span>'+
+    '<span class="adbody"><strong>'+esc(a.title)+'</strong><p>'+esc(a.text)+'</p></span>'+
+    '<span class="adlabel">Reklam</span>'+
+    '<span class="adcta">'+esc(a.cta)+ic('chev-r')+'</span></button>';
+}
+function adRowHTML(a){
+  return '<button class="adrow" type="button" data-ad="'+a.id+'">'+
+    '<svg class="art" aria-hidden="true"><use href="#'+a.art+'"/></svg><span class="adscrim"></span>'+
+    '<span class="adtxt"><strong>'+esc(a.title)+'</strong><span>'+esc(a.text)+'</span></span>'+
+    '<span class="adgo">'+ic('chev-r')+'</span>'+
+    '<span class="adlabel">Reklam</span></button>';
+}
+function adVideoHTML(a){
+  return '<div class="vad" role="group" aria-label="Reklam">'+
+    '<span class="adtag">Reklam</span>'+
+    '<button class="adbody" type="button" data-ad="'+a.id+'"><strong>'+esc(a.title)+'</strong><p>'+esc(a.brand)+' · '+esc(a.text)+'</p></button>'+
+    '<button class="adgo" type="button" data-ad="'+a.id+'">'+esc(a.cta)+ic('chev-r')+'</button>'+
+    '<button class="adclose" type="button" data-act="adclose" aria-label="Reklamı kapat">'+ic('close')+'</button></div>';
+}
 function renderBrowse(){renderHome();renderKesfet()}
 function catsHTML(){
   return '<div class="cats">'+CHIPS.slice(1).map(function(t){
@@ -1494,6 +1567,7 @@ function renderHome(){
     h+=secHead('Öne çıkanlar')+'<div class="hrail">'+feat.map(function(e){return wideHTML(e)}).join('')+'</div>';
   }
   h+=secHead('Türe göre')+catsHTML();
+  h+=adCardHTML(adFor('card',0));
   var week=byDate.filter(function(e){return e.date<='2026-11-22'});
   var shown=(browsing&&!S.showAll)?week:byDate;
   var more=(browsing&&byDate.length>week.length)?'<button class="more" type="button" id="moreBtn">'+(S.showAll?'Daha az':'Tümü ('+byDate.length+')')+'</button>':'';
@@ -1524,8 +1598,10 @@ function renderKesfet(){
   var vids=EVENTS.filter(function(e){return e.video});
   h+=secHead('Kısa videolar','<button class="more" type="button" data-tab="videolar">Hepsini izle</button>');
   h+=vids.length?'<div class="hrail">'+vids.map(thumbHTML).join('')+'</div>':'<div class="empty">Şu an video yok.</div>';
+  h+=adCardHTML(adFor('card',1));
   var tours=EVENTS.filter(function(e){return e.type==='Gezi turu'});
   h+=secHead('Gezi turları')+'<div class="hrail">'+tours.map(function(e){return wideHTML(e,'sm')}).join('')+'</div>';
+  h+=adRowHTML(adFor('row',0));
   h+=secHead('Çevrende yapılacak gösteriler')+'<div class="hrail">'+list.map(posterHTML).join('')+'</div>';
   $('#klists').innerHTML=h;
 }
@@ -1557,7 +1633,7 @@ function openDetail(id){
     body+='<div class="dprice"><b>'+esc(priceLabel(e))+'</b><small>Bilet satıcının sayfasında alınır</small></div><div class="dacts">'+
      '<button class="btn" type="button" data-act="buy">Bilet al</button>'+
      (e.video?'<button class="btn ghost" type="button" data-act="watch">'+ic('play','f')+'Videoyu izle</button>':'')+
-     '</div></div>';
+     '</div>'+adCardHTML(adFor('card',1))+'</div>';
   }
   openSheet(e.past?'Geçmiş etkinlik':'Etkinlik',body);
 }
@@ -1651,6 +1727,13 @@ function renderFeed(startId){
   if(startId){idx=Math.max(0,list.map(function(e){return e.id}).indexOf(startId))}
   feed.scrollTop=idx*feed.clientHeight;
   $$('#vtabs button').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-vtab')===S.vtab?'true':'false')});
+  paintVideoAd();
+}
+/* Video akışında tek, küçük sponsor şeridi. Kapatılınca oturum boyunca gizli
+   kalır (S.adOff); böylece izleyiciyi rahatsız etmez. */
+function paintVideoAd(){
+  var slot=$('#vadslot');if(!slot)return;
+  slot.innerHTML=(S.adOff||S.tab!=='videolar')?'':adVideoHTML(adFor('video',0));
 }
 function activate(i,items,list){
   active=i;
@@ -1658,38 +1741,9 @@ function activate(i,items,list){
   var bar=$('.vprog i',items[i]);
   if(bar){void bar.offsetWidth;bar.classList.add('play')}
 }
-/* Kaydırma animasyonu: WebView'de behavior:'smooth' güvenilmez, rAF ile kendim
-   yapıyorum. Böylece video bitince bir sonraki videoya akıcı biçimde geçilir. */
-var slideRAF=null;
-function slideTo(top){
-  var feed=$('#feed'),from=feed.scrollTop,d=top-from,t0=null,DUR=520;
-  if(slideRAF)cancelAnimationFrame(slideRAF);
-  if(reduce||Math.abs(d)<1){feed.scrollTop=top;return}
-  /* Snap açıkken programatik kaydırma anında zıplıyor; animasyon boyunca kapat. */
-  feed.classList.add('sliding');
-  function step(ts){
-    if(t0===null)t0=ts;
-    var p=Math.min(1,(ts-t0)/DUR);
-    var e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2;   /* easeInOutCubic */
-    feed.scrollTop=from+d*e;
-    if(p<1)slideRAF=requestAnimationFrame(step);
-    else{slideRAF=null;feed.classList.remove('sliding')}
-  }
-  slideRAF=requestAnimationFrame(step);
-}
-$('#feed').addEventListener('animationend',function(ev){
-  if(reduce||!ev.target.matches('.vprog i'))return;
-  if($('#feed').classList.contains('paused'))return;
-  var cur=ev.target.closest('.vid'),nx=cur&&cur.nextElementSibling;
-  if(nx&&nx.classList.contains('vid'))slideTo(nx.offsetTop);
-});
 $('#feed').addEventListener('click',function(ev){
   if(ev.target.closest('button'))return;
   this.classList.toggle('paused');
-});
-/* Kullanıcı elle kaydırırsa süren geçiş animasyonunu iptal et. */
-['wheel','touchstart','pointerdown'].forEach(function(evt){
-  $('#feed').addEventListener(evt,function(){if(slideRAF){cancelAnimationFrame(slideRAF);slideRAF=null;$('#feed').classList.remove('sliding')}},{passive:true});
 });
 $('#vtabs').addEventListener('click',function(ev){
   var b=ev.target.closest('[data-vtab]');if(!b)return;
@@ -1725,11 +1779,13 @@ function renderTickets(){
   if(deferredPrompt)h+='<div class="installrow">'+ic('install')+'<span><strong>Genç’i ana ekrana ekle</strong><small>Tek dokunuşla açılsın, çevrimdışı da çalışsın.</small></span><button type="button" data-act="install">Ekle</button></div>';
   if(!S.tickets.length){
     h+='<div class="sec"><h2 class="disp">Geçerli biletler</h2></div>'+
-      '<div class="empty">Henüz biletin yok. Bir etkinliği açıp “Bilet al” ile başlayabilirsin.</div>';
+      '<div class="empty">Henüz biletin yok. Bir etkinliği açıp “Bilet al” ile başlayabilirsin.</div>'+
+      adCardHTML(adFor('card',0));
   }else{
     var up=S.tickets.slice().sort(function(a,b){return a.e.date<b.e.date?-1:1});
     h+='<div class="sec"><h2 class="disp">Geçerli biletler</h2><span class="more">'+up.length+' bilet</span></div>';
     h+=up.map(ticketHTML).join('');
+    h+=adCardHTML(adFor('card',1));
   }
   h+='<div class="pad"></div>';
   $('#tscroll').innerHTML=h;
@@ -1978,6 +2034,9 @@ function share(e){
 }
 document.addEventListener('click',function(ev){
   var t=ev.target;
+  if(t.closest('[data-act="adclose"]')){S.adOff=true;paintVideoAd();return}
+  var ad=t.closest('[data-ad]');
+  if(ad){toast('Sponsor bağlantısı: '+(ad.getAttribute('data-ad')||'').replace('ad-sponsor-','')+' (örnek)');return}
   if(t.closest('#moreBtn')){S.showAll=!S.showAll;renderBrowse();return}
   var cat=t.closest('[data-cat]');
   if(cat){

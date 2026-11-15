@@ -159,11 +159,8 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   düğmeleri ve bilet/kaydedilen/beğenilen sayaçları yoktur; kullanıcı bunları
   istemedi. İlerleme çubuğu (`.vprog`) aktif kartta döner, `IntersectionObserver`
   ile yönetilir; kaydırma sonunda `.vend` kapanış kartı gelir. Video bitince
-  bir sonraki videoya **akıcı kaydırma** ile geçilir (`slideTo()`: rAF +
-  easeInOutCubic, ~520 ms). WebView'de `behavior:'smooth'` güvenilmez; ayrıca
-  `scroll-snap-type:y mandatory` programatik kaydırmayı anında zıplattığı için
-  animasyon boyunca `.feed.sliding` ile snap kapatılır. Kullanıcı elle
-  kaydırırsa (`wheel`/`touchstart`/`pointerdown`) süren animasyon iptal edilir.
+  **hiçbir şey olmaz** — akış kendiliğinden kaymaz, kullanıcı parmağıyla
+  ilerler. (Eski otomatik/akıcı geçiş ve `slideTo()` kaldırıldı.)
 - Video fotoğrafları Wikimedia Commons'tan `tools/fetch_video_photos.py` ile
   indirilir (açık lisanslı, dikey, renkli; kaynak listesi `img/VID-CREDITS.md`).
 - Video akışındaki "Sana özel" sıralaması `S.likes` tür uyumuna ve konuma göre
@@ -175,6 +172,22 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   Profil sayfası yalnızca kişisel içerik gösterir (bilet, kayıt, beğeni).
   Hesap sayfasının altında (yalnızca tarayıcıda) APK indirme satırı bulunur
   (`data-act="getapk"` → `getApk()`, `indir/Genc.apk`).
+
+## Reklam alanları (profil hariç)
+- Sponsor alanları gerçek bir reklam ağına bağlı **değildir**; yalnızca yerleşimi
+  ve görsel dili gösteren yerel örneklerdir (`ADS` dizisi + `adFor/adCardHTML/
+  adRowHTML/adVideoHTML`). Uygulamanın kendi kart diliyle aynı tipografi ve
+  yuvarlak köşeleri kullanır, "Reklam" etiketi taşır, tam ekran kaplamaz ve
+  otomatik oynamaz/animasyonlu değildir.
+- Üç biçim vardır: düz kart `.adcard` (Ana Sayfa'da kategori ızgarasından sonra,
+  Keşfet'te Kısa videolar bölümünden sonra, Biletlerim'de liste altında ve
+  etkinlik detayında), geniş satır `.adrow` (Keşfet'te Gezi turlarından sonra) ve
+  video akışında tek, küçük, kapatılabilir şerit `.vad` (üstte, başlık çubuğunun
+  altında; kapatılınca oturum boyunca gizli kalır, `S.adOff`).
+- **Profilde ve ödeme (satıcı) sayfasında reklam yoktur.** Arama/filtre
+  sonuçlarında da reklam gösterilmez; yalnızca durgun vitrin ve listelerde çıkar.
+- Bir reklama dokunmak sayfa açmaz; örnek bir "Sponsor bağlantısı" bildirimi
+  gösterir (`data-ad` tıklama yönetimi).
 
 ## Kart doğrulama
 - Varsayılan kart yoktur; `S.cards` boş başlar (`[]`), kullanıcı kendi kartını
