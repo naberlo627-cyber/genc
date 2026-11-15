@@ -19,7 +19,7 @@ import json
 import time
 from pathlib import Path
 
-from collect_tickets import fetch, ld_blocks, walk, detail_extras
+from collect_tickets import fetch, ld_blocks, walk, detail_extras, PASSO_API, PASSO_HDRS, passo_extras, _get_json
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data" / "tickets.json"
@@ -42,6 +42,16 @@ def enrich_one(url: str, title: str) -> dict:
     return detail_extras(html_text, event_node(html_text, title))
 
 
+def enrich_passo(ref: dict) -> dict:
+    """Passo etkinliğinin detayını kendi web API'sinden çeker."""
+    seo = (ref or {}).get("seo")
+    eid = (ref or {}).get("id")
+    if not seo or not eid:
+        return {}
+    v = _get_json(f"{PASSO_API}/geteventdetails/{seo}/{eid}/118").get("value") or {}
+    return passo_extras(v)
+
+
 def needs(e: dict, force: bool) -> bool:
     if force:
         return True
@@ -58,11 +68,19 @@ def main() -> None:
 
     # URL -> o URL'yi paylaşan etkinliklerden biri (başlık için)
     urls: dict[str, str] = {}
+    # Passo etkinlikleri kendi web API'sinden zenginleştirilir.
+    passo_refs: dict[str, dict] = {}
     for e in events:
+        if not needs(e, args.force):
+            continue
+        if e.get("provider") == "passo" and isinstance(e.get("ref"), dict):
+            key = f"passo:{e['ref'].get('id')}"
+            passo_refs.setdefault(key, e["ref"])
+            continue
         url = e.get("url") or e.get("ref")
-        if url and needs(e, args.force) and url not in urls:
+        if url and url not in urls:
             urls[url] = e.get("title", "")
-    print(f"Zenginleştirilecek benzersiz sayfa: {len(urls)}")
+    print(f"Zenginleştirilecek benzersiz sayfa: {len(urls)} (+{len(passo_refs)} Passo)")
 
     results: dict[str, dict] = {}
     done = 0
@@ -71,6 +89,9 @@ def main() -> None:
         for url, title in urls.items():
             time.sleep(0.15)
             futures[pool.submit(enrich_one, url, title)] = url
+        for key, ref in passo_refs.items():
+            time.sleep(0.15)
+            futures[pool.submit(enrich_passo, ref)] = key
         for fut in concurrent.futures.as_completed(futures):
             url = futures[fut]
             try:
@@ -79,12 +100,14 @@ def main() -> None:
                 print(f"  ! alınamadı: {url} ({exc})")
             done += 1
             if done % 25 == 0:
-                print(f"    ...{done}/{len(urls)}")
+                print(f"    ...{done}/{len(futures)}")
 
     filled = 0
     for e in events:
-        url = e.get("url") or e.get("ref")
-        ex = results.get(url)
+        if e.get("provider") == "passo" and isinstance(e.get("ref"), dict):
+            ex = results.get(f"passo:{e['ref'].get('id')}")
+        else:
+            ex = results.get(e.get("url") or e.get("ref"))
         if not ex:
             continue
         for key in ("description", "cast", "runtime", "genres", "genre_label", "age", "rules", "organizer"):

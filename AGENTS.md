@@ -97,10 +97,14 @@ PWA dosyaları + geliştirme sunucusu.
 - `tools/collect_tickets.py` — **gerçek bilet toplayıcı**. Birden çok satıcıyı
   tarar, etkinlik adı/mekan/tarih/**fiyat** bilgisini toplar, aynı etkinliği
   satan kaynakları eşleştirip **en ucuzunu** işaretler. Çıktı: `data/tickets.json`.
-  Kaynaklar: Biletinial (halka açık JSON-LD `Event`+`Offer`) ve Passo (halka
+  Kaynaklar: Biletinial (halka açık JSON-LD `Event`+`Offer`), Passo (halka
   açık `ticketingweb.passo.com.tr/api/passoweb` web API'si; fiyatlar kategori
-  bazında açık). Yeni kaynak için `SOURCES` listesine toplayıcı ekleyin.
-  `--sehir İzmir` (varsayılan), `--limit N` (kaynak başına detay sınırı).
+  bazında açık) ve Biletino (şehir sayfalarındaki bağlantılar → detayda halka
+  açık JSON-LD `Event`+`Offer`). Yeni kaynak için `SOURCES` listesine toplayıcı
+  ekleyin.
+  `--sehir "İzmir,Ankara,İstanbul,Bursa,Antalya"` (varsayılan İzmir), `--limit N`
+  (kaynak başına detay sınırı). Biletinial'ın "İstanbul Avrupa/Anadolu" ayrımı
+  `norm_city()` ile tek "İstanbul" iline indirgenir.
 - `tools/embed_data.py` — `data/tickets.json` içeriğini `Genc.html` içindeki
   `var GENC_DATA=...;` satırına gömer. Veri yoksa `null` kalır ve uygulama örnek
   veriyle çalışır. `android/build-apk.sh` bu adımı her derlemede çalıştırır;
@@ -235,6 +239,9 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   turları**, **Çevrende yapılacak gösteriler**. Arama/filtre varken tek
   "Sonuçlar" bölümüne düşer. Kategori kartına veya mekana dokunmak Keşfet'e
   geçip sonuçları gösterir (`renderBrowse()` ikisini birden tazeler).
+  **Son aramalar** (`#recent`, `recentHTML()`): aramasız durumda son 6 arama
+  çip olarak gösterilir; çipe dokunmak aramayı çalıştırır, "Temizle" listeyi
+  boşaltır. Liste `S.recent` olarak `persist()` ile saklanır.
 - Videolar sekmesi tam ekran, kaydırmalı kısa video akışıdır (`#feed`, her kart
   `.vid`). Her kartın zemini gerçek fotoğraftır (`.vphoto`, `img/vid-<id>.jpg`,
   dikey 720x1280, `loading="lazy"`); fotoğraf yüklenmezse `onerror` ile kaldırılır
@@ -262,7 +269,7 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
 Etkinlikler artık **gerçek**: uygulama, toplanan gerçek etkinlik/mekan/tarih/fiyat
 verisini gösterir. Akış:
 
-1. `python3 tools/collect_tickets.py [--sehir İzmir]` → `data/tickets.json`.
+1. `python3 tools/collect_tickets.py [--sehir "İzmir,Ankara,İstanbul,Bursa,Antalya"]` → `data/tickets.json`.
    Her kayıt; ad, mekan, il/ilçe, koordinat, tarih ve satıcı sayfasından alınan
    **gerçek fiyatı** taşır. Aynı etkinliği (başlık+mekan+tarih) satan kaynaklar
    `dedupe_and_cheapest` ile birleştirilir; `price_by_source`, `cheapest_source`
@@ -294,8 +301,14 @@ Kaynak notları:
   Biletinial afişleri (`merlincdn.net`) sorunsuz açılır, uzak kalır.
 - **Passo şehir filtresi uygulamaz**; `allevents` tüm yurdu döndürür, toplayıcı
   `venueName`/`seoTitle` içinde "İzmir" arayıp detaydan `venueCity` ile doğrular.
-- Fiyatı yalnızca giriş/Cloudflare arkasında veren siteler (Biletix, Bubilet,
-  Mobilet) şimdilik kaynak değildir; `SOURCES` yapısı yeni kaynağa açıktır.
+- **Biletino**: şehir sayfaları (`/tr/city/<il>/`) etkinlik bağlantıları verir;
+  detay sayfaları schema.org `Event`+`Offer` JSON-LD yayınlar (fiyat
+  `offers.price`, tür `@type` → uygulama türü). `robots.txt` genel botlara izin
+  verir; yalnızca `/account`, `/search` gibi yollar kapalıdır.
+- **Fiyatı yalnızca giriş/Cloudflare arkasında veren siteler (Biletix, Bubilet,
+  Mobilet) şimdilik kaynak değildir**; `SOURCES` yapısı yeni kaynağa açıktır.
+  Biletix ve bilet.com denendi: Biletix içeriği JS ile yükler (JSON-LD yok),
+  bilet.com otobüs/uçak bileti satar (etkinlik değil).
 - Toplama siteye saygılıdır: istekler paralel ama sınırlı (6 iş parçacığı),
   aralarda gecikme, `fetch` yeniden dener.
 

@@ -204,14 +204,24 @@ def when_label(start: str) -> tuple[str, str, str]:
 
 
 def district_of(venue: str, street: str, city: str) -> str:
-    """Mekan/adres metninden ilçe tahmini (ör. 'Bornova', 'Karşıyaka')."""
+    """Mekan/adres metninden ilçe tahmini (ör. 'Bornova', 'Karşıyaka').
+
+    Önce bilinen İzmir ilçeleri, sonra adresteki "X/İl" kalıbı, en son olarak
+    adres sonundaki ilçe benzeri sözcük denenir. Bulunamazsa şehir adı döner.
+    """
     for known in (
         "Bornova", "Karşıyaka", "Konak", "Buca", "Gaziemir", "Balçova",
         "Çiğli", "Bayraklı", "Karabağlar", "Menemen", "Torbalı", "Urla",
+        "Çeşme", "Foça", "Kemalpaşa", "Menderes", "Seferihisar", "Tire",
     ):
         if norm(known) in norm(venue) or norm(known) in norm(street):
             return known
+    # "Bakırköy/İstanbul", "Mamak/ Ankara" gibi kalıptan ilçeyi çıkar.
     m = re.search(r"([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\s*/\s*" + re.escape(city or ""), street or "")
+    if m:
+        return m.group(1)
+    # Şehirden bağımsız "X/İl" kalıbı (adres sonunda il adı yazılmış olabilir).
+    m = re.search(r"([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\s*/", street or "")
     if m:
         return m.group(1)
     return city or ""
@@ -317,7 +327,7 @@ def parse_events(html_text: str, source: str, url: str, genre: str) -> list[dict
             price, currency, label = _price_of(node.get("offers"))
             start = node.get("startDate") or ""
             when, wd, date = when_label(start)
-            city = (addr.get("addressLocality") or "").strip()
+            city = norm_city((addr.get("addressLocality") or "").strip())
             street = (addr.get("streetAddress") or "").strip()
             venue = (loc.get("name") or "").strip()
             title = (node.get("name") or "").strip()
@@ -457,6 +467,36 @@ def _get_json(url: str) -> dict:
         return json.loads(resp.read().decode("utf-8", "replace"))
 
 
+def _passo_rules(note: str) -> list[str]:
+    """Passo `detailNote` alanını kural maddelerine çevirir (satır başına bir madde)."""
+    text = _text(note or "")
+    if not text:
+        return []
+    parts = re.split(r"\s*(?:•|\u2022|\u00b7)\s*|\s+-\s+(?=[A-ZÇĞİÖŞÜ])", text)
+    items = [p.strip(" -–—\t") for p in parts]
+    return [p for p in items if len(p) > 3][:15]
+
+
+def passo_extras(v: dict) -> dict:
+    """Passo detay yanıtından açıklama, kural, tür ve organizatörü çıkarır.
+
+    Passo zengin detay verir: `detailPageDescription` (açıklama), `detailNote`
+    (etkinlik kuralları), `organizerName`, `genreName`/`subGenreName` (tür).
+    """
+    desc = _text(v.get("detailPageDescription"))
+    genres = [g for g in (v.get("genreName"), v.get("subGenreName")) if g]
+    return {
+        "description": desc,
+        "cast": [],
+        "runtime": 0,
+        "genres": list(dict.fromkeys(genres)),
+        "genre_label": (v.get("subGenreName") or v.get("genreName") or "").strip(),
+        "age": "",
+        "rules": _passo_rules(v.get("detailNote")),
+        "organizer": (v.get("organizerName") or "").strip(),
+    }
+
+
 def collect_passo(limit: int) -> list[dict]:
     """Passo'nun halka açık web API'si (fiyatlar kategori bazında açık)."""
     try:
@@ -519,13 +559,180 @@ def collect_passo(limit: int) -> list[dict]:
             "provider": "passo",
             "ref": {"seo": e["seoUrl"], "id": e["id"]},
             "url": f"https://www.passo.com.tr/tr/etkinlik/{e['seoUrl']}",
+            **passo_extras(v),
         })
         time.sleep(0.2)
     return events
 
 
+# Biletino şehir listeleme sayfaları. Detay sayfaları halka açık JSON-LD
+# (schema.org Event + Offer) taşır; fiyat `offers.price` alanındadır.
+BILETINO_CITY_LISTS = [
+    "https://biletino.com/tr/city/istanbul/",
+    "https://biletino.com/tr/city/ankara/",
+    "https://biletino.com/tr/city/izmir/",
+    "https://biletino.com/tr/city/antalya/",
+    "https://biletino.com/tr/city/bursa/",
+]
+
+
+def biletino_type(schema_type: str, name: str, desc: str) -> str:
+    """schema.org @type'ı önceler, yoksa ad/açıklamadan tür tahmin eder."""
+    direct = {
+        "MusicEvent": "Konser",
+        "TheaterEvent": "Tiyatro",
+        "ComedyEvent": "Stand-up",
+        "DanceEvent": "Dans",
+        "Festival": "Festival",
+        "ChildrensEvent": "Çocuk etkinlikleri",
+        "ScreeningEvent": "Sinema",
+        "SportsEvent": "Spor",
+        "ExhibitionEvent": "Sergi",
+        # Atölye/workshop etkinlikleri uygulamada "Sergi" başlığı altında toplanır.
+        "EducationEvent": "Sergi",
+    }
+    if schema_type in direct:
+        return direct[schema_type]
+    g = norm(f"{name} {desc}")
+    if any(k in g for k in ("stand up", "standup", "komedi", "komedyen")):
+        return "Stand-up"
+    if any(k in g for k in ("tiyatro", "muzikal", "opera", "bale")):
+        return "Opera ve bale" if any(k in g for k in ("opera", "bale")) else "Tiyatro"
+    if any(k in g for k in ("sinema", "film")):
+        return "Sinema"
+    if any(k in g for k in ("atolye", "workshop", "egitim", "seminer", "tadim", "pilates", "yoga")):
+        return "Sergi"
+    if any(k in g for k in ("dans",)):
+        return "Dans"
+    if any(k in g for k in ("kosu", "turnuva", "mac", "spor")):
+        return "Spor"
+    # SocialEvent ve sınıflandırılamayanlar: parti/gece etkinlikleri müzik ağırlıklı.
+    return "Konser"
+
+
+def norm_city(city: str) -> str:
+    """Kaynakların şehir adını uygulamanın il adına indirger.
+
+    Biletinial İstanbul'u "İstanbul Avrupa"/"İstanbul Anadolu" diye ikiye
+    böler; uygulama İstanbul'u tek il olarak kullanır.
+    """
+    c = (city or "").strip()
+    if c.startswith("İstanbul"):
+        return "İstanbul"
+    return c
+
+
+def parse_biletino_event(html_text: str, url: str) -> list[dict]:
+    """Biletino detay sayfasındaki JSON-LD Event kaydını uygulama olayına çevirir."""
+    out: list[dict] = []
+    for block in ld_blocks(html_text):
+        for node in walk(block):
+            if not str(node.get("@type", "")).endswith("Event"):
+                continue
+            if node.get("@type") == "EventSeries":
+                continue
+            loc = node.get("location") or {}
+            if isinstance(loc, list):
+                loc = loc[0] if loc else {}
+            addr = loc.get("address") or {}
+            if isinstance(addr, list):
+                addr = addr[0] if addr else {}
+            price, currency, label = _price_of(node.get("offers"))
+            start = node.get("startDate") or ""
+            when, wd, date = when_label(start)
+            title = (node.get("name") or "").strip()
+            venue = (loc.get("name") or "").strip()
+            if not title or not date or not venue:
+                continue
+            desc = (node.get("description") or "").strip()
+            city = (addr.get("addressRegion") or addr.get("addressLocality") or "").strip()
+            city = norm_city(city)
+            street = (addr.get("streetAddress") or "").strip()
+            district = (addr.get("addressLocality") or "").strip() or district_of(venue, street, city)
+            img = node.get("image") or ""
+            if isinstance(img, list):
+                img = img[0] if img else ""
+            lat = _to_float(addr.get("latitude"))
+            lng = _to_float(addr.get("longitude"))
+            lat, lng = sane_coords(lat, lng, district)
+            performers = node.get("performer") or []
+            if isinstance(performers, dict):
+                performers = [performers]
+            cast = [{"name": (p.get("name") or "").strip(), "role": "Sanatçı"}
+                    for p in performers if isinstance(p, dict) and p.get("name")]
+            genre = biletino_type(str(node.get("@type", "")), title, desc)
+            eid = f"{slug(title)[:40]}-{date}-{hashlib.sha1(norm(venue).encode()).hexdigest()[:5]}"
+            out.append({
+                "id": eid,
+                "type": genre,
+                "art": ART_BY_TYPE.get(genre, "art-festival"),
+                "title": title,
+                "venue": venue,
+                "city": city,
+                "image": img,
+                "district": district,
+                "address": street,
+                "lat": lat,
+                "lng": lng,
+                "start": start,
+                "date": date,
+                "when": when,
+                "wd": wd,
+                "price": price,
+                "price_label": label or "Bilet",
+                "currency": currency or "TRY",
+                "availability": _availability(node.get("offers")),
+                "source": "Biletino",
+                "provider": "biletino",
+                "ref": url,
+                "url": url,
+                "description": desc,
+                "cast": cast,
+                "runtime": 0,
+                "genres": [],
+                "genre_label": "",
+                "age": "",
+                "rules": [],
+                "organizer": "",
+            })
+    return out
+
+
+def collect_biletino(limit: int) -> list[dict]:
+    """Biletino: halka açık JSON-LD (schema.org Event + Offer). Fiyat `offers.price`."""
+    targets: dict[str, str] = {}
+    for listing in BILETINO_CITY_LISTS:
+        try:
+            html_text = fetch(listing)
+        except Exception as exc:
+            print(f"  ! Biletino liste alınamadı: {listing} ({exc})")
+            continue
+        for path in sorted(set(re.findall(r'href="(/tr/e-[^"]+?)"', html_text))):
+            targets.setdefault("https://biletino.com" + path, "")
+    print(f"  Biletino: {len(targets)} etkinlik bağlantısı")
+    items = list(targets.keys())[:limit]
+
+    def one(link: str) -> list[dict]:
+        try:
+            time.sleep(0.25)
+            return parse_biletino_event(fetch(link), link)
+        except Exception as exc:
+            print(f"  ! Biletino detay alınamadı: {link} ({exc})")
+            return []
+
+    events: list[dict] = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+        for found in pool.map(one, items):
+            events.extend(found)
+    return events
+
+
 # Yeni kaynak eklemek için: (ad, toplayıcı fonksiyonu)
-SOURCES = [("Biletinial", collect_biletinial), ("Passo", collect_passo)]
+SOURCES = [
+    ("Biletinial", collect_biletinial),
+    ("Passo", collect_passo),
+    ("Biletino", collect_biletino),
+]
 
 
 def key_of(ev: dict) -> str:
@@ -546,6 +753,10 @@ def dedupe_and_cheapest(events: list[dict]) -> list[dict]:
         for field in ("image", "venue_image"):
             if not entry.get(field):
                 entry[field] = next((e[field] for e in group if e.get(field)), "")
+        # Detay alanları: en ucuz kayıtta yoksa aynı etkinliği taşıyan diğer kaynaktan al.
+        for field in ("description", "cast", "genres", "genre_label", "age", "rules", "organizer", "runtime"):
+            if not entry.get(field):
+                entry[field] = next((e[field] for e in group if e.get(field)), entry.get(field) or ([] if field in ("cast", "genres", "rules") else (0 if field == "runtime" else "")))
         entry["sources"] = sorted({e["source"] for e in group})
         entry["price_by_source"] = {
             e["source"]: e["price"] for e in group if e.get("price") is not None
