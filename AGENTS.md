@@ -22,11 +22,13 @@ PWA dosyaları + geliştirme sunucusu.
   adla yazar ve JSON döner: `{"ok":true,"files":[...],"url":"/yuklenenler/..."}`.
 - `yuklenenler/` — yüklenen fotoğraflar (sürüm kontrolüne girmez).
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
-- `tools/brand.py` — ortak marka yardımcıları. Logo gradyanı (`STOPS`: mor
-  `#6D4AFF` → orkide `#B44DE0` → gül `#F0477E` → sarı `#FFC83D`; eski palet
-  ile yeni paletin harmanı) ve beyaz yatay bilet işareti (`TICKET`, `NOTCH_CX`,
-  `NOTCH_R`, `PERF_CX`, `PERF_Y`, `PERF_W`, `PERF_HH`, `ticket_mask`,
-  `draw_ticket`) burada tanımlıdır; tüm simge üreticileri bu modülü kullanır.
+- `tools/brand.py` — ortak marka yardımcıları. Logo gradyanı (`STOPS`: premium
+  "Aurora" paleti — indigo `#4338CA` → menekşe `#7C3AED` → mor `#A855F7` →
+  fuşya `#D946EF`; tek renk ailesi, ~57° dar ton aralığı) ve beyaz yatay bilet
+  işareti (`TICKET`, `NOTCH_CX`, `NOTCH_R`, `PERF_CX`, `PERF_Y`, `PERF_W`,
+  `PERF_HH`, `ticket_mask`, `draw_ticket`) burada tanımlıdır; `gloss()`
+  simgelere sol üstten düşen yumuşak beyaz parlama (cam hissi) ekler. Tüm
+  simge üreticileri bu modülü kullanır.
 - `tools/generate_icons.py` — PWA simge üretici. İkon, uygulama içi logonun
   kutusuz halidir: köşegen gradyan zemin + beyaz yatay bilet işareti
   (eski "G" harfi, dört uçlu ışıltı, konum iğnesi ve yan çentikli/dikey

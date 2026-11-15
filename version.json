@@ -1,6 +1,6 @@
 {
-  "version": "1.7",
-  "versionCode": 10700,
-  "notes": "Logo işareti yenilendi: üst-alt çentikli ve perforasyonlu, her boyutta net okunan bilet.",
+  "version": "1.8",
+  "versionCode": 10800,
+  "notes": "Logo kalitesi yükseltildi: uyumlu komşu tonlardan oluşan premium Aurora gradyanı ve cam parlaması; tüm ikonlar güncellendi.",
   "apk": "indir/Genc.apk"
 }

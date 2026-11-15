@@ -9,13 +9,15 @@ ile yeni kırmızı-sarının harmanlandığı gradyan zemin üzerinde beyaz bil
 from PIL import Image, ImageDraw
 
 # Uygulama içi logo gradyanıyla aynı duraklar (bkz. Genc.html --logo-c*).
-# Eski palet (mor -> mor-pembe -> pembe) ile yeni palet (mor -> kırmızı ->
-# sarı) harmanlandı: mor, orkide, gül ve altın sarısı bir gün batımı geçişi.
+# Premium "Aurora" paleti: tek renk ailesi içinde komşu tonlar (indigo ->
+# menekşe -> fuşya). Eski gökkuşağı (mor -> pembe -> kırmızı -> sarı) 4 ayrı
+# renk ailesi kullanıp "çocuk uygulaması" hissi veriyordu; dar ton aralığı
+# (235°-292°) marka rengiyle (--brand #5B3DF5) uyumlu ve daha kaliteli durur.
 STOPS = [
-    (0.00, (109, 74, 255)),   # #6D4AFF mor (her iki paletin de başı)
-    (0.34, (180, 77, 224)),   # #B44DE0 eski mor-pembe (eski renk geri geldi)
-    (0.66, (240, 71, 126)),   # #F0477E harman: kırmızı-pembe
-    (1.00, (255, 200, 61)),   # #FFC83D altın sarısı
+    (0.00, (67, 56, 202)),    # #4338CA indigo
+    (0.38, (124, 58, 237)),   # #7C3AED menekşe
+    (0.72, (168, 85, 247)),   # #A855F7 mor
+    (1.00, (217, 70, 239)),   # #D946EF fuşya
 ]
 
 # Logo işareti (44x44 kutu): yatay bilet — gövde + üst/alt orta çentik +
@@ -52,6 +54,27 @@ def gradient(size):
             k = (t - lo[0]) / span
             px[x, y] = tuple(lerp(lo[1][c], hi[1][c], k) for c in range(3))
     return img.convert("RGBA")
+
+
+def gloss(img):
+    """Sol üste düşen yumuşak beyaz parlama (cam/kalite hissi)."""
+    size = img.width
+    ss = 2
+    big = size * ss
+    lay = Image.new("L", (big, big), 0)
+    px = lay.load()
+    cx, cy, r = 0.30 * big, 0.22 * big, 0.85 * big
+    for y in range(big):
+        for x in range(big):
+            dist = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5 / r
+            if dist >= 1:
+                continue
+            a = 0.38 * (1 - dist) ** 1.6
+            px[x, y] = int(a * 255)
+    lay = lay.resize((size, size), Image.LANCZOS)
+    out = img.copy()
+    out.paste((255, 255, 255), (0, 0), lay)
+    return out
 
 
 def _apply_mask(img, mask):

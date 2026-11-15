@@ -18,7 +18,7 @@ PAD = 34
 
 def base():
     """Yuvarlak köşeli gradyan arka plan."""
-    return brand.rounded(brand.gradient(SIZE), 0.26)
+    return brand.rounded(brand.gloss(brand.gradient(SIZE)), 0.26)
 
 
 def draw_play(d):

@@ -23,19 +23,19 @@
   --ink:#17112E;--on-ink:#FFFFFF;--paper:#E9E1FA;--card:#FFFFFF;
   --brand:#5B3DF5;--on-brand:#FFFFFF;--sun:#FFC83D;--coral:#FF5A5F;--coral-text:#D92D4A;--mute:#625E7C;--line:#D5CBF0;--sw-off:#8F82B8;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#6D4AFF;--logo-c2:#B44DE0;--logo-c3:#F0477E;--logo-c4:#FFC83D;--logo-fg:#FFFFFF;color-scheme:light;
+  --logo-c1:#4338CA;--logo-c2:#7C3AED;--logo-c3:#A855F7;--logo-c4:#D946EF;--logo-fg:#FFFFFF;color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
   --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#8B6BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-c4:#FFD75E;--logo-fg:#FFFFFF;color-scheme:dark;
+  --logo-c1:#6366F1;--logo-c2:#8B5CF6;--logo-c3:#A855F7;--logo-c4:#E879F9;--logo-fg:#FFFFFF;color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
   --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#8B6BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-c4:#FFD75E;--logo-fg:#FFFFFF;color-scheme:dark;
+  --logo-c1:#6366F1;--logo-c2:#8B5CF6;--logo-c3:#A855F7;--logo-c4:#E879F9;--logo-fg:#FFFFFF;color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -569,10 +569,12 @@ svg.ic.f{fill:currentColor}
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
 
-<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--logo-c1)"/><stop offset=".34" stop-color="var(--logo-c2)"/><stop offset=".66" stop-color="var(--logo-c3)"/><stop offset="1" stop-color="var(--logo-c4)"/></linearGradient>
+<linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--logo-c1)"/><stop offset=".38" stop-color="var(--logo-c2)"/><stop offset=".72" stop-color="var(--logo-c3)"/><stop offset="1" stop-color="var(--logo-c4)"/></linearGradient>
+<radialGradient id="lgloss" cx=".3" cy=".22" r=".85"><stop offset="0" stop-color="#fff" stop-opacity=".38"/><stop offset=".55" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
 <symbol id="logo" viewBox="0 0 134 44">
   <rect x="0" y="0" width="44" height="44" rx="13" fill="url(#lg)"/>
-  <rect x="4.7" y="4.7" width="34.6" height="34.6" rx="9.4" fill="none" stroke="#fff" stroke-opacity=".24" stroke-width="1.3"/>
+  <rect x="0" y="0" width="44" height="44" rx="13" fill="url(#lgloss)"/>
+  <rect x="4.7" y="4.7" width="34.6" height="34.6" rx="9.4" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1.2"/>
   <path fill-rule="evenodd" fill="var(--logo-fg)" d="M11 13H33A4 4 0 0 1 37 17V27A4 4 0 0 1 33 31H11A4 4 0 0 1 7 27V17A4 4 0 0 1 11 13ZM18.0 13A4.0 4.0 0 0 0 26.0 13ZM18.0 31A4.0 4.0 0 0 1 26.0 31ZM12.4 21.6A1.1 1.1 0 0 1 14.6 21.6V22.4A1.1 1.1 0 0 1 12.4 22.4ZM20.9 21.6A1.1 1.1 0 0 1 23.1 21.6V22.4A1.1 1.1 0 0 1 20.9 22.4ZM29.4 21.6A1.1 1.1 0 0 1 31.6 21.6V22.4A1.1 1.1 0 0 1 29.4 22.4Z"/>
   <text x="54" y="31.4" font-family="Archivo,system-ui,sans-serif" font-weight="800" font-size="30" letter-spacing="-.6" fill="var(--ink)">Genç</text>
 </symbol>
@@ -1075,7 +1077,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.7';
+var APP_VERSION='1.8';
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
    (server.py) veya kurulumun yayınlandığı uzak adreste sunulur. Uygulama içinde
    gömülü kopya güncel olmayacağı için denetim uzak adresten yapılır. */

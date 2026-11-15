@@ -22,10 +22,10 @@ def save(img, name):
 def main():
     os.makedirs(OUT, exist_ok=True)
     for size in (192, 512):
-        save(brand.draw_ticket(brand.rounded(brand.gradient(size)), border=True), f"icon-{size}.png")
-    save(brand.draw_ticket(brand.gradient(512)), "maskable-512.png")
-    save(brand.draw_ticket(brand.rounded(brand.gradient(180)), border=True), "apple-touch-icon.png")
-    save(brand.draw_ticket(brand.rounded(brand.gradient(32))), "favicon-32.png")
+        save(brand.draw_ticket(brand.rounded(brand.gloss(brand.gradient(size))), border=True), f"icon-{size}.png")
+    save(brand.draw_ticket(brand.gloss(brand.gradient(512))), "maskable-512.png")
+    save(brand.draw_ticket(brand.rounded(brand.gloss(brand.gradient(180))), border=True), "apple-touch-icon.png")
+    save(brand.draw_ticket(brand.rounded(brand.gloss(brand.gradient(32)))), "favicon-32.png")
 
 
 if __name__ == "__main__":
