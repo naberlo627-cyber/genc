@@ -1,5 +1,5 @@
 /* Genç - çevrimdışı desteği ve hızlı açılış için servis çalışanı. */
-var CACHE = "genc-v14";
+var CACHE = "genc-v15";
 var ASSETS = [
   "./",
   "./Genc.html",
@@ -26,7 +26,18 @@ var ASSETS = [
   "./img/cat-sergi.jpg",
   "./img/cat-dans.jpg",
   "./img/cat-opera-ve-bale.jpg",
-  "./img/cat-acik-hava.jpg"
+  "./img/cat-acik-hava.jpg",
+  "./img/vid-caz.jpg",
+  "./img/vid-celik.jpg",
+  "./img/vid-efes.jpg",
+  "./img/vid-gulmece.jpg",
+  "./img/vid-kardelen.jpg",
+  "./img/vid-kaz.jpg",
+  "./img/vid-kugu.jpg",
+  "./img/vid-minik.jpg",
+  "./img/vid-sessiz.jpg",
+  "./img/vid-tango.jpg",
+  "./img/vid-yaz.jpg"
 ];
 
 self.addEventListener("install", function (e) {

@@ -37,13 +37,13 @@ def save(img, *parts):
 
 def main():
     for dens, (mip, fg) in DENSITIES.items():
-        save(brand.draw_pin(brand.rounded(brand.gradient(mip)), border=True),
+        save(brand.draw_ticket(brand.rounded(brand.gradient(mip)), border=True),
              "mipmap-" + dens, "ic_launcher.png")
-        save(brand.draw_pin(brand.circle(brand.gradient(mip))),
+        save(brand.draw_ticket(brand.circle(brand.gradient(mip))),
              "mipmap-" + dens, "ic_launcher_round.png")
         # Uyarlanabilir simge: sistem maskeler, bu yüzden tam kare gradyan.
         # İğne, güvenli alana (karenin %66'sı) sığması için küçültülür.
-        save(brand.draw_pin(brand.gradient(fg), scale=0.6),
+        save(brand.draw_ticket(brand.gradient(fg), scale=0.6),
              "drawable-" + dens, "ic_launcher_foreground.png")
 
 
