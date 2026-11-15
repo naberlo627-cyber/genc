@@ -22,11 +22,17 @@ PWA dosyaları + geliştirme sunucusu.
   adla yazar ve JSON döner: `{"ok":true,"files":[...],"url":"/yuklenenler/..."}`.
 - `yuklenenler/` — yüklenen fotoğraflar (sürüm kontrolüne girmez).
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
-- `tools/generate_icons.py` — simge üretici. İkon, uygulama içi logonun
-  kutusuz halidir: köşegen gradyan zemin + beyaz dört uçlu ışıltı işareti
-  (eski "G" harfi kaldırıldı).
+- `tools/brand.py` — ortak marka yardımcıları. Logo gradyanı (`STOPS`: mor
+  `#6D4AFF` → pembe/kırmızı `#E8437F` → sarı `#FFC83D`) ve beyaz konum iğnesi
+  işareti burada tanımlıdır; tüm simge üreticileri bu modülü kullanır.
+- `tools/generate_icons.py` — PWA simge üretici. İkon, uygulama içi logonun
+  kutusuz halidir: köşegen gradyan zemin + beyaz konum iğnesi işareti
+  (eski "G" harfi ve dört uçlu ışıltı kaldırıldı).
 - `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
   glifi; Android ve masaüstünde aynı ikon tekrar etmesin).
+- `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
+  kare, daire ve uyarlanabilir ön katman üretir; ön katmandaki iğne güvenli
+  alana sığması için `scale=0.6` ile küçültülür.
 - `android/` — PWA'yı saran Android kabuğu (Gradle, paket `com.genc.app`).
   `android/build-apk.sh` web varlıklarını `assets/www/` altına kopyalar,
   Gradle ile derler ve `indir/Genc.apk` dosyasını üretir.
@@ -119,14 +125,22 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   çağrılır, yoksa fazladan geçmiş girdisi kalır.
 - Logoya basmak ana sayfaya döner (`#home-logo`, `#web-logo`, `#feed-logo` →
   `goHome()`): üst katmanları kapatır, Keşfet sekmesine geçer, başa kaydırır.
-  Logo artık kutu + ışıltı işareti + "Genç" kelime işaretinden oluşur (`#logo`,
+  Logo kutu + konum iğnesi işareti + "Genç" kelime işaretinden oluşur (`#logo`,
   viewBox `0 0 134 44`); kelime rengi `var(--ink)` olduğu için her iki temada
-  okunur, kutu gradyanı `--logo-c1..c3` ile temaya uyar.
+  okunur, kutu gradyanı mor→pembe→sarı (`--logo-c1..c3`) ile temaya uyar.
 - Keşfet üst şeridi: solda logo, sağda profil avatarı. Tür seçimi yalnızca
   "Türe göre" ızgarasından yapılır (seçili kart `.cat.on` ile çerçevelenir).
   Logoya basmak (`goHome()`) filtreyi ve aramayı sıfırlar, Keşfet'e döner.
 - Alt menü üç sekme: Keşfet, Videolar, Biletlerim. Profil sekmesi yok;
   profile erişim yalnızca sağ üstteki avatardan (`data-tab="profil"`).
+- Videolar sekmesi tam ekran, kaydırmalı kısa video akışıdır (`#feed`, her kart
+  `.vid`). Üstte logo + "Sana özel / Yakınında" hap sekmeleri (`.vtabs`),
+  altta bilgi paneli (`.vpanel`: konum çipi, başlık, tarih/yer). Video
+  kartlarında beğen/kaydet/paylaş/bilet al düğmeleri yoktur; kullanıcı bunları
+  istemedi. İlerleme çubuğu (`.vprog`) aktif kartta döner, `IntersectionObserver`
+  ile yönetilir; kaydırma sonunda `.vend` kapanış kartı gelir.
+- Video akışındaki "Sana özel" sıralaması `S.likes` tür uyumuna ve konuma göre
+  yapılır (`videoList()`); beğeni verisi artık tutulmaz.
 - Profildeki kalem (`data-act="editprofile"`) hesap sayfasını açar
   (`openSheet('Hesap', …)`): profil alanları, kart yönetimi, tema seçici ve
   çıkış burada. Bu sayfadaki işlemler sayfayı kapatmaz; `refreshAccount()`

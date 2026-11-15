@@ -1,6 +1,6 @@
 {
-  "version": "1.4",
-  "versionCode": 10400,
-  "notes": "Kart doğrulaması, profil fotoğrafı düzeltmesi ve kategori filtresi.",
+  "version": "1.5",
+  "versionCode": 10500,
+  "notes": "Kırmızı-sarı logo, konum izni düzeltmesi ve yenilenen kısa videolar bölümü.",
   "apk": "indir/Genc.apk"
 }

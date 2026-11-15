@@ -1,5 +1,5 @@
 /* Genç - çevrimdışı desteği ve hızlı açılış için servis çalışanı. */
-var CACHE = "genc-v13";
+var CACHE = "genc-v14";
 var ASSETS = [
   "./",
   "./Genc.html",

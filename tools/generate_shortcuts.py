@@ -4,51 +4,21 @@
 Her kısayol kendi glifini alır; Android ve masaüstü aynı ikonla tekrar etmez.
 """
 import os
+import sys
 
-from PIL import Image, ImageDraw
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+import brand  # noqa: E402
+from PIL import ImageDraw  # noqa: E402
 
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "icons")
-# Uygulama içi logo gradyanıyla aynı duraklar (bkz. Genc.html --logo-c*).
-STOPS = [
-    (0.00, (109, 74, 255)),   # #6D4AFF
-    (0.55, (180, 77, 224)),   # #B44DE0
-    (1.00, (255, 79, 139)),   # #FF4F8B
-]
 SIZE = 192
 PAD = 34
 
 
-def gradient(size):
-    img = Image.new("RGB", (size, size))
-    px = img.load()
-    for y in range(size):
-        for x in range(size):
-            t = (x + y) / (2 * (size - 1))
-            lo, hi = STOPS[0], STOPS[-1]
-            for i in range(len(STOPS) - 1):
-                if STOPS[i][0] <= t <= STOPS[i + 1][0]:
-                    lo, hi = STOPS[i], STOPS[i + 1]
-                    break
-            span = (hi[0] - lo[0]) or 1
-            k = (t - lo[0]) / span
-            px[x, y] = tuple(round(lo[1][c] + (hi[1][c] - lo[1][c]) * k) for c in range(3))
-    return img
-
-
 def base():
     """Yuvarlak köşeli gradyan arka plan."""
-    img = gradient(SIZE).convert("RGBA")
-    mask = Image.new("L", (SIZE, SIZE), 0)
-    ImageDraw.Draw(mask).rounded_rectangle(
-        [0, 0, SIZE - 1, SIZE - 1], radius=int(SIZE * 0.26), fill=255
-    )
-    out = Image.new("RGBA", (SIZE, SIZE), (0, 0, 0, 0))
-    out.paste(img, (0, 0), mask)
-    return out
-
-
-def glyph(img, draw):
-    pass
+    return brand.rounded(brand.gradient(SIZE), 0.26)
 
 
 def draw_play(d):

@@ -23,19 +23,19 @@
   --ink:#17112E;--on-ink:#FFFFFF;--paper:#E9E1FA;--card:#FFFFFF;
   --brand:#5B3DF5;--on-brand:#FFFFFF;--sun:#FFC83D;--coral:#FF5A5F;--coral-text:#D92D4A;--mute:#625E7C;--line:#D5CBF0;--sw-off:#8F82B8;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#6D4AFF;--logo-c2:#B44DE0;--logo-c3:#FF4F8B;--logo-fg:#FFFFFF;color-scheme:light;
+  --logo-c1:#6D4AFF;--logo-c2:#E8437F;--logo-c3:#FFC83D;--logo-fg:#FFFFFF;color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
   --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#A78BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-fg:#140D2E;color-scheme:dark;
+  --logo-c1:#8B6BFF;--logo-c2:#F0559A;--logo-c3:#FFD75E;--logo-fg:#FFFFFF;color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
   --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
   --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#A78BFF;--logo-c2:#C77DFF;--logo-c3:#FF7AB0;--logo-fg:#140D2E;color-scheme:dark;
+  --logo-c1:#8B6BFF;--logo-c2:#F0559A;--logo-c3:#FFD75E;--logo-fg:#FFFFFF;color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -139,37 +139,23 @@ svg.ic.f{fill:currentColor}
 .thumb em svg{width:14px;height:14px;flex:none;margin-bottom:1px}
 
 /* ---------- kısa videolar ---------- */
-.vid{flex:1;position:relative;overflow:hidden;color:#fff}
-.vtop{position:absolute;left:0;right:0;top:0;padding:28px 20px 46px;background:linear-gradient(180deg,rgba(6,8,24,.78),rgba(6,8,24,0))}
-.vtabs{display:flex;gap:22px;justify-content:center}
-.vtabs button{font-weight:700;font-size:17px;padding:6px 2px 8px;color:#D5DAF0;border-bottom:3px solid transparent}
-.vtabs button[aria-pressed="true"]{color:#fff;border-color:var(--sun)}
-.reach{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}
-.reach div{font-size:12px;color:#DDE1F4;font-weight:600}
-.reach div::before{content:"";display:block;height:3px;border-radius:2px;background:rgba(255,255,255,.32);margin-bottom:5px}
-.reach div.now{color:#fff;font-weight:800}
-.reach div.now::before{background:var(--sun)}
-.vscrim{position:absolute;inset:auto 0 0 0;height:62%;background:linear-gradient(180deg,rgba(6,8,24,0),rgba(6,8,24,.86))}
-.vinfo{position:absolute;left:20px;right:96px;bottom:26px}
-.vchip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.18);padding:5px 11px 5px 8px;border-radius:14px;font-size:13px;font-weight:600}
-.vchip svg{width:15px;height:15px}
-.vinfo h2{font-size:42px;margin:12px 0 8px}
-.vinfo .when{font-weight:700;font-size:16px}
-.vinfo .where{font-size:15px;color:#E7EAF8}
-.vinfo .src{font-size:12.5px;color:#D5DAF0;margin-top:12px}
-.vact{position:absolute;right:14px;bottom:28px;display:flex;flex-direction:column;align-items:center;gap:16px}
-.vact button{display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#fff;text-align:center}
-.vact .c{width:54px;height:54px;border-radius:50%;background:rgba(8,12,34,.55);display:grid;place-items:center;transition:background-color .15s,color .15s,transform .15s}
-.vact .c svg{width:27px;height:27px}
-.vact button[aria-pressed="true"] .c{background:#fff}
-.vact .like[aria-pressed="true"] .c{color:var(--coral)}
-.vact .like[aria-pressed="true"] .c svg{fill:var(--coral)}
-.vact .save[aria-pressed="true"] .c{color:#17112E}
-.vact .save[aria-pressed="true"] .c svg{fill:var(--sun)}
-.vact .buy .c{width:62px;height:62px;background:var(--sun);color:#17112E}
-.vact .buy .c svg{width:32px;height:32px;stroke-width:2.4}
-.vprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.28)}
-.vprog i{display:block;height:100%;width:34%;background:var(--card)}
+.vid{position:relative;overflow:hidden;color:#fff;background:#0B0820}
+.vscrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,24,.5) 0,rgba(6,8,24,0) 20%,rgba(6,8,24,0) 42%,rgba(6,8,24,.9) 100%)}
+.vtop{position:absolute;left:0;right:0;top:0;z-index:3;padding:14px 20px 40px;pointer-events:none}
+.vtop button{pointer-events:auto}
+.vbrand{margin:0 0 14px}
+.vbrand .brandlogo{width:96px}
+.vtabs{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:rgba(8,12,34,.52);pointer-events:auto}
+.vtabs button{font-weight:700;font-size:14px;padding:8px 16px;border-radius:999px;color:#CFD3E8;transition:background-color .18s,color .18s}
+.vtabs button[aria-pressed="true"]{color:#17112E;background:var(--sun)}
+.vpanel{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:18px 20px 24px;background:linear-gradient(180deg,rgba(9,6,28,0),rgba(9,6,28,.66) 42%,rgba(9,6,28,.94));display:flex;flex-direction:column;gap:11px}
+.vchip{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.2);padding:5px 12px 5px 9px;border-radius:999px;font-size:12.5px;font-weight:700}
+.vchip svg{width:14px;height:14px}
+.vtitle{font-size:31px;line-height:1.06;font-weight:800}
+.vmeta{display:flex;flex-direction:column;gap:3px;font-size:14.5px;color:#E7EAF8}
+.vmeta b{color:#fff;font-weight:700}
+.vprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.22)}
+.vprog i{display:block;height:100%;width:0;background:var(--sun)}
 .toast{position:absolute;left:20px;right:20px;top:118px;background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;font-weight:600;font-size:14px;display:flex;gap:10px;align-items:center;opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 14px 30px -12px rgba(0,0,0,.5)}
 .toast.show{opacity:1;transform:none}
 .toast svg{color:var(--brand)}
@@ -375,14 +361,9 @@ svg.ic.f{fill:currentColor}
 /* videolar */
 .feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:#0B0820;color:#fff}
 .feed::-webkit-scrollbar{display:none}
-.vid{height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;overflow:hidden;color:#fff;flex:none}
-.vtop{position:absolute;left:0;right:0;top:0;z-index:3;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 46px;background:linear-gradient(180deg,rgba(6,8,24,.78),rgba(6,8,24,0));pointer-events:none}
-.vtop button{pointer-events:auto}
-.vbrand{pointer-events:auto;margin:0 0 12px}
-.vbrand .brandlogo{width:104px}
-.vinfo{position:absolute;left:20px;right:96px;bottom:26px}
-.vinfo h2{font-size:40px}
-.vprog i{width:0}
+.vid{height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;flex:none}
+.vtop{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 40px}
+.vpanel{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 .vprog i.play{animation:prog 10s linear forwards}
 .feed.paused .vprog i.play{animation-play-state:paused}
 @keyframes prog{from{width:0}to{width:100%}}
@@ -431,10 +412,6 @@ svg.ic.f{fill:currentColor}
 .venue strong{display:block;font-size:15px}
 .venue small{color:var(--mute);font-size:13px}
 .venue>.ic:last-child{color:var(--mute)}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:8px 20px 0}
-.stats div{background:var(--card);border-radius:16px;padding:12px;text-align:center}
-.stats b{display:block;font-stretch:75%;font-weight:800;font-size:28px;line-height:1}
-.stats small{color:var(--mute);font-size:12.5px}
 
 .themeseg{margin:0 20px 10px;background:var(--card);border-radius:16px;padding:4px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
 .themeseg button{height:42px;border-radius:12px;font-weight:700;font-size:14px;text-align:center;color:var(--mute);transition:background-color .15s,color .15s}
@@ -591,7 +568,7 @@ svg.ic.f{fill:currentColor}
 <symbol id="logo" viewBox="0 0 134 44">
   <rect x="0" y="0" width="44" height="44" rx="13" fill="url(#lg)"/>
   <rect x="4.7" y="4.7" width="34.6" height="34.6" rx="9.4" fill="none" stroke="#fff" stroke-opacity=".24" stroke-width="1.3"/>
-  <path d="M22 8.4 25.4 18.6 35.6 22 25.4 25.4 22 35.6 18.6 25.4 8.4 22 18.6 18.6Z" fill="var(--logo-fg)"/>
+  <path fill-rule="evenodd" d="M22 35.4C19.6 31.8 10.4 23.6 10.4 18.2A11.6 11.6 0 0 1 33.6 18.2C33.6 23.6 24.4 31.8 22 35.4Z M22 13.8A4.4 4.4 0 1 0 22 22.6A4.4 4.4 0 1 0 22 13.8Z" fill="var(--logo-fg)"/>
   <text x="54" y="31.4" font-family="Archivo,system-ui,sans-serif" font-weight="800" font-size="30" letter-spacing="-.6" fill="var(--ink)">Genç</text>
 </symbol>
 
@@ -726,7 +703,6 @@ svg.ic.f{fill:currentColor}
           <button type="button" data-vtab="ozel" aria-pressed="true">Sana özel</button>
           <button type="button" data-vtab="yakin" aria-pressed="false">Yakınında</button>
         </div>
-        <div class="reach" id="reach"></div>
       </div>
     </div>
 
@@ -1086,7 +1062,6 @@ var S={
   name:'',email:'',phone:'',
   likes:['Konser','Sinema','Gezi turu'],
   locOn:true,loc:PLACES[0],
-  liked:{},saved:{},
   cards:[],
   tickets:[],loggedIn:false,
   photo:'',
@@ -1095,7 +1070,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.4';
+var APP_VERSION='1.5';
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
    (server.py) veya kurulumun yayınlandığı uzak adreste sunulur. Uygulama içinde
    gömülü kopya güncel olmayacağı için denetim uzak adresten yapılır. */
@@ -1155,7 +1130,7 @@ function getApk(){
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,liked:S.liked,saved:S.saved,cards:S.cards,tickets:S.tickets,theme:S.theme,loggedIn:S.loggedIn,photo:S.photo,version:S.version}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,cards:S.cards,tickets:S.tickets,theme:S.theme,loggedIn:S.loggedIn,photo:S.photo,version:S.version}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
@@ -1167,8 +1142,6 @@ function restore(){
   if(d.likes&&d.likes.length)S.likes=d.likes;
   if(typeof d.locLat==='number'&&typeof d.locLng==='number')S.loc={d:d.loc||'Konumum',lat:d.locLat,lng:d.locLng,geo:!!d.locGeo};
   else if(d.loc){var p=PLACES.filter(function(x){return x.d===d.loc})[0];if(p)S.loc=p}
-  if(d.liked&&typeof d.liked==='object')S.liked=d.liked;
-  if(d.saved&&typeof d.saved==='object')S.saved=d.saved;
   if(d.cards&&d.cards.length)S.cards=d.cards;
   if(d.tickets&&d.tickets.length)S.tickets=d.tickets;
   S.loggedIn=!!d.loggedIn;
@@ -1253,19 +1226,32 @@ function kmTo(e){
 }
 /* Konum cihazdan alınır; il/ilçe seçtirmeyiz. */
 function geoAsk(cb){
-  if(!navigator.geolocation){toast('Bu tarayıcı konumu desteklemiyor.');if(cb)cb(false);return}
+  if(!navigator.geolocation){toast('Bu cihaz konumu desteklemiyor.');if(cb)cb(false);return}
+  var done=false;
+  function bitir(ok,msg){
+    if(done)return;done=true;
+    if(msg)toast(msg);
+    if(cb)cb(ok);
+  }
   toast('Konumun alınıyor…');
+  /* Bazı cihazlar ilk çağrıda geç yanıt verir; üst sınır koyup takılı kalmayı önle. */
+  var zamanAsimi=setTimeout(function(){
+    bitir(false,'Konum alınamadı. Konum servisleri açık mı?');
+  },15000);
   navigator.geolocation.getCurrentPosition(function(p){
+    clearTimeout(zamanAsimi);
     S.loc={d:'Konumum',lat:p.coords.latitude,lng:p.coords.longitude,geo:true};
     S.locOn=true;persist();paintObLoc();renderKesfet();
     if(S.tab==='profil')renderProfile();
     if(!$('#main').hidden&&S.tab==='videolar')renderFeed();
-    toast('Konumun kullanılıyor.');
-    if(cb)cb(true);
+    bitir(true,'Konumun kullanılıyor.');
   },function(err){
-    toast(err&&err.code===1?'Konum izni verilmedi.':'Konum alınamadı. Tekrar dene.');
-    if(cb)cb(false);
-  },{enableHighAccuracy:false,timeout:8000,maximumAge:600000});
+    clearTimeout(zamanAsimi);
+    var m='Konum alınamadı. Tekrar dene.';
+    if(err&&err.code===1)m='Konum izni verilmedi. Ayarlardan konum iznini açabilirsin.';
+    else if(err&&err.code===3)m='Konum alınamadı. Konum servisleri açık mı?';
+    bitir(false,m);
+  },{enableHighAccuracy:false,timeout:12000,maximumAge:300000});
 }
 function locLabel(){return S.loc.geo?'Konumum':S.loc.d}
 function distLabel(e){var k=kmTo(e);return (e.district===S.loc.d||k<1)?e.district+(k>=1?', '+Math.round(k)+' km':''):Math.round(k)+' km'}
@@ -1541,7 +1527,7 @@ function openDetail(id){
     body+='<div class="dprice"><b>'+esc(priceLabel(e))+'</b><small>Bilet satıcının sayfasında alınır</small></div><div class="dacts">'+
      '<button class="btn" type="button" data-act="buy">Bilet al</button>'+
      (e.video?'<button class="btn ghost" type="button" data-act="watch">'+ic('play','f')+'Videoyu izle</button>':'')+
-     '<button class="iconbtn" type="button" data-act="save" aria-label="Kaydet" aria-pressed="'+!!S.saved[e.id]+'">'+ic('bookmark')+'</button></div></div>';
+     '</div></div>';
   }
   openSheet(e.past?'Geçmiş etkinlik':'Etkinlik',body);
 }
@@ -1602,15 +1588,8 @@ var io=null,active=-1;
 function videoList(){
   var v=EVENTS.filter(function(e){return e.video});
   if(S.vtab==='yakin')return v.sort(function(a,b){return kmTo(a)-kmTo(b)});
-  var boost={};Object.keys(S.liked).forEach(function(id){if(S.liked[id]){var t=ALL[id].type;boost[t]=(boost[t]||0)+1}});
-  function sc(e){return (S.likes.indexOf(e.type)>-1?50:0)+(boost[e.type]||0)*20-kmTo(e)}
+  function sc(e){return (S.likes.indexOf(e.type)>-1?50:0)-kmTo(e)}
   return v.sort(function(a,b){return sc(b)-sc(a)});
-}
-function region(e){return (e.district===S.loc.d||(S.loc.geo&&kmTo(e)<10))?0:1}
-function renderReach(i,list){
-  var r=(list[i]?region(list[i]):3),L=[S.locOn?locLabel():'Çevren','İzmir','Ege','Türkiye'];
-  $('#reach').innerHTML=L.map(function(n,k){return '<div'+(k===r?' class="now"':'')+'>'+esc(n)+'</div>'}).join('');
-  $('#reach').setAttribute('aria-label','Önce '+(S.locOn?locLabel():'çevren')+', sonra İzmir, Ege ve Türkiye');
 }
 function renderFeed(startId){
   var feed=$('#feed'),list=videoList();
@@ -1618,12 +1597,8 @@ function renderFeed(startId){
   feed.innerHTML=list.map(function(e){
     return '<article class="vid" data-id="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><div class="vscrim"></div>'+
      '<div class="pausemark">'+ic('pause')+'</div>'+
-     '<div class="vinfo"><span class="vchip">'+ic('pin')+esc(chipDist(e))+'</span><h2 class="disp">'+esc(e.vtitle)+'</h2><div class="when">'+esc(e.when)+'</div><div class="where">'+esc(e.venue)+', biletler '+esc(priceLabel(e))+'</div><div class="src">'+esc(e.src)+'</div></div>'+
-     '<div class="vact">'+
-       '<button class="like tog" type="button" data-act="like" aria-pressed="'+!!S.liked[e.id]+'"><span class="c">'+ic('heart')+'</span>Beğen</button>'+
-       '<button class="save tog" type="button" data-act="save" aria-pressed="'+!!S.saved[e.id]+'"><span class="c">'+ic('bookmark')+'</span>Kaydet</button>'+
-       '<button type="button" data-act="share"><span class="c">'+ic('share')+'</span>Paylaş</button>'+
-       '<button class="buy" type="button" data-act="buy"><span class="c">'+ic('plus')+'</span>Bilet al</button>'+
+     '<div class="vpanel"><span class="vchip">'+ic('pin')+esc(chipDist(e))+'</span><h2 class="vtitle disp">'+esc(e.vtitle)+'</h2>'+
+       '<div class="vmeta"><span><b>'+esc(e.when)+'</b></span><span>'+esc(e.venue)+' · biletler '+esc(priceLabel(e))+'</span></div>'+
      '</div><div class="vprog"><i></i></div></article>';
   }).join('')+
   '<article class="vid vend"><h2 class="disp">Şimdilik hepsi bu</h2><p>Videosu olmayan etkinliklerin biletleri de uygulamada. Keşfet’te hepsine göz at.</p><button class="btn" type="button" data-tab="kesfet">Keşfet’e dön</button><button class="btn ghost" type="button" data-act="restart">Baştan izle</button></article>';
@@ -1642,12 +1617,10 @@ function renderFeed(startId){
   if(startId){idx=Math.max(0,list.map(function(e){return e.id}).indexOf(startId))}
   feed.scrollTop=idx*feed.clientHeight;
   $$('#vtabs button').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-vtab')===S.vtab?'true':'false')});
-  renderReach(idx,list);
 }
 function activate(i,items,list){
   active=i;
   $$('.vprog i',$('#feed')).forEach(function(b){b.classList.remove('play');b.style.width=''});
-  renderReach(i,list);
   var bar=$('.vprog i',items[i]);
   if(bar){void bar.offsetWidth;bar.classList.add('play')}
 }
@@ -1831,10 +1804,7 @@ function upSend(files,makeAvatar){
 
 /* ---------- profil ---------- */
 function renderProfile(){
-  var saved=EVENTS.filter(function(e){return S.saved[e.id]&&e.video});
   var h='<div class="ph"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><div class="pinfo"><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.locOn?locLabel()+' · İzmir':'Konum kapalı')+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
-  var nl=Object.keys(S.liked).filter(function(k){return S.liked[k]}).length,ns=Object.keys(S.saved).filter(function(k){return S.saved[k]}).length;
-  h+='<div class="stats"><div><b>'+S.tickets.length+'</b><small>Bilet</small></div><div><b>'+ns+'</b><small>Kaydedilen</small></div><div><b>'+nl+'</b><small>Beğenilen</small></div></div>';
   h+='<div class="actgrid">'+
     '<button type="button" data-tab="biletler">'+ic('ticket')+'Biletlerim</button>'+
     '<button type="button" data-act="editlikes">'+ic('heart')+'Hoşlandıklarım</button>'+
@@ -1844,9 +1814,6 @@ function renderProfile(){
   if(deferredPrompt)h+='<div class="installrow">'+ic('install')+'<span><strong>Genç’i ana ekrana ekle</strong><small>Tek dokunuşla açılsın.</small></span><button type="button" data-act="install">Ekle</button></div>';
   h+='<div class="sec"><h2 class="disp">Hoşlandıkların</h2><button type="button" data-act="editlikes">Düzenle</button></div>';
   h+='<div class="likes">'+S.likes.map(function(l){return '<span>'+esc(l)+'</span>'}).join('')+'</div>';
-  h+='<div class="sec"><h2 class="disp">Kaydettiklerin</h2></div>';
-  h+=saved.length?'<div class="grid3">'+saved.map(function(e){return '<button class="thumb" type="button" data-vid="'+e.id+'"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span><em>'+esc(e.title)+'</em></button>'}).join('')+'</div>'
-        :'<div class="empty">Henüz bir şey kaydetmedin. Videolarda yer imi simgesine dokun.</div>';
   h+='<div class="sec"><h2 class="disp">Gittiğin etkinlikler</h2></div>';
   h+=PAST.map(function(e){return '<button class="att" type="button" data-open="'+e.id+'"><span class="mini-art"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg></span><span><strong>'+esc(e.title)+'</strong><span>'+esc(e.when)+'</span></span><span class="done">'+ic('check')+'Gittin</span></button>'}).join('');
   h+='<div class="pad"></div>';
@@ -1944,17 +1911,6 @@ function saveCard(){
 }
 
 /* ---------- ortak tıklama yönetimi ---------- */
-function toggleLike(id,btn){
-  S.liked[id]=!S.liked[id];persist();
-  $$('[data-id="'+id+'"] [data-act="like"]').forEach(function(b){b.setAttribute('aria-pressed',!!S.liked[id])});
-  if(S.liked[id])toast('Beğendin, buna benzer etkinlikleri daha sık göstereceğiz.');
-}
-function toggleSave(id){
-  S.saved[id]=!S.saved[id];persist();
-  $$('[data-id="'+id+'"] [data-act="save"]').forEach(function(b){b.setAttribute('aria-pressed',!!S.saved[id])});
-  if(S.saved[id])toast('Kaydedildi, profilinde bulabilirsin.');else toast('Kayıttan çıkarıldı.');
-  if(S.tab==='profil')renderProfile();
-}
 function share(e){
   var data={title:e.title,text:e.title+' · '+e.when+' · '+e.venue,url:location.href};
   if(navigator.share){navigator.share(data).catch(function(){});return}
@@ -2009,8 +1965,6 @@ document.addEventListener('click',function(ev){
     case 'pickgal':pickPhoto('gal');break;
     case 'camsnap':camSnap();break;
     case 'camcancel':stopCam();closeSheet();break;
-    case 'like':toggleLike(id);break;
-    case 'save':toggleSave(id);break;
     case 'share':share(e||(tkid&&findTicket(tkid)&&findTicket(tkid).e));break;
     case 'buy':openWeb(e);break;
     case 'watch':closeSheet();goVideo(id);break;

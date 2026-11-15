@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.webkit.GeolocationPermissions;
 import android.webkit.JavascriptInterface;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -45,10 +46,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String BASE =
             "https://appassets.androidplatform.net/assets/www/Genc.html";
     private static final int REQ_CAMERA = 4711;
+    private static final int REQ_LOCATION = 4712;
 
     private WebView web;
     private ValueCallback<Uri[]> filePathCallback;
     private PermissionRequest pendingWebPermission;
+    private GeolocationPermissions.Callback pendingGeoCallback;
+    private String pendingGeoOrigin;
 
     private final ActivityResultLauncher<Intent> fileChooser =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -94,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         // Varlıklar APK içinde gömülü; WebView'ın eski sürümü önbellekten
         // göstermemesi için önbelleği kapat ve temizle.
         s.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        // Konum: WebView geolocation API'si varsayılan olarak kapalıdır.
+        s.setGeolocationEnabled(true);
         web.clearCache(true);
 
         web.setWebViewClient(new WebViewClient() {
@@ -114,6 +120,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         web.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onGeolocationPermissionsShowPrompt(String origin,
+                                                           GeolocationPermissions.Callback callback) {
+                // WebView, geolocation için ayrı izin ister. Uygulama izni varsa
+                // doğrudan ver; yoksa Android iznini iste, sonucu beklet.
+                if (hasLocationPermission()) {
+                    callback.invoke(origin, true, true);
+                } else {
+                    pendingGeoCallback = callback;
+                    pendingGeoOrigin = origin;
+                    requestPermissions(new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION}, REQ_LOCATION);
+                }
+            }
+
             @Override
             public void onPermissionRequest(final PermissionRequest request) {
                 // Kamera/mikrofon istekleri yalnızca izin verildiyse karşılanır.
@@ -200,9 +222,28 @@ public class MainActivity extends AppCompatActivity {
                 == PackageManager.PERMISSION_GRANTED;
     }
 
+    private boolean hasLocationPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED;
+    }
+
     @Override
     public void onRequestPermissionsResult(int code, String[] permissions, int[] results) {
         super.onRequestPermissionsResult(code, permissions, results);
+        if (code == REQ_LOCATION && pendingGeoCallback != null) {
+            boolean granted = false;
+            for (int r : results) if (r == PackageManager.PERMISSION_GRANTED) granted = true;
+            pendingGeoCallback.invoke(pendingGeoOrigin, granted, false);
+            pendingGeoCallback = null;
+            pendingGeoOrigin = null;
+            if (!granted) {
+                Toast.makeText(this, "Konum izni verilmedi. Ayarlardan açabilirsin.",
+                        Toast.LENGTH_LONG).show();
+            }
+            return;
+        }
         if (code != REQ_CAMERA || pendingWebPermission == null) return;
         if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
             pendingWebPermission.grant(pendingWebPermission.getResources());
