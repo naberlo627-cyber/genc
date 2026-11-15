@@ -179,9 +179,19 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   adRowHTML/adVideoHTML`). Uygulamanın kendi kart diliyle aynı tipografi ve
   yuvarlak köşeleri kullanır, "Reklam" etiketi taşır, tam ekran kaplamaz ve
   otomatik oynamaz/animasyonlu değildir.
-- Üç biçim vardır: düz kart `.adcard` (Ana Sayfa'da kategori ızgarasından sonra,
-  Keşfet'te Kısa videolar bölümünden sonra, Biletlerim'de liste altında ve
-  etkinlik detayında), geniş satır `.adrow` (Keşfet'te Gezi turlarından sonra) ve
+- Reklamların **rengi normal kartlardan farklıdır**: sıcak/amber bir zemin
+  (`--ad-bg` gradyanı), amber kenarlık (`--ad-line`) ve amber etiket/CTA
+  (`--ad-label-bg/fg`, `--ad-cta`). Açık ve koyu tema için ayrı değerler tanımlı
+  olduğundan koyu temada da ayrışır. Satır reklamının perdesi ve ok butonu da
+  amber tonludur.
+- Reklamlar diğer bölümlerle **çakışmaz**: kartlarda `margin-top:16px` ile
+  üstteki bölümden ayrılır, bölüm başlıkları (`secHead`, 22px üst boşluk) ile
+  yeterli nefes alanı bırakır; yatay taşma yoktur.
+- Dört yerleşim vardır: düz kart `.adcard` (Ana Sayfa'da kategori ızgarasından
+  sonra, Keşfet'te Kısa videolar bölümünden sonra, Biletlerim'de liste altında ve
+  etkinlik detayında), geniş satır `.adrow` (Keşfet'te Gezi turlarından sonra),
+  **Ana Sayfa "Öne çıkanlar" karuselinin içinde** 3. sıradaki yatay reklam
+  (`.hrail .adrow`, 300×176, `fcards.splice(2,0,adRowHTML(adFor('row',1)))`) ve
   video akışında tek, küçük, kapatılabilir şerit `.vad` (üstte, başlık çubuğunun
   altında; kapatılınca oturum boyunca gizli kalır, `S.adOff`).
 - **Profilde ve ödeme (satıcı) sayfasında reklam yoktur.** Arama/filtre

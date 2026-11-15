@@ -1,6 +1,6 @@
 {
-  "version": "1.10",
-  "versionCode": 11000,
-  "notes": "Video bitince artık kendiliğinden kaymıyor; akışı sen kaydırıyorsun. Profil hariç tüm ekranlara uygulamanın kendi diliyle uyumlu, rahatsız etmeyen sponsor (reklam) alanları eklendi: Ana Sayfa, Keşfet, Biletlerim, etkinlik detayı ve video akışı.",
+  "version": "1.11",
+  "versionCode": 11100,
+  "notes": "Reklam alanları yenilendi: artık normal kartlardan ayrı, sıcak/amber bir renkte; diğer bölümlerle çakışmıyor ve daha ferah yerleşiyor. Ana Sayfa'da 'Öne çıkanlar' karuselinin arasına da bir sponsor kartı eklendi.",
   "apk": "indir/Genc.apk"
 }
