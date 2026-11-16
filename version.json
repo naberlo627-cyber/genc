@@ -2,5 +2,5 @@
   "version": "1.23",
   "versionCode": 12300,
   "notes": "Bilet ekranı yenilendi: etkinlik görselli başlık, seçilebilir bilet türü ve ödeme sonrası gerçek bilet koçanı (QR, koltuk, kod). Etkinlik ayrıntısında uzun açıklama ve kurallar artık katlanır (Devamını oku / Tüm kuralları göster). Salonlar bölümünde eksik fotoğraflar tamamlandı; fotoğrafı olmayan salonlar etkinlik görselini kullanıyor.",
-  "apk": "indir/Genc.apk"
+  "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

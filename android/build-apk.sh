@@ -38,12 +38,15 @@ sed -i "s/versionName \"[^\"]*\"/versionName \"$VER\"/" "$ANDROID_DIR/app/build.
 
 NOTES="$(sed -n 's/.*"notes": "\([^"]*\)".*/\1/p' "$ROOT/version.json" 2>/dev/null | head -1)"
 [ -z "$NOTES" ] && NOTES="Genç güncellemesi."
+# APK Pages'te tutulmaz (ikili dosya); GitHub Releases'ten sunulur. Bu adres her
+# sürümde son yüklemeyi gösterdiği için link değişmez.
+APK_URL="${APK_URL:-https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk}"
 cat > "$ROOT/version.json" <<JSON
 {
   "version": "$VER",
   "versionCode": $VCODE,
   "notes": "$NOTES",
-  "apk": "indir/Genc.apk"
+  "apk": "$APK_URL"
 }
 JSON
 cp "$ROOT/version.json" "$ASSETS/"

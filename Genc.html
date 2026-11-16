@@ -1700,7 +1700,10 @@ var REMOTE_BASE='https://naberlo627-cyber.github.io/genc/';
    gösterilmez, kartlar gömülü verideki duruma göre çizilir. */
 var LIVE_ENABLED=(REMOTE_BASE.indexOf('github.io')<0);
 function updateUrl(){return (window.GENC_APP?REMOTE_BASE:'')+'version.json'}
-function apkUrl(){return (window.GENC_APP?REMOTE_BASE:'')+'indir/Genc.apk'}
+/* APK, Pages'te tutulmaz (ikili dosya); GitHub Releases'te yayınlanır ve bu
+   adres her sürümde son yüklemeyi gösterir. Böylece link hiç değişmez. */
+var APK_URL='https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk';
+function apkUrl(){return APK_URL}
 /* Göreli adresi uygulama modunda uzak sunucuya bağlar; tarayıcıda olduğu gibi kalır. */
 function absUrl(u){
   if(!u)return apkUrl();
@@ -1841,13 +1844,6 @@ function doInstall(){
   if(!deferredPrompt){toast('Tarayıcı menüsünden “Ana ekrana ekle”yi kullanabilirsin.');return}
   deferredPrompt.prompt();
   deferredPrompt.userChoice.then(function(){deferredPrompt=null;if(S.tab==='biletler')renderTickets()});
-}
-/* Android kurulum dosyasını (APK) indirir; yalnızca tarayıcıda sunulur. */
-function getApk(){
-  var a=document.createElement('a');
-  a.href='indir/Genc.apk';a.setAttribute('download','Genc.apk');
-  document.body.appendChild(a);a.click();a.remove();
-  toast('Genç kurulum dosyası indiriliyor.');
 }
 function kmTo(e){
   var R=6371,t=Math.PI/180,dl=(e.lat-S.loc.lat)*t,dn=(e.lng-S.loc.lng)*t;
