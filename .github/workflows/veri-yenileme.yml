@@ -7,6 +7,7 @@ name: Veri yenileme
 # zamanlanmış işler GitHub altyapısında çalışır. Veri değişmezse işlem yapılmaz.
 #
 # Gerekli ayar: repo Ayarlar → Actions → Workflow permissions → "Read and write".
+# (Bu izin kurulum sırasında bir kez verilir; sonrası otomatiktir.)
 
 on:
   schedule:
