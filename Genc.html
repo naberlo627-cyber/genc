@@ -1423,6 +1423,7 @@ function photoFor(e){
 var LIVE={},liveBusy=false,liveT=null;
 function liveBase(){return (window.GENC_APP?REMOTE_BASE:'')+'live'}
 function livePoll(){
+  if(!LIVE_ENABLED)return;
   var ids=EVENTS.filter(function(e){return e.real}).map(function(e){return e.rid}).filter(Boolean).slice(0,60);
   if(!ids.length)return;
   fetch(liveBase()+'?ids='+encodeURIComponent(ids.join(','))).then(function(r){return r.json()}).then(function(j){
@@ -1430,6 +1431,7 @@ function livePoll(){
   }).catch(function(){});
 }
 function livePollOne(e){
+  if(!LIVE_ENABLED)return;
   if(!e||!e.rid||liveInfo(e))return;
   fetch(liveBase()+'?ids='+encodeURIComponent(e.rid)).then(function(r){return r.json()}).then(function(j){
     if(j&&j.status){Object.keys(j.status).forEach(function(k){LIVE[k]=j.status[k]});refreshLive()}
@@ -1462,6 +1464,7 @@ function refreshLive(){
   if(!$('#sheet').hidden&&$('#sheet').dataset.eid){var e=ALL[$('#sheet').dataset.eid];if(e)updateLiveLine(e)}
 }
 function liveLine(e){
+  if(!LIVE_ENABLED)return '';
   var s=liveInfo(e);
   var cls='dot',txt='Canlı durum bekleniyor…';
   if(s){if(s.status==='available'){cls='dot on';txt='Şu an satışta · canlı doğrulandı'}else if(s.status==='soldout'){cls='dot off';txt='Tükendi · canlı doğrulandı'}else txt='Canlı durum alınamadı · son bilinen durum gösteriliyor'}
@@ -1689,7 +1692,13 @@ var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
    (server.py) veya kurulumun yayınlandığı uzak adreste sunulur. Uygulama içinde
    gömülü kopya güncel olmayacağı için denetim uzak adresten yapılır. */
-var REMOTE_BASE='https://work-1-ttmfrnzgnbjhjyrn.prod-runtime.all-hands.dev/';
+/* Kalıcı yayın adresi. Uygulama (APK) ve tarayıcı veriyi buradan çeker.
+   Kendi sunucunuz kapansa da site ayakta kalır: GitHub Pages çökmez. */
+var REMOTE_BASE='https://naberlo627-cyber.github.io/genc/';
+/* Canlı bilet durumu (boş koltuk/satışta mı) yalnızca geliştirme sunucusunda
+   (/live) vardır; Pages'te yoktur. Yokluğu uygulamayı etkilemez: rozet sessizce
+   gösterilmez, kartlar gömülü verideki duruma göre çizilir. */
+var LIVE_ENABLED=(REMOTE_BASE.indexOf('github.io')<0);
 function updateUrl(){return (window.GENC_APP?REMOTE_BASE:'')+'version.json'}
 function apkUrl(){return (window.GENC_APP?REMOTE_BASE:'')+'indir/Genc.apk'}
 /* Göreli adresi uygulama modunda uzak sunucuya bağlar; tarayıcıda olduğu gibi kalır. */
