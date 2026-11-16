@@ -52,11 +52,10 @@ jobs:
           git config user.name "genc-veri-bot"
           git config user.email "genc-veri-bot@users.noreply.github.com"
           git add -A
-          git commit -m "Veri yenileme: $(date -u +'%Y-%m-%d %H:%M UTC')
-
-Otomatik günlük etkinlik verisi güncellemesi.
-
-Co-authored-by: openhands <openhands@all-hands.dev>"
+          MESAJ="Veri yenileme: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git commit -m "$MESAJ" \
+            -m "Otomatik günlük etkinlik verisi güncellemesi." \
+            -m "Co-authored-by: openhands <openhands@all-hands.dev>"
           git push
 
       - name: Sonucu özetle
