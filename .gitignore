@@ -15,3 +15,6 @@ indir/
 
 # Ajan geçici dosyaları (ekran görüntüleri, gözlemler)
 .agent_tmp/
+
+# Statik yayın paketi (tools/build_site.sh üretir)
+dist/
