@@ -298,12 +298,14 @@ Tek işi etkinlik verisini güncel tutmak olan bağımsız bir sistem. Günlük
 çalışır, veriyi kaynaklardan yeniden toplar ve yayına alır; başka iş yapmaz.
 
 - `refresh/refresh.py` — yenileme akışı: topla → zenginleştir → `data/events.json`
-  üret → `Genc.html`'e yedek göm → `sw.js` önbellek sürümünü artır →
-  `version.json` sürümünü artır → `data/refresh_status.json` yaz.
+  üret → `Genc.html`'e yedek göm → `data/refresh_status.json` yaz.
 - `refresh/run.sh` — kabuk sarmalayıcı; cron/systemd/CI bunu çağırır.
 - `refresh/systemd/` — `genc-refresh.service` + `genc-refresh.timer` (her gün
   04:30 TRT, `Persistent=true` ile kaçan çalışmayı telafi eder).
 - `refresh/README.md` — kurulum (systemd ve cron), izleme, sorun giderme.
+
+Kapsam: yenilemenin tek işi veridir; `version.json` (APK sürümü) ve `sw.js`
+(önbellek sürümü) artırmaz. Uygulama veriyi açılışta çektiği için bu gerekmez.
 
 Tasarım ilkeleri: **çökmez** (her adım hata toleranslı, durum dosyası yazılır),
 **eşzamanlılık güvenli** (kilit dosyası), **tekrar çalıştırılabilir** (kısmi

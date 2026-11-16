@@ -21,6 +21,7 @@ import argparse
 import concurrent.futures
 import hashlib
 import json
+import os
 import re
 import time
 import unicodedata
@@ -794,7 +795,9 @@ def main() -> None:
         "events": merged,
     }
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    tmp = OUT.with_suffix(".tmp")
+    tmp.write_text(json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8")
+    os.replace(tmp, OUT)
     priced = [e for e in merged if e.get("price") is not None]
     print(f"✓ {len(merged)} etkinlik yazıldı ({len(priced)} tanesi fiyatlı) → {OUT}")
     for ev in merged[:10]:

@@ -31,9 +31,8 @@
 #   data/events.json    → uygulamanın indirdiği kompakt veri (yayın)
 #   data/refresh_status.json → son çalışma durumu (izleme için)
 #   Genc.html           → gömülü yedek veri (çevrimdışı/APK için)
-#   sw.js               → önbellek sürümü artar (tarayıcı yeni veriyi görsün)
-#   version.json        → yayın sürümü artar (güncelleme şeridi tetiklenir)
 #
-# Uygulama açılışta data/events.json'u çeker; bu yüzden yeni veri için APK'yı
-# yeniden derlemek GEREKMEZ. Yalnızca WebView/APK içindeki gömülü yedek
-# güncellensin isteniyorsa android/build-apk.sh çalıştırılır.
+# Kapsam dışı: version.json (APK sürümü) ve sw.js (önbellek sürümü) yenileme
+# sırasında artmaz. Uygulama veriyi açılışta data/events.json'dan çeker; bu
+# yüzden yeni veri için APK'yı yeniden derlemek GEREKMEZ. Yalnızca WebView/APK
+# içindeki gömülü yedek güncellensin isteniyorsa android/build-apk.sh çalıştırılır.

@@ -9,8 +9,11 @@ Ne yapar (sırayla):
   2. Zenginleştirme: tools/enrich_events.py → açıklama/kadro/kural alanları
   3. Yayın yükü: tools/build_payload.py    → data/events.json (uygulamanın indirdiği dosya)
   4. Gömme     : tools/embed_data.py       → Genc.html içine yedek veri (APK için)
-  5. Önbellek  : sw.js sürümünü artır (tarayıcı eski veriyi göstermesin)
-  6. Durum     : data/refresh_status.json (son çalışma, süre, sayı, hata)
+  5. Durum     : data/refresh_status.json (son çalışma, süre, sayı, hata)
+
+Kapsam dışı: APK sürümü (version.json) ve önbellek sürümü (sw.js) artırmaz.
+Uygulama veriyi her açılışta data/events.json'dan çektiği için yenileme bunlara
+dokunmaz; APK sürümü yalnızca gerçek bir uygulama derlemesiyle artırılır.
 
 Tasarım ilkeleri:
   * Asla çökmez: her adım hataya dayanıklıdır, hata olsa da çalışma kaydı yazılır
@@ -32,7 +35,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import subprocess
 import sys
 import time
@@ -47,7 +49,6 @@ LOCK = ROOT / "refresh" / ".lock"
 LOG_DIR = ROOT / "refresh" / "logs"
 
 CITIES = "İzmir,Ankara,İstanbul,Bursa,Antalya"
-APP_VERSION_FILE = ROOT / "version.json"
 
 
 def log(msg: str) -> None:
@@ -118,38 +119,6 @@ def count_events(path: Path) -> int:
         return 0
 
 
-def bump_sw_cache() -> str:
-    """sw.js önbellek sürümünü bir artırır; tarayıcı yeni veriyi görsün."""
-    sw = ROOT / "sw.js"
-    try:
-        text = sw.read_text(encoding="utf-8")
-    except OSError:
-        return "sw.js yok"
-    m = re.search(r'var CACHE = "genc-v(\d+)";', text)
-    if not m:
-        return "CACHE satırı bulunamadı"
-    new = int(m.group(1)) + 1
-    sw.write_text(re.sub(r'var CACHE = "genc-v\d+";', f'var CACHE = "genc-v{new}";', text, count=1),
-                  encoding="utf-8")
-    return f"genc-v{new}"
-
-
-def bump_version(prev: str | None) -> str:
-    """version.json'u bir üst sürüme çıkarır (yayınlanan veri sürümü)."""
-    try:
-        data = json.loads(APP_VERSION_FILE.read_text(encoding="utf-8"))
-    except Exception:
-        return prev or "?"
-    parts = [int(x) for x in str(data.get("version", "1.0")).split(".") if x.isdigit()]
-    while len(parts) < 3:
-        parts.append(0)
-    parts[2] += 1
-    data["version"] = ".".join(map(str, parts))
-    data["versionCode"] = parts[0] * 10000 + parts[1] * 100 + parts[2]
-    APP_VERSION_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    return data["version"]
-
-
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=200, help="kaynak başına detay sınırı")
@@ -177,9 +146,7 @@ def main() -> int:
 
     try:
         if args.dry_run:
-            log("deneme (dry-run): adımlar çalıştırılmadı")
-            write_status(last_run={"started": started, "mode": "dry-run", "ok": True,
-                                   "events": before, "duration": round(time.time() - started, 1)})
+            log("deneme (dry-run): adımlar çalıştırılmadı, durum dosyasına yazılmadı")
             return 0
 
         for name, cmd in steps:
@@ -202,14 +169,11 @@ def main() -> int:
                                    "events": after, "duration": round(time.time() - started, 1)})
             return 1
 
-        sw = bump_sw_cache()
-        version = bump_version(None)
         cities = json.loads(TICKETS.read_text(encoding="utf-8")).get("cities", [])
         duration = round(time.time() - started, 1)
-        log(f"✓ tamamlandı: {after} etkinlik, {len(cities)} il, sw={sw}, sürüm={version} ({duration}s)")
+        log(f"✓ tamamlandı: {after} etkinlik, {len(cities)} il ({duration}s)")
         write_status(last_run={"started": started, "ok": True, "events": after,
-                               "cities": cities, "sw": sw, "version": version,
-                               "duration": duration},
+                               "cities": cities, "duration": duration},
                      last_success=time.strftime("%Y-%m-%dT%H:%M:%S%z"),
                      last_success_events=after)
         return 0
