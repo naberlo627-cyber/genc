@@ -1692,23 +1692,32 @@ var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
    (server.py) veya kurulumun yayınlandığı uzak adreste sunulur. Uygulama içinde
    gömülü kopya güncel olmayacağı için denetim uzak adresten yapılır. */
-/* Kalıcı yayın adresi. Uygulama (APK) ve tarayıcı veriyi buradan çeker.
-   Kendi sunucunuz kapansa da site ayakta kalır: GitHub Pages çökmez. */
-var REMOTE_BASE='https://naberlo627-cyber.github.io/genc/';
+/* Yayın adresi. Uygulama (APK) ve tarayıcı veriyi buradan çeker.
+   Uygulama sayfayı kendi yayın adresinden açtığı için adres sayfadan türetilir;
+   böylece alan adı değişince (github.io, pages.dev, eu.org) kod değişmez.
+   Kendi sunucunuz kapansa da site ayakta kalır: statik barındırma çökmez. */
+var REMOTE_BASE=(function(){
+  try{
+    var h=location.hostname;
+    if(h && !/^(0\.0\.0\.0|\[?::1\]?)$/.test(h))
+      return location.protocol+'//'+location.host+location.pathname.replace(/[^\/]*$/,'');
+  }catch(e){}
+  return 'https://naberlo627-cyber.github.io/genc/';
+})();
 /* Canlı bilet durumu (boş koltuk/satışta mı) yalnızca geliştirme sunucusunda
-   (/live) vardır; Pages'te yoktur. Yokluğu uygulamayı etkilemez: rozet sessizce
-   gösterilmez, kartlar gömülü verideki duruma göre çizilir. */
-var LIVE_ENABLED=(REMOTE_BASE.indexOf('github.io')<0);
-function updateUrl(){return (window.GENC_APP?REMOTE_BASE:'')+'version.json'}
-/* APK, Pages'te tutulmaz (ikili dosya); GitHub Releases'te yayınlanır ve bu
-   adres her sürümde son yüklemeyi gösterir. Böylece link hiç değişmez. */
+   (/live) vardır; statik barındırmada yoktur. Yokluğu uygulamayı etkilemez:
+   rozet sessizce gösterilmez, kartlar gömülü verideki duruma göre çizilir. */
+var LIVE_ENABLED=(/^(localhost|127\.)/.test(location.hostname)||REMOTE_BASE.indexOf('all-hands.dev')>=0);
+function updateUrl(){return REMOTE_BASE+'version.json'}
+/* APK, statik barındırmada tutulmaz (ikili dosya); GitHub Releases'te yayınlanır
+   ve bu adres her sürümde son yüklemeyi gösterir. Böylece link hiç değişmez. */
 var APK_URL='https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk';
 function apkUrl(){return APK_URL}
-/* Göreli adresi uygulama modunda uzak sunucuya bağlar; tarayıcıda olduğu gibi kalır. */
+/* Göreli adresi yayın adresine bağlar; tarayıcıda da aynı sonucu verir. */
 function absUrl(u){
   if(!u)return apkUrl();
   if(/^https?:\/\//i.test(u))return u;
-  return (window.GENC_APP?REMOTE_BASE:'')+u.replace(/^\.?\//,'');
+  return REMOTE_BASE+u.replace(/^\.?\//,'');
 }
 
 /* Sürüm dizelerini karşılaştırır: a>b için 1, a<b için -1, eşitse 0. */
