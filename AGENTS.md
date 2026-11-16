@@ -163,23 +163,38 @@ PWA dosyaları + geliştirme sunucusu.
 
 ## Yayın (barındırma)
 
-Site **GitHub Pages**'te yayınlanır ve GitHub Actions veriyi yeniler. Kendi
+Site **statik barındırmada** yayınlanır; GitHub Actions veriyi yeniler. Kendi
 sunucunuz gerekmez, çökmez:
 
-- **Adres:** https://naberlo627-cyber.github.io/genc/ (kök `index.html` uygulamayı açar)
-- **Depo:** https://github.com/naberlo627-cyber/genc (açık/public — ücretsiz Pages için zorunlu)
+- **Adresler:**
+  - https://genc.pages.dev (Cloudflare Pages — kalıcı, ücretsiz, temiz adres)
+  - https://naberlo627-cyber.github.io/genc/ (GitHub Pages — yedek; kök `index.html` uygulamayı açar)
+- **Depo:** https://github.com/naberlo627-cyber/genc (açık/public — ücretsiz barındırma için zorunlu)
 - **Kaynak:** `master` dalı, kök dizin. `Genc.html` + `data/events.json` buradan sunulur.
 - **Veri yenileme:** her gün 04:30 TRT'de Actions çalışır, `data/events.json`'u
   günceller ve commit atar. Uygulama açılışta bu dosyayı çeker → yeni veri için
   APK yeniden derlenmez.
-- **APK:** GitHub Releases'ten sunulur (Pages ikili dosya tutmaz):
+- **APK:** GitHub Releases'ten sunulur (statik barındırma ikili dosya tutmaz):
   https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk
-- `REMOTE_BASE` (Genc.html) bu kalıcı adresi gösterir. Uygulama modunda
-  (`window.GENC_APP`) veri, güncelleme ve APK oradan çekilir.
 
-**GitHub Pages'te olmayanlar** (geliştirme sunucusuna özel, uygulamayı etkilemez):
-`/live` (canlı bilet durumu) ve `/upload`. Pages'te `LIVE_ENABLED=false` olur ve
-bu istekler hiç yapılmaz; kartlar gömülü verideki duruma göre çizilir.
+### Adres bağımsızlığı (önemli)
+`REMOTE_BASE` (Genc.html) sabit değildir; **açıldığı adresten türetilir**
+(`location.host` + dizin). Bu yüzden alan adı değişince (github.io → pages.dev →
+eu.org) **kod değişmez**: uygulama veriyi ve sürüm bilgisini hangi adresten
+açıldıysa oradan çeker. APK içinde (`file://`) origin boş olduğu için GitHub
+Pages adresine düşer. `absUrl()` göreli yolları aynı tabana bağlar.
+
+### Cloudflare Pages kurulumu
+Pages, depoyu doğrudan bağlar; her `master` push'unda otomatik yayınlar.
+
+- Proje adı: `genc` → adres `genc.pages.dev`
+- Üretim dalı: `master`, Framework: None, Derleme komutu: boş, Çıktı dizini: `/`
+- `_headers` dosyası önbellek politikasını verir: `Genc.html`, `sw.js`,
+  `version.json`, `data/events.json` tazelenir; `icons/`, `img/` önbellekte kalır.
+
+**Statik barındırmada olmayanlar** (geliştirme sunucusuna özel, uygulamayı etkilemez):
+`/live` (canlı bilet durumu) ve `/upload`. Statik barındırmada `LIVE_ENABLED=false`
+olur ve bu istekler hiç yapılmaz; kartlar gömülü verideki duruma göre çizilir.
 
 ### Actions izni
 İş akışı `contents: write` ister. Depo Ayarlar → Actions → Workflow permissions
