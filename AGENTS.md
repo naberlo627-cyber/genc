@@ -160,6 +160,12 @@ PWA dosyaları + geliştirme sunucusu.
   `onShowFileChooser` (galeri) ile karşılanır.
 - İmzalama anahtarı `android/app/genc-release.jks` yerel geliştirme içindir,
   depoya girmez. Yayın için kendi anahtarınızı üretin.
+- **İmza şemaları.** `signingConfigs.release` hem v1 (JAR) hem v2 imzasını açar
+  (`enableV1Signing`/`enableV2Signing`). v2 tek başına Android 7 öncesi
+  cihazlarda kurulumu "paket ayrıştırılamadı" ile bitirir; `apksigner verify`
+  çıktısında iki satır da `true` olmalıdır.
+- **minSdk 23.** Daha eski telefonlar da desteklenir. `WebViewAssetLoader`
+  (androidx.webkit) bu sürümde de çalışır.
 
 ## Yayın (barındırma)
 
@@ -184,6 +190,21 @@ sunucunuz gerekmez, çökmez:
 eu.org) **kod değişmez**: uygulama veriyi ve sürüm bilgisini hangi adresten
 açıldıysa oradan çeker. APK içinde (`file://`) origin boş olduğu için GitHub
 Pages adresine düşer. `absUrl()` göreli yolları aynı tabana bağlar.
+
+### Türkiye'den erişim ve `.dev` uzantısı
+Türkiye'de bazı ağlarda `.dev` alan adları sorun çıkarabilir: `.dev` **HSTS ön
+yükleme listesindedir** (yalnızca HTTPS'e izin verir, HTTP yedeği yoktur).
+`github.io` ise listede değildir. Bu yüzden `genc.pages.dev` yerine
+`naberlo627-cyber.github.io/genc/` adresi daha geniş uyumluluk sunar.
+
+- Ölçüm (check-host.net Türkiye düğümleri): her iki adres de 200 döner; `.dev`
+  engeli **düğüm düzeyinde yoktur**. Sorun yaşanırsa HSTS/SNI denetimi yapan
+  yerel ağ ya da DNS çözümlemesi olası sebeptir.
+- Kalibrasyon yöntemi: bilinen engelli siteler (ör. roblox.com) düğümlerde
+  "Connection reset" verir; bu, engelin ölçümle ayırt edilmesini sağlar.
+- Uygulama adres bağımsız olduğu için **herhangi bir adres** (github.io dahil)
+  çalışır; veri ve sürüm denetimi o adresten yapılır. Bu yüzden engelli bir
+  uzantıya takılınca alternatif adrese geçmek yeterlidir, kod değişmez.
 
 ### Cloudflare Pages yayını
 Proje **Direct Upload** ile açıldı (Git bağlantısı sonradan eklenemez). Siteyi
@@ -467,9 +488,12 @@ Kaynak notları:
   (`major*10000 + minor*100 + patch`) ve `version.json` üretir.
 - `version.json` (`{version, versionCode, notes, apk}`) güncelleme denetiminin
   kaynağıdır. `build-apk.sh` bunu `assets/www/` içine de kopyalar.
-- Sayfa açılışında `checkUpdate()` (1.5 sn sonra) `version.json`'ı çeker;
-  sunucudaki sürüm `APP_VERSION`'dan büyükse `#upbar` güncelleme şeridi görünür.
-  `cmpVer()` sürümleri sayısal olarak karşılaştırır.
+- Sayfa açılışında `checkUpdate()` (1.5 sn sonra) sürüm bilgisini **iki
+  kaynaktan** okur: açıldığı adres (`REMOTE_BASE`) ve `VERSION_MIRROR` (GitHub
+  Pages). APK içinde `REMOTE_BASE` appassets'e düştüğü ve oradaki kopya hep aynı
+  kaldığı için, tek kaynak okunduğunda güncelleme **hiç görünmüyordu**; uzak
+  ayna bu yüzden şarttır. En yüksek sürüm seçilir, `APP_VERSION`'dan büyükse
+  `#upbar` şeridi görünür. `cmpVer()` sürümleri sayısal olarak karşılaştırır.
 - Şeritteki "Güncelle" (`data-act="update"` → `installUpdate()`): uygulama
   içindeyse `window.GENC_INSTALL(url)` çağrılır, tarayıcıda APK indirilir.
 - `absUrl()` göreli `apk` yolunu uygulama modunda `REMOTE_BASE`'e bağlar;
