@@ -1546,6 +1546,11 @@ function applyRealData(payload){
    derleme gerekmez. Gömülü kopya (GENC_DATA) çevrimdışı/ilk açılış yedeğidir.
    Ağ hatası hiçbir durumda uygulamayı durdurmaz: sessizce yedek veri kalır. */
 var DATA_CACHE='genc.data';
+/* Taze veri kaynağı: her gün Actions'ın güncellediği kopya. Site hangi adresten
+   açılırsa açılsın (pages.dev, github.io, APK) en yeni veri buradan çekilir;
+   böylece veri tazeliği yayın (deploy) adımından bağımsızdır. Aynı adresteysek
+   ikinci istek yapılmaz. CORS her iki tarafta da açıktır. */
+var DATA_MIRROR='https://naberlo627-cyber.github.io/genc/data/events.json';
 function dataUrl(){return absUrl('data/events.json')}
 function cachedData(){
   try{var raw=localStorage.getItem(DATA_CACHE);if(!raw)return null;
@@ -1556,13 +1561,23 @@ function rememberData(d){
 }
 function loadRemoteData(){
   if(!window.fetch)return;
-  fetch(dataUrl(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){
-    if(!d||!d.events||!d.events.length)return;
-    rememberData(d);
-    /* Gömülü/yedek veriden farklıysa ekranı tazele. */
-    if(GENC_ACTIVE&&GENC_ACTIVE.generated_at===d.generated_at)return;
-    if(applyRealData(d))renderAll();
-  }).catch(function(){});
+  var own=dataUrl();
+  var urls=[own];
+  if(DATA_MIRROR!==own)urls.push(DATA_MIRROR);
+  /* İki kaynaktan en yeni veriyi seç: kendi adresimiz ve günlük güncellenen ayna. */
+  Promise.all(urls.map(function(u){
+    return fetch(u,{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null});
+  })).then(function(res){
+    var best=null;
+    res.forEach(function(d){
+      if(!d||!d.events||!d.events.length)return;
+      if(!best||String(d.generated_at||'')>String(best.generated_at||''))best=d;
+    });
+    if(!best)return;
+    rememberData(best);
+    if(GENC_ACTIVE&&GENC_ACTIVE.generated_at===best.generated_at)return;
+    if(applyRealData(best))renderAll();
+  });
 }
 /* Seçili şehre göre etkinlik listesini kurar; tekrarlayan seansları toplar. */
 function rebuildCity(){
