@@ -161,6 +161,43 @@ PWA dosyaları + geliştirme sunucusu.
 - İmzalama anahtarı `android/app/genc-release.jks` yerel geliştirme içindir,
   depoya girmez. Yayın için kendi anahtarınızı üretin.
 
+## Yayın (barındırma)
+
+Site **GitHub Pages**'te yayınlanır ve GitHub Actions veriyi yeniler. Kendi
+sunucunuz gerekmez, çökmez:
+
+- **Adres:** https://naberlo627-cyber.github.io/genc/ (kök `index.html` uygulamayı açar)
+- **Depo:** https://github.com/naberlo627-cyber/genc (açık/public — ücretsiz Pages için zorunlu)
+- **Kaynak:** `master` dalı, kök dizin. `Genc.html` + `data/events.json` buradan sunulur.
+- **Veri yenileme:** her gün 04:30 TRT'de Actions çalışır, `data/events.json`'u
+  günceller ve commit atar. Uygulama açılışta bu dosyayı çeker → yeni veri için
+  APK yeniden derlenmez.
+- **APK:** GitHub Releases'ten sunulur (Pages ikili dosya tutmaz):
+  https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk
+- `REMOTE_BASE` (Genc.html) bu kalıcı adresi gösterir. Uygulama modunda
+  (`window.GENC_APP`) veri, güncelleme ve APK oradan çekilir.
+
+**GitHub Pages'te olmayanlar** (geliştirme sunucusuna özel, uygulamayı etkilemez):
+`/live` (canlı bilet durumu) ve `/upload`. Pages'te `LIVE_ENABLED=false` olur ve
+bu istekler hiç yapılmaz; kartlar gömülü verideki duruma göre çizilir.
+
+### Actions izni
+İş akışı `contents: write` ister. Depo Ayarlar → Actions → Workflow permissions
+→ "Read and write" seçili olmalı (kurulumda bir kez verilir).
+
+### Veri yenilemeyi elle çalıştırma
+```bash
+gh workflow run veri-yenileme.yml --repo naberlo627-cyber/genc
+gh run list --repo naberlo627-cyber/genc --limit 3
+```
+
+### Yeni APK sürümü yayınlama
+```bash
+./android/build-apk.sh                       # indir/Genc.apk üretir
+gh release create v<VER> indir/Genc.apk --repo naberlo627-cyber/genc \
+  --title "Genç v<VER>" --notes "..."
+```
+
 ## Geliştirme komutları
 
 ```bash
