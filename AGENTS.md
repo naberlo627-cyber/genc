@@ -167,13 +167,14 @@ Site **statik barındırmada** yayınlanır; GitHub Actions veriyi yeniler. Kend
 sunucunuz gerekmez, çökmez:
 
 - **Adresler:**
-  - https://genc.pages.dev (Cloudflare Pages — kalıcı, ücretsiz, temiz adres)
-  - https://naberlo627-cyber.github.io/genc/ (GitHub Pages — yedek; kök `index.html` uygulamayı açar)
+  - **https://genc.pages.dev** — Cloudflare Pages (ASIL adres; küresel CDN, çökmez)
+  - https://naberlo627-cyber.github.io/genc/ — GitHub Pages (yedek + veri aynası)
 - **Depo:** https://github.com/naberlo627-cyber/genc (açık/public — ücretsiz barındırma için zorunlu)
 - **Kaynak:** `master` dalı, kök dizin. `Genc.html` + `data/events.json` buradan sunulur.
 - **Veri yenileme:** her gün 04:30 TRT'de Actions çalışır, `data/events.json`'u
-  günceller ve commit atar. Uygulama açılışta bu dosyayı çeker → yeni veri için
-  APK yeniden derlenmez.
+  günceller ve commit atar. Uygulama açılışta **iki kaynaktan** (kendi adresi +
+  GitHub aynası) veriyi çeker ve `generated_at`'i yeni olanı seçer. Böylece
+  Pages kopyası eski kalsa bile etkinlik verisi her gün tazedir.
 - **APK:** GitHub Releases'ten sunulur (statik barındırma ikili dosya tutmaz):
   https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk
 
@@ -184,13 +185,23 @@ eu.org) **kod değişmez**: uygulama veriyi ve sürüm bilgisini hangi adresten
 açıldıysa oradan çeker. APK içinde (`file://`) origin boş olduğu için GitHub
 Pages adresine düşer. `absUrl()` göreli yolları aynı tabana bağlar.
 
-### Cloudflare Pages kurulumu
-Pages, depoyu doğrudan bağlar; her `master` push'unda otomatik yayınlar.
+### Cloudflare Pages yayını
+Proje **Direct Upload** ile açıldı (Git bağlantısı sonradan eklenemez). Siteyi
+elle yayınlama:
 
-- Proje adı: `genc` → adres `genc.pages.dev`
-- Üretim dalı: `master`, Framework: None, Derleme komutu: boş, Çıktı dizini: `/`
-- `_headers` dosyası önbellek politikasını verir: `Genc.html`, `sw.js`,
-  `version.json`, `data/events.json` tazelenir; `icons/`, `img/` önbellekte kalır.
+```bash
+bash tools/build_site.sh                    # dist/ paketini hazırlar
+npx wrangler pages deploy dist --project-name=genc --branch=master --commit-dirty=true
+```
+
+`wrangler.jsonc` Pages için `pages_build_output_dir: ./dist` tanımlar.
+
+Veri taze kalır çünkü uygulama açılışta **iki kaynaktan** (kendi adresi + GitHub
+aynası) veriyi çeker ve en yenisini seçer; günlük veri için yeniden yayın
+gerekmez. Yalnızca kod/HTML değişince yukarıdaki komutla yayınlanır.
+
+`_headers` dosyası önbellek politikasını verir: `Genc.html`, `sw.js`,
+`version.json`, `data/events.json` tazelenir; `icons/`, `img/` önbellekte kalır.
 
 **Statik barındırmada olmayanlar** (geliştirme sunucusuna özel, uygulamayı etkilemez):
 `/live` (canlı bilet durumu) ve `/upload`. Statik barındırmada `LIVE_ENABLED=false`
