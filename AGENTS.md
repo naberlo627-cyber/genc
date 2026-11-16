@@ -173,8 +173,10 @@ Site **statik barındırmada** yayınlanır; GitHub Actions veriyi yeniler. Kend
 sunucunuz gerekmez, çökmez:
 
 - **Adresler:**
-  - **https://genc.pages.dev** — Cloudflare Pages (ASIL adres; küresel CDN, çökmez)
-  - https://naberlo627-cyber.github.io/genc/ — GitHub Pages (yedek + veri aynası)
+  - **https://naberlo627-cyber.github.io/genc/** — GitHub Pages (**ASIL adres**;
+    Türkiye'den erişilebilir, veri aynası da burasıdır)
+  - https://genc.pages.dev — Cloudflare Pages (küresel CDN; **Türkiye'de bazı
+    ağlarda engelli** olabiliyor, bkz. aşağıdaki `.dev` notu)
 - **Depo:** https://github.com/naberlo627-cyber/genc (açık/public — ücretsiz barındırma için zorunlu)
 - **Kaynak:** `master` dalı, kök dizin. `Genc.html` + `data/events.json` buradan sunulur.
 - **Veri yenileme:** her gün 04:30 TRT'de Actions çalışır, `data/events.json`'u
@@ -191,20 +193,31 @@ eu.org) **kod değişmez**: uygulama veriyi ve sürüm bilgisini hangi adresten
 açıldıysa oradan çeker. APK içinde (`file://`) origin boş olduğu için GitHub
 Pages adresine düşer. `absUrl()` göreli yolları aynı tabana bağlar.
 
-### Türkiye'den erişim ve `.dev` uzantısı
-Türkiye'de bazı ağlarda `.dev` alan adları sorun çıkarabilir: `.dev` **HSTS ön
-yükleme listesindedir** (yalnızca HTTPS'e izin verir, HTTP yedeği yoktur).
-`github.io` ise listede değildir. Bu yüzden `genc.pages.dev` yerine
-`naberlo627-cyber.github.io/genc/` adresi daha geniş uyumluluk sunar.
+### Türkiye'den erişim ve `.dev` uzantısı (ÖNEMLİ)
+**Türkiye'de `genc.pages.dev` bazı ağlarda açılmıyor; `github.io` açılıyor.**
+Bu yüzden **asıl adres GitHub Pages'tir**: `naberlo627-cyber.github.io/genc/`.
 
-- Ölçüm (check-host.net Türkiye düğümleri): her iki adres de 200 döner; `.dev`
-  engeli **düğüm düzeyinde yoktur**. Sorun yaşanırsa HSTS/SNI denetimi yapan
-  yerel ağ ya da DNS çözümlemesi olası sebeptir.
-- Kalibrasyon yöntemi: bilinen engelli siteler (ör. roblox.com) düğümlerde
-  "Connection reset" verir; bu, engelin ölçümle ayırt edilmesini sağlar.
-- Uygulama adres bağımsız olduğu için **herhangi bir adres** (github.io dahil)
-  çalışır; veri ve sürüm denetimi o adresten yapılır. Bu yüzden engelli bir
-  uzantıya takılınca alternatif adrese geçmek yeterlidir, kod değişmez.
+Ölçüm sonuçları:
+- DNS çözümlemesi Türkiye düğümlerinden **sorunsuzdur** (`genc.pages.dev` →
+  172.66.x.x). Yani sorun DNS değil, **ağ seviyesinde engeldir**.
+- İki adres **farklı sunucularda** durur: `pages.dev` → Cloudflare
+  (172.66.x.x), `github.io` → GitHub/Fastly (185.199.x.x). Engel Cloudflare
+  tarafına denk gelir; GitHub Pages etkilenmez.
+- `.dev` ayrıca **HSTS ön yükleme listesindedir** (yalnızca HTTPS, HTTP yedeği
+  yok). `github.io` listede değildir. Bu, `.dev` adreslerini kısıtlı ağlarda
+  daha kırılgan yapar.
+- Kalibrasyon: bilinen engelli siteler (ör. roblox.com) düğümlerde "Connection
+  reset" verir; bu yöntem engelin ölçümle ayırt edilmesini sağlar.
+
+**Uygulama adres bağımsızdır** (`REMOTE_BASE` açıldığı adresten türetilir;
+içinde sabit `pages.dev` yoktur). Bu yüzden:
+- `github.io` adresinden açılırsa veri ve sürüm denetimi oradan yapılır — kod
+  değişmez.
+- APK içinde (`file://`) origin boş olduğu için zaten `github.io`'ya düşer.
+- Yeni bir alan adı bağlanırsa (ör. ücretsiz `eu.org`) yine kod değişmez.
+
+Bir adres engellenirse **kullanıcıya alternatif adresi verin**; uygulamanın
+kendisinde değişiklik gerekmez.
 
 ### Cloudflare Pages yayını
 Proje **Direct Upload** ile açıldı (Git bağlantısı sonradan eklenemez). Siteyi
