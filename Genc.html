@@ -2156,16 +2156,15 @@ function thumbHTML(e){
    kendi kartlarıyla aynı dili kullanır, "Reklam" etiketi taşır, tam ekran
    kaplamaz ve kullanıcıyı rahatsız etmez. */
 var ADS=[
-  {id:'ad-sponsor-bilet',kind:'card',brand:'Biletix',title:'Bu haftanın konser biletleri',text:'Kardelen ve Ege Caz Akşamı için erken alım indirimi',cta:'İncele',art:'art-concert'},
-  {id:'ad-sponsor-kahve',kind:'card',brand:'Kahve Durağı',title:'Gösteri öncesi bir kahve',text:'Etkinlik bileti gösterene ikinci kahve bizden',cta:'Kupon',art:'art-standup'},
-  {id:'ad-sponsor-tur',kind:'row',brand:'Gezi Turu',title:'Hafta sonu kaçamağı',text:'Efes ve Şirince turlarında %15 indirim',cta:'İncele',art:'art-tour'},
-  {id:'ad-sponsor-video',kind:'video',brand:'Genç+',title:'Reklamsız Genç+',text:'Aylık 29,90 ₺ · istediğin zaman iptal',cta:'Dene',art:'art-concert'}
+  /* Sponsor alanları boş: uygulamada sahte/örnek reklam gösterilmez.
+     Gerçek bir sponsor ekleneceğinde aynı biçimde satır eklemek yeterli. */
 ];
 function adFor(kind,idx){
   var m=ADS.filter(function(a){return a.kind===kind});
   return m[(idx||0)%m.length];
 }
 function adCardHTML(a){
+  if(!a)return '';
   return '<button class="adcard" type="button" data-ad="'+a.id+'">'+
     '<span class="adthumb"><svg class="art" aria-hidden="true"><use href="#'+a.art+'"/></svg></span>'+
     '<span class="adbody"><strong>'+esc(a.title)+'</strong><p>'+esc(a.text)+'</p></span>'+
@@ -2173,6 +2172,7 @@ function adCardHTML(a){
     '<span class="adcta">'+esc(a.cta)+ic('chev-r')+'</span></button>';
 }
 function adRowHTML(a){
+  if(!a)return '';
   return '<button class="adrow" type="button" data-ad="'+a.id+'">'+
     '<svg class="art" aria-hidden="true"><use href="#'+a.art+'"/></svg><span class="adscrim"></span>'+
     '<span class="adtxt"><strong>'+esc(a.title)+'</strong><span>'+esc(a.text)+'</span></span>'+
@@ -2180,6 +2180,7 @@ function adRowHTML(a){
     '<span class="adlabel">Reklam</span></button>';
 }
 function adVideoHTML(a){
+  if(!a)return '';
   return '<div class="vad" role="group" aria-label="Reklam">'+
     '<span class="adtag">Reklam</span>'+
     '<button class="adbody" type="button" data-ad="'+a.id+'"><strong>'+esc(a.title)+'</strong><p>'+esc(a.brand)+' · '+esc(a.text)+'</p></button>'+
@@ -3277,9 +3278,6 @@ function share(e){
 }
 document.addEventListener('click',function(ev){
   var t=ev.target;
-  if(t.closest('[data-act="adclose"]')){S.adOff=true;paintVideoAd();return}
-  var ad=t.closest('[data-ad]');
-  if(ad){toast('Sponsor bağlantısı: '+(ad.getAttribute('data-ad')||'').replace('ad-sponsor-','')+' (örnek)');return}
   if(t.closest('#moreBtn')){S.showAll=!S.showAll;renderBrowse();return}
   /* Etkinlikler bölümü: hızlı kategori seçimi ve filtre sayfası. */
   var evc=t.closest('[data-evcat]');
