@@ -1551,6 +1551,10 @@ var DATA_CACHE='genc.data';
    böylece veri tazeliği yayın (deploy) adımından bağımsızdır. Aynı adresteysek
    ikinci istek yapılmaz. CORS her iki tarafta da açıktır. */
 var DATA_MIRROR='https://naberlo627-cyber.github.io/genc/data/events.json';
+/* Sürüm bilgisi de uzaktan okunur. APK içinde REMOTE_BASE appassets'e düşer ve
+   orada gömülü (hep aynı) version.json vardır; o yüzden güncelleme hiç görünmezdi.
+   Aynı adresteysek kendi version.json'umuz kullanılır. */
+var VERSION_MIRROR='https://naberlo627-cyber.github.io/genc/version.json';
 function dataUrl(){return absUrl('data/events.json')}
 function cachedData(){
   try{var raw=localStorage.getItem(DATA_CACHE);if(!raw)return null;
@@ -1562,8 +1566,11 @@ function rememberData(d){
 function loadRemoteData(){
   if(!window.fetch)return;
   var own=dataUrl();
-  var urls=[own];
+  /* APK içinde (appassets) gömülü data/ yoktur; boşuna istek atmayalım. */
+  var urls=[];
+  if(!/^https:\/\/appassets\./.test(own))urls.push(own);
   if(DATA_MIRROR!==own)urls.push(DATA_MIRROR);
+  if(!urls.length)return;
   /* İki kaynaktan en yeni veriyi seç: kendi adresimiz ve günlük güncellenen ayna. */
   Promise.all(urls.map(function(u){
     return fetch(u,{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null});
@@ -1701,7 +1708,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.24';
+var APP_VERSION='1.25';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -1748,8 +1755,21 @@ function cmpVer(a,b){
 /* Yeni sürüm var mı diye sorar. Bulursa sayfadaki güncelleme şeridini gösterir. */
 function checkUpdate(){
   if(!window.fetch)return;
-  fetch(updateUrl(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(d){
-    if(!d||!d.version)return;
+  var own=updateUrl();
+  var urls=[];
+  /* APK içinde gömülü version.json hep aynı kalır; uzak kaynağı da sor. */
+  if(!/^https:\/\/appassets\./.test(own))urls.push(own);
+  if(VERSION_MIRROR!==own)urls.push(VERSION_MIRROR);
+  if(!urls.length)urls.push(VERSION_MIRROR);
+  Promise.all(urls.map(function(u){
+    return fetch(u,{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null});
+  })).then(function(res){
+    var d=null;
+    res.forEach(function(x){
+      if(!x||!x.version)return;
+      if(!d||cmpVer(x.version,d.version)>0)d=x;
+    });
+    if(!d)return;
     window.GENC_LATEST=d;
     if(cmpVer(d.version,APP_VERSION)>0){
       var bar=$('#upbar');
