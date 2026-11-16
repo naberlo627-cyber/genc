@@ -1,0 +1,14 @@
+[Unit]
+Description=Genç veri yenileme (etkinlik verisini güncelle)
+Documentation=file:///workspace/project/refresh/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/workspace/project
+ExecStart=/workspace/project/refresh/run.sh
+# Ağ yoksa veya kaynak yavaşsa erken pes etme.
+TimeoutStartSec=3600
+# Yenileme başarısız olsa da bir sonraki zamanlanmış çalışma devam etsin.
+SuccessExitStatus=0

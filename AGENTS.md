@@ -106,9 +106,15 @@ PWA dosyaları + geliştirme sunucusu.
   (kaynak başına detay sınırı). Biletinial'ın "İstanbul Avrupa/Anadolu" ayrımı
   `norm_city()` ile tek "İstanbul" iline indirgenir.
 - `tools/embed_data.py` — `data/tickets.json` içeriğini `Genc.html` içindeki
-  `var GENC_DATA=...;` satırına gömer. Veri yoksa `null` kalır ve uygulama örnek
-  veriyle çalışır. `android/build-apk.sh` bu adımı her derlemede çalıştırır;
+  `var GENC_DATA=...;` satırına gömer. Bu gömülü kopya artık **yedektir**
+  (çevrimdışı/ilk açılış ve APK); uygulama normalde `data/events.json`'u
+  sunucudan çeker. `android/build-apk.sh` bu adımı her derlemede çalıştırır;
   `COLLECT=1` verilirse önce taze veri toplanır.
+- `tools/build_payload.py` — `data/tickets.json`'u (girintili) ağ için kompakt
+  `data/events.json`'a çevirir. Uygulamanın çalışma anında indirdiği dosya budur.
+- `data/events.json` — uygulamanın indirdiği yayın verisi. Günlük yenileme
+  yalnızca bu dosyayı değiştirir; bu yüzden yeni veri için APK/HTML yeniden
+  derlemek **gerekmez**.
 - `data/tickets.json` — toplanan gerçek etkinlik/fiyat verisi (uygulamaya gömülür).
   Her etkinlik detay alanları da taşır: `description` (açıklama), `cast`
   (`{name,role}` listesi), `runtime` (dakika), `genres`/`genre_label`, `age`
@@ -274,12 +280,49 @@ verisini gösterir. Akış:
    **gerçek fiyatı** taşır. Aynı etkinliği (başlık+mekan+tarih) satan kaynaklar
    `dedupe_and_cheapest` ile birleştirilir; `price_by_source`, `cheapest_source`
    alanları üretilir ve **en ucuz kaynak** seçilir.
-2. `python3 tools/embed_data.py` → veri `Genc.html` içindeki `GENC_DATA`'ya gömülür.
-3. Açılışta `applyRealData()` `EVENTS` dizisini gerçek kayıtlarla değiştirir.
+2. `python3 tools/build_payload.py` → `data/events.json` (uygulamanın indirdiği
+   kompakt veri) ve `python3 tools/embed_data.py` → veri `Genc.html` içindeki
+   `GENC_DATA`'ya **yedek** olarak gömülür.
+3. Açılışta `applyRealData()` önce `localStorage` önbelleğini, yoksa gömülü
+   `GENC_DATA`'yı gösterir; ardından `loadRemoteData()` `data/events.json`'u
+   sunucudan çeker ve farklıysa ekranı tazeler. Ağ hatası sessizce yutulur,
+   uygulama son bilinen veriyle çalışmaya devam eder.
    Gerçek kayıtlarda detay sayfası "Bileti satın al" gösterir ve
    `openReal()` ile **satıcının gerçek bilet sayfası** açılır (uygulama ödeme
    almaz). Birden çok kaynak eşleşirse fiyat "… ₺ · en ucuz" ve not
    "En ucuz: <kaynak> · <kaynaklar> karşılaştırıldı" olur.
+
+## Veri yenileme servisi (`refresh/`)
+
+Tek işi etkinlik verisini güncel tutmak olan bağımsız bir sistem. Günlük
+çalışır, veriyi kaynaklardan yeniden toplar ve yayına alır; başka iş yapmaz.
+
+- `refresh/refresh.py` — yenileme akışı: topla → zenginleştir → `data/events.json`
+  üret → `Genc.html`'e yedek göm → `sw.js` önbellek sürümünü artır →
+  `version.json` sürümünü artır → `data/refresh_status.json` yaz.
+- `refresh/run.sh` — kabuk sarmalayıcı; cron/systemd/CI bunu çağırır.
+- `refresh/systemd/` — `genc-refresh.service` + `genc-refresh.timer` (her gün
+  04:30 TRT, `Persistent=true` ile kaçan çalışmayı telafi eder).
+- `refresh/README.md` — kurulum (systemd ve cron), izleme, sorun giderme.
+
+Tasarım ilkeleri: **çökmez** (her adım hata toleranslı, durum dosyası yazılır),
+**eşzamanlılık güvenli** (kilit dosyası), **tekrar çalıştırılabilir** (kısmi
+veri yayına alınmaz, başarısızsa önceki veri korunur), **sessizce bozmaz**
+(`--min-events` altındaysa yeni veri reddedilir).
+
+Çalıştırma ve izleme:
+
+```bash
+./refresh/run.sh                     # elle yenileme
+python3 refresh/refresh.py --dry-run # akış denetimi (toplamadan)
+cat data/refresh_status.json         # son çalışma: ok, etkinlik sayısı, süre
+tail -f refresh/logs/refresh.log     # çalışma günlüğü
+systemctl list-timers genc-refresh.timer   # systemd ile sonraki çalışma
+```
+
+Uygulama veriyi çalışma anında çektiği için **günlük veri yenilemesi APK
+derlemesi gerektirmez**. Gömülü yedek (APK içi) güncellensin isteniyorsa
+`./android/build-apk.sh` çalıştırılır.
 
 Kaynak notları:
 

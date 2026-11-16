@@ -1,0 +1,20 @@
+{
+ "last_run": {
+  "started": 1794810229.3206973,
+  "ok": true,
+  "events": 405,
+  "cities": [
+   "Ankara",
+   "Antalya",
+   "Bursa",
+   "İstanbul",
+   "İzmir"
+  ],
+  "sw": "genc-v34",
+  "version": "1.23.1",
+  "duration": 69.4
+ },
+ "updated_at": "2026-11-16T06:24:58+0000",
+ "last_success": "2026-11-16T06:24:58+0000",
+ "last_success_events": 405
+}

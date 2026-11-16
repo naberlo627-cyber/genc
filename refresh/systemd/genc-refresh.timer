@@ -1,0 +1,15 @@
+[Unit]
+Description=Genç veri yenileme zamanlayıcısı (her gün 04:30)
+
+[Timer]
+# Her gün 04:30 (Türkiye saati).
+OnCalendar=*-*-* 04:30:00
+Timezone=Europe/Istanbul
+# Makine kapalı olduğu için kaçan çalışmayı açılışta telafi et.
+Persistent=true
+# Çalışma bittikten 5 dk sonra bir sonraki pencerede tekrar denenebilir.
+AccuracySec=5min
+RandomizedDelaySec=10min
+
+[Install]
+WantedBy=timers.target
