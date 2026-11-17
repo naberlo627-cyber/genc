@@ -2083,6 +2083,12 @@ function scheduleNativeNotify(t){
   }catch(e){}
 }
 function cancelNativeNotify(id){if(!window.GENC_NOTIFY)return;try{window.GENC_NOTIFY.cancel(id)}catch(e){}}
+/* Açılışta kurulu hatırlatıcıları native tarafa yeniden yaz. Alarmlar cihaz
+   yeniden başlatılınca kaybolur; bu yüzden her açılışta tazelenir. */
+function syncNativeNotify(){
+  if(!window.GENC_NOTIFY)return;
+  S.tickets.forEach(function(t){if(t.remind)scheduleNativeNotify(t)});
+}
 /* Yaklaşan, henüz bildirilmemiş hatırlatıcıları gösterir. */
 function notifyTick(){
   if(!S.notify.on)return;
@@ -4252,7 +4258,7 @@ setTimeout(checkUpdate,1500);
 /* Canlı durumu çek ve dakikada bir tazele (hata olsa da uygulama çalışır). */
 liveStart();setTimeout(livePoll,800);
 /* Bilet hatırlatıcıları: açılışta ve dakikada bir denetle. */
-setTimeout(notifyTick,1200);
+setTimeout(function(){syncNativeNotify();notifyTick()},1200);
 setInterval(function(){if(S.loggedIn)notifyTick()},60000);
 /* Videolar geçici kapalıysa menü butonunu gizle. */
 if(!VIDEO_ON){var nv=$('#nav-videolar');if(nv)nv.hidden=true}

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             "https://appassets.androidplatform.net/assets/www/Genc.html";
     private static final int REQ_CAMERA = 4711;
     private static final int REQ_LOCATION = 4712;
+    private static final int REQ_NOTIFY = 4713;
 
     private WebView web;
     private ValueCallback<Uri[]> filePathCallback;
@@ -84,8 +85,13 @@ public class MainActivity extends AppCompatActivity {
         web = new WebView(this);
         setContentView(web);
 
+        // Bildirim kanalını hazırla (Android 8+). Kurulu hatırlatıcılar için.
+        NotifyScheduler.ensureChannel(this);
+
         // Güncelleme köprüsü: sayfa yeni APK adresini buraya iletir.
         web.addJavascriptInterface(new UpdateBridge(), "GencUpdate");
+        // Bildirim köprüsü: bilet hatırlatıcılarını native alarmlara bağlar.
+        web.addJavascriptInterface(new NotifyBridge(), "GENC_NOTIFY");
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -178,6 +184,33 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /* --- bildirim köprüsü ---
+       Sayfa, bilet hatırlatıcılarını buraya iletir. Alarmlar native kurulur; ilk
+       kurulumda Android 13+ için bildirim izni istenir. */
+    private class NotifyBridge {
+        @JavascriptInterface
+        public void schedule(String id, String title, String venue, long atMs) {
+            if (atMs <= System.currentTimeMillis()) return;
+            runOnUiThread(() -> {
+                ensureNotifyPermission();
+                NotifyScheduler.schedule(MainActivity.this, id, title, venue, atMs);
+            });
+        }
+
+        @JavascriptInterface
+        public void cancel(String id) {
+            runOnUiThread(() -> NotifyScheduler.cancel(MainActivity.this, id));
+        }
+    }
+
+    /* Bildirim izni (Android 13+). İzin verilirse kurulu alarmlar tazelenir. */
+    private void ensureNotifyPermission() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) return;
+        requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQ_NOTIFY);
+    }
+
     private void downloadAndInstall(String url) {
         File dir = new File(getCacheDir(), "updates");
         if (!dir.exists() && !dir.mkdirs()) return;
@@ -233,6 +266,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int code, String[] permissions, int[] results) {
         super.onRequestPermissionsResult(code, permissions, results);
+        if (code == REQ_NOTIFY) {
+            if (results.length > 0 && results[0] == PackageManager.PERMISSION_GRANTED) {
+                // İzin yeni verildi; kurulu hatırlatıcıların kanalı hazır olsun.
+                NotifyScheduler.ensureChannel(this);
+            }
+            return;
+        }
         if (code == REQ_LOCATION && pendingGeoCallback != null) {
             boolean granted = false;
             for (int r : results) if (r == PackageManager.PERMISSION_GRANTED) granted = true;

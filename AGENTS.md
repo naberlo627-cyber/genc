@@ -723,10 +723,21 @@ cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
   ekranını açar); kapalıysa `Genc.html?bilet=<id>` ile açar.
 - Bildirim değişikliklerinde `CACHE` adını yükseltmeyi unutma (şu an `genc-v42`).
 
-### Android (APK) — planlanan
-Tarayıcı bildirimi sayfa kapalıyken her zaman garanti değildir. APK'da native
-`AlarmManager` + `NotificationManager` ile kurulacak; JS tarafı hazırdır:
-`window.GENC_NOTIFY.schedule(id,title,venue,atMs)` ve `.cancel(id)` çağrıları
-`scheduleNativeNotify()`/`cancelNativeNotify()` içinden yapılır ve köprü yoksa
-sessizce atlanır. `MainActivity`'ye bu köprünün ve `POST_NOTIFICATIONS` izninin
-eklenmesi gerekir.
+### Android (APK)
+- Tarayıcı bildirimi sayfa kapalıyken her zaman garanti değildir; APK'da native
+  alarm kullanılır.
+- `NotifyScheduler.java`: `AlarmManager.setExactAndAllowWhileIdle` ile hatırlatıcı
+  zamanına alarm kurar; alarm çalınca `NotifyScheduler$Receiver` bildirimi gösterir
+  (uygulama kapalıyken de çalışır). Kurulu alarmlar `genc_notify` tercihinde JSON
+  olarak tutulur.
+- JS köprüsü `window.GENC_NOTIFY` (`MainActivity.NotifyBridge`):
+  `schedule(id,title,venue,atMs)` ve `cancel(id)`. JS tarafındaki
+  `scheduleNativeNotify()`/`cancelNativeNotify()` bu köprüyü kullanır; köprü yoksa
+  (tarayıcı) sessizce atlanır. `syncNativeNotify()` her açılışta alarmları tazeler
+  (cihaz yeniden başlatılınca düşerler).
+- Android 13+ `POST_NOTIFICATIONS` izni ilk `schedule` çağrısında istenir;
+  `SCHEDULE_EXACT_ALARM` tam zamanlı alarm için manifest'te tanımlı (izin yoksa
+  yaklaşık zamanlıya düşülür).
+- Bildirim küçük simgesi `res/drawable/ic_notify.xml`; kanal `genc_bilet`.
+- Derleme: `android/setup-toolchain.sh` (JDK 21 + SDK 34 + Gradle 8.7), sonra
+  `android/build-apk.sh` → `indir/Genc.apk`.
