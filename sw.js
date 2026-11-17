@@ -1,5 +1,5 @@
 /* Genç - çevrimdışı desteği ve hızlı açılış için servis çalışanı. */
-var CACHE = "genc-v41";
+var CACHE = "genc-v42";
 var ASSETS = [
   "./",
   "./Genc.html",
@@ -107,4 +107,24 @@ self.addEventListener("fetch", function (e) {
     return;
   }
   e.respondWith(staleWhileRevalidate(req));
+});
+
+/* Bilet hatırlatıcısı: bildirime dokununca uygulamayı ilgili bilete aç.
+   Uygulama zaten açıksa var olan pencereye mesaj gönderir ve öne alır. */
+self.addEventListener("notificationclick", function (e) {
+  e.notification.close();
+  var data = e.notification.data || {};
+  var target = "./Genc.html" + (data.ticket ? "?bilet=" + encodeURIComponent(data.ticket) : "");
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(function (list) {
+      for (var i = 0; i < list.length; i++) {
+        var c = list[i];
+        if (c.url.indexOf("Genc.html") !== -1 && "focus" in c) {
+          c.postMessage({ type: "notify-open", ticket: data.ticket || "" });
+          return c.focus();
+        }
+      }
+      if (self.clients.openWindow) return self.clients.openWindow(target);
+    })
+  );
 });

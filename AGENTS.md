@@ -683,3 +683,50 @@ maskele (`sed -E "s/${GHT}/<token>/g"`).
   hâlde kurulu PWA eski dosyaları önbellekten sunmaya devam eder.
 - `android/app/src/main/assets/www/` altındaki kopyalar `build-apk.sh` ile
   senkronlanır; elle düzenleme yapılmaz.
+
+## Bildirimler (bilet hatırlatıcıları) — 2026-11
+
+Barındırma statiktir; sunucu/push altyapısı yoktur. Bu yüzden hatırlatıcılar
+cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
+
+### Veri modeli
+- `S.notify = {on:bool, lead:dakika}` — genel bildirim açık/kapalı ve varsayılan
+  öncül süre. `NOTIFY_LEADS = [15,30,60,120,1440]` (1440 = 1 gün).
+- Her bilette: `t.remind` (bool), `t.lead` (dakika), `t.notified` (son bildirim
+  damgası, ms). Bilet alınınca `armTicketNotify()` varsayılanı uygular.
+- Kalıcılık `persist()`/`restore()` içinde `notify` alanı ile taşınır
+  (`localStorage` anahtarı `genc.v1`).
+
+### Akış
+- `eventDate(e)` etkinlik başlangıcını, `remindAt(t)` = etkinlik − `lead` anını verir.
+- `notifyTick()` açılışta ve **dakikada bir** çalışır (`setInterval`, yalnızca
+  giriş yapılmışsa). Zamanı gelen (son 2 saat içinde, bir kez) hatırlatıcılar
+  `showReminder()` ile gösterilir.
+- `showReminder()`: izin varsa service worker üzerinden `showNotification`
+  (sekme kapalıyken de görünür), yoksa uygulama içi `toast`.
+- `enableNotify()` `Notification.requestPermission()` ister; `denied` ise
+  ayar ekranında "engelli" uyarısı çıkar ve adres çubuğundan açması söylenir.
+- `disableNotify()` tüm biletlerin hatırlatıcısını kapatır.
+
+### Arayüz
+- Profil > **Bildirimler** (`data-act="notify"` → `notifySettings()`): aç/kapa
+  anahtarı, öncül süre çipleri (`data-act="setlead"`), bilet listesi ve her bilet
+  için anahtar (`data-act="remind" data-tk="..."`).
+- Bilet kartında **Hatırlat / Hatırlatıcı açık** düğmesi.
+- Ayar sayfası açıkken değişiklik yapılınca `refreshNotifySheet()` yerinde tazeler.
+  Eylemler global tıklama dağıtıcısında (`data-act` switch) işlenir; sayfaya
+  doğrudan dinleyici eklenmez.
+
+### Service worker
+- `sw.js` `notificationclick` işler: uygulama açıksa pencereyi odaklar ve
+  `postMessage({type:'notify-open',ticket})` gönderir (uygulama ilgili biletin QR
+  ekranını açar); kapalıysa `Genc.html?bilet=<id>` ile açar.
+- Bildirim değişikliklerinde `CACHE` adını yükseltmeyi unutma (şu an `genc-v42`).
+
+### Android (APK) — planlanan
+Tarayıcı bildirimi sayfa kapalıyken her zaman garanti değildir. APK'da native
+`AlarmManager` + `NotificationManager` ile kurulacak; JS tarafı hazırdır:
+`window.GENC_NOTIFY.schedule(id,title,venue,atMs)` ve `.cancel(id)` çağrıları
+`scheduleNativeNotify()`/`cancelNativeNotify()` içinden yapılır ve köprü yoksa
+sessizce atlanır. `MainActivity`'ye bu köprünün ve `POST_NOTIFICATIONS` izninin
+eklenmesi gerekir.

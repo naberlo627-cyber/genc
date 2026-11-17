@@ -114,6 +114,21 @@ svg.ic.f{fill:currentColor}
 .sw::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .15s}
 .sw[aria-checked="true"]{background:var(--brand)}
 .sw[aria-checked="true"]::after{transform:translateX(20px)}
+.sw.sm{width:42px;height:25px;border-radius:13px}
+.sw.sm::after{width:19px;height:19px}
+.sw.sm[aria-checked="true"]::after{transform:translateX(17px)}
+.nrow{display:flex;align-items:center;gap:12px;margin:8px 0;padding:13px 14px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line)}
+.nrow.off{opacity:.6}
+.nrow>svg{width:22px;height:22px;color:var(--brand);flex:none}
+.nrow>span{flex:1;min-width:0}
+.nlabel{display:flex;flex-direction:column;gap:2px;min-width:0}
+.nlabel strong{font-size:15px;overflow-wrap:anywhere}
+.nlabel small{color:var(--mute);font-size:12.5px;overflow-wrap:anywhere}
+.ndone{color:var(--mute);font-size:12.5px;font-weight:700;flex:none}
+.nhelp{margin:4px 0 0;color:var(--mute);font-size:13px;line-height:1.5}
+.leadrow{display:flex;flex-wrap:wrap;gap:8px;padding:2px 0 6px}
+.lchip{height:40px;padding:0 16px;border-radius:20px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:600;font-size:14px}
+.lchip.on{background:var(--brand);color:var(--on-brand);box-shadow:none}
 .picks{display:flex;flex-wrap:wrap;gap:10px;padding:16px 20px}
 .pick{height:46px;padding:0 18px;border-radius:23px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:600;font-size:15px;display:inline-flex;align-items:center;gap:8px;transition:background-color .15s,color .15s}
 .pick svg{width:18px;height:18px;display:none}
@@ -956,6 +971,7 @@ svg.ic.f{fill:currentColor}
 <symbol id="i-compass2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M15 9l-1.8 4.2L9 15l1.8-4.2z"/></symbol>
 <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 3.2a5.6 5.6 0 0 0-5.6 5.6v3.4L4.6 16h14.8l-1.8-3.8V8.8A5.6 5.6 0 0 0 12 3.2z"/><path d="M9.7 18.6a2.4 2.4 0 0 0 4.6 0"/></symbol>
 <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
 <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M4 4l16 16"/><path d="M9.5 9.7A3 3 0 0 0 12 15c.8 0 1.5-.3 2-.8"/><path d="M6.3 6.5C4 8.2 2.5 12 2.5 12s3.5 6.5 9.5 6.5c1.7 0 3.2-.5 4.4-1.2"/><path d="M10 5.7c.6-.1 1.3-.2 2-.2 6 0 9.5 6.5 9.5 6.5s-1 1.8-2.8 3.5"/></symbol>
 </svg>
@@ -1847,11 +1863,12 @@ var S={
   evCat:'Tümü',evVenue:'Tümü',evDate:'Tümü',evSort:'onerilen',evShow:12,
   scrolls:{},
   recent:[],
+  notify:{on:false,lead:60},
   version:''
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.30';
+var APP_VERSION='1.31';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -1944,7 +1961,7 @@ function getApk(){
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider,notify:S.notify}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
@@ -1967,6 +1984,7 @@ function restore(){
   if(d.tickets&&d.tickets.length)S.tickets=d.tickets;
   if(typeof d.tab==='string'&&d.tab)S.tab=d.tab;
   if(d.scrolls&&typeof d.scrolls==='object')S.scrolls=d.scrolls;
+  if(d.notify&&typeof d.notify==='object'){S.notify.on=!!d.notify.on;S.notify.lead=+d.notify.lead||60}
   S.loggedIn=!!d.loggedIn;
 }
 
@@ -2016,10 +2034,145 @@ function download(name,text,mime){
 }
 function addTicket(e,opt,qty){
   var t={id:'t'+Date.now()+Math.floor(Math.random()*999),code:newCode(),e:e,opt:e.prices[opt][0],qty:qty,seat0:Math.floor(Math.random()*4),at:new Date().toISOString()};
+  armTicketNotify(t);
   S.tickets.push(t);persist();return t;
 }
 function findTicket(code){
   return S.tickets.filter(function(t){return t.code===code||String(t.id)===code})[0];
+}
+
+/* ---------- bildirimler (bilet hatırlatıcıları) ----------
+   Amaç: kullanıcı bir bilete hatırlatıcı kurunca, etkinlikten `lead` dakika önce
+   haber verilir. Barındırma statik olduğu için sunucu yoktur:
+   - Tarayıcıda: sayfa açıkken zamanlayıcı ile yerel bildirim gösterilir; sayfa
+     kapalıyken service worker zamanlanmış bildirimi gösterir (destekleyen
+     tarayıcılarda). Bildirim izni yoksa hatırlatıcı uygulama içi listede tutulur.
+   - APK'da: native AlarmManager kurulur (GencNotify köprüsü), uygulama kapalı
+     olsa bile sistem bildirimi gelir.
+   Hatırlatıcı durumu biletin üzerinde: t.remind (true/false), t.lead (dakika),
+   t.notified (son bildirim damgası). */
+var NOTIFY_LEADS=[15,30,60,120,1440];
+function notifySupported(){return typeof Notification!=='undefined'}
+function notifyGranted(){return notifySupported()&&Notification.permission==='granted'}
+function notifyDenied(){return notifySupported()&&Notification.permission==='denied'}
+/* Etkinlik başlangıcını Date olarak döndürür; saat yoksa gün başı sayılır. */
+function eventDate(e){
+  var d=new Date(e.start||(e.date+'T00:00:00'));
+  if(isNaN(d.getTime())){d=new Date(e.date+'T00:00:00')}
+  return d;
+}
+/* Hatırlatıcının çalacağı an: etkinlik - lead dakika. */
+function remindAt(t){
+  var lead=(t.lead||S.notify.lead||60)*60000;
+  return new Date(eventDate(t.e).getTime()-lead);
+}
+function leadLabel(m){return m>=1440?(m/1440===1?'1 gün':(m/1440)+' gün'):(m>=60?(m/60===1?'1 saat':(m/60)+' saat'):m+' dakika')}
+/* Bilet alınınca varsayılan hatırlatıcı kurulur (bildirim açıksa). */
+function armTicketNotify(t){
+  t.remind=!!S.notify.on;
+  t.lead=S.notify.lead||60;
+  t.notified=0;
+  scheduleNativeNotify(t);
+}
+/* Native (APK) alarmı kurar/temizler; tarayıcıda sessizce atlanır. */
+function scheduleNativeNotify(t){
+  if(!window.GENC_NOTIFY)return;
+  try{
+    if(t.remind&&remindAt(t).getTime()>Date.now())window.GENC_NOTIFY.schedule(t.id,t.e.title,t.e.venue,remindAt(t).getTime());
+    else window.GENC_NOTIFY.cancel(t.id);
+  }catch(e){}
+}
+function cancelNativeNotify(id){if(!window.GENC_NOTIFY)return;try{window.GENC_NOTIFY.cancel(id)}catch(e){}}
+/* Yaklaşan, henüz bildirilmemiş hatırlatıcıları gösterir. */
+function notifyTick(){
+  if(!S.notify.on)return;
+  var now=Date.now(),fired=false;
+  S.tickets.forEach(function(t){
+    if(!t.remind)return;
+    var at=remindAt(t).getTime();
+    if(at<=now&&now-at<2*3600000&&(t.notified||0)<at){
+      t.notified=now;fired=true;showReminder(t);
+    }
+  });
+  if(fired)persist();
+}
+/* Yerel bildirim; izin yoksa uygulama içi tost yeterli olur. */
+function showReminder(t){
+  var when=t.e.when+' · '+t.e.venue;
+  var body='“'+t.e.title+'” etkinliği yaklaşıyor. '+when;
+  try{
+    if(notifyGranted()){
+      if(navigator.serviceWorker&&navigator.serviceWorker.ready){
+        navigator.serviceWorker.ready.then(function(reg){
+          reg.showNotification('Biletin yaklaşıyor 🎟️',{body:body,tag:'genc-'+t.id,icon:'icons/icon-192.png',badge:'icons/favicon-32.png',data:{ticket:t.id}});
+        }).catch(function(){new Notification('Biletin yaklaşıyor 🎟️',{body:body,icon:'icons/icon-192.png'})});
+      }else{
+        new Notification('Biletin yaklaşıyor 🎟️',{body:body,icon:'icons/icon-192.png'});
+      }
+    }
+  }catch(e){}
+  toast('🎟️ '+t.e.title+' yaklaşıyor · '+t.e.when);
+}
+/* İzin isteyip bildirimleri açar. Kullanıcı reddederse kapalı kalır. */
+function enableNotify(cb){
+  if(!notifySupported()){toast('Bu cihaz bildirimleri desteklemiyor.');if(cb)cb(false);return}
+  if(notifyGranted()){S.notify.on=true;persist();if(cb)cb(true);return}
+  Notification.requestPermission().then(function(p){
+    if(p==='granted'){S.notify.on=true;persist();toast('Bildirimler açıldı.');if(cb)cb(true)}
+    else{S.notify.on=false;persist();toast('Bildirim izni verilmedi.');if(cb)cb(false)}
+  }).catch(function(){if(cb)cb(false)});
+}
+function disableNotify(){
+  S.notify.on=false;
+  S.tickets.forEach(function(t){t.remind=false;cancelNativeNotify(t.id)});
+  persist();
+}
+/* Bir biletin hatırlatıcısını açar/kapatır. */
+function toggleTicketRemind(id){
+  var t=findTicket(id);if(!t)return;
+  if(t.remind){t.remind=false;cancelNativeNotify(t.id);persist();renderProfile();refreshNotifySheet();toast('Hatırlatıcı kapatıldı.');return}
+  if(!S.notify.on){
+    enableNotify(function(ok){if(ok){t.remind=true;t.lead=S.notify.lead||60;t.notified=0;scheduleNativeNotify(t);persist();renderProfile();refreshNotifySheet();toast('Etkinlikten '+leadLabel(t.lead)+' önce hatırlatacağız.')}});
+    return;
+  }
+  t.remind=true;t.lead=S.notify.lead||60;t.notified=0;scheduleNativeNotify(t);persist();renderProfile();refreshNotifySheet();
+  toast('Etkinlikten '+leadLabel(t.lead)+' önce hatırlatacağız.');
+}
+/* Bildirimleri aç/kapat düğmesi. */
+function toggleNotifyAll(){
+  if(S.notify.on){disableNotify();toast('Bildirimler kapatıldı.');refreshNotifySheet();renderProfile()}
+  else enableNotify(function(){refreshNotifySheet();renderProfile()});
+}
+/* Öncül süreyi değiştirir; kurulu hatırlatıcılar yeni süreye göre yeniden kurulur. */
+function setNotifyLead(m){
+  S.notify.lead=m;
+  S.tickets.forEach(function(t){if(t.remind){t.lead=m;t.notified=0;scheduleNativeNotify(t)}});
+  persist();refreshNotifySheet();
+}
+/* Bildirim ayarları: izin durumu, öncül süre ve bilet bazlı hatırlatıcılar. */
+function notifySettings(){
+  var st=notifyGranted()?'açık':(notifyDenied()?'engelli':'kapalı');
+  var h='<p class="gsay">Bilet aldığın etkinlik yaklaşınca haber verelim. Böylece hiçbir gösteriyi kaçırmazsın.</p>';
+  h+='<div class="nrow"><span>'+ic('bell')+'<span class="nlabel"><strong>Bildirimler</strong><small>İzin durumu: '+st+'</small></span></span><button class="sw" type="button" role="switch" aria-checked="'+(S.notify.on?'true':'false')+'" aria-label="Bildirimleri aç" data-act="notifytoggle"></button></div>';
+  if(notifyDenied())h+='<p class="nhelp">Tarayıcı bildirim izni engellenmiş. Adres çubuğundaki kilit simgesinden izni açabilirsin.</p>';
+  h+='<div class="shsec"><h4 class="disp">Ne zaman hatırlatalım?</h4></div>';
+  h+='<div class="leadrow">'+NOTIFY_LEADS.map(function(m){
+    return '<button type="button" class="lchip'+(S.notify.lead===m?' on':'')+'" data-act="setlead" data-lead="'+m+'">'+leadLabel(m)+'</button>';
+  }).join('')+'</div>';
+  h+='<div class="shsec"><h4 class="disp">Biletlerim</h4></div>';
+  if(!S.tickets.length){h+='<div class="empty">Henüz biletin yok.</div>'}
+  else{
+    h+=S.tickets.slice().sort(function(a,b){return a.e.date<b.e.date?-1:1}).map(function(t){
+      var past=eventDate(t.e).getTime()<Date.now();
+      return '<div class="nrow'+(past?' off':'')+'"><span class="nlabel"><strong>'+esc(t.e.title)+'</strong><small>'+esc(t.e.when)+' · '+esc(t.e.venue)+'</small></span>'+
+        (past?'<span class="ndone">Geçti</span>':'<button class="sw sm" type="button" role="switch" aria-checked="'+(t.remind?'true':'false')+'" aria-label="Hatırlat" data-act="remind" data-tk="'+t.id+'"></button>')+'</div>';
+    }).join('');
+  }
+  openSheet('Bildirimler',h);
+}
+/* Ayar sayfası açıksa yerinde tazele. */
+function refreshNotifySheet(){
+  if(!$('#sheet').hidden&&$('#sh-title').textContent==='Bildirimler')notifySettings();
 }
 
 /* ---------- kurulum (ana ekrana ekle) ---------- */
@@ -3559,7 +3712,8 @@ function ticketHTML(t){
     '<span>Koltuk: '+esc(seatsFor(t))+'</span>'+
     '<span>Toplam: '+esc(fmt(amount*t.qty))+'</span>'+
     '<span class="acts"><button type="button" data-act="showqr">'+ic('qr')+'Büyük göster</button>'+
-    '<button type="button" data-act="addcal">'+ic('calendar')+'Takvime ekle</button></span></span></div>'+
+    '<button type="button" data-act="addcal">'+ic('calendar')+'Takvime ekle</button>'+
+    '<button type="button" data-act="remind" data-tk="'+t.id+'">'+ic('bell')+(t.remind?'Hatırlatıcı açık':'Hatırlat')+'</button></span></span></div>'+
   '</article>';
 }
 /* Biletler profil sayfasında gösterilir; bu bölüm profil içine gömülür. */
@@ -3716,6 +3870,7 @@ function renderProfile(){
   var h='<div class="ph"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><div class="pinfo"><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.locOn?locLabel()+' · '+S.city:S.city+' · konum kapalı')+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
   h+='<div class="actgrid">'+
     '<button type="button" data-act="weekly">'+ic('image')+'Bu hafta ne var?</button>'+
+    '<button type="button" data-act="notify">'+ic('bell')+'Bildirimler</button>'+
     '<button type="button" data-act="editlikes">'+ic('heart')+'Hoşlandıklarım</button>'+
     (VIDEO_ON?'<button type="button" data-tab="videolar">'+ic('play')+'Kısa videolar</button>':'')+
     '<button type="button" data-act="addcard">'+ic('shield')+'Kart ekle</button>'+
@@ -3980,6 +4135,10 @@ document.addEventListener('click',function(ev){
       }
       break;
     case 'weekly':weeklyShareSheet();break;
+    case 'notify':notifySettings();break;
+    case 'notifytoggle':toggleNotifyAll();break;
+    case 'setlead':setNotifyLead(+a.getAttribute('data-lead'));break;
+    case 'remind':toggleTicketRemind(tkid||(a.getAttribute('data-tk')));break;
     case 'wkshare':weeklyShare();break;
     case 'wksave':weeklySave();break;
     case 'buy':openWeb(e);break;
@@ -4054,6 +4213,12 @@ function applyDeepLink(){
 /* ---------- çevrimdışı destek ---------- */
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+  /* Bildirime dokunulduğunda service worker pencereye haber verir; ilgili
+     biletin kod ekranı açılır. */
+  navigator.serviceWorker.addEventListener('message',function(ev){
+    var d=ev.data||{};
+    if(d.type==='notify-open'&&d.ticket){showBigQR(d.ticket)}
+  });
 }
 
 function renderAll(){renderBrowse();renderTickets();renderProfile();if(S.tab==='salonlar')renderVenues()}
@@ -4086,6 +4251,9 @@ loadRemoteData();
 setTimeout(checkUpdate,1500);
 /* Canlı durumu çek ve dakikada bir tazele (hata olsa da uygulama çalışır). */
 liveStart();setTimeout(livePoll,800);
+/* Bilet hatırlatıcıları: açılışta ve dakikada bir denetle. */
+setTimeout(notifyTick,1200);
+setInterval(function(){if(S.loggedIn)notifyTick()},60000);
 /* Videolar geçici kapalıysa menü butonunu gizle. */
 if(!VIDEO_ON){var nv=$('#nav-videolar');if(nv)nv.hidden=true}
 /* Profil fotoğrafı için kalıcı gizli seçici: avatara dokununca doğrudan açılır. */

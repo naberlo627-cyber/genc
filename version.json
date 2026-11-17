@@ -1,6 +1,6 @@
 {
-  "version": "1.30",
-  "versionCode": 13000,
-  "notes": "Konum artık tüm Türkiye'yi kapsıyor (81 il, tüm ilçeler); haftalık paylaşım görseli marka renklerinde ve gerçek etkinlik fotoğraflarıyla yenilendi; misafir girişi (Kaydolmadan devam et) yayında.",
+  "version": "1.31",
+  "versionCode": 13100,
+  "notes": "Bildirimler geldi: bilet aldığın etkinlik yaklaşınca haber veriyoruz. Profil > Bildirimler'den açabilir, ne zaman önce hatırlatılacağını (15 dk–1 gün) seçebilirsin.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
