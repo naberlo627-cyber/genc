@@ -8,6 +8,11 @@ name: Yayın (Surge + Cloudflare Pages)
 on:
   push:
     branches: [master]
+  # Veri yenileme işi bot token'ıyla commit attığı için push tetiklemesi
+  # çalışmaz; veri yenileme bittiğinde yayını bu olay tetikler.
+  workflow_run:
+    workflows: ["Veri yenileme"]
+    types: [completed]
   workflow_dispatch: {}
 
 permissions:
