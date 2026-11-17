@@ -190,8 +190,10 @@ Site **statik barındırmada** yayınlanır; GitHub Actions veriyi yeniler. Kend
 sunucunuz gerekmez, çökmez:
 
 - **Adresler:**
-  - **https://naberlo627-cyber.github.io/genc/** — GitHub Pages (**ASIL adres**;
-    Türkiye'den erişilebilir, veri aynası da burasıdır)
+  - **https://genc.surge.sh** — surge.sh (**ASIL adres**; Türkiye'den erişilebilir,
+    her push'ta otomatik güncellenir)
+  - https://naberlo627-cyber.github.io/genc/ — GitHub Pages (Türkiye'den
+    erişilebilir, veri aynası da burasıdır)
   - https://genc.pages.dev — Cloudflare Pages (küresel CDN; **Türkiye'de bazı
     ağlarda engelli** olabiliyor, bkz. aşağıdaki `.dev` notu)
 - **Depo:** https://github.com/naberlo627-cyber/genc (açık/public — ücretsiz barındırma için zorunlu)
@@ -597,12 +599,16 @@ Kaynak notları:
 - Depoyu kısaltmak için yeniden adlandırmak `REMOTE_BASE` yedeğini bozar
   (`Genc.html` içinde sabit `.../genc/`), önerilmez.
 
-## Yayın: genc.surge.sh (surge.sh)
+## Yayın: genc.surge.sh (surge.sh) — ASIL ADRES
 - Uygulamanın canlı adresi: **https://genc.surge.sh** (surge.sh ücretsiz plan).
   TR'de açılır (Cloudflare değil), ticari kullanıma izin verir.
-- Yayın: `tools/deploy_surge.sh` → `tools/build_site.sh` çalıştırır, `dist/`
-  üretir, `dist/CNAME` içine alan adını yazar ve `surge . <domain>` ile yükler.
-  Gerekli ortam değişkenleri: `SURGE_TOKEN` ve `SURGE_LOGIN` (`npx surge token`).
+- **Otomatik yayın:** `.github/workflows/yayin.yml` içindeki `surge` işi,
+  `master`'a her push'ta `tools/deploy_surge.sh` çalıştırıp siteyi yükler.
+  Gerekli depo sırları: `SURGE_TOKEN` ve `SURGE_LOGIN` (depo → Settings →
+  Secrets and variables → Actions). Sırlar tanımlıysa her push otomatik yayınlanır.
+- Elle yayın: `SURGE_TOKEN=... SURGE_LOGIN=... bash tools/deploy_surge.sh`
+  → `tools/build_site.sh` çalıştırır, `dist/` üretir, `dist/CNAME` içine alan
+  adını yazar ve `surge . <domain>` ile yükler. Token: `npx surge token`.
 - `tools/build_site.sh` artık `indir/Genc.apk` dosyasını da `dist/indir/` altına
   kopyalar: bazı ağlarda GitHub indirme sunucusu engelli olabildiğinden kurulum
   dosyası site üzerinden de erişilebilir kalır.
@@ -618,11 +624,10 @@ Kaynak notları:
   der ve yayın yapılamaz. Çözüm: kullanıcıdan `SURGE_TOKEN` + `SURGE_LOGIN`
   alın (güvenli anahtar kutusu `/workspace/secrets_inbox/`), sonra
   `tools/deploy_surge.sh` çalıştırın. Token yeniden üretilir: `npx surge token`.
-- **Surge kopyası elle güncellenir.** Günlük veri yenileme iş akışı yalnızca
-  `master`'a commit atar; surge'a yükleme yapmaz. Bu yüzden surge'daki
-  `data/events.json` ve `indir/Genc.apk` bayat kalabilir. Güncellemek için
-  `tools/deploy_surge.sh` çalıştırılmalıdır. (Asıl adres GitHub Pages olduğu
-  için site kullanıcıları yine taze veri görür.)
+- **Surge kopyası artık otomatik güncellenir.** `yayin.yml` iş akışı `master`'a
+  her push'ta surge'a yükler; günlük veri yenileme iş akışı commit attığında da
+  tetiklenir. Sırlar eksikse iş sessizce atlanır ve surge kopyası bayat kalır —
+  bu durumda sırları tanımlayın.
 
 ### GitHub'a gönderme (asıl adres)
 GitHub kimlik bilgisi oturum ortamında hazır gelmez (`GITHUB_TOKEN` boş olabilir).

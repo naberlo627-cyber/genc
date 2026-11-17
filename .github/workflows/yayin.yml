@@ -1,11 +1,9 @@
-name: Yayın (Cloudflare Pages)
+name: Yayın (Surge + Cloudflare Pages)
 
-# Siteyi Cloudflare Pages'e yükler. master dalına her push'ta çalışır.
-# Sırlar tanımlanana kadar sessizce atlanır (kırmızı çarpı oluşturmaz).
-#
-# Gerekli sırlar (depo → Settings → Secrets and variables → Actions):
-#   CLOUDFLARE_API_TOKEN   Pages:Edit yetkili API anahtarı
-#   CLOUDFLARE_ACCOUNT_ID  Cloudflare hesap kimliği
+# master'a her push'ta siteyi yayınlar.
+#   - Surge (genc.surge.sh)   → ASIL adres
+#   - Cloudflare Pages (genc.pages.dev) → yedek
+# İlgili sırlar tanımlı değilse o iş sessizce atlanır.
 
 on:
   push:
@@ -16,7 +14,36 @@ permissions:
   contents: read
 
 jobs:
-  yayinla:
+  surge:
+    name: Surge (genc.surge.sh)
+    runs-on: ubuntu-latest
+    env:
+      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+      SURGE_LOGIN: ${{ secrets.SURGE_LOGIN }}
+    steps:
+      - name: Sır denetimi
+        id: check
+        run: |
+          if [ -z "$SURGE_TOKEN" ] || [ -z "$SURGE_LOGIN" ]; then
+            echo "hazir=false" >> "$GITHUB_OUTPUT"
+            echo "Surge sırları tanımlı değil; yayın atlandı."
+          else
+            echo "hazir=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Depoyu al
+        if: steps.check.outputs.hazir == 'true'
+        uses: actions/checkout@v4
+      - name: Node kur
+        if: steps.check.outputs.hazir == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Surge'e yükle
+        if: steps.check.outputs.hazir == 'true'
+        run: bash tools/deploy_surge.sh
+
+  cloudflare:
+    name: Cloudflare Pages (genc.pages.dev)
     runs-on: ubuntu-latest
     env:
       CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -31,15 +58,12 @@ jobs:
           else
             echo "hazir=true" >> "$GITHUB_OUTPUT"
           fi
-
       - name: Depoyu al
         if: steps.check.outputs.hazir == 'true'
         uses: actions/checkout@v4
-
       - name: Yayın paketini hazırla
         if: steps.check.outputs.hazir == 'true'
         run: bash tools/build_site.sh
-
       - name: Cloudflare Pages'e yükle
         if: steps.check.outputs.hazir == 'true'
         uses: cloudflare/wrangler-action@v3
