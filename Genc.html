@@ -255,6 +255,8 @@ svg.ic.f{fill:currentColor}
 .sh-body .err{margin:10px 0 0}
 .fin{padding:0 20px}
 .cta.sm{margin:12px 0 0;width:100%}
+.cta.sm.ghost{background:transparent;color:var(--mute);box-shadow:inset 0 0 0 1.5px var(--line)}
+.gsay{margin:2px 0 4px;color:var(--mute);font-size:14.5px;line-height:1.55}
 
 /* hazır ekranı */
 .done-logo{width:190px;height:auto;margin:34px auto 8px;display:block}
@@ -757,6 +759,23 @@ svg.ic.f{fill:currentColor}
 .installrow strong{display:block;font-size:15px}
 .installrow small{color:var(--mute);font-size:12.5px}
 .installrow button{background:var(--grad);color:#fff;font-weight:700;font-size:13.5px;padding:10px 14px;border-radius:12px;flex:none}
+.guestrow{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:14px;width:calc(100% - 40px);box-shadow:inset 0 0 0 1.5px var(--line)}
+.guestrow .ic{color:var(--brand);flex:none}
+.guestrow span{flex:1;min-width:0}
+.guestrow strong{display:block;font-size:15px}
+.guestrow small{color:var(--mute);font-size:12.5px}
+.guestrow button{background:var(--grad);color:#fff;font-weight:700;font-size:13.5px;padding:10px 14px;border-radius:12px;flex:none}
+.livebar{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;margin:10px 20px 0;padding:13px 14px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.livebar .ic{color:var(--brand);flex:none}
+.livebar span{flex:1;min-width:0}
+.livebar strong{display:block;font-size:14.5px}
+.livebar small{display:block;color:var(--mute);font-size:12.5px;margin-top:2px;line-height:1.45}
+.livebar .lvnames b{color:var(--brand)}
+.livebig{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:16px;box-shadow:inset 0 0 0 1.5px var(--line)}
+.livebig .ic{color:var(--brand);flex:none;width:30px;height:30px}
+.livebig strong{display:block;font-size:26px;font-weight:800;line-height:1.1}
+.livebig small{color:var(--mute);font-size:12.5px}
+.livechips{margin-top:2px}
 @media (max-width:380px){.nav button{font-size:10.5px}}
 
 /* ---------- giriş / kayıt ---------- */
@@ -773,6 +792,8 @@ svg.ic.f{fill:currentColor}
 .gbtn{display:flex;align-items:center;justify-content:center;gap:11px;width:calc(100% - 40px);margin:12px 20px 0;height:54px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:700;font-size:15.5px;color:var(--ink)}
 .gbtn .gmark{width:20px;height:20px;flex:none}
 .gbtn[disabled]{opacity:.5}
+.gbtn.ghost{margin-top:10px;background:transparent;box-shadow:inset 0 0 0 1.5px var(--line);color:var(--mute);font-size:15px}
+.gbtn.ghost .ic{width:20px;height:20px;flex:none}
 .orline{display:flex;align-items:center;gap:12px;padding:16px 20px 0;color:var(--mute);font-size:12.5px;font-weight:600}
 .orline::before,.orline::after{content:"";flex:1;height:1px;background:var(--line)}
 .authswitch{text-align:center;padding:18px 20px 6px;color:var(--mute);font-size:14.5px}
@@ -971,6 +992,10 @@ svg.ic.f{fill:currentColor}
           <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
           <span id="gbtn-label">Google ile devam et</span>
         </button>
+        <button class="gbtn ghost" id="guestbtn" type="button">
+          <svg class="ic"><use href="#i-user"/></svg>
+          <span>Kaydolmadan devam et</span>
+        </button>
         <p class="err" id="err1" role="alert"></p>
         <p class="authnote" id="auth-note">Devam ederek bir hesap oluşturursun. Bilgilerin yalnızca bu cihazda saklanır; şifren şifrelenmiş olarak tutulur, sunucuya gönderilmez.</p>
       </div>
@@ -1018,6 +1043,7 @@ svg.ic.f{fill:currentColor}
           <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
         </div>
         <div class="locbar"><button class="loc" id="locbtn" type="button" aria-haspopup="dialog"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg><span id="locname">Konum kapalı</span><svg class="ic" style="width:18px;height:18px"><use href="#i-chev-d"/></svg></button></div>
+        <div class="livebar" id="livebar" hidden></div>
         <div id="hlists"></div>
         <div class="pad"></div>
       </div>
@@ -1413,15 +1439,92 @@ var VENUE_PHOTOS={"Ahmed Adnan Saygun Sanat Merkezi":"img/venue-ahmed-adnan-sayg
 var IZMIR=[38.4192,27.1287];
 /* Şehir merkezleri: kullanıcı konumunu açmazsa seçili şehre bu noktadan
    bakılır. Etkinlikler yalnızca seçili şehirden gelir. */
-var CITY_COORDS={'İzmir':[38.4192,27.1287],'Ankara':[39.9334,32.8597],'İstanbul':[41.0082,28.9784],'Bursa':[40.1885,29.0610],'Antalya':[36.8969,30.7133]};
-/* İl → ilçe listesi. Veriden türeyen ilçeler bunun üstüne eklenir; böylece
-   yeni ilçeler veriyle birlikte kendiliğinden görünür. */
-var CITY_DISTRICTS={
-  'İzmir':['Bornova','Karşıyaka','Konak','Buca','Gaziemir','Balçova','Çiğli','Bayraklı','Karabağlar','Menemen','Torbalı','Urla','Çeşme','Foça','Kemalpaşa','Menderes','Seferihisar','Tire'],
-  'İstanbul':['Bakırköy','Beşiktaş','Kadıköy','Şişli','Beyoğlu','Ataşehir','Maltepe','Kartal','Üsküdar','Fatih','Sarıyer','Beylikdüzü','Şişli'],
-  'Ankara':['Çankaya','Yenimahalle','Mamak','Etimesgut','Altındağ','Keçiören','Sincan','Polatlı'],
-  'Bursa':['Osmangazi','Nilüfer','Yıldırım','Gemlik','İnegöl'],
-  'Antalya':['Muratpaşa','Konyaaltı','Kepez','Döşemealtı','Aksu']
+/* İl → ilçe ve il → merkez koordinat verisi (81 il, tüm ilçeler).
+   Kaynak: TÜİK/adres kayıtlarından derlenen açık veri; elle güncellenmez. */
+var TR_CITY_COORDS={"Adana": [37.0017, 35.3289], "Adıyaman": [37.7647, 38.2786], "Afyonkarahisar": [38.7503, 30.5567], "Aksaray": [38.3667, 34.0333], "Amasya": [40.6497, 35.8353], "Ankara": [39.9208, 32.8541], "Antalya": [36.8841, 30.7056], "Ardahan": [41.1083, 42.7], "Artvin": [41.1822, 41.8189], "Aydın": [37.8444, 27.8456], "Ağrı": [39.7194, 43.0506], "Balıkesir": [39.6486, 27.8825], "Bartın": [41.6333, 32.3333], "Batman": [37.8833, 41.1333], "Bayburt": [40.25, 40.2167], "Bilecik": [40.1456, 29.9792], "Bingöl": [38.885, 40.4986], "Bitlis": [38.3953, 42.1236], "Bolu": [40.7353, 31.6064], "Burdur": [37.7211, 30.2906], "Bursa": [40.1822, 29.0611], "Denizli": [37.7764, 29.0861], "Diyarbakır": [37.9142, 40.2306], "Düzce": [40.8333, 31.1667], "Edirne": [41.6708, 26.5556], "Elazığ": [38.6806, 39.2264], "Erzincan": [39.75, 39.5], "Erzurum": [39.9086, 41.2769], "Eskişehir": [39.7764, 30.5206], "Gaziantep": [37.0667, 37.3833], "Giresun": [40.9167, 38.4], "Gümüşhane": [40.45, 39.4833], "Hakkari": [37.5833, 43.7333], "Hatay": [36.2, 36.1667], "Isparta": [37.7667, 30.55], "Iğdır": [39.9167, 44.0333], "Kahramanmaraş": [37.5833, 36.9333], "Karabük": [41.2, 32.6333], "Karaman": [37.1833, 33.2167], "Kars": [40.6083, 43.0833], "Kastamonu": [41.3889, 33.7822], "Kayseri": [38.7311, 35.4789], "Kilis": [36.7167, 37.1167], "Kocaeli": [40.7667, 29.9167], "Konya": [37.8667, 32.4833], "Kütahya": [39.4167, 29.9833], "Kırklareli": [41.7333, 27.2167], "Kırıkkale": [39.85, 33.5167], "Kırşehir": [39.1422, 34.1706], "Malatya": [38.355, 38.305], "Manisa": [38.6136, 27.4269], "Mardin": [37.3111, 40.7436], "Mersin": [36.8, 34.6333], "Muğla": [37.2167, 28.3667], "Muş": [38.7444, 41.4961], "Nevşehir": [38.6244, 34.7231], "Niğde": [37.9667, 34.6833], "Ordu": [40.9833, 37.8833], "Osmaniye": [37.0667, 36.25], "Rize": [41.0208, 40.5236], "Sakarya": [40.7667, 30.4167], "Samsun": [41.2864, 36.3314], "Siirt": [37.9444, 41.9333], "Sinop": [42.0236, 35.1531], "Sivas": [39.7472, 37.0175], "Tekirdağ": [40.9833, 27.5167], "Tokat": [40.3167, 36.55], "Trabzon": [41.0, 39.7333], "Tunceli": [39.1167, 39.5333], "Uşak": [38.6833, 29.4167], "Van": [38.5, 43.4], "Yalova": [40.65, 29.2667], "Yozgat": [39.8167, 34.8167], "Zonguldak": [41.45, 31.8], "Çanakkale": [40.1556, 26.4144], "Çankırı": [40.6, 33.6167], "Çorum": [40.5506, 34.9556], "İstanbul": [41.0138, 28.9497], "İzmir": [38.4188, 27.1287], "Şanlıurfa": [37.15, 38.8], "Şırnak": [37.5167, 42.4667]};
+var TR_CITIES=["Adana", "Adıyaman", "Afyonkarahisar", "Aksaray", "Amasya", "Ankara", "Antalya", "Ardahan", "Artvin", "Aydın", "Ağrı", "Balıkesir", "Bartın", "Batman", "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa", "Denizli", "Diyarbakır", "Düzce", "Edirne", "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkari", "Hatay", "Isparta", "Iğdır", "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri", "Kilis", "Kocaeli", "Konya", "Kütahya", "Kırklareli", "Kırıkkale", "Kırşehir", "Malatya", "Manisa", "Mardin", "Mersin", "Muğla", "Muş", "Nevşehir", "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak", "Çanakkale", "Çankırı", "Çorum", "İstanbul", "İzmir", "Şanlıurfa", "Şırnak"];
+var TR_CITY_DISTRICTS={
+  "Adana":["Aladağ", "Ceyhan", "Feke", "Karaisalı", "Karataş", "Kozan", "Pozantı", "Saimbeyli", "Sarıçam", "Seyhan", "Tufanbeyli", "Yumurtalık", "Yüreğir", "Çukurova", "İmamoğlu"],
+  "Adıyaman":["Besni", "Gerger", "Gölbaşı", "Kahta", "Merkez", "Samsat", "Sincik", "Tut", "Çelikhan"],
+  "Afyonkarahisar":["Bayat", "Başmakçı", "Bolvadin", "Dazkırı", "Dinar", "Emirdağ", "Evciler", "Hocalar", "Kızılören", "Merkez", "Sandıklı", "Sinanpaşa", "Sultandağı", "Çay", "Çobanlar", "İhsaniye", "İscehisar", "Şuhut"],
+  "Aksaray":["Ağaçören", "Eskil", "Gülağaç", "Güzelyurt", "Merkez", "Ortaköy", "Sarıyahşi", "Sultanhanı"],
+  "Amasya":["Göynücek", "Gümüşhacıköy", "Hamamözü", "Merkez", "Merzifon", "Suluova", "Taşova"],
+  "Ankara":["Akyurt", "Altındağ", "Ayaş", "Bala", "Beypazarı", "Elmadağ", "Etimesgut", "Evren", "Gölbaşı", "Güdül", "Haymana", "Kahramankazan", "Kalecik", "Keçiören", "Kızılcahamam", "Mamak", "Nallıhan", "Polatlı", "Pursaklar", "Sincan", "Yenimahalle", "Çamlıdere", "Çankaya", "Çubuk", "Şereflikoçhisar"],
+  "Antalya":["Akseki", "Aksu", "Alanya", "Demre", "Döşemealtı", "Elmalı", "Finike", "Gazipaşa", "Gündoğmuş", "Kaş", "Kemer", "Kepez", "Konyaaltı", "Korkuteli", "Kumluca", "Manavgat", "Muratpaşa", "Serik", "İbradı"],
+  "Ardahan":["Damal", "Göle", "Hanak", "Merkez", "Posof", "Çıldır"],
+  "Artvin":["Ardanuç", "Arhavi", "Borçka", "Hopa", "Kemalpaşa", "Merkez", "Murgul", "Yusufeli", "Şavşat"],
+  "Aydın":["Bozdoğan", "Buharkent", "Didim", "Efeler", "Germencik", "Karacasu", "Karpuzlu", "Koçarlı", "Kuyucak", "Kuşadası", "Köşk", "Nazilli", "Sultanhisar", "Söke", "Yenipazar", "Çine", "İncirliova"],
+  "Ağrı":["Diyadin", "Doğubayazıt", "Eleşkirt", "Hamur", "Merkez", "Patnos", "Taşlıçay", "Tutak"],
+  "Balıkesir":["Altıeylül", "Ayvalık", "Balya", "Bandırma", "Bigadiç", "Burhaniye", "Dursunbey", "Edremit", "Erdek", "Gömeç", "Gönen", "Havran", "Karesi", "Kepsut", "Manyas", "Marmara", "Savaştepe", "Susurluk", "Sındırgı", "İvrindi"],
+  "Bartın":["Amasra", "Kurucaşile", "Merkez", "Ulus"],
+  "Batman":["Beşiri", "Gercüş", "Hasankeyf", "Kozluk", "Merkez", "Sason"],
+  "Bayburt":["Aydıntepe", "Demirözü", "Merkez"],
+  "Bilecik":["Bozüyük", "Gölpazarı", "Merkez", "Osmaneli", "Pazaryeri", "Söğüt", "Yenipazar", "İnhisar"],
+  "Bingöl":["Adaklı", "Genç", "Karlıova", "Kiğı", "Merkez", "Solhan", "Yayladere", "Yedisu"],
+  "Bitlis":["Adilcevaz", "Ahlat", "Güroymak", "Hizan", "Merkez", "Mutki", "Tatvan"],
+  "Bolu":["Dörtdivan", "Gerede", "Göynük", "Kıbrıscık", "Mengen", "Merkez", "Mudurnu", "Seben", "Yeniçağa"],
+  "Burdur":["Altınyayla", "Ağlasun", "Bucak", "Gölhisar", "Karamanlı", "Kemer", "Merkez", "Tefenni", "Yeşilova", "Çavdır", "Çeltikçi"],
+  "Bursa":["Büyükorhan", "Gemlik", "Gürsu", "Harmancık", "Karacabey", "Keles", "Kestel", "Mudanya", "Mustafakemalpaşa", "Nilüfer", "Orhaneli", "Orhangazi", "Osmangazi", "Yenişehir", "Yıldırım", "İnegöl", "İznik"],
+  "Denizli":["Acıpayam", "Babadağ", "Baklan", "Bekilli", "Beyağaç", "Bozkurt", "Buldan", "Güney", "Honaz", "Kale", "Merkezefendi", "Pamukkale", "Sarayköy", "Serinhisar", "Tavas", "Çal", "Çameli", "Çardak", "Çivril"],
+  "Diyarbakır":["Bağlar", "Bismil", "Dicle", "Ergani", "Eğil", "Hani", "Hazro", "Kayapınar", "Kocaköy", "Kulp", "Lice", "Silvan", "Sur", "Yenişehir", "Çermik", "Çüngüş", "Çınar"],
+  "Düzce":["Akçakoca", "Cumayeri", "Gölyaka", "Gümüşova", "Kaynaşlı", "Merkez", "Yığılca", "Çilimli"],
+  "Edirne":["Enez", "Havsa", "Keşan", "Lalapaşa", "Meriç", "Merkez", "Süloğlu", "Uzunköprü", "İpsala"],
+  "Elazığ":["Alacakaya", "Arıcak", "Ağın", "Baskil", "Karakoçan", "Keban", "Kovancılar", "Maden", "Merkez", "Palu", "Sivrice"],
+  "Erzincan":["Kemah", "Kemaliye", "Merkez", "Otlukbeli", "Refahiye", "Tercan", "Çayırlı", "Üzümlü", "İliç"],
+  "Erzurum":["Aziziye", "Aşkale", "Horasan", "Hınıs", "Karayazı", "Karaçoban", "Köprüköy", "Narman", "Oltu", "Olur", "Palandöken", "Pasinler", "Pazaryolu", "Tekman", "Tortum", "Uzundere", "Yakutiye", "Çat", "İspir", "Şenkaya"],
+  "Eskişehir":["Alpu", "Beylikova", "Günyüzü", "Han", "Mahmudiye", "Mihalgazi", "Mihalıççık", "Odunpazarı", "Sarıcakaya", "Seyitgazi", "Sivrihisar", "Tepebaşı", "Çifteler", "İnönü"],
+  "Gaziantep":["Araban", "Karkamış", "Nizip", "Nurdağı", "Oğuzeli", "Yavuzeli", "İslahiye", "Şahinbey", "Şehitkamil"],
+  "Giresun":["Alucra", "Bulancak", "Dereli", "Doğankent", "Espiye", "Eynesil", "Görele", "Güce", "Keşap", "Merkez", "Piraziz", "Tirebolu", "Yağlıdere", "Çamoluk", "Çanakçı", "Şebinkarahisar"],
+  "Gümüşhane":["Kelkit", "Köse", "Kürtün", "Merkez", "Torul", "Şiran"],
+  "Hakkari":["Derecik", "Merkez", "Yüksekova", "Çukurca", "Şemdinli"],
+  "Hatay":["Altınözü", "Antakya", "Arsuz", "Belen", "Defne", "Dörtyol", "Erzin", "Hassa", "Kumlu", "Kırıkhan", "Payas", "Reyhanlı", "Samandağ", "Yayladağı", "İskenderun"],
+  "Isparta":["Aksu", "Atabey", "Eğirdir", "Gelendost", "Gönen", "Keçiborlu", "Merkez", "Senirkent", "Sütçüler", "Uluborlu", "Yalvaç", "Yenişarbademli", "Şarkikaraağaç"],
+  "Iğdır":["Aralık", "Karakoyunlu", "Merkez", "Tuzluca"],
+  "Kahramanmaraş":["Afşin", "Andırın", "Dulkadiroğlu", "Ekinözü", "Elbistan", "Göksun", "Nurhak", "Onikişubat", "Pazarcık", "Türkoğlu", "Çağlayancerit"],
+  "Karabük":["Eflani", "Eskipazar", "Merkez", "Ovacık", "Safranbolu", "Yenice"],
+  "Karaman":["Ayrancı", "Başyayla", "Ermenek", "Kazımkarabekir", "Merkez", "Sarıveliler"],
+  "Kars":["Akyaka", "Arpaçay", "Digor", "Kağızman", "Merkez", "Sarıkamış", "Selim", "Susuz"],
+  "Kastamonu":["Abana", "Araç", "Azdavay", "Ağlı", "Bozkurt", "Cide", "Daday", "Devrekani", "Doğanyurt", "Hanönü", "Küre", "Merkez", "Pınarbaşı", "Seydiler", "Taşköprü", "Tosya", "Çatalzeytin", "İhsangazi", "İnebolu", "Şenpazar"],
+  "Kayseri":["Akkışla", "Bünyan", "Develi", "Felahiye", "Hacılar", "Kocasinan", "Melikgazi", "Pınarbaşı", "Sarıoğlan", "Sarız", "Talas", "Tomarza", "Yahyalı", "Yeşilhisar", "Özvatan", "İncesu"],
+  "Kilis":["Elbeyli", "Merkez", "Musabeyli", "Polateli"],
+  "Kocaeli":["Başiskele", "Darıca", "Derince", "Dilovası", "Gebze", "Gölcük", "Kandıra", "Karamürsel", "Kartepe", "Körfez", "Çayırova", "İzmit"],
+  "Konya":["Ahırlı", "Akören", "Akşehir", "Altınekin", "Beyşehir", "Bozkır", "Cihanbeyli", "Derbent", "Derebucak", "Doğanhisar", "Emirgazi", "Ereğli", "Güneysınır", "Hadim", "Halkapınar", "Hüyük", "Ilgın", "Kadınhanı", "Karapınar", "Karatay", "Kulu", "Meram", "Sarayönü", "Selçuklu", "Seydişehir", "Taşkent", "Tuzlukçu", "Yalıhüyük", "Yunak", "Çeltik", "Çumra"],
+  "Kütahya":["Altıntaş", "Aslanapa", "Domaniç", "Dumlupınar", "Emet", "Gediz", "Hisarcık", "Merkez", "Pazarlar", "Simav", "Tavşanlı", "Çavdarhisar", "Şaphane"],
+  "Kırklareli":["Babaeski", "Demirköy", "Kofçaz", "Lüleburgaz", "Merkez", "Pehlivanköy", "Pınarhisar", "Vize"],
+  "Kırıkkale":["Bahşılı", "Balışeyh", "Delice", "Karakeçili", "Keskin", "Merkez", "Sulakyurt", "Yahşihan", "Çelebi"],
+  "Kırşehir":["Akpınar", "Akçakent", "Boztepe", "Kaman", "Merkez", "Mucur", "Çiçekdağı"],
+  "Malatya":["Akçadağ", "Arapgir", "Arguvan", "Battalgazi", "Darende", "Doğanyol", "Doğanşehir", "Hekimhan", "Kale", "Kuluncak", "Pütürge", "Yazıhan", "Yeşilyurt"],
+  "Manisa":["Ahmetli", "Akhisar", "Alaşehir", "Demirci", "Gölmarmara", "Gördes", "Kula", "Köprübaşı", "Kırkağaç", "Salihli", "Saruhanlı", "Sarıgöl", "Selendi", "Soma", "Turgutlu", "Yunusemre", "Şehzadeler"],
+  "Mardin":["Artuklu", "Dargeçit", "Derik", "Kızıltepe", "Mazıdağı", "Midyat", "Nusaybin", "Savur", "Yeşilli", "Ömerli"],
+  "Mersin":["Akdeniz", "Anamur", "Aydıncık", "Bozyazı", "Erdemli", "Gülnar", "Mezitli", "Mut", "Silifke", "Tarsus", "Toroslar", "Yenişehir", "Çamlıyayla"],
+  "Muğla":["Bodrum", "Dalaman", "Datça", "Fethiye", "Kavaklıdere", "Köyceğiz", "Marmaris", "Menteşe", "Milas", "Ortaca", "Seydikemer", "Ula", "Yatağan"],
+  "Muş":["Bulanık", "Hasköy", "Korkut", "Malazgirt", "Merkez", "Varto"],
+  "Nevşehir":["Acıgöl", "Avanos", "Derinkuyu", "Gülşehir", "Hacıbektaş", "Kozaklı", "Merkez", "Ürgüp"],
+  "Niğde":["Altunhisar", "Bor", "Merkez", "Ulukışla", "Çamardı", "Çiftlik"],
+  "Ordu":["Akkuş", "Altınordu", "Aybastı", "Fatsa", "Gölköy", "Gülyalı", "Gürgentepe", "Kabadüz", "Kabataş", "Korgan", "Kumru", "Mesudiye", "Perşembe", "Ulubey", "Çamaş", "Çatalpınar", "Çaybaşı", "Ünye", "İkizce"],
+  "Osmaniye":["Bahçe", "Düziçi", "Hasanbeyli", "Kadirli", "Merkez", "Sumbas", "Toprakkale"],
+  "Rize":["Ardeşen", "Derepazarı", "Fındıklı", "Güneysu", "Hemşin", "Kalkandere", "Merkez", "Pazar", "Çamlıhemşin", "Çayeli", "İkizdere", "İyidere"],
+  "Sakarya":["Adapazarı", "Akyazı", "Arifiye", "Erenler", "Ferizli", "Geyve", "Hendek", "Karapürçek", "Karasu", "Kaynarca", "Kocaali", "Pamukova", "Sapanca", "Serdivan", "Söğütlü", "Taraklı"],
+  "Samsun":["19 mayıs", "Alaçam", "Asarcık", "Atakum", "Ayvacık", "Bafra", "Canik", "Havza", "Kavak", "Ladik", "Salıpazarı", "Tekkeköy", "Terme", "Vezirköprü", "Yakakent", "Çarşamba", "İlkadım"],
+  "Siirt":["Baykan", "Eruh", "Kurtalan", "Merkez", "Pervari", "Tillo", "Şirvan"],
+  "Sinop":["Ayancık", "Boyabat", "Dikmen", "Durağan", "Erfelek", "Gerze", "Merkez", "Saraydüzü", "Türkeli"],
+  "Sivas":["Akıncılar", "Altınyayla", "Divriği", "Doğanşar", "Gemerek", "Gölova", "Gürün", "Hafik", "Kangal", "Koyulhisar", "Merkez", "Suşehri", "Ulaş", "Yıldızeli", "Zara", "İmranlı", "Şarkışla"],
+  "Tekirdağ":["Ergene", "Hayrabolu", "Kapaklı", "Malkara", "Marmaraereğlisi", "Muratlı", "Saray", "Süleymanpaşa", "Çerkezköy", "Çorlu", "Şarköy"],
+  "Tokat":["Almus", "Artova", "Başçiftlik", "Erbaa", "Merkez", "Niksar", "Pazar", "Reşadiye", "Sulusaray", "Turhal", "Yeşilyurt", "Zile"],
+  "Trabzon":["Akçaabat", "Araklı", "Arsin", "Beşikdüzü", "Dernekpazarı", "Düzköy", "Hayrat", "Köprübaşı", "Maçka", "Of", "Ortahisar", "Sürmene", "Tonya", "Vakfıkebir", "Yomra", "Çarşıbaşı", "Çaykara", "Şalpazarı"],
+  "Tunceli":["Hozat", "Mazgirt", "Merkez", "Nazımiye", "Ovacık", "Pertek", "Pülümür", "Çemişgezek"],
+  "Uşak":["Banaz", "Eşme", "Karahallı", "Merkez", "Sivaslı", "Ulubey"],
+  "Van":["Bahçesaray", "Başkale", "Edremit", "Erciş", "Gevaş", "Gürpınar", "Muradiye", "Saray", "Tuşba", "Çaldıran", "Çatak", "Özalp", "İpekyolu"],
+  "Yalova":["Altınova", "Armutlu", "Merkez", "Termal", "Çiftlikköy", "Çınarcık"],
+  "Yozgat":["Akdağmadeni", "Aydıncık", "Boğazlıyan", "Kadışehri", "Merkez", "Saraykent", "Sarıkaya", "Sorgun", "Yenifakılı", "Yerköy", "Çandır", "Çayıralan", "Çekerek", "Şefaatli"],
+  "Zonguldak":["Alaplı", "Devrek", "Ereğli", "Gökçebey", "Kilimli", "Kozlu", "Merkez", "Çaycuma"],
+  "Çanakkale":["Ayvacık", "Bayramiç", "Biga", "Bozcaada", "Eceabat", "Ezine", "Gelibolu", "Gökçeada", "Lapseki", "Merkez", "Yenice", "Çan"],
+  "Çankırı":["Atkaracalar", "Bayramören", "Eldivan", "Ilgaz", "Korgun", "Kurşunlu", "Kızılırmak", "Merkez", "Orta", "Yapraklı", "Çerkeş", "Şabanözü"],
+  "Çorum":["Alaca", "Bayat", "Boğazkale", "Dodurga", "Kargı", "Laçin", "Mecitözü", "Merkez", "Ortaköy", "Osmancık", "Oğuzlar", "Sungurlu", "Uğurludağ", "İskilip"],
+  "İstanbul":["Adalar", "Arnavutköy", "Ataşehir", "Avcılar", "Bahçelievler", "Bakırköy", "Bayrampaşa", "Bağcılar", "Başakşehir", "Beykoz", "Beylikdüzü", "Beyoğlu", "Beşiktaş", "Büyükçekmece", "Esenler", "Esenyurt", "Eyüpsultan", "Fatih", "Gaziosmanpaşa", "Güngören", "Kadıköy", "Kartal", "Kağıthane", "Küçükçekmece", "Maltepe", "Pendik", "Sancaktepe", "Sarıyer", "Silivri", "Sultanbeyli", "Sultangazi", "Tuzla", "Zeytinburnu", "Çatalca", "Çekmeköy", "Ümraniye", "Üsküdar", "Şile", "Şişli"],
+  "İzmir":["Aliağa", "Balçova", "Bayraklı", "Bayındır", "Bergama", "Beydağ", "Bornova", "Buca", "Dikili", "Foça", "Gaziemir", "Güzelbahçe", "Karabağlar", "Karaburun", "Karşıyaka", "Kemalpaşa", "Kiraz", "Konak", "Kınık", "Menderes", "Menemen", "Narlıdere", "Seferihisar", "Selçuk", "Tire", "Torbalı", "Urla", "Çeşme", "Çiğli", "Ödemiş"],
+  "Şanlıurfa":["Akçakale", "Birecik", "Bozova", "Ceylanpınar", "Eyyübiye", "Halfeti", "Haliliye", "Harran", "Hilvan", "Karaköprü", "Siverek", "Suruç", "Viranşehir"],
+  "Şırnak":["Beytüşşebap", "Cizre", "Güçlükonak", "Merkez", "Silopi", "Uludere", "İdil"],
 };
 /* Kayıttaki ilçe alanı bazen il adını taşır ("İstanbul Anadolu") ya da boştur.
    Bu durumda adresteki "İlçe/İl" kalıbından gerçek ilçe çıkarılır. */
@@ -1438,12 +1541,18 @@ function districtsOf(city){
     if((e.city||'')===(city||'')&&e.district&&e.district!==city)set[e.district]=1;
   });
   var out=Object.keys(set).sort(function(a,b){return a.localeCompare(b,'tr')});
-  (CITY_DISTRICTS[city]||[]).forEach(function(d){if(out.indexOf(d)<0)out.push(d)});
+  (TR_CITY_DISTRICTS[city]||[]).forEach(function(d){if(out.indexOf(d)<0)out.push(d)});
   return out;
 }
 var ALL_EVENTS=[];
 var GENC_ACTIVE=null;
-var CITIES=['İzmir'];
+/* Şehir listesi: 81 il; etkinliği olan iller başta gelir. */
+function cityList(){
+  var has={};ALL_EVENTS.forEach(function(e){if(e.city)has[e.city]=1});
+  var a=TR_CITIES.filter(function(c){return has[c]});
+  var b=TR_CITIES.filter(function(c){return !has[c]});
+  return a.concat(b);
+}
 /* Etkinlik ve salon fotoğrafları: gömülü veriden gelir; yoksa SVG/renk yedeği. */
 function photoFor(e){
   var src=e.img||(e.venue&&VENUE_PHOTOS[e.venue])||'';
@@ -1568,8 +1677,6 @@ function applyRealData(payload){
   if(!src||!src.events||!src.events.length)return false;
   ALL_EVENTS=src.events.map(realToEvent);
   if(src.city)S.city=src.city;
-  if(src.cities&&src.cities.length)CITIES=src.cities.slice();
-  else if(src.city)CITIES=[src.city];
   ALL_EVENTS.forEach(function(e){
     e.day=+e.date.slice(8,10);e.mon=MON[+e.date.slice(5,7)-1];
   });
@@ -1637,7 +1744,7 @@ function setCity(city){
   S.city=city;
   /* Şehir değişince varsayılan konum o şehrin merkezine taşınır (konum açık değilse). */
   if(!S.loc.geo){
-    var c=CITY_COORDS[city]||IZMIR;
+    var c=TR_CITY_COORDS[city]||IZMIR;
     S.loc={d:city,lat:c[0],lng:c[1]};
   }
   persist();rebuildCity();
@@ -1733,7 +1840,7 @@ var S={
   likes:['Konser','Sinema','Gezi turu'],
   locOn:true,loc:{d:'İzmir',lat:38.4192,lng:27.1287},city:'İzmir',district:'',
   cards:[],
-  tickets:[],saved:[],loggedIn:false,
+  tickets:[],saved:[],loggedIn:false,guest:false,
   photo:'',
   acctId:'',provider:'',
   filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'home',adOff:false,
@@ -1744,7 +1851,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.27';
+var APP_VERSION='1.30';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -1837,7 +1944,7 @@ function getApk(){
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
@@ -1847,6 +1954,7 @@ function restore(){
   if(typeof d.version==='string')S.version=d.version;
   if(typeof d.acctId==='string')S.acctId=d.acctId;
   if(typeof d.provider==='string')S.provider=d.provider;
+  if(typeof d.guest==='boolean')S.guest=d.guest;
   if(typeof d.locOn==='boolean')S.locOn=d.locOn;
   if(typeof d.city==='string'&&d.city)S.city=d.city;
   if(typeof d.district==='string')S.district=d.district;
@@ -1969,8 +2077,8 @@ function locLabel(){return S.loc.geo?'Konumum':S.loc.d}
 /* Konumdan en yakın bilinen şehri bulur (konum açılınca şehir otomatik seçilir). */
 function nearestCity(lat,lng){
   var best=null,bd=1e9;
-  Object.keys(CITY_COORDS).forEach(function(c){
-    var p=CITY_COORDS[c],d=Math.pow(p[0]-lat,2)+Math.pow(p[1]-lng,2);
+  Object.keys(TR_CITY_COORDS).forEach(function(c){
+    var p=TR_CITY_COORDS[c],d=Math.pow(p[0]-lat,2)+Math.pow(p[1]-lng,2);
     if(d<bd){bd=d;best=c}
   });
   return bd<0.25?best:null; /* ~500 km içindeki en yakın şehir */
@@ -2080,7 +2188,7 @@ function paintObLoc(){
    Keşfet'te uygulanır. Kullanıcıya kendi ili ve ilçesi sorulur. */
 function fillCitySelect(){
   var sel=$('#in-city');if(!sel)return;
-  var cities=CITIES.length?CITIES:['İzmir'];
+  var cities=cityList();
   sel.innerHTML=cities.map(function(c){return '<option value="'+esc(c)+'"'+(S.city===c?' selected':'')+'>'+esc(c)+'</option>'}).join('');
   fillDistrictSelect();
 }
@@ -2118,6 +2226,38 @@ var GOOGLE_CLIENT_ID=(function(){
   return (m&&m.content.trim())||'';
 })();
 function normEmail(e){return String(e||'').trim().toLowerCase()}
+/* Yaygın sahte/tek kullanımlık e-posta alan adları: kabul edilmez. */
+var BAD_MAIL_DOMAINS=['mailinator.com','tempmail.com','temp-mail.org','10minutemail.com','guerrillamail.com','guerrillamail.net','yopmail.com','yopmail.fr','trashmail.com','sharklasers.com','throwawaymail.com','getnada.com','maildrop.cc','dispostable.com','fakeinbox.com','example.com','example.org','test.com','test.test','localhost','mail.com.trfake'];
+/* Sık yapılan yazım hataları: doğru adres önerilir. */
+var MAIL_TYPOS={'gmial.com':'gmail.com','gmai.com':'gmail.com','gamil.com':'gmail.com','gmaill.com':'gmail.com','gmail.co':'gmail.com','gmail.con':'gmail.com','gmail.cm':'gmail.com','gnail.com':'gmail.com','hotmial.com':'hotmail.com','hotmai.com':'hotmail.com','hotmail.co':'hotmail.com','outlok.com':'outlook.com','outlook.co':'outlook.com','yaho.com':'yahoo.com','yahoo.co':'yahoo.com','icloud.co':'icloud.com'};
+/* Geçerli e-posta denetimi: biçim + alan adı kuralları. */
+function validEmail(m){
+  m=normEmail(m);
+  if(m.length<6||m.length>254)return false;
+  if(!/^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(m))return false;
+  var p=m.split('@');if(p.length!==2)return false;
+  var loc=p[0],dom=p[1];
+  if(loc.length<1||loc.length>64)return false;
+  if(/^\.|\.$|\.\./.test(loc))return false;          /* baştaki/sondaki/çift nokta yok */
+  if(/^\.|\.$|\.\.|^-|-$/.test(dom))return false;    /* alan adı nokta/tire ile başlamaz/bitmez */
+  if(dom.indexOf('.')<1)return false;
+  var tld=dom.split('.').pop();
+  if(!/^[a-z]{2,24}$/.test(tld))return false;        /* uzantı yalnızca harf */
+  if(BAD_MAIL_DOMAINS.indexOf(dom)>-1)return false;  /* sahte/tek kullanımlık alan adı */
+  return true;
+}
+/* Kayıt/giriş için e-posta denetimi; sorun varsa Türkçe açıklama döndürür. */
+function emailCheck(m){
+  m=normEmail(m);
+  if(!m)return {ok:false,err:'E-posta adresini yazar mısın?'};
+  if(!/^[^@\s]+@[^@\s]+$/.test(m))return {ok:false,err:'E-posta adresi geçerli görünmüyor. Örn. ad@ornek.com'};
+  var dom=m.split('@')[1]||'';
+  if(BAD_MAIL_DOMAINS.indexOf(dom)>-1)return {ok:false,err:'Bu e-posta servisi kabul edilmiyor. Lütfen gerçek adresini kullan.'};
+  var typo=MAIL_TYPOS[dom];
+  if(typo)return {ok:false,err:'“'+dom+'” yazımı yanlış görünüyor. “'+typo+'” demek istedin mi?'};
+  if(!validEmail(m))return {ok:false,err:'E-posta adresi geçerli görünmüyor. Örn. ad@ornek.com'};
+  return {ok:true,err:''};
+}
 function loadAccounts(){try{var a=JSON.parse(localStorage.getItem(ACCT_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
 function saveAccounts(a){try{localStorage.setItem(ACCT_KEY,JSON.stringify(a))}catch(e){}}
 function findAccount(email){email=normEmail(email);var l=loadAccounts();for(var i=0;i<l.length;i++)if(l[i].email===email)return l[i];return null}
@@ -2145,6 +2285,7 @@ function authHash(pass,salt){
 function newAcctId(prefix){return prefix+Date.now().toString(36)+cryptoRandom(3)}
 function doSignup(name,email,pass){
   email=normEmail(email);
+  if(!validEmail(email))return Promise.resolve({err:'E-posta adresi geçerli görünmüyor.'});
   if(findAccount(email))return Promise.resolve({err:'Bu e-posta ile bir hesap zaten var. Giriş yapmayı dene.'});
   var salt=cryptoRandom(16);
   return authHash(pass,salt).then(function(h){
@@ -2164,11 +2305,16 @@ function doLogin(email,pass){
   });
 }
 function applyAccount(a,isNew){
-  S.acctId=a.id;S.provider=a.provider||'email';
+  S.acctId=a.id;S.provider=a.provider||'email';S.guest=false;
   S.name=a.name||S.name;S.email=a.email||S.email;
   if(a.photo)S.photo=a.photo;
   persist();
-  if(isNew){toast('Hesabın oluşturuldu.');showStep(2)}
+  registerUser(S.name);
+  if(isNew){
+    toast('Hesabın oluşturuldu.');
+    if(upgradingFromGuest){upgradingFromGuest=false;enterMain()}
+    else showStep(2);
+  }
   else{toast('Giriş yapıldı. Hoş geldin, '+firstName(a.name)+'!');enterMain()}
 }
 
@@ -2200,7 +2346,8 @@ function submitAuth(){
   if(authMode==='signup'){
     var n=$('#in-name').value.trim(),m=$('#in-mail').value.trim(),p=$('#in-pass').value;
     if(n.length<2){er.textContent='Adını yazar mısın?';$('#in-name').focus();return}
-    if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='E-posta adresi geçerli görünmüyor.';$('#in-mail').focus();return}
+    var ec=emailCheck(m);
+    if(!ec.ok){er.textContent=ec.err;$('#in-mail').focus();return}
     if(p.length<6){er.textContent='Şifre en az 6 karakter olmalı.';$('#in-pass').focus();return}
     busy(btn,true);
     doSignup(n,m,p).then(function(r){
@@ -2210,7 +2357,8 @@ function submitAuth(){
     });
   }else{
     var m2=$('#li-mail').value.trim(),p2=$('#li-pass').value;
-    if(!/^\S+@\S+\.\S+$/.test(m2)){er.textContent='E-posta adresi geçerli görünmüyor.';$('#li-mail').focus();return}
+    var ec2=emailCheck(m2);
+    if(!ec2.ok){er.textContent=ec2.err;$('#li-mail').focus();return}
     if(!p2){er.textContent='Şifreni yazar mısın?';$('#li-pass').focus();return}
     busy(btn,true);
     doLogin(m2,p2).then(function(r){
@@ -2263,6 +2411,15 @@ function onGoogleCred(resp){
   }
   applyAccount(a,isNew);
 }
+function googleInit(){
+  window.google.accounts.id.initialize({
+    client_id:GOOGLE_CLIENT_ID,
+    callback:onGoogleCred,
+    auto_select:false,
+    cancel_on_tap_outside:true,
+    use_fedcm_for_prompt:true
+  });
+}
 function googleSignIn(){
   var er=$('#err1');er.textContent='';
   if(!GOOGLE_CLIENT_ID){er.textContent='Google ile giriş henüz ayarlanmadı; e-posta ile devam edebilirsin.';return}
@@ -2270,19 +2427,162 @@ function googleSignIn(){
   loadGsi().then(function(ok){
     btn.disabled=false;
     if(!ok||!window.google||!window.google.accounts){er.textContent='Google servisine ulaşılamadı. İnternetini kontrol et.';return}
-    window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:onGoogleCred,auto_select:false,cancel_on_tap_outside:true});
-    window.google.accounts.id.prompt();
+    googleInit();
+    /* One Tap penceresi engellenirse (FedCM/çerez ayarı) kullanıcıya haber ver. */
+    window.google.accounts.id.prompt(function(n){
+      if(n&&n.isNotDisplayed&&n.isNotDisplayed()){
+        er.textContent='Google penceresi açılamadı. Tarayıcın açılır pencereyi engelliyor olabilir; e-posta ile de devam edebilirsin.';
+      }
+    });
   });
 }
 $('#gbtn').addEventListener('click',googleSignIn);
+
+/* ---------- aktif kullanıcı sayacı (pazarlama) ----------
+   Sayaç: abacus.jasoncameron.dev (anahtarsız, CORS açık, kalıcı).
+   İsim akışı: ntfy.sh (anahtarsız, CORS açık, son 12 saat).
+   Ağ hataları uygulamayı asla etkilemez: başarısız olursa sessizce atlanır. */
+var STATS_NS='genc-app-7f3a91';
+var STATS_KEY='uyeler';
+var STATS_BASE='https://abacus.jasoncameron.dev';
+var NAMES_TOPIC='genc-uyeler-7f3a91b2';
+var STATS_SEEN='genc.counted';
+var NAMES_SEEN='genc.namesent';
+var COUNT_CACHE='genc.countcache';
+var activeCache={ts:0,count:0,names:[]};
+function statCounted(){try{return localStorage.getItem(STATS_SEEN)==='1'}catch(e){return false}}
+function markCounted(){try{localStorage.setItem(STATS_SEEN,'1')}catch(e){}}
+function namesSent(){try{return localStorage.getItem(NAMES_SEEN)==='1'}catch(e){return false}}
+function markNamesSent(){try{localStorage.setItem(NAMES_SEEN,'1')}catch(e){}}
+function cacheCount(n){try{localStorage.setItem(COUNT_CACHE,String(n))}catch(e){}}
+function cachedCount(){try{var v=parseInt(localStorage.getItem(COUNT_CACHE),10);return v>0?v:0}catch(e){return 0}}
+/* Sayaç servisi ara sıra 500 döndürür; birkaç deneme ile toparlanır. */
+function getJSON(url,tries){
+  return fetch(url,{cache:'no-store'}).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  }).catch(function(e){
+    if(tries<=1)throw e;
+    return new Promise(function(res){setTimeout(res,700)}).then(function(){return getJSON(url,tries-1)});
+  });
+}
+/* Kayıtlı ya da misafir, adı olan herkesi sayaca ve isim akışına ekler. */
+function registerUser(name){
+  if(!name||name.length<2)return;
+  if(!statCounted()){
+    getJSON(STATS_BASE+'/hit/'+STATS_NS+'/'+STATS_KEY,3).then(function(d){
+      if(d&&typeof d.value==='number'){markCounted();cacheCount(d.value);activeCache.count=d.value;renderActiveUsers()}
+    }).catch(function(){});
+  }
+  if(!namesSent()){
+    fetch('https://ntfy.sh/'+NAMES_TOPIC,{method:'POST',body:name,cache:'no-store'})
+      .then(function(){markNamesSent()}).catch(function(){});
+  }
+}
+/* Sayaç ve isim akışını okur (en çok 3 dakikada bir tazelenir). */
+function loadActiveUsers(force){
+  var now=Date.now();
+  if(!force&&now-activeCache.ts<180000)return;
+  activeCache.ts=now;
+  if(!activeCache.count){var c=cachedCount();if(c){activeCache.count=c;renderActiveUsers()}}
+  getJSON(STATS_BASE+'/get/'+STATS_NS+'/'+STATS_KEY,3).then(function(d){
+    if(d&&typeof d.value==='number'){activeCache.count=d.value;cacheCount(d.value);renderActiveUsers()}
+  }).catch(function(){});
+  fetch('https://ntfy.sh/'+NAMES_TOPIC+'/json?poll=1',{cache:'no-store'})
+    .then(function(r){return r.text()}).then(function(t){
+      var seen={},list=[];
+      t.split('\n').forEach(function(line){
+        if(!line.trim())return;
+        try{
+          var m=JSON.parse(line);
+          if(!m||m.event!=='message'||!m.message)return;
+          var n=String(m.message).trim().slice(0,24);
+          if(n.length<2)return;
+          var k=norm(n);
+          if(seen[k])return;seen[k]=1;list.push(n);
+        }catch(e){}
+      });
+      if(list.length){activeCache.names=list.slice(-24).reverse();renderActiveUsers()}
+    }).catch(function(){});
+}
+/* Sayaç servisi yanıt vermezse canlı isim akışı (son 12 saat) yedek olur. */
+function effectiveCount(){return activeCache.count>0?activeCache.count:activeCache.names.length}
+/* Sayıyı Türkçe biçimde yazar: 1240 -> "1.240". */
+function userCountText(n){return (n||0).toLocaleString('tr-TR')}
+function renderActiveUsers(){
+  var n=effectiveCount();
+  var el=$('#livebar');
+  if(el){
+    if(n>0){
+      var names=activeCache.names;
+      var extra=names.length?'<span class="lvnames">'+names.slice(0,3).map(function(x){return '<b>'+esc(x)+'</b>'}).join(', ')+(names.length>3?' ve diğerleri':'')+'</span>':'';
+      el.innerHTML=ic('user')+'<span><strong>'+userCountText(n)+' kişi Genç’i kullanıyor</strong><small>Sen de aramızdasın'+(extra?': '+extra:'')+'.</small></span>';
+      el.hidden=false;
+    }else el.hidden=true;
+  }
+  var pl=$('#active-users');
+  if(pl){
+    if(n>0){
+      var h='<div class="sec"><h2 class="disp">Aktif kullanıcılar</h2></div>';
+      h+='<div class="livebig">'+ic('user')+'<span><strong>'+userCountText(n)+'</strong><small>kişi Genç’i kullanıyor</small></span></div>';
+      if(activeCache.names.length){
+        h+='<div class="likes livechips">'+activeCache.names.map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</div>';
+      }
+      pl.innerHTML=h;
+    }else pl.innerHTML='';
+  }
+}
+
+function isRegistered(){return !!S.acctId}
+var upgradingFromGuest=false;
+function startGuest(){
+  if(S.name){S.guest=true;S.acctId='';S.provider='';persist();registerUser(S.name);showStep(2);return}
+  var h='<p class="gsay">Devam etmek için adını yaz. Bilet almak istersen tek dokunuşla hesap oluşturursun.</p>'+
+        '<div class="field"><label for="g-name">Adın</label><input id="g-name" type="text" autocomplete="given-name" placeholder="Örn. Emre"></div>'+
+        '<p class="err" id="g-err" role="alert"></p>';
+  openSheet('Adın ne?',h,function(body){
+    var inp=$('#g-name');if(inp)setTimeout(function(){inp.focus()},80);
+    function go(){
+      var n=(inp.value||'').trim();
+      if(n.length<2){$('#g-err').textContent='Adını yazar mısın?';inp.focus();return}
+      S.guest=true;S.name=n;S.acctId='';S.provider='';persist();
+      registerUser(n);
+      closeSheet();showStep(2);
+    }
+    var b=document.createElement('button');
+    b.className='cta sm';b.type='button';b.textContent='Devam et';
+    b.addEventListener('click',go);
+    body.appendChild(b);
+    if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();go()}});
+  });
+}
+$('#guestbtn').addEventListener('click',startGuest);
+/* Kayıt olmadan bilet alınamaz: kullanıcıyı hesap oluşturmaya yönlendirir. */
+function accountPrompt(){
+  var h='<p class="gsay">Bilet almak için hesap oluşturman gerekiyor. Böylece biletlerin güvenle saklanır ve sana ulaşabiliriz.</p>'+
+        '<button class="cta sm" type="button" data-act="gotoreg">Hesap oluştur</button>'+
+        '<button class="cta sm ghost" type="button" data-act="later">Şimdi değil</button>';
+  openSheet('Hesap gerekli',h,function(body){
+    var r=body.querySelector('[data-act="gotoreg"]'),l=body.querySelector('[data-act="later"]');
+    if(r)r.addEventListener('click',function(){closeSheet();goRegister()});
+    if(l)l.addEventListener('click',closeSheet);
+  });
+}
+function goRegister(){
+  upgradingFromGuest=true;
+  $('#main').hidden=true;$('#onb').hidden=false;
+  setAuthMode('signup');
+  if(S.name)$('#in-name').value=S.name;
+  showStep(1);
+}
 $('#pickgo').addEventListener('click',function(){
   var s=selectedPicks($('#picks'));if(!s.length)return;S.likes=s;
-  var sel=$('#in-city');if(sel&&sel.value){S.city=sel.value;if(!S.loc.geo){var c=CITY_COORDS[S.city]||IZMIR;S.loc={d:S.city,lat:c[0],lng:c[1]}}rebuildCity()}
+  var sel=$('#in-city');if(sel&&sel.value){S.city=sel.value;if(!S.loc.geo){var c=TR_CITY_COORDS[S.city]||IZMIR;S.loc={d:S.city,lat:c[0],lng:c[1]}}rebuildCity()}
   var dsel=$('#in-district');S.district=(dsel&&dsel.value)?dsel.value:'';
   showStep(3);
 });
 $('#in-city').addEventListener('change',function(){
-  S.city=this.value;if(!S.loc.geo){var c=CITY_COORDS[S.city]||IZMIR;S.loc={d:S.city,lat:c[0],lng:c[1]}}rebuildCity();
+  S.city=this.value;if(!S.loc.geo){var c=TR_CITY_COORDS[S.city]||IZMIR;S.loc={d:S.city,lat:c[0],lng:c[1]}}rebuildCity();
   S.district='';fillDistrictSelect();
 });
 $('#go3').addEventListener('click',enterMain);
@@ -2296,6 +2596,7 @@ function enterMain(){
   renderAll();setTab('home');
   if(pendingShortcut){runShortcut(pendingShortcut);pendingShortcut=null}else applyDeepLink();
   openSharedTicket();
+  loadActiveUsers(true);
 }
 
 /* ---------- tema (yalnızca sistem teması) ---------- */
@@ -2601,7 +2902,7 @@ function evHead(){
     '<button type="button" class="evlink" data-act="evcity">Şehir değiştir</button></div>';
 }
 function evCitySheet(){
-  var cities=CITIES.length?CITIES:['İzmir'];
+  var cities=cityList();
   var h='<div class="fsheet"><div class="fg"><h4>Şehir</h4><div class="fwrap">'+cities.map(function(c){
     return '<button type="button" class="'+(S.city===c?'on':'')+'" data-evsetcity="'+esc(c)+'">'+esc(c)+'</button>';
   }).join('')+'</div></div>'+
@@ -2699,7 +3000,7 @@ $('#q').addEventListener('input',function(){S.q=this.value;renderBrowse()});
 $('#q').addEventListener('change',function(){rememberSearch(this.value)});
 $('#q').addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();this.blur();rememberSearch(this.value)}});
 $('#locbtn').addEventListener('click',function(){
-  var cities=CITIES.length?CITIES:['İzmir'];
+  var cities=cityList();
   openSheet('Konum', '<div class="locrow" style="margin:0 0 12px"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg>'+
     '<div class="t"><span id="ls-name">'+esc(S.locOn?locLabel()+' · '+S.city:S.city+' · konum kapalı')+'</span><small id="ls-sub">'+esc(S.locOn&&S.loc.geo?'Yakınındakiler önce gösteriliyor':'Konumunu kullanarak yakınındaki etkinlikleri öne çıkar')+'</small></div>'+
     '<button class="sw" id="ls-sw" type="button" role="switch" aria-checked="'+(S.locOn?'true':'false')+'" aria-label="Konumu kullan"></button></div>'+
@@ -2716,9 +3017,9 @@ $('#locbtn').addEventListener('click',function(){
     });
   });
 });
-/* İlçe seçim çipleri: "Tümü" + o ilde etkinliği olan ilçeler. */
+/* İlçe seçim çipleri: "Tümü" + o ilin tüm ilçeleri. */
 function districtChips(){
-  var list=districtsOf(S.city).filter(function(d){return EVENTS.some(function(e){return e.district===d})});
+  var list=districtsOf(S.city);
   if(!list.length)return '<span class="hint" style="padding:0">Bu il için ilçe bilgisi yok.</span>';
   return '<button type="button" class="'+(S.district?'':'on')+'" data-setdistrict="">Tümü</button>'+list.map(function(d){
     return '<button type="button" class="'+(S.district===d?'on':'')+'" data-setdistrict="'+esc(d)+'">'+esc(d)+'</button>';
@@ -2886,25 +3187,27 @@ function paneKurallar(e){
 /* ---------- haftalık paylaşım görseli ----------
    Yerel sosyal gruplarda (mahalle/semt grupları, WhatsApp toplulukları, yerel
    haber sayfaları) paylaşılmak üzere "Bu hafta ne var?" kartı çizer. Kart
-   tamamen cihazda üretilir ve yalnızca yerel varlıkları kullanır: uzak satıcı
-   fotoğrafları CORS'suz olduğundan canvas'a çizilemez, bu yüzden fotoğraf yerine
-   türü simgeleyen renk geçişi kullanılır. Şehir adı konuma göre değişir. */
+   cihazda üretilir; etkinlik afişleri satıcı CDN'lerinden `crossOrigin`
+   isteğiyle çekilir (üç kaynak da `Access-Control-Allow-Origin: *` verir), bu
+   yüzden canvas lekelenmez. Fotoğraf gelmezse türü simgeleyen renk geçişi
+   kullanılır. Şehir adı konuma göre değişir. */
 var WK={w:1080,h:1350,c:null};
 var WK_ART={'art-concert':['#E5402A','#8A1F14'],'art-theatre':['#5A2A3A','#8A3A4A'],'art-film':['#2A1A12','#7A2A1E'],'art-tour':['#3F6B4A','#2A4A33'],'art-festival':['#E5712A','#B34A12'],'art-standup':['#C5321F','#7A2010'],'art-kids':['#2A6E8A','#1D4C63'],'art-sport':['#2F5E43','#1F3F2D'],'art-expo':['#7A5A38','#5A4028'],'art-dance':['#8A1F14','#5A2A3A']};
 var WK_GLYPH={'Konser':'\u266A','Tiyatro':'\u25AD','Sinema':'\u25B6','Festival':'\u2726','Stand-up':'\u263A','Çocuk':'\u2605','Spor':'\u26BD','Sergi':'\u25A3','Opera ve bale':'\u266B','Dans':'\u266B'};
 function wkArt(art){return WK_ART[art]||['#E5402A','#8A1F14']}
 function wkGlyph(type){return WK_GLYPH[type]||'\u2726'}
 /* Paylaşım kartında uygulamanın kendi logosu kullanılır (referans alınır, kopyalanmaz):
-   gömülü #logo simgesindeki yol verisi yeniden kullanılır, tema değişkenleri
-   kart zemini için açık tonlarla değiştirilir. */
+   gömülü #logo simgesindeki yol verisi yeniden kullanılır. Kart zemini krem
+   olduğu için logo koyu mürekkep + kırmızı aksanla boyanır (currentColor ve
+   --logo-accent sırasıyla INK ve BRAND ile değiştirilir). */
 var WK_LOGO=null,WK_LOGO_URL=null;
 function wkLogoURL(){
   if(WK_LOGO_URL!==null)return WK_LOGO_URL;
   var sym=document.getElementById('logo');
   if(!sym){WK_LOGO_URL='';return WK_LOGO_URL}
   var inner=sym.innerHTML
-    .replace(/var\(--logo-ink\)/g,'#FFFFFF').replace(/var\(--logo-accent\)/g,'#FFD9CE');
-  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2585.39 896.85" color="#FFFFFF">'+inner+'</svg>';
+    .replace(/var\(--logo-ink\)/g,'#14100D').replace(/var\(--logo-accent\)/g,'#E5402A');
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2585.39 896.85" color="#14100D">'+inner+'</svg>';
   WK_LOGO_URL='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
   return WK_LOGO_URL;
 }
@@ -2915,6 +3218,40 @@ function wkLoadLogo(cb){
   im.onload=function(){WK_LOGO=im;if(cb)cb()};
   im.onerror=function(){if(cb)cb()};
   im.src=url;
+}
+/* Etkinlik afişlerini canvas'a çizilebilir hâle getirir. Satıcı CDN'leri
+   `Access-Control-Allow-Origin: *` verdiği için `crossOrigin` ile çekilir;
+   gelmeyen afişler için renk geçişli yedek kullanılır. */
+var WK_IMGS={};
+function wkPreloadPicks(cb){
+  var picks=wkPicks(),left=picks.length;
+  if(!left){cb();return}
+  var done=function(){left--;if(left<=0)cb()};
+  picks.forEach(function(e){
+    if(!e.img||WK_IMGS[e.id]!==undefined){done();return}
+    WK_IMGS[e.id]=null;
+    var im=new Image();im.crossOrigin='anonymous';
+    im.onload=function(){WK_IMGS[e.id]=im;done()};
+    im.onerror=function(){done()};
+    im.src=e.img;
+  });
+}
+function wkPoster(x,px,py,size,e,r){
+  x.save();wkRound(x,px,py,size,size,r);x.clip();
+  var im=e&&WK_IMGS[e.id];
+  if(im&&im.width){
+    var s=Math.max(size/im.width,size/im.height),dw=im.width*s,dh=im.height*s;
+    x.drawImage(im,px+(size-dw)/2,py+(size-dh)/2,dw,dh);
+  }else{
+    var cols=wkArt(e.art),g=x.createLinearGradient(px,py,px+size,py+size);
+    g.addColorStop(0,cols[0]);g.addColorStop(1,cols[1]);
+    x.fillStyle=g;x.fillRect(px,py,size,size);
+    x.fillStyle='#FFFFFF';x.textAlign='center';x.textBaseline='middle';
+    x.font='800 '+Math.round(size*0.5)+'px Archivo,system-ui,sans-serif';
+    x.fillText(wkGlyph(e.type),px+size/2,py+size/2+2);
+    x.textAlign='left';x.textBaseline='alphabetic';
+  }
+  x.restore();
 }
 function wkRound(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath()}
 function wkFillRound(c,x,y,w,h,r,fill){wkRound(c,x,y,w,h,r);c.fillStyle=fill;c.fill()}
@@ -2950,73 +3287,72 @@ function buildWeeklyCanvas(){
   var c=document.createElement('canvas');c.width=WK.w;c.height=WK.h;
   var x=c.getContext('2d');
   var city=S.city||'İzmir',picks=wkPicks();
-  var bg=x.createLinearGradient(0,0,WK.w,WK.h);
-  bg.addColorStop(0,'#1B1145');bg.addColorStop(.55,'#2A1B63');bg.addColorStop(1,'#3D1E6E');
-  x.fillStyle=bg;x.fillRect(0,0,WK.w,WK.h);
-  var glow=x.createRadialGradient(900,140,10,900,140,720);
-  glow.addColorStop(0,'rgba(180,77,224,.5)');glow.addColorStop(1,'rgba(180,77,224,0)');
-  x.fillStyle=glow;x.fillRect(0,0,WK.w,700);
-  var glow2=x.createRadialGradient(120,1200,10,120,1200,700);
-  glow2.addColorStop(0,'rgba(91,61,245,.45)');glow2.addColorStop(1,'rgba(91,61,245,0)');
-  x.fillStyle=glow2;x.fillRect(0,700,WK.w,WK.h-700);
+  var CREAM='#F7F0E6',CARD='#FFFFFF',INK='#14100D',BRAND='#E5402A',MUTE='#6E655B',LINE='#E6DCCF';
 
-  /* üst şerit: marka + şehir etiketi */
-  wkFillRound(x,64,58,120,120,34,'rgba(255,255,255,.12)');
+  /* zemin + üst marka şeridi */
+  x.fillStyle=CREAM;x.fillRect(0,0,WK.w,WK.h);
+  var hg=x.createLinearGradient(0,0,WK.w,0);
+  hg.addColorStop(0,BRAND);hg.addColorStop(1,'#C5321F');
+  x.fillStyle=hg;x.fillRect(0,0,WK.w,10);
+
+  /* üst şerit: logo + marka + hafta aralığı */
+  wkFillRound(x,64,54,104,104,28,'rgba(20,16,13,.05)');
   if(WK_LOGO){
-    x.save();wkRound(x,64,58,120,120,34);x.clip();
-    var lw=112,lh=lw*(896.85/2585.39);
-    x.drawImage(WK_LOGO,68,58+(120-lh)/2,lw,lh);x.restore();
+    x.save();wkRound(x,64,54,104,104,28);x.clip();
+    var lw=96,lh=lw*(896.85/2585.39);
+    x.drawImage(WK_LOGO,68,54+(104-lh)/2,lw,lh);x.restore();
   }else{
-    x.fillStyle='#FFFFFF';x.textAlign='center';x.textBaseline='middle';
-    x.font='800 84px Archivo,system-ui,sans-serif';x.fillText('G',124,124);
+    x.fillStyle=INK;x.textAlign='center';x.textBaseline='middle';
+    x.font='800 72px Archivo,system-ui,sans-serif';x.fillText('G',116,108);
     x.textAlign='left';x.textBaseline='alphabetic';
   }
-  x.fillStyle='#FFFFFF';x.font='800 60px Archivo,system-ui,sans-serif';
-  x.fillText('Genç',212,108);
-  x.fillStyle='rgba(255,255,255,.72)';x.font='600 30px Archivo,system-ui,sans-serif';
-  x.fillText('bilet · etkinlik rehberi',214,156);
-  x.textAlign='right';x.fillStyle='rgba(255,255,255,.62)';x.font='700 30px Archivo,system-ui,sans-serif';
-  x.fillText(wkWeekRange(),WK.w-64,108);
-  x.fillStyle='#FFC83D';x.font='800 40px Archivo,system-ui,sans-serif';
-  x.fillText(city+' \u00B7 Bu hafta',WK.w-64,160);
-  x.textAlign='left';x.textBaseline='alphabetic';
+  x.fillStyle=INK;x.font='800 54px Archivo,system-ui,sans-serif';
+  x.fillText('Genç',190,96);
+  x.fillStyle=MUTE;x.font='600 27px Archivo,system-ui,sans-serif';
+  x.fillText('bilet · etkinlik rehberi',192,138);
+  x.textAlign='right';
+  x.fillStyle=BRAND;x.font='800 34px Archivo,system-ui,sans-serif';
+  x.fillText(city+' \u00B7 bu hafta',WK.w-64,96);
+  x.fillStyle=MUTE;x.font='700 27px Archivo,system-ui,sans-serif';
+  x.fillText(wkWeekRange(),WK.w-64,138);
+  x.textAlign='left';
 
   /* başlık */
-  x.fillStyle='#FFFFFF';x.font='800 100px Archivo,system-ui,sans-serif';
-  x.fillText('Bu hafta ne var?',64,300);
-  x.fillStyle='rgba(255,255,255,.8)';x.font='600 38px Archivo,system-ui,sans-serif';
-  x.fillText(city+' \u00B7 seçili hafta \u00B7 '+picks.length+' etkinlik \u00F6nerisi',64,362);
+  x.fillStyle=INK;x.font='800 96px Archivo,system-ui,sans-serif';
+  x.fillText('Bu hafta ne var?',64,268);
+  x.fillStyle=MUTE;x.font='600 34px Archivo,system-ui,sans-serif';
+  x.fillText(picks.length+' etkinlik \u00F6nerisi \u00B7 '+city,64,322);
 
-  /* etkinlik satırları */
-  var y=420,rowH=112,gap=14;
+  /* etkinlik kartları: afiş + başlık + mekan + fiyat + tarih */
+  var y=356,cardH=124,gap=12,pad=18,ps=cardH-pad*2;
   picks.forEach(function(e){
-    wkFillRound(x,64,y,WK.w-128,rowH,26,'rgba(255,255,255,.09)');
-    var cols=wkArt(e.art),g=x.createLinearGradient(88,y+10,88+92,y+102);
-    g.addColorStop(0,cols[0]);g.addColorStop(1,cols[1]);
-    wkFillRound(x,88,y+10,92,92,24,g);
-    x.fillStyle='#FFFFFF';x.textAlign='center';x.textBaseline='middle';x.font='800 52px Archivo,system-ui,sans-serif';
-    x.fillText(wkGlyph(e.type),134,y+56);
-    x.textAlign='left';x.textBaseline='alphabetic';
-    x.fillStyle='#FFFFFF';x.font='800 41px Archivo,system-ui,sans-serif';
-    x.fillText(wkClipText(x,e.title,WK.w-128-250),206,y+50);
-    x.fillStyle='rgba(255,255,255,.72)';x.font='600 29px Archivo,system-ui,sans-serif';
-    x.fillText(wkClipText(x,e.venue,WK.w-128-250),206,y+88);
-    x.textAlign='right';x.fillStyle='#FFC83D';x.font='800 38px Archivo,system-ui,sans-serif';
-    x.fillText(wkClipText(x,priceLabel(e),190),WK.w-96,y+50);
-    x.fillStyle='rgba(255,255,255,.72)';x.font='600 28px Archivo,system-ui,sans-serif';
-    x.fillText(wkClipText(x,e.range||e.when,300),WK.w-96,y+88);
+    wkFillRound(x,64,y,WK.w-128,cardH,28,CARD);
+    x.strokeStyle=LINE;x.lineWidth=2;wkRound(x,64,y,WK.w-128,cardH,28);x.stroke();
+    wkPoster(x,64+pad,y+pad,ps,e,20);
+    var tx=64+pad+ps+26,tmax=WK.w-128-pad-ps-26-300;
+    x.fillStyle=INK;x.font='800 38px Archivo,system-ui,sans-serif';
+    x.fillText(wkClipText(x,e.title,tmax),tx,y+54);
+    x.fillStyle=MUTE;x.font='600 27px Archivo,system-ui,sans-serif';
+    x.fillText(wkClipText(x,e.venue+(e.district?' \u00B7 '+e.district:''),tmax),tx,y+92);
+    x.textAlign='right';
+    x.fillStyle=BRAND;x.font='800 37px Archivo,system-ui,sans-serif';
+    x.fillText(wkClipText(x,priceLabel(e),220),WK.w-96,y+54);
+    x.fillStyle=MUTE;x.font='600 26px Archivo,system-ui,sans-serif';
+    x.fillText(wkClipText(x,e.range||e.when,250),WK.w-96,y+92);
     x.textAlign='left';
-    y+=rowH+gap;
+    y+=cardH+gap;
   });
 
   /* alt bilgi */
-  x.fillStyle='rgba(255,255,255,.14)';x.fillRect(64,WK.h-160,WK.w-128,2);
-  x.fillStyle='#FFFFFF';x.font='700 34px Archivo,system-ui,sans-serif';
-  x.fillText('Genç uygulamas\u0131nda t\u00FCm etkinlikler ve biletler',64,WK.h-104);
-  x.fillStyle='rgba(255,255,255,.7)';x.font='600 30px Archivo,system-ui,sans-serif';
-  x.fillText('Her hafta ' + city + ' i\u00E7in g\u00FCncellenir',64,WK.h-58);
-  x.textAlign='right';x.fillStyle='#FFC83D';x.font='800 32px Archivo,system-ui,sans-serif';
-  x.fillText('genc',WK.w-64,WK.h-80);
+  x.fillStyle=LINE;x.fillRect(64,WK.h-150,WK.w-128,2);
+  x.fillStyle=INK;x.font='800 34px Archivo,system-ui,sans-serif';
+  x.fillText('Genç uygulamas\u0131nda t\u00FCm etkinlikler ve biletler',64,WK.h-92);
+  x.fillStyle=MUTE;x.font='600 29px Archivo,system-ui,sans-serif';
+  x.fillText('Her hafta '+city+' i\u00E7in g\u00FCncellenir',64,WK.h-48);
+  x.textAlign='right';
+  wkFillRound(x,WK.w-254,WK.h-118,190,66,20,BRAND);
+  x.fillStyle='#FFFFFF';x.font='800 32px Archivo,system-ui,sans-serif';
+  x.fillText('genc',WK.w-88,WK.h-76);
   x.textAlign='left';
   return c;
 }
@@ -3036,6 +3372,7 @@ function weeklyShareSheet(){
     }
     paint();
     wkLoadLogo(function(){if(WK_LOGO)paint()});
+    wkPreloadPicks(function(){paint()});
   });
 }
 function weeklyCardHTML(){
@@ -3098,8 +3435,8 @@ function openWeb(e){
    }).join('')+'</div>'+
    '<div class="wrow"><span>Adet</span><div class="qty"><button type="button" data-qty="-1" aria-label="Azalt">−</button><output id="wq" aria-live="polite">1</output><button type="button" data-qty="1" aria-label="Artır">+</button></div></div>'+
    '<div class="wrow wtot"><span>Toplam</span><b id="wt"></b></div>'+
-   '<button class="btn" type="button" data-act="pay">'+(e.prices[0][1]===0&&e.prices.length===1?'Satıcıda devam et':'Satıcıda ödemeye geç')+'</button>'+
-   '<p class="wnote">'+ic('shield')+'<span>Bu sayfa uygulamanın içinde açılır. Satın alma, satıcının güvenli sayfasında tamamlanır.</span></p>';
+   '<button class="btn" type="button" data-act="pay">'+(isRegistered()?(e.prices[0][1]===0&&e.prices.length===1?'Satıcıda devam et':'Satıcıda ödemeye geç'):'Devam etmek için hesap oluştur')+'</button>'+
+   '<p class="wnote">'+ic('shield')+'<span>'+(isRegistered()?'Bu sayfa uygulamanın içinde açılır. Satın alma, satıcının güvenli sayfasında tamamlanır.':'Bilet almak için kısa bir kayıt gerekiyor; böylece biletin güvenle saklanır.')+'</span></p>';
   updWeb();$('#web').hidden=false;
   if(!histStack.length||histStack[histStack.length-1].t!=='web')layerPush({t:'web'});
   $('#web-close').focus();
@@ -3119,6 +3456,7 @@ $('#web-body').addEventListener('click',function(ev){
   if(q){W.qty=Math.max(1,Math.min(10,W.qty+(+q.getAttribute('data-qty'))));updWeb();return}
   var a=ev.target.closest('[data-act]');
   if(a&&a.getAttribute('data-act')==='pay'){
+    if(!isRegistered()){closeWeb();accountPrompt();return}
     var t=addTicket(W.e,W.opt,W.qty),amount=W.e.prices[W.opt][1]*W.qty;
     W=null;
     $('#web-title').textContent='Biletin hazır';
@@ -3382,7 +3720,9 @@ function renderProfile(){
     (VIDEO_ON?'<button type="button" data-tab="videolar">'+ic('play')+'Kısa videolar</button>':'')+
     '<button type="button" data-act="addcard">'+ic('shield')+'Kart ekle</button>'+
   '</div>';
+  if(S.guest&&!isRegistered())h+='<div class="guestrow">'+ic('user')+'<span><strong>Hesap oluştur</strong><small>Bilet al, biletlerini kaybetme.</small></span><button type="button" data-act="gotoregister">Oluştur</button></div>';
   if(deferredPrompt)h+='<div class="installrow">'+ic('install')+'<span><strong>Genç’i ana ekrana ekle</strong><small>Tek dokunuşla açılsın.</small></span><button type="button" data-act="install">Ekle</button></div>';
+  h+='<div id="active-users"></div>';
   h+='<div class="sec"><h2 class="disp">Biletlerim</h2><button type="button" data-act="scan">Bilet kodu sorgula</button></div>';
   h+=ticketsSectionHTML();
   h+='<div class="sec"><h2 class="disp">Hoşlandıkların</h2><button type="button" data-act="editlikes">Düzenle</button></div>';
@@ -3398,6 +3738,7 @@ function renderProfile(){
   h+=PAST.map(function(e){return '<button class="att" type="button" data-open="'+e.id+'"><span class="mini-art"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg></span><span><strong>'+esc(e.title)+'</strong><span>'+esc(e.when)+'</span></span><span class="done">'+ic('check')+'Gittin</span></button>'}).join('');
   h+='<div class="pad"></div>';
   $('#pscroll').innerHTML=h;
+  renderActiveUsers();
 }
 /* Kaydedilenler: kimliği saklanan etkinlikleri sırayla döndürür. */
 function savedEvents(){return (S.saved||[]).map(function(id){return ALL[id]}).filter(Boolean)}
@@ -3642,11 +3983,12 @@ document.addEventListener('click',function(ev){
     case 'wkshare':weeklyShare();break;
     case 'wksave':weeklySave();break;
     case 'buy':openWeb(e);break;
-    case 'openbuy':openReal(e);break;
+    case 'openbuy':if(!isRegistered()){accountPrompt();break}openReal(e);break;
     case 'watch':closeSheet();goVideo(id);break;
     case 'similar':closeSheet();S.evCat=CHIPS.indexOf(e.type)>-1?e.type:'Tümü';S.evVenue='Tümü';S.evDate='Tümü';S.evSort='onerilen';S.evShow=12;S.q='';$('#q').value='';S.filter='Tümü';renderBrowse();setTab('kesfet');$('#kscroll').scrollTop=0;break;
     case 'restart':$('#feed').scrollTo({top:0,behavior:reduce?'auto':'smooth'});break;
     case 'editprofile':editProfile();break;
+    case 'gotoregister':closeSheet();goRegister();break;
     case 'saveprofile':saveProfile();break;
     case 'chpass':changePassword();break;
     case 'editlikes':editLikes();break;
@@ -3658,7 +4000,7 @@ document.addEventListener('click',function(ev){
     case 'logout':
       closeSheet();
       $('#main').hidden=true;$('#onb').hidden=false;setTab('home');$('#main').hidden=true;
-      S.name='';S.email='';S.phone='';S.loggedIn=false;S.photo='';S.acctId='';S.provider='';
+      S.name='';S.email='';S.phone='';S.loggedIn=false;S.photo='';S.acctId='';S.provider='';S.guest=false;
       try{localStorage.removeItem(STORE)}catch(x){}
       $('#in-name').value='';$('#in-mail').value='';$('#in-pass').value='';
       $('#li-mail').value='';$('#li-pass').value='';
@@ -3749,7 +4091,7 @@ if(!VIDEO_ON){var nv=$('#nav-videolar');if(nv)nv.hidden=true}
 /* Profil fotoğrafı için kalıcı gizli seçici: avatara dokununca doğrudan açılır. */
 var gphoto=$('#gphoto');
 gphoto.addEventListener('change',function(){if(gphoto.files.length)upSend(gphoto.files,true);gphoto.value=''});
-if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab(S.tab||'home');applyDeepLink();openSharedTicket()}
+if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab(S.tab||'home');applyDeepLink();openSharedTicket();if(S.name)registerUser(S.name);loadActiveUsers(true)}
 else{setAuthMode('signup');applyDeepLink();showStep(1)}
 })();
 </script>

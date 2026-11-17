@@ -1,6 +1,6 @@
 {
-  "version": "1.27",
-  "versionCode": 12700,
-  "notes": "Yeni marka tasarımı: krem zemin, mürekkep metin ve aksan kırmızısı. Logo yenilendi, ana sayfadaki 'Türe göre' bölümü kaldırıldı. Google ile giriş web'de görünür, uygulamada gizli.",
+  "version": "1.30",
+  "versionCode": 13000,
+  "notes": "Konum artık tüm Türkiye'yi kapsıyor (81 il, tüm ilçeler); haftalık paylaşım görseli marka renklerinde ve gerçek etkinlik fotoğraflarıyla yenilendi; misafir girişi (Kaydolmadan devam et) yayında.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

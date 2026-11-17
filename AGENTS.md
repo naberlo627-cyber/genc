@@ -58,10 +58,16 @@ PWA dosyaları + geliştirme sunucusu.
 - **"Tükendi" rozeti.** `refreshLive()` rozeti yalnızca konumlandırılmış görsel
   kabına (`.evpic`, `.tkpic`, `.poster .pic`, `.wide`, `.thumb`) ekler; düz
   satırlara (ör. `.calrow`) eklenirse sayfanın sol üstüne kaçardı.
-- **Çok şehir.** Veri beş ili kapsar (İzmir, Ankara, İstanbul, Bursa, Antalya).
-  `S.city` seçili şehri tutar (`nearestCity` konumdan tahmin eder, onboarding 2.
-  adım ve `#locbtn` şehir sayfası ayarlar); Keşfet listesi seçili şehre göre
-  süzülür. İstanbul Anadolu/Avrupa yakaları `İstanbul`'a normalize edilir.
+- **Çok şehir.** Konum seçimi tüm Türkiye'yi kapsar: 81 il ve tüm ilçeler
+  `TR_CITIES` / `TR_CITY_DISTRICTS` / `TR_CITY_COORDS` içinde gömülüdür (kaynak:
+  TÜİK/adres kayıtlarından derlenen açık veri; elle güncellenmez). `cityList()`
+  etkinliği olan illeri başa alır, kalanı alfabetik ekler; veri kaynağı ne
+  verirse versin 81 il listesi korunur. `S.city` seçili şehri tutar
+  (`nearestCity` konumdan tahmin eder, onboarding 2. adım ve `#locbtn` şehir
+  sayfası ayarlar); Keşfet listesi seçili şehre göre süzülür. İstanbul
+  Anadolu/Avrupa yakaları `İstanbul`'a normalize edilir. `districtsOf(city)`
+  önce verideki ilçeleri, sonra gömülü ilçe listesini birleştirir; `districtChips`
+  ilin tüm ilçelerini gösterir.
 - `manifest.json` — PWA manifest'i; `shortcuts` dizisi ana ekran kısayollarını
   tanımlar (`?git=...` derin bağlantıları).
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler
@@ -536,15 +542,18 @@ Kaynak notları:
 ## Haftalık paylaşım görseli ("Bu hafta ne var?")
 - Yerel topluluklarda (mahalle/semt grupları, WhatsApp toplulukları, yerel haber
   sayfaları) paylaşılmak üzere her hafta tekrar eden, cihazda üretilen bir görsel.
-- `buildWeeklyCanvas()` 1080×1350 dikey PNG çizer: marka logosu, şehir etiketi,
-  "Bu hafta ne var?" başlığı, haftanın 6 etkinliği ve alt bilgi. Şehir adı
+- `buildWeeklyCanvas()` 1080×1350 dikey PNG çizer: krem zemin (`#F7F0E6`), üstte
+  kırmızı marka şeridi, marka logosu, "Bu hafta ne var?" başlığı, haftanın 6
+  etkinliği (afiş + başlık + mekan/ilçe + fiyat + tarih) ve alt bilgi. Şehir adı
   `S.city`'den gelir, yani konuma/seçilen şehre göre değişir.
 - `wkPicks()` önce bu haftanın etkinliklerini (öne çıkanlar → en yakın), yetmezse
   yaklaşanlardan 6'ya tamamlar. `wkWeekRange()` haftayı pazartesi–pazar gösterir.
-- Görsel yalnızca yerel varlıklarla çizilir: uzak satıcı fotoğrafları CORS
-  başlığı göndermediği için canvas'a çizilemez (`Access-Control-Allow-Origin`
-  yok → tuval "kirli" olur ve `toDataURL` hata verir). Bu yüzden fotoğraf yerine
-  türü simgeleyen renk geçişi (`WK_ART`) ve simge (`WK_GLYPH`) kullanılır.
+- **Afişler.** Etkinlik afişleri satıcı CDN'lerinden (`b6s54eznn8xq.merlincdn.net`,
+  `resources-biletino.s3.eu-west-1.amazonaws.com`, `image.passo.com.tr`) `crossOrigin='anonymous'`
+  isteğiyle çekilir; üç kaynak da `Access-Control-Allow-Origin: *` verdiği için
+  canvas lekelenmez ve `toDataURL`/Web Share çalışır. `wkPreloadPicks()` altı
+  afişi önceden yükler, `wkPoster()` kare kırpımla çizer. Afiş gelmezse türü
+  simgeleyen renk geçişi (`WK_ART`) ve simge (`WK_GLYPH`) yedeği kullanılır.
 - Logo, gömülü `#logo` simgesinden `wkLogoURL()` ile yeniden üretilir: SVG yol
   verisi alınır, tema değişkenleri (`--logo-c1..c4`) kart zemini için açık
   tonlarla değiştirilir, `color:#FFFFFF` ile beyaza boyanır. Kopyalama değil,
