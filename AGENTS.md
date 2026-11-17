@@ -624,6 +624,20 @@ Kaynak notları:
   `tools/deploy_surge.sh` çalıştırılmalıdır. (Asıl adres GitHub Pages olduğu
   için site kullanıcıları yine taze veri görür.)
 
+### GitHub'a gönderme (asıl adres)
+GitHub kimlik bilgisi oturum ortamında hazır gelmez (`GITHUB_TOKEN` boş olabilir).
+Kullanıcı token'ı güvenli anahtar kutusuna bırakır: `/workspace/secrets_inbox/GitHub.txt`
+(`ghp_...`). Gönderme:
+
+```bash
+GHT=$(tr -d ' \r\n' < /workspace/secrets_inbox/GitHub.txt)
+git push "https://x-access-token:${GHT}@github.com/naberlo627-cyber/genc.git" master
+```
+
+`master`'a push, GitHub Pages'i (asıl adres) otomatik yayınlar. Token yalnızca
+push anında URL'e eklenir, `.git/config`'e yazılmaz. Token'ı komut çıktısında
+maskele (`sed -E "s/${GHT}/<token>/g"`).
+
 ## Hesap sistemi: gerçek kayıt ve giriş (2026-11)
 - Eskiden e-posta/şifre alanları yalnızca görünüşteydi ("laf olsun diye"); artık
   kayıt ve giriş **gerçekten doğrulanır**.
