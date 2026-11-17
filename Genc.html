@@ -6,6 +6,9 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#E9E1FA">
 <title>Genç</title>
+<!-- Google ile giriş için istemci kimliği. Boş bırakılırsa Google düğmesi bilgilendirme mesajı verir.
+     Örnek: <meta name="google-client-id" content="1234567890-abc.apps.googleusercontent.com"> -->
+<meta name="google-client-id" content="">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236D4AFF'/%3E%3Cstop offset='.55' stop-color='%23B44DE0'/%3E%3Cstop offset='1' stop-color='%23FF4F8B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 12.2 36.9 27.1 51.8 32 36.9 36.9 32 51.8 27.1 36.9 12.2 32 27.1 27.1Z' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
@@ -763,6 +766,27 @@ svg.ic.f{fill:currentColor}
 .installrow small{color:var(--mute);font-size:12.5px}
 .installrow button{background:var(--grad);color:#fff;font-weight:700;font-size:13.5px;padding:10px 14px;border-radius:12px;flex:none}
 @media (max-width:380px){.nav button{font-size:10.5px}}
+
+/* ---------- giriş / kayıt ---------- */
+.authhead{padding:8px 20px 0}
+.authlogo{width:132px;height:auto;display:block;margin:calc(env(safe-area-inset-top,0px) + 6px) 20px 0}
+.authtitle{font-size:34px;padding:16px 20px 6px;letter-spacing:-.01em}
+.authtext{padding:0 20px;color:var(--mute);font-size:15px;line-height:1.45;max-width:34ch}
+.authnote{padding:12px 20px 0;color:var(--mute);font-size:12.5px;line-height:1.5}
+.authnote strong{color:var(--ink)}
+.pwrow{position:relative}
+.pwrow input{padding-right:52px}
+.pwrow .peek{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--mute)}
+.pwrow .peek .ic{width:22px;height:22px}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:11px;width:calc(100% - 40px);margin:12px 20px 0;height:54px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);font-weight:700;font-size:15.5px;color:var(--ink)}
+.gbtn .gmark{width:20px;height:20px;flex:none}
+.gbtn[disabled]{opacity:.5}
+.orline{display:flex;align-items:center;gap:12px;padding:16px 20px 0;color:var(--mute);font-size:12.5px;font-weight:600}
+.orline::before,.orline::after{content:"";flex:1;height:1px;background:var(--line)}
+.authswitch{text-align:center;padding:18px 20px 6px;color:var(--mute);font-size:14.5px}
+.authswitch button{color:var(--brand);font-weight:700;padding:2px 4px}
+.authswitch button:active{opacity:.6}
+.gname{margin:2px 0 0;color:var(--mute);font-size:13px}
 </style>
 </head>
 <body>
@@ -919,6 +943,8 @@ svg.ic.f{fill:currentColor}
 <symbol id="i-compass2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M15 9l-1.8 4.2L9 15l1.8-4.2z"/></symbol>
 <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.5 5v14M15.5 5v14"/></symbol>
 <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M4 4l16 16"/><path d="M9.5 9.7A3 3 0 0 0 12 15c.8 0 1.5-.3 2-.8"/><path d="M6.3 6.5C4 8.2 2.5 12 2.5 12s3.5 6.5 9.5 6.5c1.7 0 3.2-.5 4.4-1.2"/><path d="M10 5.7c.6-.1 1.3-.2 2-.2 6 0 9.5 6.5 9.5 6.5s-1 1.8-2.8 3.5"/></symbol>
 </svg>
 
 <div id="app">
@@ -930,17 +956,34 @@ svg.ic.f{fill:currentColor}
       <div class="steps" id="steps" aria-label="Adım 1 / 3"><i class="d"></i><i></i><i></i></div>
     </div>
 
-    <!-- adım 1: hesap -->
+    <!-- adım 1: giriş / kayıt -->
     <div class="ostep pane" id="ob1">
       <div class="scroll">
-        <svg class="logo-lg" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg>
-        <h2 class="ob-title disp">Hoş geldin</h2>
-        <p class="ob-sub">Çevrendeki konser, sinema ve gezileri keşfetmek için iki bilgi yeterli.</p>
-        <div class="field"><label for="in-name">Ad soyad</label><input id="in-name" type="text" autocomplete="name" placeholder="Örn. Emre Yıldız"></div>
-        <div class="field"><label for="in-mail">E-posta</label><input id="in-mail" type="email" autocomplete="email" inputmode="email" placeholder="ornek@eposta.com"></div>
+        <svg class="authlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg>
+        <h2 class="authtitle disp" id="auth-title">Aramıza katıl</h2>
+        <p class="authtext" id="auth-sub">Hesabını oluştur; çevrendeki konser, sinema ve etkinlikleri kaçırma.</p>
+
+        <div id="auth-signup">
+          <div class="field"><label for="in-name">Ad soyad</label><input id="in-name" type="text" autocomplete="name" placeholder="Örn. Emre Yıldız"></div>
+          <div class="field"><label for="in-mail">E-posta</label><input id="in-mail" type="email" autocomplete="email" inputmode="email" placeholder="ornek@eposta.com"></div>
+          <div class="field pwrow"><label for="in-pass">Şifre</label><input id="in-pass" type="password" autocomplete="new-password" placeholder="En az 6 karakter"><button class="peek" type="button" data-peek="in-pass" aria-label="Şifreyi göster"><svg class="ic"><use href="#i-eye"/></svg></button></div>
+        </div>
+
+        <div id="auth-login" hidden>
+          <div class="field"><label for="li-mail">E-posta</label><input id="li-mail" type="email" autocomplete="email" inputmode="email" placeholder="ornek@eposta.com"></div>
+          <div class="field pwrow"><label for="li-pass">Şifre</label><input id="li-pass" type="password" autocomplete="current-password" placeholder="Şifren"><button class="peek" type="button" data-peek="li-pass" aria-label="Şifreyi göster"><svg class="ic"><use href="#i-eye"/></svg></button></div>
+        </div>
+
+        <div class="orline">veya</div>
+        <button class="gbtn" id="gbtn" type="button">
+          <svg class="gmark" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          <span id="gbtn-label">Google ile devam et</span>
+        </button>
         <p class="err" id="err1" role="alert"></p>
+        <p class="authnote" id="auth-note">Devam ederek bir hesap oluşturursun. Bilgilerin yalnızca bu cihazda saklanır; şifren şifrelenmiş olarak tutulur, sunucuya gönderilmez.</p>
       </div>
-      <button class="cta" id="go1" type="button">Devam et</button>
+      <button class="cta" id="go1" type="button">Hesap oluştur</button>
+      <div class="authswitch" id="auth-switch">Zaten hesabın var mı? <button type="button" id="to-login">Giriş yap</button></div>
     </div>
 
     <!-- adım 2: zevkler -->
@@ -1700,6 +1743,7 @@ var S={
   cards:[],
   tickets:[],saved:[],loggedIn:false,
   photo:'',
+  acctId:'',provider:'',
   filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'home',adOff:false,
   evCat:'Tümü',evVenue:'Tümü',evDate:'Tümü',evSort:'onerilen',evShow:12,
   scrolls:{},
@@ -1708,7 +1752,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.25';
+var APP_VERSION='1.26';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -1801,7 +1845,7 @@ function getApk(){
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
@@ -1809,6 +1853,8 @@ function restore(){
   ['name','email','phone'].forEach(function(k){if(typeof d[k]==='string')S[k]=d[k]});
   if(typeof d.photo==='string')S.photo=d.photo;
   if(typeof d.version==='string')S.version=d.version;
+  if(typeof d.acctId==='string')S.acctId=d.acctId;
+  if(typeof d.provider==='string')S.provider=d.provider;
   if(typeof d.locOn==='boolean')S.locOn=d.locOn;
   if(typeof d.city==='string'&&d.city)S.city=d.city;
   if(typeof d.district==='string')S.district=d.district;
@@ -2067,14 +2113,176 @@ $('#ob-sw').addEventListener('click',function(){
   geoAsk(function(ok){if(!ok){S.locOn=false;paintObLoc()}});
 });
 $('#ob-back').addEventListener('click',function(){if(step>1)showStep(step-1)});
-function submit1(){
-  var n=$('#in-name').value.trim(),m=$('#in-mail').value.trim(),er=$('#err1');
-  if(n.length<2){er.textContent='Adını yazar mısın?';$('#in-name').focus();return}
-  if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='E-posta adresi geçerli görünmüyor.';$('#in-mail').focus();return}
-  er.textContent='';S.name=n;S.email=m;showStep(2);
+
+/* ---------- hesaplar (cihaz içi, gerçek doğrulama) ----------
+   Şifre düz metin olarak saklanmaz: rastgele tuz + SHA-256 özeti tutulur.
+   Kayıt/giriş gerçekten doğrulanır; yanlış şifreyle giriş yapılamaz.
+   Hesaplar yalnızca bu cihazda kalır (sunucu yok), başka cihazda yeniden kaydolunur. */
+var ACCT_KEY='genc.accounts.v1';
+/* Google istemci kimliği: <meta name="google-client-id"> ya da aşağıdaki satır doldurulur.
+   Google Cloud Console > APIs & Services > Credentials > OAuth client ID (Web) ile alınır. */
+var GOOGLE_CLIENT_ID=(function(){
+  var m=document.querySelector('meta[name="google-client-id"]');
+  return (m&&m.content.trim())||'';
+})();
+function normEmail(e){return String(e||'').trim().toLowerCase()}
+function loadAccounts(){try{var a=JSON.parse(localStorage.getItem(ACCT_KEY)||'[]');return Array.isArray(a)?a:[]}catch(e){return[]}}
+function saveAccounts(a){try{localStorage.setItem(ACCT_KEY,JSON.stringify(a))}catch(e){}}
+function findAccount(email){email=normEmail(email);var l=loadAccounts();for(var i=0;i<l.length;i++)if(l[i].email===email)return l[i];return null}
+function cryptoRandom(n){
+  var a=new Uint8Array(n);
+  if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(a);
+  else for(var i=0;i<n;i++)a[i]=Math.floor(Math.random()*256);
+  return Array.prototype.map.call(a,function(b){return('00'+b.toString(16)).slice(-2)}).join('');
 }
-$('#go1').addEventListener('click',submit1);
-['#in-name','#in-mail'].forEach(function(s){$(s).addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submit1()}})});
+function fallbackHash(s){
+  /* WebCrypto yoksa (çok eski tarayıcı) kullanılan yedek; yine de düz metin değil. */
+  var h1=0x811c9dc5,h2=0x1000193,i,c;
+  for(i=0;i<s.length;i++){c=s.charCodeAt(i);h1=(h1^c)>>>0;h1=(h1*16777619)>>>0;h2=((h2<<5)-h2+c)>>>0;}
+  return('fb'+h1.toString(16)+h2.toString(16)).slice(0,40);
+}
+function authHash(pass,salt){
+  var data=salt+':'+pass;
+  if(window.crypto&&crypto.subtle&&crypto.subtle.digest&&window.TextEncoder){
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(data)).then(function(buf){
+      return Array.prototype.map.call(new Uint8Array(buf),function(b){return('00'+b.toString(16)).slice(-2)}).join('');
+    }).catch(function(){return fallbackHash(data)});
+  }
+  return Promise.resolve(fallbackHash(data));
+}
+function newAcctId(prefix){return prefix+Date.now().toString(36)+cryptoRandom(3)}
+function doSignup(name,email,pass){
+  email=normEmail(email);
+  if(findAccount(email))return Promise.resolve({err:'Bu e-posta ile bir hesap zaten var. Giriş yapmayı dene.'});
+  var salt=cryptoRandom(16);
+  return authHash(pass,salt).then(function(h){
+    var a={id:newAcctId('u'),name:name,email:email,salt:salt,hash:h,provider:'email',created:Date.now()};
+    var l=loadAccounts();l.push(a);saveAccounts(l);
+    return {acct:a};
+  });
+}
+function doLogin(email,pass){
+  email=normEmail(email);
+  var a=findAccount(email);
+  if(!a)return Promise.resolve({err:'Bu e-posta ile kayıtlı bir hesap bulunamadı. Önce kaydol.'});
+  if(a.provider==='google')return Promise.resolve({err:'Bu hesap Google ile açılmış. Google ile giriş yap.'});
+  return authHash(pass,a.salt).then(function(h){
+    if(h!==a.hash)return {err:'Şifre yanlış. Tekrar dene.'};
+    return {acct:a};
+  });
+}
+function applyAccount(a,isNew){
+  S.acctId=a.id;S.provider=a.provider||'email';
+  S.name=a.name||S.name;S.email=a.email||S.email;
+  if(a.photo)S.photo=a.photo;
+  persist();
+  if(isNew){toast('Hesabın oluşturuldu.');showStep(2)}
+  else{toast('Giriş yapıldı. Hoş geldin, '+firstName(a.name)+'!');enterMain()}
+}
+
+/* ---------- giriş / kayıt ekranı ---------- */
+var authMode='signup';
+function bindAuthSwitch(){
+  var b=document.getElementById('to-login'),c=document.getElementById('to-signup');
+  if(b)b.addEventListener('click',function(){setAuthMode('login')});
+  if(c)c.addEventListener('click',function(){setAuthMode('signup')});
+}
+function setAuthMode(m){
+  authMode=m;var su=m==='signup';
+  $('#auth-signup').hidden=!su;$('#auth-login').hidden=su;
+  $('#auth-title').textContent=su?'Aramıza katıl':'Tekrar hoş geldin';
+  $('#auth-sub').textContent=su?'Hesabını oluştur; çevrendeki konser, sinema ve etkinlikleri kaçırma.':'Hesabına giriş yap ve kaldığın yerden devam et.';
+  $('#go1').textContent=su?'Hesap oluştur':'Giriş yap';
+  $('#gbtn-label').textContent=su?'Google ile kaydol':'Google ile giriş yap';
+  $('#auth-note').hidden=!su;
+  $('#auth-switch').innerHTML=su?'Zaten hesabın var mı? <button type="button" id="to-login">Giriş yap</button>':'Hesabın yok mu? <button type="button" id="to-signup">Kaydol</button>';
+  $('#err1').textContent='';
+  bindAuthSwitch();
+}
+function busy(b,on){
+  b.disabled=on;
+  b.textContent=on?'Bir saniye…':(authMode==='signup'?'Hesap oluştur':'Giriş yap');
+}
+function submitAuth(){
+  var er=$('#err1'),btn=$('#go1');er.textContent='';
+  if(authMode==='signup'){
+    var n=$('#in-name').value.trim(),m=$('#in-mail').value.trim(),p=$('#in-pass').value;
+    if(n.length<2){er.textContent='Adını yazar mısın?';$('#in-name').focus();return}
+    if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='E-posta adresi geçerli görünmüyor.';$('#in-mail').focus();return}
+    if(p.length<6){er.textContent='Şifre en az 6 karakter olmalı.';$('#in-pass').focus();return}
+    busy(btn,true);
+    doSignup(n,m,p).then(function(r){
+      busy(btn,false);
+      if(r.err){er.textContent=r.err;return}
+      applyAccount(r.acct,true);
+    });
+  }else{
+    var m2=$('#li-mail').value.trim(),p2=$('#li-pass').value;
+    if(!/^\S+@\S+\.\S+$/.test(m2)){er.textContent='E-posta adresi geçerli görünmüyor.';$('#li-mail').focus();return}
+    if(!p2){er.textContent='Şifreni yazar mısın?';$('#li-pass').focus();return}
+    busy(btn,true);
+    doLogin(m2,p2).then(function(r){
+      busy(btn,false);
+      if(r.err){er.textContent=r.err;return}
+      applyAccount(r.acct,false);
+    });
+  }
+}
+$('#go1').addEventListener('click',submitAuth);
+['#in-name','#in-mail','#in-pass','#li-mail','#li-pass'].forEach(function(s){
+  var el=$(s);if(el)el.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();submitAuth()}});
+});
+$$('[data-peek]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var inp=$('#'+b.getAttribute('data-peek'));if(!inp)return;
+    var show=inp.type==='password';inp.type=show?'text':'password';
+    var u=b.querySelector('use');if(u)u.setAttribute('href',show?'#i-eye-off':'#i-eye');
+    b.setAttribute('aria-label',show?'Şifreyi gizle':'Şifreyi göster');
+  });
+});
+
+/* ---------- Google ile giriş (Google Identity Services) ---------- */
+var gsiLoading=null;
+function loadGsi(){
+  if(window.google&&window.google.accounts)return Promise.resolve(true);
+  if(gsiLoading)return gsiLoading;
+  gsiLoading=new Promise(function(res){
+    var s=document.createElement('script');
+    s.src='https://accounts.google.com/gsi/client';s.async=true;s.defer=true;
+    s.onload=function(){res(true)};s.onerror=function(){res(false)};
+    document.head.appendChild(s);
+  });
+  return gsiLoading;
+}
+function decodeJwt(t){
+  try{
+    var p=String(t).split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    while(p.length%4)p+='=';
+    return JSON.parse(decodeURIComponent(escape(atob(p))));
+  }catch(e){return null}
+}
+function onGoogleCred(resp){
+  var d=decodeJwt((resp&&resp.credential)||'');
+  if(!d||!d.email){$('#err1').textContent='Google girişi doğrulanamadı. Tekrar dene.';return}
+  var email=normEmail(d.email),a=findAccount(email),isNew=false;
+  if(!a){
+    a={id:newAcctId('g'),name:d.name||email.split('@')[0],email:email,provider:'google',photo:d.picture||'',created:Date.now()};
+    var l=loadAccounts();l.push(a);saveAccounts(l);isNew=true;
+  }
+  applyAccount(a,isNew);
+}
+function googleSignIn(){
+  var er=$('#err1');er.textContent='';
+  if(!GOOGLE_CLIENT_ID){er.textContent='Google ile giriş henüz ayarlanmadı; e-posta ile devam edebilirsin.';return}
+  var btn=$('#gbtn');btn.disabled=true;
+  loadGsi().then(function(ok){
+    btn.disabled=false;
+    if(!ok||!window.google||!window.google.accounts){er.textContent='Google servisine ulaşılamadı. İnternetini kontrol et.';return}
+    window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:onGoogleCred,auto_select:false,cancel_on_tap_outside:true});
+    window.google.accounts.id.prompt();
+  });
+}
+$('#gbtn').addEventListener('click',googleSignIn);
 $('#pickgo').addEventListener('click',function(){
   var s=selectedPicks($('#picks'));if(!s.length)return;S.likes=s;
   var sel=$('#in-city');if(sel&&sel.value){S.city=sel.value;if(!S.loc.geo){var c=CITY_COORDS[S.city]||IZMIR;S.loc={d:S.city,lat:c[0],lng:c[1]}}rebuildCity()}
@@ -3212,10 +3420,12 @@ function renderProfile(){
 function savedEvents(){return (S.saved||[]).map(function(id){return ALL[id]}).filter(Boolean)}
 /* Kalemin açtığı hesap sayfası: profil bilgileri, kartlar, görünüm, çıkış. */
 function editProfile(){
-  var h='<div class="acctop"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><span class="acctxt"><strong>'+esc(S.name||'Misafir')+'</strong><small>'+esc(S.email||'E-posta ekle')+'</small></span></div>';
+  var provTxt=S.provider==='google'?'Google ile bağlı hesap':'E-posta ile açılmış hesap';
+  var h='<div class="acctop"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><span class="acctxt"><strong>'+esc(S.name||'Misafir')+'</strong><small>'+esc(S.email||'E-posta ekle')+'</small><span class="gname">'+provTxt+'</span></span></div>';
   h+='<div class="field"><label for="e-name">Ad soyad</label><input id="e-name" type="text" autocomplete="name" value="'+esc(S.name)+'"></div>';
-  h+='<div class="field"><label for="e-mail">E-posta</label><input id="e-mail" type="email" autocomplete="email" value="'+esc(S.email)+'"></div>';
+  h+='<div class="field"><label for="e-mail">E-posta (hesap)</label><input id="e-mail" type="email" autocomplete="email" value="'+esc(S.email)+'" readonly aria-readonly="true" style="opacity:.7"></div>';
   h+='<div class="field"><label for="e-tel">Telefon</label><input id="e-tel" type="tel" autocomplete="tel" inputmode="tel" placeholder="0 5•• ••• •• ••" value="'+esc(S.phone)+'"></div>';
+  if(S.provider!=='google')h+='<button class="gbtn" type="button" data-act="chpass" style="margin:8px 20px 0;width:calc(100% - 40px)">'+ic('shield')+' Şifre değiştir</button>';
   h+='<div class="shsec"><h4 class="disp">Kayıtlı kartlar</h4><button type="button" data-act="addcard">Ekle</button></div>';
   h+=S.cards.length?S.cards.map(function(c){
     return '<div class="cardrow" data-card="'+c.id+'"><button class="cmain" type="button" data-act="defcard" aria-label="Varsayılan yap: •••• '+c.last4+'"><span class="plastic" aria-hidden="true"></span><span class="txt"><strong>'+esc(c.brand||'Banka kartı')+'</strong><span>•••• '+c.last4+', son kullanma '+esc(c.exp)+'</span></span>'+(c.def?'<span class="def">Varsayılan</span>':'<span class="setdef">Varsayılan yap</span>')+'</button><button class="cdel" type="button" data-act="delcard" aria-label="Kartı sil: •••• '+c.last4+'">'+ic('close')+'</button></div>';
@@ -3232,12 +3442,40 @@ function refreshAccount(){
   if(!$('#sheet').hidden&&$('#sh-title').textContent==='Hesap')editProfile();
 }
 function saveProfile(){
-  var n=$('#e-name').value.trim(),m=$('#e-mail').value.trim(),t=$('#e-tel').value.trim(),er=$('#e-err');
+  var n=$('#e-name').value.trim(),t=$('#e-tel').value.trim(),er=$('#e-err');
   if(n.length<2){er.textContent='Adını yazar mısın?';return}
-  if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='E-posta adresi geçerli görünmüyor.';return}
   if(t&&t.replace(/\D/g,'').length<10){er.textContent='Telefon numarası eksik görünüyor.';return}
-  S.name=n;S.email=m;S.phone=t;persist();renderProfile();renderBrowse();
+  S.name=n;S.phone=t;
+  /* Hesap kaydındaki adı da güncelle ki girişte aynı isim görünsün. */
+  if(S.acctId){var l=loadAccounts();for(var i=0;i<l.length;i++){if(l[i].id===S.acctId){l[i].name=n;saveAccounts(l);break}}}
+  persist();renderProfile();renderBrowse();
   refreshAccount();toast('Profilin güncellendi.');
+}
+/* Şifre değiştirme: mevcut şifre doğrulanır, yeni şifre tuzlanıp yeniden özetlenir. */
+function changePassword(){
+  var a=null,l=loadAccounts();for(var i=0;i<l.length;i++)if(l[i].id===S.acctId){a=l[i];break}
+  if(!a){toast('Hesap bulunamadı; yeniden giriş yap.');return}
+  openSheet('Şifre değiştir',
+    '<div class="field"><label for="cp-old">Mevcut şifre</label><input id="cp-old" type="password" autocomplete="current-password"></div>'+
+    '<div class="field"><label for="cp-new">Yeni şifre</label><input id="cp-new" type="password" autocomplete="new-password" placeholder="En az 6 karakter"></div>'+
+    '<p class="err" id="cp-err" role="alert"></p>'+
+    '<button class="cta sm" id="cp-go" type="button">Şifreyi güncelle</button>',function(root){
+      var b=document.getElementById('cp-go');
+      b.addEventListener('click',function(){
+        var o=document.getElementById('cp-old').value,nw=document.getElementById('cp-new').value,er=document.getElementById('cp-err');
+        er.textContent='';
+        if(!o){er.textContent='Mevcut şifreni yaz.';return}
+        if(nw.length<6){er.textContent='Yeni şifre en az 6 karakter olmalı.';return}
+        authHash(o,a.salt).then(function(h){
+          if(h!==a.hash){er.textContent='Mevcut şifre yanlış.';return}
+          var salt=cryptoRandom(16);
+          authHash(nw,salt).then(function(nh){
+            a.salt=salt;a.hash=nh;saveAccounts(l);
+            closeSheet();toast('Şifren güncellendi.');
+          });
+        });
+      });
+    });
 }
 function editLikes(){
   openSheet('Hoşlandıkların','<div class="picks" id="lk-picks">'+pickHTML(S.likes)+'</div><button class="cta" id="lk-save" type="button" data-act="savelikes"></button>',function(root){
@@ -3427,6 +3665,7 @@ document.addEventListener('click',function(ev){
     case 'restart':$('#feed').scrollTo({top:0,behavior:reduce?'auto':'smooth'});break;
     case 'editprofile':editProfile();break;
     case 'saveprofile':saveProfile();break;
+    case 'chpass':changePassword();break;
     case 'editlikes':editLikes();break;
     case 'savelikes':var s=selectedPicks($('#lk-picks'));if(s.length){S.likes=s;persist();closeSheet();renderProfile();toast('Zevklerin güncellendi.')}break;
     case 'addcard':addCard();break;
@@ -3436,9 +3675,11 @@ document.addEventListener('click',function(ev){
     case 'logout':
       closeSheet();
       $('#main').hidden=true;$('#onb').hidden=false;setTab('home');$('#main').hidden=true;
-      S.name='';S.email='';S.phone='';S.loggedIn=false;S.photo='';
+      S.name='';S.email='';S.phone='';S.loggedIn=false;S.photo='';S.acctId='';S.provider='';
       try{localStorage.removeItem(STORE)}catch(x){}
-      $('#in-name').value='';$('#in-mail').value='';
+      $('#in-name').value='';$('#in-mail').value='';$('#in-pass').value='';
+      $('#li-mail').value='';$('#li-pass').value='';
+      setAuthMode('signup');
       showStep(1);break;
   }
 });
@@ -3513,7 +3754,7 @@ if(!VIDEO_ON){var nv=$('#nav-videolar');if(nv)nv.hidden=true}
 var gphoto=$('#gphoto');
 gphoto.addEventListener('change',function(){if(gphoto.files.length)upSend(gphoto.files,true);gphoto.value=''});
 if(S.loggedIn){$('#onb').hidden=true;$('#main').hidden=false;renderAll();setTab(S.tab||'home');applyDeepLink();openSharedTicket()}
-else{applyDeepLink();showStep(1)}
+else{setAuthMode('signup');applyDeepLink();showStep(1)}
 })();
 </script>
 </body>

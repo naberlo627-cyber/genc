@@ -593,3 +593,49 @@ Kaynak notları:
   sunulur; sonra e-posta doğrulanana kadar "ready" durumuna geçer. Doğrulama:
   `npx surge verify` (hesap e-postasına link gider) veya `surge login --browser`
   ile panele girip doğrula. Doğrulandıktan sonra yeniden yayınlamak gerekmez.
+
+## Hesap sistemi: gerçek kayıt ve giriş (2026-11)
+- Eskiden e-posta/şifre alanları yalnızca görünüşteydi ("laf olsun diye"); artık
+  kayıt ve giriş **gerçekten doğrulanır**.
+- Barındırma statik (surge.sh / GitHub Pages) olduğu için sunucu yoktur. Hesap
+  sistemi **cihaz içi** çalışır: hesaplar `localStorage` anahtarı
+  `genc.accounts.v1` altında tutulur.
+- Şifre **düz metin saklanmaz**. Her hesap için `crypto.getRandomValues` ile 16
+  baytlık rastgele tuz üretilir; `salt + ':' + şifre` değerinin SHA-256 özeti
+  (`crypto.subtle.digest`) saklanır. Girişte aynı hesap yeniden özetlenip
+  karşılaştırılır → yanlış şifreyle giriş **reddedilir**.
+  - `authHash()` (Genc.html ~2136) WebCrypto yoksa FNV tabanlı `fallbackHash`'e
+    düşer (yine düz metin değil). WebCrypto yalnızca güvenli bağlamda çalışır:
+    `https://` (surge, GitHub Pages) ve APK'daki `https://appassets.androidplatform.net`.
+- İlgili fonksiyonlar (`Genc.html`): `loadAccounts/saveAccounts/findAccount`,
+  `cryptoRandom`, `authHash`, `doSignup`, `doLogin`, `applyAccount`,
+  `setAuthMode`, `submitAuth`, `changePassword`.
+- Durum alanları: `S.acctId` (hesap kimliği), `S.provider` (`'email'` | `'google'`).
+  Her ikisi de `persist()`/`restore()` içinde saklanır. Hesap kaydı `S.acctId`
+  üzerinden bulunur; **e-posta hesap anahtarıdır ve profil ekranında kilitlidir**
+  (`readonly`), ad ve telefon düzenlenebilir.
+- Onboarding 1. adımı artık giriş/kayıt ekranıdır: kayıt (ad + e-posta + şifre)
+  ve giriş (e-posta + şifre) arasında geçiş yapar; "Şifre değiştir" hesap
+  sayfasındadır. Kayıt sonrası 2. adım (zevkler), giriş sonrası doğrudan ana ekran.
+
+### Google ile giriş (Google Identity Services)
+- `GOOGLE_CLIENT_ID` `Genc.html` başındaki
+  `<meta name="google-client-id" content="">` etiketinden okunur. Boşsa Google
+  düğmesi "henüz ayarlanmadı" mesajı verir; e-posta ile giriş her zaman çalışır.
+- Etkinleştirmek için: Google Cloud Console > APIs & Services > Credentials >
+  OAuth client ID (Web) oluştur, yetkili kaynaklara `https://genc.surge.sh` ekle
+  ve istemci kimliğini meta etiketine yaz.
+- Akış: `loadGsi()` → `accounts.google.com/gsi/client` betiği →
+  `google.accounts.id.initialize({client_id, callback})` → `prompt()`. Dönen
+  kimlik JWT'si `decodeJwt()` ile çözülür; `email` hesap anahtarıdır. Google ile
+  ilk girişte hesap `provider:'google'` olarak oluşturulur, fotoğraf da alınır.
+- Not: yalnızca JWT içeriği okunur, imza doğrulaması yapılmaz (sunucu yok).
+  Gerçek üretim için sunucu taraflı doğrulama gerekir.
+
+### Sürüm ve yayın
+- `APP_VERSION` tek kaynaktır (`Genc.html`); `android/build-apk.sh` versionName ve
+  versionCode'u buradan türetir, `version.json` üretir.
+- Yeni sürümde `sw.js` içindeki `CACHE` adını yükselt (ör. `genc-v37`), aksi
+  hâlde kurulu PWA eski dosyaları önbellekten sunmaya devam eder.
+- `android/app/src/main/assets/www/` altındaki kopyalar `build-apk.sh` ile
+  senkronlanır; elle düzenleme yapılmaz.
