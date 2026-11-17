@@ -1,8 +1,8 @@
 {
  "last_run": {
-  "started": 1794817057.1403546,
+  "started": 1794907420.163635,
   "ok": true,
-  "events": 357,
+  "events": 416,
   "cities": [
    "Ankara",
    "Antalya",
@@ -10,9 +10,9 @@
    "İstanbul",
    "İzmir"
   ],
-  "duration": 71.4
+  "duration": 65.0
  },
- "updated_at": "2026-11-16T08:18:48+0000",
- "last_success": "2026-11-16T08:18:48+0000",
- "last_success_events": 357
+ "updated_at": "2026-11-17T09:24:45+0000",
+ "last_success": "2026-11-17T09:24:45+0000",
+ "last_success_events": 416
 }
