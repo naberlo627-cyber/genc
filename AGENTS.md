@@ -557,3 +557,39 @@ Kaynak notları:
   yüzden seçici `img~.art`'tır; diğerleri `.photo` sınıfını kullanır.
 - Fotoğraf üzerindeki kategori rozeti (`.evcat`) görselin altına yerleştirilir
   ve `.evpic::after` gradyanı ile okunabilirlik sağlanır.
+
+## Ücretsiz alan adı ve barındırma notları (2026-11)
+- Uygulama adresten bağımsızdır: `REMOTE_BASE` `location.host`'tan türetilir
+  (`Genc.html` ~1721). Özel alan adına geçmek için kod değişikliği gerekmez.
+- Kullanıcının ağında Cloudflare IP'leri (104.16/104.18/172.66 → `*.pages.dev`,
+  `*.workers.dev`) engelli; GitHub IP'leri (185.199.x → `*.github.io`) çalışıyor.
+  Bu yüzden hedef, GitHub IP'lerine çözülen kısa bir adrestir.
+- `is-a.dev`: ücretsiz, GitHub Pages'e CNAME verir ve GitHub IP'lerine çözer.
+  Ancak deposunun `AGENTS.md` dosyası AI üretimi PR kabul etmediğini söyler
+  (PR'ı insan açmalı); ayrıca "ticari olmayan + yazılım geliştirme ile ilgili"
+  şartı vardır → Genç (etkinlik/bilet) uygun olmayabilir.
+- Netlify (`netlify.app`) ve Vercel (`vercel.app`) TR'den erişilebilir ve ticari
+  kullanıma açıktır; ücretsiz isim için hesap token'ı gerekir. `genc*` adları alınmış.
+- DigitalPlat FreeDomain (`dpdns.org`, `us.kg`, `qzz.io`, `xx.kg`, `qd.je`):
+  ücretsiz, ticari OK, ama harici nameserver delegasyonu ister (DNS editörü yok).
+- `eu.org`: ücretsiz ama NS delegasyonu + Gmail dışı e-posta ister; ticari siteleri
+  isteksizce kabul eder.
+- Depoyu kısaltmak için yeniden adlandırmak `REMOTE_BASE` yedeğini bozar
+  (`Genc.html` içinde sabit `.../genc/`), önerilmez.
+
+## Yayın: genc.surge.sh (surge.sh)
+- Uygulamanın canlı adresi: **https://genc.surge.sh** (surge.sh ücretsiz plan).
+  TR'de açılır (Cloudflare değil), ticari kullanıma izin verir.
+- Yayın: `tools/deploy_surge.sh` → `tools/build_site.sh` çalıştırır, `dist/`
+  üretir, `dist/CNAME` içine alan adını yazar ve `surge . <domain>` ile yükler.
+  Gerekli ortam değişkenleri: `SURGE_TOKEN` ve `SURGE_LOGIN` (`npx surge token`).
+- `tools/build_site.sh` artık `indir/Genc.apk` dosyasını da `dist/indir/` altına
+  kopyalar: bazı ağlarda GitHub indirme sunucusu engelli olabildiğinden kurulum
+  dosyası site üzerinden de erişilebilir kalır.
+- Uygulama adresten bağımsızdır: `manifest.json` (start_url/scope göreli),
+  `sw.js` kaydı göreli (`sw.js`), `absUrl()` göreli yolları `REMOTE_BASE`'e
+  bağlar. Bu yüzden surge adresinde ek kod değişikliği gerekmez.
+- DİKKAT: surge yeni hesaplarda `*.surge.sh` alan adları yalnızca ilk 90 dakika
+  sunulur; sonra e-posta doğrulanana kadar "ready" durumuna geçer. Doğrulama:
+  `npx surge verify` (hesap e-postasına link gider) veya `surge login --browser`
+  ile panele girip doğrula. Doğrulandıktan sonra yeniden yayınlamak gerekmez.

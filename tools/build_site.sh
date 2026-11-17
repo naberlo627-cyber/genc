@@ -16,5 +16,11 @@ done
 for d in data icons img; do
   [ -d "$ROOT/$d" ] && cp -r "$ROOT/$d" "$OUT/"
 done
+# APK da yayına girer: bazı ağlarda GitHub indirme sunucusu engelli olduğundan
+# uygulama kurulum dosyası site üzerinden de erişilebilir kalmalı.
+if [ -f "$ROOT/indir/Genc.apk" ]; then
+  mkdir -p "$OUT/indir"
+  cp "$ROOT/indir/Genc.apk" "$OUT/indir/"
+fi
 
 echo "Yayın paketi hazır: $OUT"
