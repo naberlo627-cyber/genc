@@ -90,7 +90,10 @@ PWA dosyaları + geliştirme sunucusu.
   alana çekilir.
 - `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
   glifi; Android ve masaüstünde aynı ikon tekrar etmesin). Zemin krem, glifler
-  mürekkeptir.
+  mürekkeptir. **Tek kaynak:** hem web simgelerini (`icons/shortcut-<id>.png`)
+  hem Android yoğunluklarını (`res/drawable-<dpi>/sc_<id>.png`; mdpi 48 → xxxhdpi
+  192) aynı çağrıda üretir; böylece ikonlar bir daha renk/tasarım açısından
+  ayrışmaz. Kısayol kimlikleri: `hafta, bilet-al, yakin, ara, biletlerim, profil`.
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
   kare, daire ve uyarlanabilir ön katman üretir; ön katman zemin + monogram
   birlikte kremdir, monogram güvenli alan için `scale=0.6` ile küçültülür.
@@ -158,6 +161,12 @@ PWA dosyaları + geliştirme sunucusu.
 - `MainActivity`, sayfa yüklenince `window.GENC_APP=true` atar. Uygulama bunu
   görünce fotoğrafları sunucuya göndermez, `cropSquare()` ile kırpıp data URL
   olarak `localStorage`'da saklar.
+- **`GENC_APP` zamanlaması (önemli).** `evaluateJavascript` ile atılan bayrak
+  sayfa betiği çalıştıktan **sonra** gelebilir; bu yüzden açılıştaki tek seferlik
+  kontrol bayat kalır. Çözüm: `gencApplyAppMode()` (Genc.html) bayrağı her
+  çağrıldığında okur ve `genc-app` sınıfını gövdeye ekler/çıkarır;
+  `MainActivity` bayrağı atarken bu fonksiyonu da çağırır. Google giriş düğmesi
+  web'de görünür, uygulamada (`.genc-app`) gizlenir.
 - Kamera/galeri: `WebChromeClient.onPermissionRequest` (kamera izni) ve
   `onShowFileChooser` (galeri) ile karşılanır.
 - İmzalama anahtarı `android/app/genc-release.jks` yerel geliştirme içindir,
@@ -595,6 +604,16 @@ Kaynak notları:
   sunulur; sonra e-posta doğrulanana kadar "ready" durumuna geçer. Doğrulama:
   `npx surge verify` (hesap e-postasına link gider) veya `surge login --browser`
   ile panele girip doğrula. Doğrulandıktan sonra yeniden yayınlamak gerekmez.
+- **Oturum kalıcı değildir.** `~/.netrc` (surge oturumu) çalışma alanı dışında
+  tutulur ve temizlenebilir; bu durumda `npx surge whoami` → "Not Authenticated"
+  der ve yayın yapılamaz. Çözüm: kullanıcıdan `SURGE_TOKEN` + `SURGE_LOGIN`
+  alın (güvenli anahtar kutusu `/workspace/secrets_inbox/`), sonra
+  `tools/deploy_surge.sh` çalıştırın. Token yeniden üretilir: `npx surge token`.
+- **Surge kopyası elle güncellenir.** Günlük veri yenileme iş akışı yalnızca
+  `master`'a commit atar; surge'a yükleme yapmaz. Bu yüzden surge'daki
+  `data/events.json` ve `indir/Genc.apk` bayat kalabilir. Güncellemek için
+  `tools/deploy_surge.sh` çalıştırılmalıdır. (Asıl adres GitHub Pages olduğu
+  için site kullanıcıları yine taze veri görür.)
 
 ## Hesap sistemi: gerçek kayıt ve giriş (2026-11)
 - Eskiden e-posta/şifre alanları yalnızca görünüşteydi ("laf olsun diye"); artık
