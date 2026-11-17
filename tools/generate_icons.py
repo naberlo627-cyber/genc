@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Genç PWA ikonlarını üretir (icons/ klasörüne PNG yazar).
 
-İkon, uygulama içi logonun kutusuz halidir: köşegen gradyan zemin üzerinde
-beyaz konum iğnesi. Gradyan ve işaret ortak modülden gelir (tools/brand.py).
+İkon: krem zemin üzerine aksan renkli "G" monogramı (bkz. tools/brand.py).
 """
 import os
 import sys
@@ -22,10 +21,10 @@ def save(img, name):
 def main():
     os.makedirs(OUT, exist_ok=True)
     for size in (192, 512):
-        save(brand.draw_monogram(brand.rounded(brand.gloss(brand.gradient(size))), border=True), f"icon-{size}.png")
-    save(brand.draw_monogram(brand.gloss(brand.gradient(512))), "maskable-512.png")
-    save(brand.draw_monogram(brand.rounded(brand.gloss(brand.gradient(180))), border=True), "apple-touch-icon.png")
-    save(brand.draw_monogram(brand.rounded(brand.gloss(brand.gradient(32)))), "favicon-32.png")
+        save(brand.draw_monogram(brand.rounded(brand.flat(size, brand.CREAM))), f"icon-{size}.png")
+    save(brand.draw_monogram(brand.flat(512, brand.CREAM), scale=0.72), "maskable-512.png")
+    save(brand.draw_monogram(brand.rounded(brand.flat(180, brand.CREAM))), "apple-touch-icon.png")
+    save(brand.draw_monogram(brand.flat(32, brand.CREAM)), "favicon-32.png")
 
 
 if __name__ == "__main__":

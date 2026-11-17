@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#E9E1FA">
+<meta name="theme-color" content="#F7F0E6">
 <title>Genç</title>
 <!-- Google ile giriş için istemci kimliği. Boş bırakılırsa Google düğmesi bilgilendirme mesajı verir.
      Örnek: <meta name="google-client-id" content="1234567890-abc.apps.googleusercontent.com"> -->
 <meta name="google-client-id" content="">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236D4AFF'/%3E%3Cstop offset='.55' stop-color='%23B44DE0'/%3E%3Cstop offset='1' stop-color='%23FF4F8B'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M32 12.2 36.9 27.1 51.8 32 36.9 36.9 32 51.8 27.1 36.9 12.2 32 27.1 27.1Z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2314100D'/%3E%3Cpath d='M32 12.2 36.9 27.1 51.8 32 36.9 36.9 32 51.8 27.1 36.9 12.2 32 27.1 27.1Z' fill='%23F7F0E6'/%3E%3Ccircle cx='46' cy='46' r='5' fill='%23E5402A'/%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -23,31 +23,31 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#17112E;--on-ink:#FFFFFF;--paper:#E9E1FA;--card:#FFFFFF;
-  --brand:#5B3DF5;--on-brand:#FFFFFF;--sun:#FFC83D;--coral:#FF5A5F;--coral-text:#D92D4A;--mute:#625E7C;--line:#D5CBF0;--sw-off:#8F82B8;
+  --ink:#14100D;--on-ink:#F7F0E6;--paper:#F7F0E6;--card:#FFFFFF;
+  --brand:#E5402A;--on-brand:#FFFFFF;--sun:#F0A500;--coral:#E5402A;--coral-text:#C5321F;--mute:#6E655B;--line:#E6DCCF;--sw-off:#A79A8A;
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
-  --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#4338CA;--logo-c2:#7C3AED;--logo-c3:#A855F7;--logo-c4:#D946EF;--logo-fg:#FFFFFF;color-scheme:light;
+  --grad:linear-gradient(135deg,#E5402A 0%,#C5321F 100%);
+  --logo-ink:#14100D;--logo-accent:#E5402A;--logo-fg:#FFFFFF;color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
-  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
+  --ink:#F7F0E6;--on-ink:#14100D;--paper:#14100D;--card:#241F1A;
+  --brand:#FF6A4D;--on-brand:#1A0F0A;--sun:#F0A500;--coral:#FF6A4D;--coral-text:#FF8A70;--mute:#B5A895;--line:#3A322A;--sw-off:#8C8071;
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
-  --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#6366F1;--logo-c2:#8B5CF6;--logo-c3:#A855F7;--logo-c4:#E879F9;--logo-fg:#FFFFFF;color-scheme:dark;
+  --grad:linear-gradient(135deg,#FF6A4D 0%,#D93A20 100%);
+  --logo-ink:#F7F0E6;--logo-accent:#FF6A4D;--logo-fg:#FFFFFF;color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --ink:#F2EEFF;--on-ink:#140D2E;--paper:#120C26;--card:#2A2048;
-  --brand:#9A85FF;--on-brand:#140D2E;--sun:#FFC83D;--coral:#FF7A7F;--coral-text:#FF9AA0;--mute:#A9A0CE;--line:#453872;--sw-off:#7E6FBD;
+  --ink:#F7F0E6;--on-ink:#14100D;--paper:#14100D;--card:#241F1A;
+  --brand:#FF6A4D;--on-brand:#1A0F0A;--sun:#F0A500;--coral:#FF6A4D;--coral-text:#FF8A70;--mute:#B5A895;--line:#3A322A;--sw-off:#8C8071;
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
-  --grad:linear-gradient(135deg,#6D4AFF 0%,#5B3DF5 100%);
-  --logo-c1:#6366F1;--logo-c2:#8B5CF6;--logo-c3:#A855F7;--logo-c4:#E879F9;--logo-fg:#FFFFFF;color-scheme:dark;
+  --grad:linear-gradient(135deg,#FF6A4D 0%,#D93A20 100%);
+  --logo-ink:#F7F0E6;--logo-accent:#FF6A4D;--logo-fg:#FFFFFF;color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 html{-webkit-text-size-adjust:100%}
 body{font-family:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.35;color:var(--ink);background:var(--paper);overflow:hidden;transition:background-color .2s}
-body.night{background:#150E2E}
+body.night{background:#14100D}
 [hidden]{display:none!important}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;text-align:left;-webkit-tap-highlight-color:transparent}
 input{font:inherit;color:inherit}
@@ -94,11 +94,11 @@ svg.ic.f{fill:currentColor}
 .nav button{display:flex;flex-direction:column;align-items:center;gap:4px;font-weight:600;font-size:12px;color:var(--mute)}
 .nav .ico{width:58px;height:32px;border-radius:16px;display:grid;place-items:center;transition:background-color .15s}
 .nav .on{color:var(--ink)}
-.nav .on .ico{background:var(--sun);color:#17112E}
-.nav.night{background:#150E2E;border-top:0}
-.nav.night button{color:#C9C1EA}
+.nav .on .ico{background:var(--sun);color:#14100D}
+.nav.night{background:#14100D;border-top:0}
+.nav.night button{color:#C9BCA9}
 .nav.night .on{color:#fff}
-.nav.night .on .ico{background:var(--sun);color:#17112E}
+.nav.night .on .ico{background:var(--sun);color:#14100D}
 
 /* ---------- kayıt ---------- */
 .steps{display:flex;gap:6px;flex:1;margin-left:14px}
@@ -124,7 +124,7 @@ svg.ic.f{fill:currentColor}
 
 /* ---------- bilet satırı ---------- */
 .tk{display:flex;background:var(--card);border-radius:16px;position:relative;margin:0 20px 12px;width:calc(100% - 40px);text-align:left;overflow:hidden}
-.tk .tkpic{position:relative;width:104px;flex:none;overflow:hidden;background:linear-gradient(135deg,#4A1D7A,#A42BFF)}
+.tk .tkpic{position:relative;width:104px;flex:none;overflow:hidden;background:var(--grad)}
 .tk .tkpic img{width:100%;height:100%;object-fit:cover;display:block}
 .tk .tkpic .art{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.55}
 .tk .tkpic .photo~.art{display:none}
@@ -159,7 +159,7 @@ svg.ic.f{fill:currentColor}
 .thumb em svg{width:14px;height:14px;flex:none;margin-bottom:1px}
 
 /* ---------- kısa videolar ---------- */
-.vid{position:relative;overflow:hidden;color:#fff;background:#0B0820;isolation:isolate}
+.vid{position:relative;overflow:hidden;color:#fff;background:#14100D;isolation:isolate}
 .vphoto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .vscrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,8,24,.7) 0,rgba(6,8,24,.14) 20%,rgba(6,8,24,0) 44%,rgba(6,8,24,.5) 76%,rgba(6,8,24,.95) 100%)}
 .vtop{position:absolute;left:0;right:0;top:0;z-index:3;padding:14px 18px 40px;pointer-events:none;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
@@ -167,18 +167,18 @@ svg.ic.f{fill:currentColor}
 .vbrand{margin:0}
 .vbrand .brandlogo{width:90px}
 .vtabs{display:inline-flex;gap:4px;padding:4px;border-radius:999px;background:rgba(8,12,34,.5);backdrop-filter:blur(10px);pointer-events:auto;flex:none}
-.vtabs button{font-weight:700;font-size:13.5px;padding:8px 15px;border-radius:999px;color:#D6D9EE;transition:background-color .18s,color .18s}
-.vtabs button[aria-pressed="true"]{color:#17112E;background:var(--sun)}
+.vtabs button{font-weight:700;font-size:13.5px;padding:8px 15px;border-radius:999px;color:#EDE3D5;transition:background-color .18s,color .18s}
+.vtabs button[aria-pressed="true"]{color:#14100D;background:var(--sun)}
 .vpanel{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:20px 22px 26px;display:flex;flex-direction:column;gap:12px}
 .vtag{align-self:flex-start;display:inline-flex;align-items:center;gap:7px;padding:6px 13px;border-radius:999px;font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.24);backdrop-filter:blur(6px)}
 .vtag .dot{width:7px;height:7px;border-radius:50%;background:var(--sun);flex:none}
 .vtitle{font-size:30px;line-height:1.07;font-weight:800;text-shadow:0 2px 20px rgba(0,0,0,.55)}
 .vmeta{display:flex;flex-direction:column;gap:7px;font-size:14.5px}
-.vrow{display:flex;align-items:center;gap:9px;color:#E7EAF8}
+.vrow{display:flex;align-items:center;gap:9px;color:#EFE6D9}
 .vrow svg{width:17px;height:17px;flex:none;opacity:.92}
 .vrow b{color:#fff;font-weight:700}
 .vprog{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(255,255,255,.2);z-index:4}
-.vprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),#FF7A45)}
+.vprog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--sun),var(--brand))}
 .toast{position:absolute;left:20px;right:20px;top:118px;background:var(--card);color:var(--ink);border-radius:14px;padding:12px 14px;font-weight:600;font-size:14px;display:flex;gap:10px;align-items:center;opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 14px 30px -12px rgba(0,0,0,.5)}
 .toast.show{opacity:1;transform:none}
 .toast svg{color:var(--brand)}
@@ -215,7 +215,7 @@ svg.ic.f{fill:currentColor}
 /* ---------- Genç: yeni renkler ve düzen ---------- */
 .top{padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 6px}
 .brandlogo{width:114px;height:auto;display:block}
-.logobtn{display:block;padding:0;border-radius:12px;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 4px 10px rgba(91,61,245,.20))}
+.logobtn{display:block;padding:0;border-radius:12px;-webkit-tap-highlight-color:transparent;filter:drop-shadow(0 4px 10px rgba(229,64,42,.22))}
 .logobtn:active{transform:scale(.97)}
 .logobtn:active .brandlogo{opacity:.85}
 .logo-lg{width:150px;height:auto;display:block;margin:calc(env(safe-area-inset-top,0px) + 8px) 20px 0}
@@ -223,18 +223,18 @@ svg.ic.f{fill:currentColor}
 .avatar{border:0}
 .locbar{padding:0 20px 12px}
 .loc{padding:4px 8px 4px 0}
-.cta{background:var(--grad);box-shadow:0 12px 24px -14px rgba(91,61,245,.8)}
+.cta{background:var(--grad);box-shadow:0 12px 24px -14px rgba(229,64,42,.75)}
 .cta[disabled]{box-shadow:none}
 .cardrow .plastic{background:var(--grad)}
 .nav{height:auto;min-height:86px;padding-bottom:max(22px,env(safe-area-inset-bottom))}
 /* Güncelleme şeridi: alt menünün hemen üstünde, yeni APK hazır olduğunda görünür. */
-.upbar{display:flex;align-items:center;gap:10px;margin:0 12px 8px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 24px -16px rgba(23,17,46,.5)}
+.upbar{display:flex;align-items:center;gap:10px;margin:0 12px 8px;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 24px -16px rgba(20,16,13,.45)}
 .upbar .uptxt{flex:1;min-width:0}
 .upbar .uptxt strong{display:block;font-size:14px}
 .upbar .uptxt small{display:block;color:var(--mute);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .upbar button[data-act="update"]{flex:none;background:var(--grad);color:#fff;font-weight:700;font-size:13px;padding:8px 14px;border-radius:12px;border:0}
 .upbar .upx{flex:none;width:32px;height:32px;display:grid;place-items:center;color:var(--mute);border-radius:50%;border:0;background:transparent}
-.nav .on .ico{background:var(--sun);color:#17112E}
+.nav .on .ico{background:var(--sun);color:#14100D}
 .back{box-shadow:0 0 0 1px var(--line)}
 .sw[aria-checked="true"]{background:var(--brand)}
 .thumb,.poster .pic,.tk,.search{transition:transform .12s}
@@ -251,7 +251,7 @@ svg.ic.f{fill:currentColor}
 .field select{width:100%;height:52px;border-radius:15px;border:0;background:var(--card);padding:0 14px;font-size:16px;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line);appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 22px) 24px,calc(100% - 16px) 24px;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
 .field select:focus{outline:0;box-shadow:0 0 0 3px var(--brand)}
 .field .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.err{margin:10px 20px 0;color:#D32F4D;font-weight:600;font-size:14px;min-height:20px}
+.err{margin:10px 20px 0;color:var(--coral-text);font-weight:600;font-size:14px;min-height:20px}
 .sh-body .err{margin:10px 0 0}
 .fin{padding:0 20px}
 .cta.sm{margin:12px 0 0;width:100%}
@@ -285,7 +285,7 @@ svg.ic.f{fill:currentColor}
 .opt-row[aria-pressed="true"] .tick{display:grid}
 
 /* etkinlik ayrıntısı — tam genişlik görsel + üstte tür/aksiyon, altta künye */
-.dhero{position:relative;height:252px;margin:-8px -20px 0;border-radius:0 0 26px 26px;overflow:hidden;background:linear-gradient(135deg,#4A1D7A,#A42BFF)}
+.dhero{position:relative;height:252px;margin:-8px -20px 0;border-radius:0 0 26px 26px;overflow:hidden;background:var(--grad)}
 .dhero .scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(10,6,24,.05) 30%,rgba(10,6,24,.86))}
 .dhero .dtop{position:absolute;left:14px;right:14px;top:14px;z-index:3;display:flex;align-items:flex-start;gap:8px}
 .dhero .poster-tag{position:static;display:flex;gap:6px;flex-wrap:wrap}
@@ -293,10 +293,10 @@ svg.ic.f{fill:currentColor}
 .dhero .poster-tag svg{width:13px;height:13px}
 .dhero .dactions{margin-left:auto;display:flex;gap:8px;flex:none}
 .dhero .dactions button{width:40px;height:40px;border-radius:50%;background:rgba(23,17,46,.6);backdrop-filter:blur(6px);color:#fff;display:grid;place-items:center;transition:background-color .15s,color .15s}
-.dhero .dactions button[aria-pressed="true"]{background:var(--sun);color:#17112E}
+.dhero .dactions button[aria-pressed="true"]{background:var(--sun);color:#14100D}
 .dhero .dactions svg{width:19px;height:19px}
 .dhero .dov{position:absolute;left:17px;right:17px;bottom:15px;z-index:2;color:#fff}
-.dhero .dov .dtype{display:inline-flex;align-items:center;gap:6px;background:var(--sun);color:#17112E;font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px;margin-bottom:9px}
+.dhero .dov .dtype{display:inline-flex;align-items:center;gap:6px;background:var(--sun);color:#14100D;font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px;margin-bottom:9px}
 .dhero .dov .dtype svg{width:14px;height:14px}
 .dhero .dov h3{margin:0;font-stretch:80%;font-weight:800;font-size:27px;line-height:1.07;text-shadow:0 2px 16px rgba(0,0,0,.55)}
 .dhero .dov .dvenue{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:13.5px;font-weight:600;opacity:.95}
@@ -321,18 +321,18 @@ svg.ic.f{fill:currentColor}
 .poster .pic .photo,.wide .photo,.dhero .photo,.thumb .photo{z-index:0}
 .poster .pic .art,.wide .art,.dhero .art,.thumb .art{z-index:0}
 .poster .pic .photo~.art,.wide .photo~.art,.dhero .photo~.art{display:none}
-.livetag{position:absolute;left:8px;top:8px;background:rgba(214,31,64,.94);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:10px;z-index:3}
+.livetag{position:absolute;left:8px;top:8px;background:rgba(229,64,42,.94);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:10px;z-index:3}
 .poster.soldout .pic{opacity:.55}
 .dline.live{display:flex;align-items:center;gap:8px;font-weight:700}
 .dot{width:10px;height:10px;border-radius:50%;background:var(--mute);flex:none}
 .dot.on{background:#19b06a;box-shadow:0 0 0 4px rgba(25,176,106,.18)}
-.dot.off{background:#d61f40;box-shadow:0 0 0 4px rgba(214,31,64,.16)}
+.dot.off{background:#E5402A;box-shadow:0 0 0 4px rgba(229,64,42,.16)}
 /* salonlar */
 .vhint{color:var(--mute);font-size:13px;margin:2px 20px 10px}
 .vgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px 6px}
 .vcard{text-align:left;background:var(--card);border-radius:18px;overflow:hidden;display:block;border:2px solid transparent}
 .vcard.on{border-color:var(--brand)}
-.vcard .vpic{position:relative;height:96px;display:block;background:linear-gradient(135deg,#4A1D7A,#A42BFF);overflow:hidden}
+.vcard .vpic{position:relative;height:96px;display:block;background:var(--grad);overflow:hidden}
 .vcard .vpic .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.55));z-index:1}
 .vcard .vpic b{position:absolute;right:8px;bottom:8px;z-index:2;background:rgba(23,17,46,.82);color:#fff;font-size:12px;font-weight:800;padding:3px 8px;border-radius:10px}
 .vcard>strong{display:block;padding:9px 11px 0;font-size:14px;line-height:1.2}
@@ -341,7 +341,7 @@ svg.ic.f{fill:currentColor}
 /* salon ekranı (alt sayfa içinde) */
 .vsheet{margin:0 0 4px}
 .vsheet .vcal{padding:0}
-.vhero{position:relative;height:150px;border-radius:16px;overflow:hidden;margin:0 0 10px;background:linear-gradient(135deg,#4A1D7A,#A42BFF)}
+.vhero{position:relative;height:150px;border-radius:16px;overflow:hidden;margin:0 0 10px;background:var(--grad)}
 .vhero .photo{width:100%;height:100%;object-fit:cover;display:block}
 .vhero .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.4))}
 .vmeta{display:flex;align-items:center;gap:6px;color:var(--mute);font-size:13.5px;font-weight:600;margin:0 0 12px}
@@ -356,7 +356,7 @@ svg.ic.f{fill:currentColor}
 .calrow .cp{flex:none;font-weight:800;font-size:13px}
 .pill{font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px;flex:none}
 .pill.on{background:rgba(25,176,106,.16);color:#128a52}
-.pill.off{background:rgba(214,31,64,.14);color:#c0183a}
+.pill.off{background:rgba(229,64,42,.14);color:#C5321F}
 /* etkinlik detayı: sekmeli bölümler (Detay · Biletler · Kadro · Yorumlar · Kurallar) */
 .dtabs{display:flex;gap:6px;overflow-x:auto;margin:18px -20px 4px;padding:2px 20px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .dtabs::-webkit-scrollbar{display:none}
@@ -408,8 +408,8 @@ svg.ic.f{fill:currentColor}
 .btn{flex:1;min-height:54px;border-radius:16px;background:var(--grad);color:#fff;font-weight:700;font-size:16px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 16px}
 .btn.ghost{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
 .iconbtn{flex:none;width:54px;height:54px;border-radius:16px;background:var(--card);display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px var(--line)}
-.iconbtn[aria-pressed="true"]{background:var(--sun);box-shadow:none;color:#17112E}
-.iconbtn[aria-pressed="true"] svg{fill:#17112E}
+.iconbtn[aria-pressed="true"]{background:var(--sun);box-shadow:none;color:#14100D}
+.iconbtn[aria-pressed="true"] svg{fill:#14100D}
 
 /* uygulama içi satıcı sayfası */
 .webv{position:fixed;inset:0;margin:0 auto;max-width:480px;width:100%;z-index:60;background:var(--paper);display:flex;flex-direction:column}
@@ -463,7 +463,7 @@ svg.ic.f{fill:currentColor}
 .installrow span{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
 .installrow strong{font-size:14px}
 .installrow small{font-size:12px;opacity:.85}
-.installrow button{background:#fff;color:#17112E;border:0;border-radius:11px;padding:9px 16px;font-weight:800;font-size:13px}
+.installrow button{background:#fff;color:#14100D;border:0;border-radius:11px;padding:9px 16px;font-weight:800;font-size:13px}
 .tkt{position:relative;margin:14px 20px 0;border-radius:20px;background:var(--card);border:1px solid var(--line);overflow:hidden}
 .tkt .top2{display:flex;gap:12px;align-items:flex-start;padding:16px}
 .tkt .mini-art{position:relative;width:56px;height:56px;border-radius:14px;overflow:hidden;flex:none}
@@ -515,7 +515,7 @@ svg.ic.f{fill:currentColor}
 .sh-body .err{color:var(--coral-text);font-size:13px;font-weight:600;padding:0 0 4px}
 
 /* videolar */
-.feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:linear-gradient(160deg,#241056,#4A1D7A 55%,#7A2A6E);color:#fff}
+.feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;background:linear-gradient(160deg,#1A120C,#3A2018 55%,#5A2A1E);color:#fff}
 .feed::-webkit-scrollbar{display:none}
 .vid{height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;flex:none}
 .vtop{padding:calc(env(safe-area-inset-top,0px) + 14px) 18px 40px}
@@ -531,7 +531,7 @@ svg.ic.f{fill:currentColor}
 .vend .vendmark svg{width:32px;height:32px}
 .vend h2{font-size:34px;line-height:1.1}
 .vend p{color:#E9E2F8;max-width:30ch;font-size:15px;line-height:1.5}
-.vend .btn{flex:none;width:100%;max-width:300px;background:var(--sun);color:#17112E}
+.vend .btn{flex:none;width:100%;max-width:300px;background:var(--sun);color:#14100D}
 .vend .btn.ghost{background:rgba(255,255,255,.14);color:#fff;box-shadow:none}
 .toast{position:fixed;left:50%;right:auto;top:calc(env(safe-area-inset-top,0px) + 14px);width:min(440px,calc(100% - 40px));z-index:90;transform:translate(-50%,-10px)}
 .toast.show{transform:translate(-50%,0)}
@@ -556,14 +556,6 @@ svg.ic.f{fill:currentColor}
 .wide .wt strong{display:block;font-stretch:75%;font-weight:800;font-size:25px;line-height:1.05}
 .wide .wt span{display:block;font-size:13px;margin-top:4px;color:#F1EEFF}
 .wide:active{transform:scale(.98)}
-.cats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px}
-.cat{border-radius:16px;min-height:78px;padding:11px 12px;color:#fff;display:flex;flex-direction:column;justify-content:space-between;transition:transform .12s;background-size:cover;background-position:center;background-repeat:no-repeat;position:relative;overflow:hidden;text-shadow:0 1px 4px rgba(6,4,22,.8)}
-.cat:active{transform:scale(.97)}
-.cat b{font-size:14px;line-height:1.15;position:relative;z-index:2}
-.cat small{font-size:12px;opacity:.9;position:relative;z-index:2}
-.cat.on{outline:3px solid var(--ink);outline-offset:2px}
-.cat .catimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
-.cat::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(6,4,22,.12),rgba(6,4,22,.72));z-index:1}
 /* ---------- etkinlikler (keşfet) ----------
    Referans (Biletinial) "Etkinlikler" bölümü: filtre çubuğu + kart listesi.
    Kart: afiş, kategori etiketi, başlık, mekan ve tarih, başlangıç fiyatı. */
@@ -618,10 +610,10 @@ svg.ic.f{fill:currentColor}
 .wkday.on{background:var(--grad);box-shadow:none}
 .wkday.on b,.wkday.on small{color:#fff}
 .wkday.on i{background:var(--sun);opacity:1}
-.wkfeat{position:relative;display:block;width:calc(100% - 40px);margin:6px 20px 12px;height:210px;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#4A1D7A,#A42BFF);text-align:left}
+.wkfeat{position:relative;display:block;width:calc(100% - 40px);margin:6px 20px 12px;height:210px;border-radius:22px;overflow:hidden;background:var(--grad);text-align:left}
 .wkfeat .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.78));z-index:1}
 .wkfeat .fb{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;color:#fff}
-.wkfeat .fb .wkwhen{display:inline-flex;align-items:center;gap:6px;background:var(--sun);color:#17112E;font-weight:800;font-size:12px;padding:5px 11px;border-radius:999px;margin-bottom:9px}
+.wkfeat .fb .wkwhen{display:inline-flex;align-items:center;gap:6px;background:var(--sun);color:#14100D;font-weight:800;font-size:12px;padding:5px 11px;border-radius:999px;margin-bottom:9px}
 .wkfeat .fb .wkwhen svg{width:14px;height:14px}
 .wkfeat .fb strong{display:block;font-stretch:80%;font-weight:800;font-size:25px;line-height:1.08;text-shadow:0 2px 14px rgba(0,0,0,.5)}
 .wkfeat .fb .wkmeta{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:13.5px;font-weight:600;opacity:.95}
@@ -629,7 +621,7 @@ svg.ic.f{fill:currentColor}
 .wkfeat .fb .wkmeta svg{width:15px;height:15px}
 .wklist{display:flex;flex-direction:column;gap:10px;padding:2px 20px 0}
 .wkrow{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:10px;box-shadow:inset 0 0 0 1.5px var(--line);text-align:left}
-.wkrow .wp{position:relative;flex:none;width:58px;height:58px;border-radius:14px;overflow:hidden;background:linear-gradient(135deg,#4A1D7A,#A42BFF)}
+.wkrow .wp{position:relative;flex:none;width:58px;height:58px;border-radius:14px;overflow:hidden;background:var(--grad)}
 .wkrow .wp .art{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
 .wkrow .wp .photo~.art{display:none}
 .wkrow .wb{flex:1;min-width:0}
@@ -711,10 +703,10 @@ svg.ic.f{fill:currentColor}
 .vad .adtag{flex:none;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(255,255,255,.16);padding:3px 7px;border-radius:6px}
 .vad .adbody{flex:1;min-width:0;text-align:left;color:inherit;background:none;border:0;padding:0}
 .vad strong{display:block;font-size:13.5px;line-height:1.2}
-.vad p{margin:1px 0 0;font-size:11.5px;color:#CFC8EA;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vad p{margin:1px 0 0;font-size:11.5px;color:#C9BCA9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vad .adgo{flex:none;font-weight:800;font-size:12.5px;color:var(--sun);display:flex;align-items:center;gap:2px;background:none;border:0}
 .vad .adgo svg{width:15px;height:15px}
-.vad .adclose{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#CFC8EA;background:none;border:0}
+.vad .adclose{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#C9BCA9;background:none;border:0}
 .vad .adclose svg{width:15px;height:15px}
 
 
@@ -752,7 +744,7 @@ svg.ic.f{fill:currentColor}
 .tkt .acts{display:flex;gap:8px;margin-top:10px}
 .tkt .acts button{height:40px;padding:0 14px;border-radius:12px;background:var(--paper);font-weight:700;font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
 .tkt .acts button svg{width:17px;height:17px}
-.tkt .used{position:absolute;right:14px;top:14px;background:var(--sun);color:#17112E;font-weight:800;font-size:12px;padding:4px 10px;border-radius:10px}
+.tkt .used{position:absolute;right:14px;top:14px;background:var(--sun);color:#14100D;font-weight:800;font-size:12px;padding:4px 10px;border-radius:10px}
 .tkt.past{opacity:.72}
 .bigqr{background:#fff;border-radius:20px;padding:18px;margin:14px auto 6px;width:min(260px,70vw)}
 .bigqr svg{width:100%;height:auto;display:block}
@@ -795,7 +787,7 @@ svg.ic.f{fill:currentColor}
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
 <defs>
-  <linearGradient id="gc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1B1147"/><stop offset=".55" stop-color="#5B21B6"/><stop offset="1" stop-color="#E8436B"/></linearGradient>
+  <linearGradient id="gc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2A1A12"/><stop offset=".55" stop-color="#7A2A1E"/><stop offset="1" stop-color="#E5402A"/></linearGradient>
   <linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
   <linearGradient id="gf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0E1B3D"/><stop offset=".5" stop-color="#4A2F8F"/><stop offset=".78" stop-color="#FF7A45"/><stop offset="1" stop-color="#FFC400"/></linearGradient>
   <linearGradient id="gt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8FD3FF"/><stop offset="1" stop-color="#FFE9A8"/></linearGradient>
@@ -846,7 +838,7 @@ svg.ic.f{fill:currentColor}
 </symbol>
 
 <symbol id="art-theatre" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
-  <rect width="240" height="400" fill="#1B1147"/>
+  <rect width="240" height="400" fill="#2A1A12"/>
   <path d="M96 0h48L214 340H26z" fill="url(#gl)"/>
   <rect y="338" width="240" height="62" fill="#6B3B1E"/>
   <path d="M0 362h240M0 384h240" stroke="#4A2812" stroke-width="2"/>
@@ -887,7 +879,7 @@ svg.ic.f{fill:currentColor}
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
 
-<symbol id="logo" viewBox="0 0 2585.39 896.85"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--logo-c1)"/><stop offset=".38" stop-color="var(--logo-c2)"/><stop offset=".72" stop-color="var(--logo-c3)"/><stop offset="1" stop-color="var(--logo-c4)"/></linearGradient></defs><g transform="translate(-48.652,699.087)"><path d="M388 12Q221.93505859375 12.0 135.293701171875 -75.945556640625Q48.65234375 -163.89111328125 48.65234375 -343.54345703125Q48.65234375 -462.9130859375 91.510986328125 -541.684814453125Q134.36962890625 -620.45654296875 215.858642578125 -659.771728515625Q297.34765625 -699.0869140625 412.23876953125 -699.0869140625Q481.49951171875 -699.0869140625 542.488525390625 -683.271728515625Q603.4775390625 -667.45654296875 650.1513671875 -635.86962890625Q696.8251953125 -604.28271484375 722.912109375 -556.65234375Q748.9990234375 -509.02197265625 748.9990234375 -444.93505859375H573.15283203125Q573.15283203125 -471.95703125 560.82666015625 -493.381103515625Q548.50048828125 -514.80517578125 527.076416015625 -529.587890625Q505.65234375 -544.37060546875 477.815185546875 -551.78369140625Q449.97802734375 -559.19677734375 418.9560546875 -559.19677734375Q372.6513671875 -559.19677734375 337.401123046875 -546.87060546875Q302.15087890625 -534.54443359375 278.99853515625 -509.663818359375Q255.84619140625 -484.783203125 244.248291015625 -448.93505859375Q232.650390625 -413.0869140625 232.650390625 -365.49951171875V-321.130859375Q232.650390625 -256.97802734375 252.661376953125 -213.945068359375Q272.67236328125 -170.912109375 313.1943359375 -149.401123046875Q353.71630859375 -127.89013671875 413.4775390625 -127.89013671875Q459.4345703125 -127.89013671875 495.78271484375 -141.814208984375Q532.130859375 -155.73828125 553.554931640625 -182.358154296875Q574.97900390625 -208.97802734375 574.97900390625 -245.93505859375V-251.3046875H390.216796875V-376.6953125H748.9990234375V0.0H644.58642578125L627.6083984375 -71.65234375Q597.06494140625 -43.826171875 561.4345703125 -25.141357421875Q525.80419921875 -6.45654296875 483.173828125 2.771728515625Q440.54345703125 12.0 388 12Z" transform="translate(0.0,0)" fill="currentColor"/><path d="M320.3466796875 12.0Q230.36865234375 12.0 167.031982421875 -17.5Q103.6953125 -47.0 70.532470703125 -108.0Q37.36962890625 -169.0 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.2607421875 -418.228271484375Q103.15185546875 -479.0 164.858154296875 -509.04345703125Q226.564453125 -539.0869140625 313.8251953125 -539.0869140625Q400.15087890625 -539.0869140625 459.802734375 -510.04345703125Q519.45458984375 -481.0 550.345703125 -420.9130859375Q581.23681640625 -360.826171875 581.23681640625 -266.28271484375V-231.36962890625H202.58544921875Q203.49853515625 -189.4345703125 215.139892578125 -160.010498046875Q226.78125 -130.58642578125 252.107421875 -115.716796875Q277.43359375 -100.84716796875 318.62939453125 -100.84716796875Q343.80322265625 -100.84716796875 362.988037109375 -106.84716796875Q382.1728515625 -112.84716796875 395.270751953125 -124.26025390625Q408.36865234375 -135.67333984375 414.966552734375 -151.9560546875Q421.564453125 -168.23876953125 421.564453125 -188.34765625H581.23681640625Q581.23681640625 -139.97802734375 563.465087890625 -102.4345703125Q545.693359375 -64.89111328125 511.747802734375 -39.532470703125Q477.80224609375 -14.173828125 429.552490234375 -1.0869140625Q381.302734375 12.0 320.3466796875 12.0ZM204.0419921875 -321.71728515625H414.02099609375Q414.02099609375 -348.19580078125 407.336181640625 -367.663330078125Q400.6513671875 -387.130859375 388.23828125 -400.228759765625Q375.8251953125 -413.32666015625 358.183837890625 -419.554931640625Q340.54248046875 -425.783203125 318.1728515625 -425.783203125Q282.43359375 -425.783203125 258.379150390625 -413.8701171875Q234.32470703125 -401.95703125 221.41162109375 -379.032958984375Q208.49853515625 -356.10888671875 204.0419921875 -321.71728515625Z" transform="translate(815.0,0)" fill="currentColor"/><path d="M62.28271484375 0.0V-527.0869140625H197.43359375L209.06396484375 -451.65234375H216.06396484375Q235.6943359375 -479.45654296875 262.096435546875 -499.04345703125Q288.49853515625 -518.63037109375 321.357177734375 -528.858642578125Q354.2158203125 -539.0869140625 391.12890625 -539.0869140625Q448.19384765625 -539.0869140625 487.78076171875 -518.097900390625Q527.36767578125 -497.10888671875 548.28076171875 -454.93505859375Q569.19384765625 -412.76123046875 569.19384765625 -347.93505859375V0.0H404.89111328125V-324.84814453125Q404.89111328125 -346.8701171875 399.47802734375 -362.65283203125Q394.06494140625 -378.435546875 384.010498046875 -389.120361328125Q373.9560546875 -399.80517578125 358.945068359375 -405.076904296875Q343.93408203125 -410.3486328125 324.6513671875 -410.3486328125Q295.9990234375 -410.3486328125 273.8466796875 -396.794189453125Q251.6943359375 -383.23974609375 238.91162109375 -360.402587890625Q226.12890625 -337.5654296875 226.12890625 -308.173828125V0.0Z" transform="translate(1434.0,0)" fill="currentColor"/><path d="M310.62939453125 12.0Q224.28173828125 12.0 163.26025390625 -18.04345703125Q102.23876953125 -48.0869140625 69.80419921875 -109.358642578125Q37.36962890625 -170.63037109375 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.032470703125 -418.5Q102.6953125 -479.54345703125 163.716796875 -509.5869140625Q224.73828125 -539.63037109375 310.62939453125 -539.63037109375Q367.43359375 -539.63037109375 414.955078125 -526.63037109375Q462.4765625 -513.63037109375 497.682861328125 -486.858642578125Q532.88916015625 -460.0869140625 551.965087890625 -418.9130859375Q571.041015625 -377.7392578125 571.041015625 -321.3916015625H409.54248046875Q409.54248046875 -355.130859375 398.270751953125 -376.95703125Q386.9990234375 -398.783203125 364.770751953125 -409.65283203125Q342.54248046875 -420.5224609375 309.71630859375 -420.5224609375Q271.97705078125 -420.5224609375 248.422607421875 -404.511474609375Q224.8681640625 -388.50048828125 213.726806640625 -357.52197265625Q202.58544921875 -326.54345703125 202.58544921875 -281.49951171875V-244.58740234375Q202.58544921875 -200.0 213.99853515625 -169.06494140625Q225.41162109375 -138.1298828125 249.966064453125 -122.34716796875Q274.5205078125 -106.564453125 314.1728515625 -106.564453125Q347.62939453125 -106.564453125 370.12939453125 -117.43408203125Q392.62939453125 -128.3037109375 404.62939453125 -150.858154296875Q416.62939453125 -173.41259765625 416.62939453125 -206.7822265625H571.041015625Q571.041015625 -151.80419921875 551.965087890625 -110.358642578125Q532.88916015625 -68.9130859375 497.9111328125 -41.9130859375Q462.93310546875 -14.9130859375 415.183349609375 -1.45654296875Q367.43359375 12.0 310.62939453125 12.0ZM118.390625 197.76025390625Q88.49951171875 197.76025390625 55.249755859375 194.401611328125Q22.0 191.04296875 0.0 185.41259765625V132.06494140625H99.06494140625Q117.97802734375 132.06494140625 129.206298828125 128.15185546875Q140.4345703125 124.23876953125 140.4345703125 109.15185546875Q140.4345703125 95.521484375 132.206298828125 90.336669921875Q123.97802734375 85.15185546875 101.06494140625 85.15185546875H59.23876953125L76.49951171875 -26.216796875H164.28173828125L155.564453125 31.28271484375Q177.216796875 32.826171875 197.858154296875 41.4130859375Q218.49951171875 50.0 231.49951171875 66.445556640625Q244.49951171875 82.89111328125 244.49951171875 110.23876953125Q244.49951171875 136.869140625 231.771240234375 154.227783203125Q219.04296875 171.58642578125 199.58642578125 180.901611328125Q180.1298828125 190.216796875 158.445068359375 193.988525390625Q136.76025390625 197.76025390625 118.390625 197.76025390625Z" transform="translate(2063.0,0)" fill="url(#lg)"/></g></symbol>
+<symbol id="logo" viewBox="0 0 2585.39 896.85"><g transform="translate(-48.652,699.087)"><path d="M388 12Q221.93505859375 12.0 135.293701171875 -75.945556640625Q48.65234375 -163.89111328125 48.65234375 -343.54345703125Q48.65234375 -462.9130859375 91.510986328125 -541.684814453125Q134.36962890625 -620.45654296875 215.858642578125 -659.771728515625Q297.34765625 -699.0869140625 412.23876953125 -699.0869140625Q481.49951171875 -699.0869140625 542.488525390625 -683.271728515625Q603.4775390625 -667.45654296875 650.1513671875 -635.86962890625Q696.8251953125 -604.28271484375 722.912109375 -556.65234375Q748.9990234375 -509.02197265625 748.9990234375 -444.93505859375H573.15283203125Q573.15283203125 -471.95703125 560.82666015625 -493.381103515625Q548.50048828125 -514.80517578125 527.076416015625 -529.587890625Q505.65234375 -544.37060546875 477.815185546875 -551.78369140625Q449.97802734375 -559.19677734375 418.9560546875 -559.19677734375Q372.6513671875 -559.19677734375 337.401123046875 -546.87060546875Q302.15087890625 -534.54443359375 278.99853515625 -509.663818359375Q255.84619140625 -484.783203125 244.248291015625 -448.93505859375Q232.650390625 -413.0869140625 232.650390625 -365.49951171875V-321.130859375Q232.650390625 -256.97802734375 252.661376953125 -213.945068359375Q272.67236328125 -170.912109375 313.1943359375 -149.401123046875Q353.71630859375 -127.89013671875 413.4775390625 -127.89013671875Q459.4345703125 -127.89013671875 495.78271484375 -141.814208984375Q532.130859375 -155.73828125 553.554931640625 -182.358154296875Q574.97900390625 -208.97802734375 574.97900390625 -245.93505859375V-251.3046875H390.216796875V-376.6953125H748.9990234375V0.0H644.58642578125L627.6083984375 -71.65234375Q597.06494140625 -43.826171875 561.4345703125 -25.141357421875Q525.80419921875 -6.45654296875 483.173828125 2.771728515625Q440.54345703125 12.0 388 12Z" transform="translate(0.0,0)" fill="currentColor"/><path d="M320.3466796875 12.0Q230.36865234375 12.0 167.031982421875 -17.5Q103.6953125 -47.0 70.532470703125 -108.0Q37.36962890625 -169.0 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.2607421875 -418.228271484375Q103.15185546875 -479.0 164.858154296875 -509.04345703125Q226.564453125 -539.0869140625 313.8251953125 -539.0869140625Q400.15087890625 -539.0869140625 459.802734375 -510.04345703125Q519.45458984375 -481.0 550.345703125 -420.9130859375Q581.23681640625 -360.826171875 581.23681640625 -266.28271484375V-231.36962890625H202.58544921875Q203.49853515625 -189.4345703125 215.139892578125 -160.010498046875Q226.78125 -130.58642578125 252.107421875 -115.716796875Q277.43359375 -100.84716796875 318.62939453125 -100.84716796875Q343.80322265625 -100.84716796875 362.988037109375 -106.84716796875Q382.1728515625 -112.84716796875 395.270751953125 -124.26025390625Q408.36865234375 -135.67333984375 414.966552734375 -151.9560546875Q421.564453125 -168.23876953125 421.564453125 -188.34765625H581.23681640625Q581.23681640625 -139.97802734375 563.465087890625 -102.4345703125Q545.693359375 -64.89111328125 511.747802734375 -39.532470703125Q477.80224609375 -14.173828125 429.552490234375 -1.0869140625Q381.302734375 12.0 320.3466796875 12.0ZM204.0419921875 -321.71728515625H414.02099609375Q414.02099609375 -348.19580078125 407.336181640625 -367.663330078125Q400.6513671875 -387.130859375 388.23828125 -400.228759765625Q375.8251953125 -413.32666015625 358.183837890625 -419.554931640625Q340.54248046875 -425.783203125 318.1728515625 -425.783203125Q282.43359375 -425.783203125 258.379150390625 -413.8701171875Q234.32470703125 -401.95703125 221.41162109375 -379.032958984375Q208.49853515625 -356.10888671875 204.0419921875 -321.71728515625Z" transform="translate(815.0,0)" fill="currentColor"/><path d="M62.28271484375 0.0V-527.0869140625H197.43359375L209.06396484375 -451.65234375H216.06396484375Q235.6943359375 -479.45654296875 262.096435546875 -499.04345703125Q288.49853515625 -518.63037109375 321.357177734375 -528.858642578125Q354.2158203125 -539.0869140625 391.12890625 -539.0869140625Q448.19384765625 -539.0869140625 487.78076171875 -518.097900390625Q527.36767578125 -497.10888671875 548.28076171875 -454.93505859375Q569.19384765625 -412.76123046875 569.19384765625 -347.93505859375V0.0H404.89111328125V-324.84814453125Q404.89111328125 -346.8701171875 399.47802734375 -362.65283203125Q394.06494140625 -378.435546875 384.010498046875 -389.120361328125Q373.9560546875 -399.80517578125 358.945068359375 -405.076904296875Q343.93408203125 -410.3486328125 324.6513671875 -410.3486328125Q295.9990234375 -410.3486328125 273.8466796875 -396.794189453125Q251.6943359375 -383.23974609375 238.91162109375 -360.402587890625Q226.12890625 -337.5654296875 226.12890625 -308.173828125V0.0Z" transform="translate(1434.0,0)" fill="currentColor"/><path d="M310.62939453125 12.0Q224.28173828125 12.0 163.26025390625 -18.04345703125Q102.23876953125 -48.0869140625 69.80419921875 -109.358642578125Q37.36962890625 -170.63037109375 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.032470703125 -418.5Q102.6953125 -479.54345703125 163.716796875 -509.5869140625Q224.73828125 -539.63037109375 310.62939453125 -539.63037109375Q367.43359375 -539.63037109375 414.955078125 -526.63037109375Q462.4765625 -513.63037109375 497.682861328125 -486.858642578125Q532.88916015625 -460.0869140625 551.965087890625 -418.9130859375Q571.041015625 -377.7392578125 571.041015625 -321.3916015625H409.54248046875Q409.54248046875 -355.130859375 398.270751953125 -376.95703125Q386.9990234375 -398.783203125 364.770751953125 -409.65283203125Q342.54248046875 -420.5224609375 309.71630859375 -420.5224609375Q271.97705078125 -420.5224609375 248.422607421875 -404.511474609375Q224.8681640625 -388.50048828125 213.726806640625 -357.52197265625Q202.58544921875 -326.54345703125 202.58544921875 -281.49951171875V-244.58740234375Q202.58544921875 -200.0 213.99853515625 -169.06494140625Q225.41162109375 -138.1298828125 249.966064453125 -122.34716796875Q274.5205078125 -106.564453125 314.1728515625 -106.564453125Q347.62939453125 -106.564453125 370.12939453125 -117.43408203125Q392.62939453125 -128.3037109375 404.62939453125 -150.858154296875Q416.62939453125 -173.41259765625 416.62939453125 -206.7822265625H571.041015625Q571.041015625 -151.80419921875 551.965087890625 -110.358642578125Q532.88916015625 -68.9130859375 497.9111328125 -41.9130859375Q462.93310546875 -14.9130859375 415.183349609375 -1.45654296875Q367.43359375 12.0 310.62939453125 12.0ZM118.390625 197.76025390625Q88.49951171875 197.76025390625 55.249755859375 194.401611328125Q22.0 191.04296875 0.0 185.41259765625V132.06494140625H99.06494140625Q117.97802734375 132.06494140625 129.206298828125 128.15185546875Q140.4345703125 124.23876953125 140.4345703125 109.15185546875Q140.4345703125 95.521484375 132.206298828125 90.336669921875Q123.97802734375 85.15185546875 101.06494140625 85.15185546875H59.23876953125L76.49951171875 -26.216796875H164.28173828125L155.564453125 31.28271484375Q177.216796875 32.826171875 197.858154296875 41.4130859375Q218.49951171875 50.0 231.49951171875 66.445556640625Q244.49951171875 82.89111328125 244.49951171875 110.23876953125Q244.49951171875 136.869140625 231.771240234375 154.227783203125Q219.04296875 171.58642578125 199.58642578125 180.901611328125Q180.1298828125 190.216796875 158.445068359375 193.988525390625Q136.76025390625 197.76025390625 118.390625 197.76025390625Z" transform="translate(2063.0,0)" fill="var(--logo-accent)"/></g></symbol>
 
 <linearGradient id="ga1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF7A45"/><stop offset="1" stop-color="#B0125E"/></linearGradient>
 <linearGradient id="ga2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CCBFF"/><stop offset="1" stop-color="#FFF1B0"/></linearGradient>
@@ -898,40 +890,40 @@ svg.ic.f{fill:currentColor}
   <rect width="240" height="400" fill="url(#ga1)"/>
   <path d="M0 0h50l-30 400H0zM190 0h50v400h-20z" fill="#7A0B43" opacity=".55"/>
   <ellipse cx="120" cy="330" rx="120" ry="40" fill="#FFC83D" opacity=".4"/>
-  <circle cx="120" cy="170" r="30" fill="#17112E"/><rect x="116" y="196" width="8" height="120" rx="4" fill="#17112E"/>
-  <path d="M84 316h72" stroke="#17112E" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="120" cy="170" r="30" fill="#14100D"/><rect x="116" y="196" width="8" height="120" rx="4" fill="#14100D"/>
+  <path d="M84 316h72" stroke="#14100D" stroke-width="8" stroke-linecap="round"/>
   <circle cx="60" cy="70" r="6" fill="#FFC83D"/><circle cx="190" cy="110" r="4" fill="#fff" opacity=".8"/><circle cx="170" cy="50" r="5" fill="#FFC83D"/>
 </symbol>
 <symbol id="art-kids" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
   <rect width="240" height="400" fill="url(#ga2)"/>
   <path d="M0 330q60-50 120-20t120-30v120H0z" fill="#3FB27F"/>
-  <g stroke="#17112E" stroke-width="2" opacity=".6"><path d="M70 170 110 330M120 130l0 200M170 190l-40 140"/></g>
-  <circle cx="70" cy="140" r="34" fill="#FF5A5F"/><circle cx="120" cy="100" r="38" fill="#6D4AFF"/><circle cx="172" cy="160" r="32" fill="#FFC83D"/>
+  <g stroke="#14100D" stroke-width="2" opacity=".6"><path d="M70 170 110 330M120 130l0 200M170 190l-40 140"/></g>
+  <circle cx="70" cy="140" r="34" fill="#FF5A5F"/><circle cx="120" cy="100" r="38" fill="#E5712A"/><circle cx="172" cy="160" r="32" fill="#FFC83D"/>
   <circle cx="60" cy="130" r="8" fill="#fff" opacity=".5"/><circle cx="108" cy="88" r="9" fill="#fff" opacity=".5"/><circle cx="163" cy="150" r="8" fill="#fff" opacity=".5"/>
   <circle cx="200" cy="60" r="22" fill="#fff" opacity=".7"/>
 </symbol>
 <symbol id="art-sport" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
   <rect width="240" height="400" fill="url(#ga3)"/>
   <g fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3"><rect x="20" y="230" width="200" height="150" rx="6"/><path d="M20 305h200"/><circle cx="120" cy="305" r="28"/></g>
-  <circle cx="120" cy="140" r="56" fill="#fff"/><path d="M120 108l24 18-9 28h-30l-9-28z" fill="#17112E"/>
-  <path d="M120 84v24M144 126l24-8M135 154l14 22M105 154l-14 22M96 126l-24-8" stroke="#17112E" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="120" cy="140" r="56" fill="#fff"/><path d="M120 108l24 18-9 28h-30l-9-28z" fill="#14100D"/>
+  <path d="M120 84v24M144 126l24-8M135 154l14 22M105 154l-14 22M96 126l-24-8" stroke="#14100D" stroke-width="5" stroke-linecap="round"/>
   <path d="M30 0v70M210 0v70" stroke="#fff" stroke-opacity=".6" stroke-width="4"/><circle cx="30" cy="70" r="9" fill="#FFC83D"/><circle cx="210" cy="70" r="9" fill="#FFC83D"/>
 </symbol>
 <symbol id="art-expo" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
   <rect width="240" height="400" fill="url(#ga4)"/>
   <rect y="320" width="240" height="80" fill="#B88A63"/>
-  <rect x="26" y="80" width="86" height="120" fill="#fff" stroke="#17112E" stroke-width="5"/><circle cx="69" cy="130" r="22" fill="#FF5A5F"/><path d="M26 200l34-40 26 24 26-30v46z" fill="#6D4AFF"/>
-  <rect x="136" y="60" width="78" height="78" fill="#fff" stroke="#17112E" stroke-width="5"/><path d="M146 128l24-50 34 50z" fill="#FFC83D"/>
-  <rect x="136" y="170" width="78" height="110" fill="#fff" stroke="#17112E" stroke-width="5"/><circle cx="175" cy="225" r="26" fill="#3FB27F"/>
-  <rect x="26" y="240" width="86" height="60" fill="#fff" stroke="#17112E" stroke-width="5"/><path d="M36 290q20-40 40-10t26-20" fill="none" stroke="#FF4F8B" stroke-width="6"/>
+  <rect x="26" y="80" width="86" height="120" fill="#fff" stroke="#14100D" stroke-width="5"/><circle cx="69" cy="130" r="22" fill="#FF5A5F"/><path d="M26 200l34-40 26 24 26-30v46z" fill="#E5712A"/>
+  <rect x="136" y="60" width="78" height="78" fill="#fff" stroke="#14100D" stroke-width="5"/><path d="M146 128l24-50 34 50z" fill="#FFC83D"/>
+  <rect x="136" y="170" width="78" height="110" fill="#fff" stroke="#14100D" stroke-width="5"/><circle cx="175" cy="225" r="26" fill="#3FB27F"/>
+  <rect x="26" y="240" width="86" height="60" fill="#fff" stroke="#14100D" stroke-width="5"/><path d="M36 290q20-40 40-10t26-20" fill="none" stroke="#FF4F8B" stroke-width="6"/>
 </symbol>
 <symbol id="art-dance" viewBox="0 0 240 400" preserveAspectRatio="xMidYMid slice">
   <rect width="240" height="400" fill="url(#ga5)"/>
   <circle cx="120" cy="150" r="110" fill="#FFC83D" opacity=".18"/><circle cx="120" cy="150" r="70" fill="#FFC83D" opacity=".18"/>
-  <path d="M0 340q120-60 240 0v60H0z" fill="#17112E" opacity=".75"/>
-  <circle cx="98" cy="210" r="14" fill="#17112E"/><path d="M98 224c-20 40-24 80-14 110h30c4-30-4-70-16-110z" fill="#17112E"/>
-  <circle cx="148" cy="190" r="14" fill="#17112E"/><path d="M148 204c26 36 34 76 26 130h-34c-4-50 2-90 8-130z" fill="#17112E"/>
-  <path d="M104 236q22-14 40-26" stroke="#17112E" stroke-width="9" stroke-linecap="round" fill="none"/>
+  <path d="M0 340q120-60 240 0v60H0z" fill="#14100D" opacity=".75"/>
+  <circle cx="98" cy="210" r="14" fill="#14100D"/><path d="M98 224c-20 40-24 80-14 110h30c4-30-4-70-16-110z" fill="#14100D"/>
+  <circle cx="148" cy="190" r="14" fill="#14100D"/><path d="M148 204c26 36 34 76 26 130h-34c-4-50 2-90 8-130z" fill="#14100D"/>
+  <path d="M104 236q22-14 40-26" stroke="#14100D" stroke-width="9" stroke-linecap="round" fill="none"/>
   <circle cx="40" cy="60" r="5" fill="#fff"/><circle cx="196" cy="90" r="4" fill="#fff"/><circle cx="190" cy="40" r="6" fill="#FFC83D"/>
 </symbol>
 <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
@@ -1726,7 +1718,7 @@ function openVenue(name){
   openSheet(g.name, body);
 }
 
-var CATC={'Sinema':'#3B2A8F,#6D4AFF','Konser':'#8E2DE2,#E3004D','Tiyatro':'#B0125E,#D13C00','Gezi turu':'#0E7A4B,#2B8058','Festival':'#D13C00,#956A00','Stand-up':'#E3004D,#A66200','Çocuk etkinlikleri':'#0071DA,#0E7D93','Spor':'#0B5E3C,#2B8150','Sergi':'#946944,#9A6813','Dans':'#2B1055,#E60000','Opera ve bale':'#4A1D7A,#A42BFF','Açık hava':'#1D8068,#687916'};
+var CATC={'Sinema':'#4A3B33,#2B2320','Konser':'#E5402A,#8A1F14','Tiyatro':'#8A1F14,#B33A22','Gezi turu':'#3F6B4A,#2A4A33','Festival':'#E5712A,#B34A12','Stand-up':'#C5321F,#7A2010','Çocuk etkinlikleri':'#2A6E8A,#1D4C63','Spor':'#2F5E43,#1F3F2D','Sergi':'#7A5A38,#5A4028','Dans':'#4A2418,#7A2A1E','Opera ve bale':'#5A2A3A,#8A3A4A','Açık hava':'#4A5E2A,#33421D'};
 /* Kategori kutucuklarındaki gerçek fotoğraflar (tools/fetch_category_photos.py ile indirilir).
    Fotoğraf bulunamazsa CATC renk geçişi yedek olarak kalır. */
 var CATIMG={'Sinema':'sinema','Konser':'konser','Tiyatro':'tiyatro','Gezi turu':'gezi-turu','Festival':'festival','Stand-up':'stand-up','Çocuk etkinlikleri':'cocuk-etkinlikleri','Spor':'spor','Sergi':'sergi','Dans':'dans','Opera ve bale':'opera-ve-bale','Açık hava':'acik-hava'};
@@ -1752,7 +1744,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.26';
+var APP_VERSION='1.27';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -1888,7 +1880,7 @@ function qrSVG(text){
   var m;try{m=QRCodeLite.matrix(text,'M')}catch(e){return '<svg viewBox="0 0 1 1" role="img" aria-label="Kod üretilemedi"></svg>'}
   var n=m.length,d='';
   for(var r=0;r<n;r++)for(var c=0;c<n;c++)if(m[r][c])d+='M'+c+' '+r+'h1v1h-1z';
-  return '<svg viewBox="-1 -1 '+(n+2)+' '+(n+2)+'" shape-rendering="crispEdges" role="img" aria-label="Bilet QR kodu"><rect x="-1" y="-1" width="'+(n+2)+'" height="'+(n+2)+'" fill="#fff"/><path d="'+d+'" fill="#17112E"/></svg>';
+  return '<svg viewBox="-1 -1 '+(n+2)+' '+(n+2)+'" shape-rendering="crispEdges" role="img" aria-label="Bilet QR kodu"><rect x="-1" y="-1" width="'+(n+2)+'" height="'+(n+2)+'" fill="#fff"/><path d="'+d+'" fill="#14100D"/></svg>';
 }
 function ticketPayload(t){
   return ['GENÇ',t.e.id,t.code,String(t.qty),t.opt,seatsFor(t)].join('|');
@@ -2310,7 +2302,7 @@ function enterMain(){
 var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
 function isDark(){return !!(mq&&mq.matches)}
 function paintChrome(){
-  var c=(S.tab==='videolar'&&!$('#main').hidden)?'#150E2E':(isDark()?'#120C26':'#E9E1FA');
+  var c=(S.tab==='videolar'&&!$('#main').hidden)?'#14100D':(isDark()?'#14100D':'#F7F0E6');
   document.querySelector('meta[name=theme-color]').setAttribute('content',c);
 }
 function applyTheme(){
@@ -2431,13 +2423,6 @@ function adVideoHTML(a){
     '<button class="adclose" type="button" data-act="adclose" aria-label="Reklamı kapat">'+ic('close')+'</button></div>';
 }
 function renderBrowse(){renderHome();renderKesfet()}
-function catsHTML(){
-  return '<div class="cats">'+CHIPS.slice(1).map(function(t){
-    var n=EVENTS.filter(function(e){return e.type===t}).length,c=(CATC[t]||'#6D4AFF,#FF4F8B').split(',');
-    var img='img/cat-'+catSlug(t)+'.jpg';
-    return '<button class="cat'+(S.evCat===t?' on':'')+'" type="button" data-cat="'+esc(t)+'" aria-pressed="'+(S.evCat===t)+'" style="background:linear-gradient(135deg,'+c[0]+','+c[1]+')"><img class="catimg" src="'+img+'" alt="" loading="lazy" onerror="this.remove()"><b>'+esc(t)+'</b><small>'+n+' etkinlik</small></button>';
-  }).join('')+'</div>';
-}
 /* ---------- ana sayfa (logo) ---------- */
 function renderHome(){
   paintAvatars();
@@ -2455,7 +2440,6 @@ function renderHome(){
     fcards.splice(Math.min(2,fcards.length),0,adRowHTML(adFor('row',1)));
     h+=secHead('Öne çıkanlar')+'<div class="hrail">'+fcards.join('')+'</div>';
   }
-  h+=secHead('Türe göre')+catsHTML();
   h+=adCardHTML(adFor('card',0));
   var weekEnd=evWeekEnd();
   var week=byDate.filter(function(e){return e.date<=weekEnd});
@@ -2906,9 +2890,9 @@ function paneKurallar(e){
    fotoğrafları CORS'suz olduğundan canvas'a çizilemez, bu yüzden fotoğraf yerine
    türü simgeleyen renk geçişi kullanılır. Şehir adı konuma göre değişir. */
 var WK={w:1080,h:1350,c:null};
-var WK_ART={'art-concert':['#6D4AFF','#B44DE0'],'art-theatre':['#3B2AA8','#8B5CF6'],'art-film':['#1E1B4B','#5B3DF5'],'art-tour':['#0EA5A0','#3B82F6'],'art-festival':['#F97316','#E11D48'],'art-standup':['#7C3AED','#DB2777'],'art-kids':['#0EA5E9','#22C55E'],'art-sport':['#16A34A','#0EA5A0'],'art-expo':['#A855F7','#6366F1'],'art-dance':['#E11D48','#7C3AED']};
+var WK_ART={'art-concert':['#E5402A','#8A1F14'],'art-theatre':['#5A2A3A','#8A3A4A'],'art-film':['#2A1A12','#7A2A1E'],'art-tour':['#3F6B4A','#2A4A33'],'art-festival':['#E5712A','#B34A12'],'art-standup':['#C5321F','#7A2010'],'art-kids':['#2A6E8A','#1D4C63'],'art-sport':['#2F5E43','#1F3F2D'],'art-expo':['#7A5A38','#5A4028'],'art-dance':['#8A1F14','#5A2A3A']};
 var WK_GLYPH={'Konser':'\u266A','Tiyatro':'\u25AD','Sinema':'\u25B6','Festival':'\u2726','Stand-up':'\u263A','Çocuk':'\u2605','Spor':'\u26BD','Sergi':'\u25A3','Opera ve bale':'\u266B','Dans':'\u266B'};
-function wkArt(art){return WK_ART[art]||['#5B3DF5','#B44DE0']}
+function wkArt(art){return WK_ART[art]||['#E5402A','#8A1F14']}
 function wkGlyph(type){return WK_GLYPH[type]||'\u2726'}
 /* Paylaşım kartında uygulamanın kendi logosu kullanılır (referans alınır, kopyalanmaz):
    gömülü #logo simgesindeki yol verisi yeniden kullanılır, tema değişkenleri
@@ -2919,8 +2903,7 @@ function wkLogoURL(){
   var sym=document.getElementById('logo');
   if(!sym){WK_LOGO_URL='';return WK_LOGO_URL}
   var inner=sym.innerHTML
-    .replace(/var\(--logo-c1\)/g,'#C7D2FE').replace(/var\(--logo-c2\)/g,'#DDD6FE')
-    .replace(/var\(--logo-c3\)/g,'#F5D0FE').replace(/var\(--logo-c4\)/g,'#FBCFE8');
+    .replace(/var\(--logo-ink\)/g,'#FFFFFF').replace(/var\(--logo-accent\)/g,'#FFD9CE');
   var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2585.39 896.85" color="#FFFFFF">'+inner+'</svg>';
   WK_LOGO_URL='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
   return WK_LOGO_URL;
@@ -3739,7 +3722,20 @@ Object.keys(SCROLL_OF).forEach(function(k){
 });
 window.addEventListener('pagehide',function(){saveScroll();persist()});
 window.addEventListener('beforeunload',function(){saveScroll();persist()});
-restore();applyTheme();
+/* Google ile giriş yalnızca web'de gösterilir; uygulama içi WebView'de Google akışı
+   engellenir. APK, bayrağı sayfa yüklendikten sonra (onPageFinished) yazdığı için
+   hem açılışta hem de bayrak sonradan gelirse uygulanır. */
+var _gencApp=!!window.GENC_APP;
+function applyAppMode(){
+  if(!(window.GENC_APP||_gencApp))return;
+  var gb=$('#gbtn');if(gb)gb.hidden=true;
+  var or=document.querySelector('.orline');if(or)or.hidden=true;
+}
+window.gencApplyAppMode=applyAppMode;
+try{Object.defineProperty(window,'GENC_APP',{configurable:true,
+  get:function(){return _gencApp},
+  set:function(v){_gencApp=!!v;if(v)applyAppMode();}})}catch(e){}
+restore();applyTheme();applyAppMode();
 /* Önce yerel önbellek (anında açılış), sonra gömülü yedek; ağ gelince tazelenir. */
 if(!applyRealData(cachedData())&&!applyRealData()){}
 else renderAll();

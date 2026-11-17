@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 // gönderilmez, cihazda saklanır. Güncelleme köprüsü de burada verilir.
                 view.evaluateJavascript(
                         "window.GENC_APP=true;"
+                        + "if(window.gencApplyAppMode)window.gencApplyAppMode();"
                         + "window.GENC_INSTALL=function(u){window.GencUpdate.install(u)};",
                         null);
             }

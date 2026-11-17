@@ -1,6 +1,6 @@
 {
-  "version": "1.26",
-  "versionCode": 12600,
-  "notes": "Gerçek hesap sistemi: kayıt ve giriş artık şifreyle doğrulanıyor (tuzlu SHA-256). Yenilenen giriş/kayıt ekranı, Google ile giriş seçeneği ve hesap sayfasında şifre değiştirme eklendi.",
+  "version": "1.27",
+  "versionCode": 12700,
+  "notes": "Yeni marka tasarımı: krem zemin, mürekkep metin ve aksan kırmızısı. Logo yenilendi, ana sayfadaki 'Türe göre' bölümü kaldırıldı. Google ile giriş web'de görünür, uygulamada gizli.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

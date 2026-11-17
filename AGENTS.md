@@ -77,23 +77,25 @@ PWA dosyaları + geliştirme sunucusu.
   adla yazar ve JSON döner: `{"ok":true,"files":[...],"url":"/yuklenenler/..."}`.
 - `yuklenenler/` — yüklenen fotoğraflar (sürüm kontrolüne girmez).
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
-- `tools/brand.py` — ortak marka yardımcıları. Logo gradyanı (`STOPS`: premium
-  "Aurora" paleti — indigo `#4338CA` → menekşe `#7C3AED` → mor `#A855F7` →
-  fuşya `#D946EF`; tek renk ailesi, ~57° dar ton aralığı) ve beyaz "G"
-  monogramı (`monogram_mask`, `draw_monogram`; maske `tools/assets/gmono_mask.png`)
-  burada tanımlıdır; `gloss()` simgelere sol üstten düşen yumuşak beyaz parlama
-  (cam hissi) ekler. Tüm simge üreticileri bu modülü kullanır.
+- `tools/brand.py` — ortak marka yardımcıları. Palet üç renge iner: krem
+  `CREAM #F7F0E6` (zemin), mürekkep `INK #14100D` (metin), aksan
+  `ACCENT #E5402A` (monogram ve vurgular). `monogram_mask`, `draw_monogram`,
+  `flat`, `rounded`, `circle` burada tanımlıdır (maske
+  `tools/assets/gmono_mask.png`). Tüm simge üreticileri bu modülü kullanır.
 - `tools/assets/gmono_mask.png` — "G" monogramının yüksek çözünürlüklü alfa
   maskesi. `Genc.html #gmono` ile aynı form (Archivo 800 "G"); ikon üreticileri
   bu maskeyi kullanır. Monogram değişirse burası ve `#gmono` birlikte güncellenir.
-- `tools/generate_icons.py` — PWA simge üretici. İkon, uygulama içi markanın
-  monogram halidir: köşegen gradyan zemin + beyaz "G" monogramı (eski kutu +
-  bilet işareti kaldırıldı).
+- `tools/generate_icons.py` — PWA simge üretici. İkon, krem zemin üzerine aksan
+  kırmızısı "G" monogramıdır; maskable sürümde monogram `scale=0.72` ile güvenli
+  alana çekilir.
 - `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
-  glifi; Android ve masaüstünde aynı ikon tekrar etmesin).
+  glifi; Android ve masaüstünde aynı ikon tekrar etmesin). Zemin krem, glifler
+  mürekkeptir.
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
-  kare, daire ve uyarlanabilir ön katman üretir; ön katmandaki monogram güvenli
-  alana sığması için `scale=0.6` ile küçültülür.
+  kare, daire ve uyarlanabilir ön katman üretir; ön katman zemin + monogram
+  birlikte kremdir, monogram güvenli alan için `scale=0.6` ile küçültülür.
+  `res/values/colors.xml` içindeki `ic_launcher_background` ve `brand_bg` krem
+  (`#F7F0E6`) olmalıdır.
 - `tools/collect_tickets.py` — **gerçek bilet toplayıcı**. Birden çok satıcıyı
   tarar, etkinlik adı/mekan/tarih/**fiyat** bilgisini toplar, aynı etkinliği
   satan kaynakları eşleştirip **en ucuzunu** işaretler. Çıktı: `data/tickets.json`.
@@ -322,10 +324,10 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
 - Marka, ayrı bir kutu + simge değil, doğrudan **"Genç" kelime markasıdır**
   (`#logo`, viewBox `0 0 2585.39 896.85`). Harfler Archivo 800'ün dış
   çizgilerinden (fontTools ile) SVG `path`'e çevrilmiştir: "G","e","n"
-  `currentColor` (her iki temada okunur), Türkçeye özgü **"ç"** ise marka
-  gradyanıyla (`url(#lg)`) boyanır — ismin içine gömülü tek marka izi
-  (Amazon gülümsemesi / FedEx oku gibi). Gradyan `#logo` içinde tanımlıdır
-  (`--logo-c1..c4`). Uygulama ikonları için monogram `#gmono` (44x44 beyaz "G").
+  `currentColor` (mürekkep), Türkçeye özgü **"ç"** ise aksan kırmızısıyla
+  (`var(--logo-accent)`) boyanır — ismin içine gömülü tek marka izi
+  (Amazon gülümsemesi / FedEx oku gibi). Uygulama ikonları için monogram
+  `#gmono` (44x44 "G").
 - Logoya basmak **Ana Sayfa**'ya döner (`#home-logo`, `#kesfet-logo`,
   `#web-logo`, `#feed-logo` → `goHome()`): üst katmanları kapatır, `home`
   sekmesine geçer, `#hscroll`'u başa kaydırır.
@@ -333,7 +335,7 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   (`kesfet`), Videolar (`videolar`), Biletlerim (`biletler`). Profil sekmesi
   yok; profile erişim yalnızca sağ üstteki avatardan (`data-tab="profil"`).
 - Ana Sayfa (`#tab-home`, `renderHome()`): logo, konum şeridi, "Öne çıkanlar",
-  "Türe göre" ızgarası, "Bu hafta/Yaklaşanlar" bilet listesi (`.tk` — solda
+  "Bu hafta/Yaklaşanlar" bilet listesi (`.tk` — solda
   afiş `.tkpic`, üstünde gün/ay etiketi `.tkdate`, sağda başlık/mekan/fiyat),
   "Ücretsiz etkinlikler", "Yakındaki mekanlar" (toplanma alanları önce).
   Aramasız/ışıksız varsayılan vitrin burada.

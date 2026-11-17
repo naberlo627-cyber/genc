@@ -208,10 +208,10 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Genç - dosya yükle</title>
 <style>
-body{{font-family:system-ui,sans-serif;max-width:640px;margin:0 auto;padding:24px;background:#E9E1FA;color:#17112E}}
+body{{font-family:system-ui,sans-serif;max-width:640px;margin:0 auto;padding:24px;background:#F7F0E6;color:#14100D}}
 h1{{font-size:22px}} form{{background:#fff;padding:18px;border-radius:16px;margin:16px 0}}
-input[type=file]{{margin:10px 0;display:block}} button{{background:#5B3DF5;color:#fff;border:0;padding:12px 18px;border-radius:12px;font-weight:700;font-size:15px}}
-ul{{background:#fff;padding:14px 14px 14px 32px;border-radius:16px}} a{{color:#5B3DF5}}
+input[type=file]{{margin:10px 0;display:block}} button{{background:#E5402A;color:#fff;border:0;padding:12px 18px;border-radius:12px;font-weight:700;font-size:15px}}
+ul{{background:#fff;padding:14px 14px 14px 32px;border-radius:16px}} a{{color:#E5402A}}
 </style>
 <h1>Genç - dosya yükle</h1>
 <p>Dosyalar burada yüklenir, ardından <a href="/">uygulamaya</a> dönün.</p>
