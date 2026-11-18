@@ -1,6 +1,6 @@
 {
-  "version": "1.41",
-  "versionCode": 14100,
-  "notes": "Etkinlik detayındaki Tarih, Yer ve Mekan bilgileri artık kırpılmıyor; uzun adlar ve tarihler tam görünüyor. Ayrıca uygulama kısayolları ve veri tazeleme iyileştirmeleri.",
+  "version": "1.42",
+  "versionCode": 14200,
+  "notes": "Karanlık modda site artık krem/beyaz kalıyor (tarayıcının zorla karanlık teması kapatıldı). Profil sayfasından 'Bu hafta ne var?' kaldırıldı.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

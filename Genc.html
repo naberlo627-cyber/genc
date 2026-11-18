@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="only light">
 <meta name="theme-color" content="#F7F0E6">
 <title>Genç</title>
 <!-- Google ile giriş için istemci kimliği. Boş bırakılırsa Google düğmesi bilgilendirme mesajı verir.
@@ -27,7 +27,7 @@
   --brand:#E5402A;--on-brand:#FFFFFF;--sun:#F0A500;--coral:#E5402A;--coral-text:#C5321F;--mute:#6E655B;--line:#E6DCCF;--sw-off:#A79A8A;
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
   --grad:linear-gradient(135deg,#E5402A 0%,#C5321F 100%);
-  --logo-accent:#E5402A;color-scheme:light;
+  --logo-accent:#E5402A;color-scheme:only light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -1950,7 +1950,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.41';
+var APP_VERSION='1.42';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -3978,7 +3978,6 @@ function upSend(files,makeAvatar){
 function renderProfile(){
   var h='<div class="ph"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><div class="pinfo"><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(locCityLabel())+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
   h+='<div class="actgrid">'+
-    '<button type="button" data-act="weekly">'+ic('image')+'Bu hafta ne var?</button>'+
     '<button type="button" data-act="notify">'+ic('bell')+'Bildirimler</button>'+
     (VIDEO_ON?'<button type="button" data-tab="videolar">'+ic('play')+'Kısa videolar</button>':'')+
     '<button type="button" data-act="addcard">'+ic('shield')+'Kart ekle</button>'+
