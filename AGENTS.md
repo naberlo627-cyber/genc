@@ -48,9 +48,11 @@ PWA dosyaları + geliştirme sunucusu.
   tiyatro, opera, gösteri merkezi, sanat merkezi, arena) veya `gather` (kültür
   merkezi, kongre merkezi, AVM, meydan, park, kafe) olarak sınıflar. Salonlar
   sekmesi (`renderVenues`) yalnızca `hall` mekanlarını listeler; salona dokunmak
-  `openVenue()` ile o salonun gün gün programını alt sayfada açar. Ana Sayfa
-  "Yakındaki mekanlar" bölümü `gather` alanlarını öne alır, kalanı en yakın
-  mekanlarla tamamlar.
+  `openVenue()` ile o salonun gün gün programını alt sayfada açar. "Yakındaki
+  mekanlar" şeridi (`nearbyVenuesHTML`) Salonlar sekmesinin en üstünde gösterilir:
+  `gather` alanlarını öne alır, kalanı en yakın mekanlarla tamamlar; karta dokunmak
+  o mekanın etkinliklerini Keşfet'te arar (`data-venue`). Ana Sayfa bu şeridi
+  göstermez.
 - **Sekme ve kaydırma kalıcılığı.** `S.tab` ve `S.scrolls` (sekme başına
   kaydırma konumu) `persist()`/`restore()` ile saklanır; uygulama yeniden
   açıldığında son sekme ve konum geri yüklenir (`restoreScroll`). Kaydırma
@@ -406,7 +408,7 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
 - Ana Sayfa (`#tab-home`, `renderHome()`): logo, konum şeridi, "Öne çıkanlar",
   "Bu hafta/Yaklaşanlar" bilet listesi (`.tk` — solda
   afiş `.tkpic`, üstünde gün/ay etiketi `.tkdate`, sağda başlık/mekan/fiyat),
-  "Ücretsiz etkinlikler", "Yakındaki mekanlar" (toplanma alanları önce).
+  "Ücretsiz etkinlikler". "Yakındaki mekanlar" şeridi Salonlar sekmesine taşındı.
   Aramasız/ışıksız varsayılan vitrin burada.
 - Keşfet (`#tab-kesfet`, `renderKesfet()`): yalnızca arama kutusu + vitrin
   bölümleri. Aramasız durumda üç bölüm gösterir: **Kısa videolar**, **Gezi
@@ -648,11 +650,19 @@ Kaynak notları:
   `overflow-wrap:anywhere` + `word-break:break-word` verilir. Uygulama
   temizlenmemiş eski önbellek verisiyle açılsa bile metin sarılır.
 - Sarma kuralı olan kaplar: `.dprose` (Hakkında), `.drule p` (Kurallar),
-  `.castcard .cn/.cr` (Kadro), `.dmcell.addr b` (Adres). Yeni bir uzun-metin
-  kabı eklerken bu kuralı da eklemek gerekir.
+  `.castcard .cn/.cr` (Kadro), `.dmcell b` (Tarih/Yer/Mekan hücreleri), `.dmcell.addr b`
+  (Adres). Yeni bir uzun-metin kabı eklerken bu kuralı da eklemek gerekir.
+- `.dmcell b` metni bir zamanlar `white-space:nowrap` + `text-overflow:ellipsis` +
+  `overflow:hidden` idi; uzun tarih/mekan adları kırpılıyor ve yana kaydırılamıyordu
+  (kullanıcı "Hakkında okunamıyor" diye bildirdi). Artık `overflow-wrap:anywhere` +
+  `word-break:break-word` ile sarar. Dar ekranda metin kaplarını test ederken
+  `scrollWidth>clientWidth` + `overflow:hidden|ellipsis` kombinasyonunu ara: bu,
+  kullanıcının ulaşamadığı gerçek kırpmadır.
 - `.sh-body` (detay sayfası gövdesi) `overflow-x:hidden` kullanır; böylece
   kaçan bir öğe olsa bile sayfa sağa kaymaz. `.dtabs` ve `.dhero` bilinçli
-  olarak tam genişlikte/yatay kaydırmalıdır, kırpılmaz.
+  olarak tam genişlikte/yatay kaydırmalıdır, kırpılmaz. `.dtabs` içindeki
+  butonların ekran sağını geçmesi normaldir (yatay kaydırılabilir sekme çubuğu);
+  gerçek kırpma değildir.
 - Adres hücresi (`.dmcell.addr`) artık kesilmez (`white-space:normal`) ve
   yanında `data-act="copyaddr"` kopyala düğmesi bulunur; `copyText()` panoya
   yazar, güvenli bağlam yoksa `execCommand` ile geri düşer.
