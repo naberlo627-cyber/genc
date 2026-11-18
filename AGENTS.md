@@ -190,7 +190,7 @@ Site **statik barındırmada** yayınlanır; GitHub Actions veriyi yeniler. Kend
 sunucunuz gerekmez, çökmez:
 
 - **Adresler:**
-  - **https://genc.surge.sh** — surge.sh (**ASIL adres**; Türkiye'den erişilebilir,
+  - **https://genc-etkinlik.surge.sh** — surge.sh (**ASIL adres**; Türkiye'den erişilebilir,
     her push'ta otomatik güncellenir)
   - https://naberlo627-cyber.github.io/genc/ — GitHub Pages (Türkiye'den
     erişilebilir, veri aynası da burasıdır)
@@ -599,9 +599,12 @@ Kaynak notları:
 - Depoyu kısaltmak için yeniden adlandırmak `REMOTE_BASE` yedeğini bozar
   (`Genc.html` içinde sabit `.../genc/`), önerilmez.
 
-## Yayın: genc.surge.sh (surge.sh) — ASIL ADRES
-- Uygulamanın canlı adresi: **https://genc.surge.sh** (surge.sh ücretsiz plan).
+## Yayın: genc-etkinlik.surge.sh (surge.sh) — ASIL ADRES
+- Uygulamanın canlı adresi: **https://genc-etkinlik.surge.sh** (surge.sh ücretsiz plan).
   TR'de açılır (Cloudflare değil), ticari kullanıma izin verir.
+- **Neden bu ad?** Eski `genc.surge.sh` adresi **başka bir surge hesabına** kayıtlı
+  (bu hesap `genc.surge.sh`'e yayın yapamıyor: "you do not have permission").
+  Bu yüzden hesabın sahip olduğu yeni bir ad kullanılıyor: `genc-etkinlik.surge.sh`.
 - **Otomatik yayın:** `.github/workflows/yayin.yml` içindeki `surge` işi,
   `master`'a her push'ta `tools/deploy_surge.sh` çalıştırıp siteyi yükler.
   Gerekli depo sırları: `SURGE_TOKEN` ve `SURGE_LOGIN` (depo → Settings →
@@ -672,7 +675,7 @@ maskele (`sed -E "s/${GHT}/<token>/g"`).
   `<meta name="google-client-id" content="">` etiketinden okunur. Boşsa Google
   düğmesi "henüz ayarlanmadı" mesajı verir; e-posta ile giriş her zaman çalışır.
 - Etkinleştirmek için: Google Cloud Console > APIs & Services > Credentials >
-  OAuth client ID (Web) oluştur, yetkili kaynaklara `https://genc.surge.sh` ekle
+  OAuth client ID (Web) oluştur, yetkili kaynaklara `https://genc-etkinlik.surge.sh` ekle
   ve istemci kimliğini meta etiketine yaz.
 - Akış: `loadGsi()` → `accounts.google.com/gsi/client` betiği →
   `google.accounts.id.initialize({client_id, callback})` → `prompt()`. Dönen
