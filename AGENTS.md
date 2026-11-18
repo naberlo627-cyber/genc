@@ -55,9 +55,18 @@ PWA dosyaları + geliştirme sunucusu.
   kaydırma konumu) `persist()`/`restore()` ile saklanır; uygulama yeniden
   açıldığında son sekme ve konum geri yüklenir (`restoreScroll`). Kaydırma
   dinleyicileri `pagehide`/`beforeunload` ile diske yazılır.
-- **"Tükendi" rozeti.** `refreshLive()` rozeti yalnızca konumlandırılmış görsel
-  kabına (`.evpic`, `.tkpic`, `.poster .pic`, `.wide`, `.thumb`) ekler; düz
-  satırlara (ör. `.calrow`) eklenirse sayfanın sol üstüne kaçardı.
+- **"Tükendi" rozeti.** `refreshLive()` her kartta tek rozet çizer: `.evcard`
+  kendi rozetini (`.evsold`) taşır, diğer kartlar (afiş, geniş, bilet, küçük
+  resim) `.livetag` alır. Rozet yalnızca konumlandırılmış görsel kabına
+  (`.tkpic`, `.poster .pic`, `.wide`, `.thumb`) eklenir; düz satırlara
+  (ör. `.calrow`) eklenirse sayfanın sol üstüne kaçardı. İki dal birbirini
+  dışladığı için aynı kartta iki "Tükendi" üst üste binmez.
+- **Metin temizliği.** Kaynak sitelerden gelen başlık/mekan/metin alanlarında
+  görünmez dolgu karakterleri (Hangul filler `U+3164`, sıfır genişlikli boşluk)
+  ve kırılmaz boşluk bulunabilir. `cleanText()` bunları ayıklar ve fazla
+  boşlukları tek boşluğa indirir; `realToEvent` ve `fixDistrict` girişte
+  uygular. Aynı temizlik `tools/collect_tickets.py` içindeki `clean_text()`
+  ile veri toplama sırasında da yapılır.
 - **Çok şehir.** Konum seçimi tüm Türkiye'yi kapsar: 81 il ve tüm ilçeler
   `TR_CITIES` / `TR_CITY_DISTRICTS` / `TR_CITY_COORDS` içinde gömülüdür (kaynak:
   TÜİK/adres kayıtlarından derlenen açık veri; elle güncellenmez). `cityList()`

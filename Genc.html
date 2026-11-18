@@ -614,15 +614,7 @@ svg.ic.f{fill:currentColor}
 .evcard .evgo{flex:none;background:var(--brand);color:#fff;font-weight:700;font-size:12.5px;padding:8px 12px;border-radius:999px}
 .evmore{display:block;margin:14px 20px 0;width:calc(100% - 40px);padding:14px;border-radius:16px;background:var(--card);border:1.5px solid var(--line);font-weight:700;font-size:14px;color:var(--brand)}
 .evempty{margin:6px 20px 0;color:var(--mute);font-size:14px}
-/* Haftalık paylaşım: ana sayfa giriş kartı ve paylaşım sayfası. */
-.wkcard{display:flex;align-items:center;gap:12px;width:calc(100% - 40px);margin:2px 20px 10px;padding:15px 16px;border-radius:18px;background:var(--grad);color:#fff;text-align:left;box-shadow:0 8px 20px color-mix(in srgb,var(--brand) 30%,transparent)}
-.wkcard>.ic:first-child{flex:none;width:26px;height:26px}
-.wkcard>span{flex:1;min-width:0}
-.wkcard strong{display:block;font-size:16px;font-weight:800}
-.wkcard small{display:block;font-size:12.5px;opacity:.92;margin-top:3px;line-height:1.3}
-.wkcard>.ic:last-child{flex:none;opacity:.85;width:18px;height:18px}
 /* Bu hafta bölümü: gün şeridi + öne çıkan büyük kart + kompakt liste. */
-.wksec{margin:0 0 4px}
 .wkdays{display:flex;gap:8px;overflow-x:auto;padding:2px 20px 6px;scrollbar-width:none}
 .wkdays::-webkit-scrollbar{display:none}
 .wkday{flex:none;min-width:58px;padding:9px 12px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);text-align:center;transition:background-color .15s,box-shadow .15s}
@@ -1454,6 +1446,17 @@ function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&am
 function ic(n,c){return '<svg class="ic '+(c||'')+'" aria-hidden="true"><use href="#i-'+n+'"/></svg>'}
 function fmt(n){return n===0?'Ücretsiz':n.toLocaleString('tr-TR')+' ₺'}
 function norm(s){return String(s).toLocaleLowerCase('tr-TR').replace(/[’']/g,'')}
+/* Kaynak sitelerden gelen metinlerde zaman zaman görünmez dolgu karakterleri
+   (Hangul filler, sıfır genişlikli boşluk) veya kırılmaz boşluk bulunur;
+   bunlar başlık/mekan adlarında bozuk görünüme yol açar. Görüntülemeden önce
+   ayıklanır ve fazla boşluklar tek boşluğa indirilir. */
+function cleanText(s){
+  return String(s==null?'':s)
+    .replace(/[\u3164\u200b-\u200f\u2060\ufeff]/g,'')
+    .replace(/\u00a0/g,' ')
+    .replace(/\s{2,}/g,' ')
+    .trim();
+}
 
 /* ---------- veri ---------- */
 var TYPES=['Konser','Sinema','Tiyatro','Stand-up','Festival','Çocuk etkinlikleri','Gezi turu','Spor','Sergi','Dans','Opera ve bale','Açık hava'];
@@ -1597,7 +1600,7 @@ var TR_CITY_DISTRICTS={
 /* Kayıttaki ilçe alanı bazen il adını taşır ("İstanbul Anadolu") ya da boştur.
    Bu durumda adresteki "İlçe/İl" kalıbından gerçek ilçe çıkarılır. */
 function fixDistrict(d,city,addr){
-  d=(d||'').trim();city=(city||'').trim();
+  d=cleanText(d);city=cleanText(city);addr=cleanText(addr);
   if(d&&(!city||(d!==city&&d.indexOf(city)!==0)))return d;
   var m=String(addr||'').match(/([A-ZÇĞİÖŞÜ][a-zçğıöşü]+)\s*\//);
   return m?m[1]:'';
@@ -1659,19 +1662,23 @@ function refreshLive(){
     var e=ALL[b.getAttribute('data-open')];if(!e||!e.real)return;
     var s=liveInfo(e),off=!!(s&&s.status==='soldout');
     b.classList.toggle('soldout',off);
+    /* Kart tipine göre tek bir "Tükendi" rozeti: .evcard kendi rozetini taşır
+       (.evsold), diğer kartlar (poster, wide, bilet) .livetag alır. Böylece
+       aynı kartta iki rozet üst üste binmez. */
+    var badge=b.querySelector('.evsold');
+    if(b.classList.contains('evcard')){
+      if(off){if(!badge){badge=document.createElement('span');badge.className='evsold';badge.textContent='Tükendi';b.querySelector('.evpic').appendChild(badge)}}
+      else if(badge)badge.remove();
+      return;
+    }
     /* "Tükendi" rozeti yalnızca konumlandırılmış görsel kabına eklenir;
        düz satırlara (ör. salon programı) eklenirse sayfanın sol üstüne kaçar. */
-    var pic=b.querySelector('.evpic,.tkpic,.poster .pic,.wide,.thumb');
+    var pic=b.querySelector('.tkpic,.poster .pic,.wide,.thumb');
     var old=b.querySelector('.livetag');
     if(pic){
       if(off){if(!old){old=document.createElement('span');old.className='livetag';old.textContent='Tükendi';pic.appendChild(old)}}
       else if(old)old.remove();
     }else if(old)old.remove();
-    var badge=b.querySelector('.evsold');
-    if(b.classList.contains('evcard')){
-      if(off){if(!badge){badge=document.createElement('span');badge.className='evsold';badge.textContent='Tükendi';b.querySelector('.evpic').appendChild(badge)}}
-      else if(badge)badge.remove();
-    }
   });
   if(!$('#sheet').hidden&&$('#sheet').dataset.eid){var e=ALL[$('#sheet').dataset.eid];if(e)updateLiveLine(e)}
 }
@@ -1686,18 +1693,18 @@ function updateLiveLine(e){var el=$('#d-live');if(el)el.outerHTML=liveLine(e)}
 
 function realToEvent(r){
   return {
-    id:'r-'+r.id,rid:r.id,type:r.type,art:r.art,title:r.title,venue:r.venue,
+    id:'r-'+r.id,rid:r.id,type:r.type,art:r.art,title:cleanText(r.title),venue:cleanText(r.venue),
     district:fixDistrict(r.district,r.city,r.address)||r.city||'İzmir',
     lat:(r.lat==null?IZMIR[0]:r.lat),lng:(r.lng==null?IZMIR[1]:r.lng),
-    date:r.date,when:r.when,wd:r.wd,start:r.start,city:r.city,address:r.address,
+    date:r.date,when:r.when,wd:r.wd,start:r.start,city:r.city,address:cleanText(r.address),
     prices:[[r.price_label||'Bilet',(r.price==null?0:r.price)]],
     real:true,source:r.source,sources:r.sources||[r.source],
     priceBySource:r.price_by_source||{},cheapest:r.cheapest_source||null,
     img:r.image||'',venueImg:r.venue_image||'',
     soldout:r.availability==='SoldOut',url:r.url,
-    about:r.description||'',cast:r.cast||[],runtime:r.runtime||0,
-    genres:r.genres||[],genreLabel:r.genre_label||'',age:r.age||'',
-    rules:r.rules||[],organizer:r.organizer||''
+    about:r.description||'',cast:(r.cast||[]).map(function(c){return {name:cleanText(c.name),role:cleanText(c.role)}}),runtime:r.runtime||0,
+    genres:r.genres||[],genreLabel:cleanText(r.genre_label),age:r.age||'',
+    rules:r.rules||[],organizer:cleanText(r.organizer)
   };
 }
 /* Aynı oyunun farklı seansları tek kartta toplanır. Referans uygulamada da
@@ -1921,7 +1928,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.34';
+var APP_VERSION='1.35';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -2297,6 +2304,12 @@ function geoAsk(cb){
   },{enableHighAccuracy:false,timeout:12000,maximumAge:300000});
 }
 function locLabel(){return S.loc.geo?'Konumum':S.loc.d}
+/* Konum etiketi + şehir: ikisi aynıysa (ör. "İzmir · İzmir") şehri bir kez göster. */
+function locCityLabel(){
+  if(!S.locOn)return S.city+' · konum kapalı';
+  var l=locLabel();
+  return l===S.city?l:l+' · '+S.city;
+}
 /* Konumdan en yakın bilinen şehri bulur (konum açılınca şehir otomatik seçilir). */
 function nearestCity(lat,lng){
   var best=null,bd=1e9;
@@ -3156,7 +3169,7 @@ function evCitySheet(){
 function evSection(){
   var l=evFiltered();
   var h=evHead();
-  h+=secHead('Etkinlikler','<button type="button" class="more" data-act="evfilter">Filtrele</button>');
+  h+=secHead('Etkinlikler');
   h+=evFilterBar();
   if(!l.length){h+='<div class="evempty">Bu filtreye uyan etkinlik yok. Filtreyi değiştirmeyi dene.</div>';return h}
   var shown=l.slice(0,S.evShow);
@@ -3235,9 +3248,8 @@ function renderKesfet(){
   h+=evSection();
   h+=adCardHTML(adFor('card',1));
   var tours=EVENTS.filter(function(e){return e.type==='Gezi turu'});
-  h+=secHead('Gezi turları')+'<div class="hrail">'+tours.map(function(e){return wideHTML(e,'sm')}).join('')+'</div>';
+  if(tours.length)h+=secHead('Gezi turları')+'<div class="hrail">'+tours.map(function(e){return wideHTML(e,'sm')}).join('')+'</div>';
   h+=adRowHTML(adFor('row',0));
-  h+=secHead('Çevrende yapılacak gösteriler')+'<div class="hrail">'+list.map(posterHTML).join('')+'</div>';
   $('#klists').innerHTML=h;
 }
 $('#q').addEventListener('input',function(){S.q=this.value;renderBrowse()});
@@ -3246,7 +3258,7 @@ $('#q').addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventD
 $('#locbtn').addEventListener('click',function(){
   var cities=cityList();
   openSheet('Konum', '<div class="locrow" style="margin:0 0 12px"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg>'+
-    '<div class="t"><span id="ls-name">'+esc(S.locOn?locLabel()+' · '+S.city:S.city+' · konum kapalı')+'</span><small id="ls-sub">'+esc(S.locOn&&S.loc.geo?'Yakınındakiler önce gösteriliyor':'Konumunu kullanarak yakınındaki etkinlikleri öne çıkar')+'</small></div>'+
+    '<div class="t"><span id="ls-name">'+esc(locCityLabel())+'</span><small id="ls-sub">'+esc(S.locOn&&S.loc.geo?'Yakınındakiler önce gösteriliyor':'Konumunu kullanarak yakınındaki etkinlikleri öne çıkar')+'</small></div>'+
     '<button class="sw" id="ls-sw" type="button" role="switch" aria-checked="'+(S.locOn?'true':'false')+'" aria-label="Konumu kullan"></button></div>'+
     '<button class="cta" type="button" data-act="geoloc">Konumumu kullan</button>'+
     '<div class="fg" style="margin-top:14px"><h4>İl</h4><div class="fwrap">'+cities.map(function(c){
@@ -3404,9 +3416,6 @@ function paneDetay(e){
 }
 function paneBiletler(e){
   var h=sessionListHTML(e);
-  if(!h){
-    h+='<div class="dsec">Gösterim</div><div class="dfacts"><div class="dfact"><small>'+ic('calendar')+'Tarih</small><b>'+esc(e.range||e.when)+'</b></div><div class="dfact"><small>'+ic('pin')+'Mekan</small><b>'+esc(e.venue)+'</b></div></div>';
-  }
   h+='<div class="dnote">'+ic('shield')+'<span>Bilet satın alma, satıcının güvenli ödeme sayfasında tamamlanır. Fiyatlar satıcıdan alınır ve değişebilir.</span></div>';
   h+='<button class="btn dcta" type="button" data-act="'+(e.real?'openbuy':'buy')+'">'+(e.real?'Bileti satın al':'Bilet al')+'</button>';
   h+=adCardHTML(adFor('card',1));
@@ -3635,10 +3644,6 @@ function weeklyShareSheet(){
     wkPreloadPicks(function(){paint()});
   });
 }
-function weeklyCardHTML(){
-  var n=wkPicks().length;
-  return '<button class="wkcard" type="button" data-act="weekly">'+ic('image')+'<span><strong>Bu hafta ne var?</strong><small>'+esc(S.city||'İzmir')+' \u00B7 '+n+' etkinlik \u00B7 payla\u015F\u0131labilir g\u00F6rsel</small></span>'+ic('chev-r')+'</button>';
-}
 function weeklySave(){
   if(!WK.c)return;
   try{
@@ -3825,12 +3830,10 @@ function ticketHTML(t){
 }
 /* Biletler profil sayfasında gösterilir; bu bölüm profil içine gömülür. */
 function ticketsSectionHTML(){
-  var h='<div class="actgrid">'+
-    '<button type="button" data-tab="kesfet">'+ic('compass2')+'Etkinlik keşfet</button>'+
-    '<button type="button" data-act="scan">'+ic('qr')+'Bilet kodu sorgula</button>'+
-  '</div>';
+  var h='';
   if(!S.tickets.length){
-    h+='<div class="empty">Henüz biletin yok. Bir etkinliği açıp “Bilet al” ile başlayabilirsin.</div>';
+    h+='<div class="empty">Henüz biletin yok. Bir etkinliği açıp “Bilet al” ile başlayabilirsin.</div>'+
+       '<button class="cta" type="button" data-tab="kesfet">Etkinliklere göz at</button>';
   }else{
     var up=S.tickets.slice().sort(function(a,b){return a.e.date<b.e.date?-1:1});
     h+='<div class="sec"><h2 class="disp">Geçerli biletler</h2><span class="more">'+up.length+' bilet</span></div>';
@@ -3979,11 +3982,10 @@ function upSend(files,makeAvatar){
 
 /* ---------- profil ---------- */
 function renderProfile(){
-  var h='<div class="ph"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><div class="pinfo"><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(S.locOn?locLabel()+' · '+S.city:S.city+' · konum kapalı')+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
+  var h='<div class="ph"><button class="big ppset" type="button" data-act="setphoto" aria-label="Profil fotoğrafını değiştir">'+avatarHTML()+'</button><div class="pinfo"><h1 class="disp">'+esc(S.name||'Misafir')+'</h1><span class="dist">'+ic('pin')+esc(locCityLabel())+'</span></div><button class="ed" type="button" data-act="editprofile" aria-label="Profili düzenle">'+ic('edit')+'</button></div>';
   h+='<div class="actgrid">'+
     '<button type="button" data-act="weekly">'+ic('image')+'Bu hafta ne var?</button>'+
     '<button type="button" data-act="notify">'+ic('bell')+'Bildirimler</button>'+
-    '<button type="button" data-act="editlikes">'+ic('heart')+'Hoşlandıklarım</button>'+
     (VIDEO_ON?'<button type="button" data-tab="videolar">'+ic('play')+'Kısa videolar</button>':'')+
     '<button type="button" data-act="addcard">'+ic('shield')+'Kart ekle</button>'+
   '</div>';
@@ -4001,8 +4003,10 @@ function renderProfile(){
       return '<button class="att" type="button" data-open="'+e.id+'"><span class="mini-art"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg></span><span><strong>'+esc(e.title)+'</strong><span>'+esc(e.when)+' · '+esc(e.venue)+'</span></span><span class="done">'+ic('bookmark')+'</span></button>';
     }).join('');
   }
-  h+='<div class="sec"><h2 class="disp">Gittiğin etkinlikler</h2></div>';
-  h+=PAST.map(function(e){return '<button class="att" type="button" data-open="'+e.id+'"><span class="mini-art"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg></span><span><strong>'+esc(e.title)+'</strong><span>'+esc(e.when)+'</span></span><span class="done">'+ic('check')+'Gittin</span></button>'}).join('');
+  if(PAST.length){
+    h+='<div class="sec"><h2 class="disp">Gittiğin etkinlikler</h2></div>';
+    h+=PAST.map(function(e){return '<button class="att" type="button" data-open="'+e.id+'"><span class="mini-art"><svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg></span><span><strong>'+esc(e.title)+'</strong><span>'+esc(e.when)+'</span></span><span class="done">'+ic('check')+'Gittin</span></button>'}).join('');
+  }
   h+='<div class="pad"></div>';
   $('#pscroll').innerHTML=h;
   renderActiveUsers();

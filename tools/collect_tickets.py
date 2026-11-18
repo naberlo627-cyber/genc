@@ -186,6 +186,19 @@ def norm(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
 
 
+# Kaynak sitelerin metinlerinde görünmez dolgu karakterleri (Hangul filler,
+# sıfır genişlikli boşluk) ve kırılmaz boşluk bulunabilir; bunlar başlık/mekan
+# adlarında bozuk görünüme yol açar, bu yüzden kayıttan önce ayıklanır.
+_INVISIBLE = dict.fromkeys(
+    [0x3164, 0xFEFF, 0x2060, *range(0x200B, 0x2010)], None
+)
+
+
+def clean_text(text: str) -> str:
+    text = (text or "").translate(_INVISIBLE).replace("\u00a0", " ")
+    return re.sub(r"\s{2,}", " ", text).strip()
+
+
 def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", norm(text)).strip("-")
 
@@ -329,9 +342,9 @@ def parse_events(html_text: str, source: str, url: str, genre: str) -> list[dict
             start = node.get("startDate") or ""
             when, wd, date = when_label(start)
             city = norm_city((addr.get("addressLocality") or "").strip())
-            street = (addr.get("streetAddress") or "").strip()
-            venue = (loc.get("name") or "").strip()
-            title = (node.get("name") or "").strip()
+            street = clean_text(addr.get("streetAddress") or "")
+            venue = clean_text(loc.get("name") or "")
+            title = clean_text(node.get("name") or "")
             img = (node.get("image") or "").strip()
             if isinstance(node.get("image"), list) and node["image"]:
                 img = str(node["image"][0])
@@ -525,12 +538,12 @@ def collect_passo(limit: int) -> list[dict]:
         start = (v.get("date") or "").replace(" ", "T")
         when, wd, date = when_label(start)
         genre = passo_type(v.get("genreName", ""), v.get("name", ""))
-        title = (v.get("name") or "").strip()
-        venue = (v.get("venueName") or "").strip()
+        title = clean_text(v.get("name") or "")
+        venue = clean_text(v.get("venueName") or "")
         if not title or not date:
             continue
         eid = f"{slug(title)[:40]}-{date}-{hashlib.sha1(norm(venue).encode()).hexdigest()[:5]}"
-        district = (v.get("venueCounty") or "").strip()
+        district = clean_text(v.get("venueCounty") or "")
         img = passo_img(v.get("detailPageImageName") or v.get("homePageImageName"))
         venue_img = passo_img(v.get("venueTemplateImageName") or v.get("venueImageNames"))
         lat, lng = sane_coords(_to_float(v.get("venueLatitude")), _to_float(v.get("venueLongitude")), district)
@@ -641,15 +654,15 @@ def parse_biletino_event(html_text: str, url: str) -> list[dict]:
             price, currency, label = _price_of(node.get("offers"))
             start = node.get("startDate") or ""
             when, wd, date = when_label(start)
-            title = (node.get("name") or "").strip()
-            venue = (loc.get("name") or "").strip()
+            title = clean_text(node.get("name") or "")
+            venue = clean_text(loc.get("name") or "")
             if not title or not date or not venue:
                 continue
             desc = (node.get("description") or "").strip()
             city = (addr.get("addressRegion") or addr.get("addressLocality") or "").strip()
             city = norm_city(city)
-            street = (addr.get("streetAddress") or "").strip()
-            district = (addr.get("addressLocality") or "").strip() or district_of(venue, street, city)
+            street = clean_text(addr.get("streetAddress") or "")
+            district = clean_text(addr.get("addressLocality") or "") or district_of(venue, street, city)
             img = node.get("image") or ""
             if isinstance(img, list):
                 img = img[0] if img else ""
