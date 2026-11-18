@@ -312,8 +312,7 @@ svg.ic.f{fill:currentColor}
 .dmcell>.ic{flex:none;width:20px;height:20px;color:var(--brand)}
 .dmcell span{min-width:0}
 .dmcell small{display:block;color:var(--mute);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
-.dmcell b{display:block;font-size:14.5px;font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.dmcell.addr b{white-space:normal;overflow-wrap:anywhere;word-break:break-word}
+.dmcell b{display:block;font-size:14.5px;font-weight:800;line-height:1.25;overflow-wrap:anywhere;word-break:break-word}
 .dmcell.addr{position:relative}
 .dmcell.addr .dmcopy{flex:none;width:34px;height:34px;border-radius:50%;background:var(--grad);color:#fff;display:grid;place-items:center;margin-left:auto}
 .dmcell.addr .dmcopy svg{width:17px;height:17px}
@@ -1878,12 +1877,34 @@ function venueDaysHTML(g){
     return '<div class="calday"><div class="calhead"><b>'+esc(d.when)+'</b><span>'+d.items.length+' gösteri</span></div>'+rows+'</div>';
   }).join('');
 }
+/* Salonlar sekmesinde gösterilen "Yakındaki mekanlar" şeridi: toplanma alanları
+   önce, sonra konuma en yakın mekanlar. Karta dokununca o mekanın etkinlikleri
+   Keşfet'te aranır. */
+function nearbyVenuesHTML(){
+  var vm={};EVENTS.forEach(function(e){(vm[e.venue]=vm[e.venue]||{e:e,n:0}).n++});
+  var vs=Object.keys(vm).map(function(k){return vm[k]}).sort(function(a,b){
+    var ga=venueKind(a.e.venue)==='gather'?0:1,gb=venueKind(b.e.venue)==='gather'?0:1;
+    return ga!==gb?ga-gb:kmTo(a.e)-kmTo(b.e);
+  }).slice(0,8);
+  if(!vs.length)return '';
+  return secHead('Yakındaki mekanlar')+'<div class="vrail">'+vs.map(function(v){
+    var km=kmTo(v.e),meta=esc(v.e.district||'');
+    if(km>=1)meta+=(meta?' · ':'')+Math.round(km)+' km';
+    return '<button class="vcard" type="button" data-venue="'+esc(v.e.venue)+'">'+
+      '<span class="vpic">'+photoFor(v.e)+'<svg class="art" aria-hidden="true"><use href="#'+v.e.art+'"/></svg><span class="scrim"></span><b>'+v.n+' etkinlik</b></span>'+
+      '<strong>'+esc(v.e.venue)+'</strong><span class="m">'+meta+'</span></button>';
+  }).join('')+'</div>';
+}
 function renderVenues(){
   var all=venuesList();
   var list=all.filter(function(g){return venueKind(g.name)==='hall'});
   if(!list.length)list=all;
-  if(!list.length){$('#vlists').innerHTML='<div class="empty">Henüz salon verisi yok.</div>';return}
-  var h=secHead('Salonlar ('+list.length+')')+
+  var h=nearbyVenuesHTML();
+  if(!list.length){
+    h+='<div class="empty">Henüz salon verisi yok.</div>';
+    $('#vlists').innerHTML=h;return;
+  }
+  h+=secHead('Salonlar ('+list.length+')')+
     '<p class="vhint">Sinema, tiyatro, opera ve konser salonları. Program için bir salona dokun.</p>';
   h+='<div class="vgrid">'+list.map(function(g){
     return '<button class="vcard" type="button" data-vopen="'+esc(g.name)+'">'+
@@ -1929,7 +1950,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.40';
+var APP_VERSION='1.41';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -2977,20 +2998,8 @@ function renderHome(){
   if(browsing){
     var free=EVENTS.filter(function(e){return e.prices.every(function(p){return p[1]===0})});
     if(free.length)h+=secHead('Ücretsiz etkinlikler')+'<div class="hrail">'+free.map(posterHTML).join('')+'</div>';
-    /* Toplanma alanları (kültür merkezi, kongre, AVM, meydan) önce gelir; kalan
-       yerler en yakın mekanlarla tamamlanır. Salon programları Salonlar sekmesinde. */
-    var vm={};EVENTS.forEach(function(e){(vm[e.venue]=vm[e.venue]||{e:e,n:0}).n++});
-    var vs=Object.keys(vm).map(function(k){return vm[k]}).sort(function(a,b){
-      var ga=venueKind(a.e.venue)==='gather'?0:1,gb=venueKind(b.e.venue)==='gather'?0:1;
-      return ga!==gb?ga-gb:kmTo(a.e)-kmTo(b.e);
-    }).slice(0,8);
-    h+=secHead('Yakındaki mekanlar')+'<div class="vrail">'+vs.map(function(v){
-      var km=kmTo(v.e),meta=esc(v.e.district||'');
-      if(km>=1)meta+=(meta?' · ':'')+Math.round(km)+' km';
-      return '<button class="vcard" type="button" data-venue="'+esc(v.e.venue)+'">'+
-        '<span class="vpic">'+photoFor(v.e)+'<svg class="art" aria-hidden="true"><use href="#'+v.e.art+'"/></svg><span class="scrim"></span><b>'+v.n+' etkinlik</b></span>'+
-        '<strong>'+esc(v.e.venue)+'</strong><span class="m">'+meta+'</span></button>';
-    }).join('')+'</div>';
+    /* Toplanma alanları ve yakın mekanlar artık Salonlar sekmesinde
+       gösterilir (bkz. renderVenues / nearbyVenuesHTML). */
   }
   $('#hlists').innerHTML=h;
 }

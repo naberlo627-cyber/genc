@@ -1,6 +1,6 @@
 {
-  "version": "1.40",
-  "versionCode": 14000,
-  "notes": "Veri tazeliği güçlendirildi: uygulama etkinlik verisini artık birden çok güvenilir kaynaktan çekip en yenisini seçiyor; böylece bir kaynak erişilemez olsa bile liste güncel kalıyor. Ayrıca yanlış yapılandırılmış bir yedek alan adı düzeltildi; uygulama içi (APK) günlük veri yenilemesi artık güvenilir çalışıyor.",
+  "version": "1.41",
+  "versionCode": 14100,
+  "notes": "Etkinlik detayındaki Tarih, Yer ve Mekan bilgileri artık kırpılmıyor; uzun adlar ve tarihler tam görünüyor. Ayrıca uygulama kısayolları ve veri tazeleme iyileştirmeleri.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
