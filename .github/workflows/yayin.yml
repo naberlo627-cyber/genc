@@ -1,7 +1,7 @@
 name: Yayın (Surge + Cloudflare Pages)
 
 # master'a her push'ta siteyi yayınlar.
-#   - Surge (gencapp.surge.sh)   → ASIL adres
+#   - Surge (genc.surge.sh)   → ASIL adres
 #   - Cloudflare Pages (genc.pages.dev) → yedek
 # İlgili sırlar tanımlı değilse o iş sessizce atlanır.
 
@@ -20,7 +20,7 @@ permissions:
 
 jobs:
   surge:
-    name: Surge (gencapp.surge.sh)
+    name: Surge (genc.surge.sh)
     runs-on: ubuntu-latest
     env:
       SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
