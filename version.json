@@ -1,6 +1,6 @@
 {
-  "version": "1.38",
-  "versionCode": 13800,
-  "notes": "Hata düzeltmesi: 'Bu hafta' bölümündeki büyük öne çıkan kartta ve salon kartlarında etkinlik fotoğrafı, üzerine binen kategori simgesi yüzünden bozuk görünüyordu. Fotoğraf varken yedek simge artık gizleniyor; kartlar afiş fotoğrafını temiz gösteriyor. Ayrıca: tek tema (açık), Profil'deki 'Aktif kullanıcılar' yalnızca anonim sayı gösterir.",
+  "version": "1.39",
+  "versionCode": 13900,
+  "notes": "Okunabilirlik ve veri düzeni: etkinlik 'Hakkında' metni artık dar ekrana sığıyor; kaynakta uzun bozuk karakter satırları temizleniyor ve metin gerekirse kelime içinden sarılıyor (yatay kaydırma gerekmez). Adres alanına kopyala düğmesi eklendi; adres artık kesilmeden görünüyor. Etkinlik verisi günlük yenilemeye ek olarak bir metin temizleme adımından geçiyor ve Profil'de son güncelleme zamanı gösteriliyor.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

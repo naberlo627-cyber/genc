@@ -456,8 +456,13 @@ verisini gösterir. Akış:
 Tek işi etkinlik verisini güncel tutmak olan bağımsız bir sistem. Günlük
 çalışır, veriyi kaynaklardan yeniden toplar ve yayına alır; başka iş yapmaz.
 
-- `refresh/refresh.py` — yenileme akışı: topla → zenginleştir → `data/events.json`
-  üret → `Genc.html`'e yedek göm → `data/refresh_status.json` yaz.
+- `refresh/refresh.py` — yenileme akışı: topla → zenginleştir → **metin temizle**
+  → `data/events.json` üret → `Genc.html`'e yedek göm → `data/refresh_status.json`
+  yaz.
+- `tools/clean_events.py` — kaynak metinlerindeki biçim bozukluklarını düzeltir:
+  yüzlerce karakterlik tire/ayraç satırları kısalır, görünmez ve art arda
+  boşluklar sadeleşir. Bu, "Hakkında" ve "Kurallar" panellerinin dar ekranda
+  yatay kaymasını önler. Tekrar çalıştırılabilir; yalnızca biçim düzeltir.
 - `refresh/run.sh` — kabuk sarmalayıcı; cron/systemd/CI bunu çağırır.
 - `refresh/systemd/` — `genc-refresh.service` + `genc-refresh.timer` (her gün
   04:30 TRT, `Persistent=true` ile kaçan çalışmayı telafi eder).
@@ -624,6 +629,27 @@ Kaynak notları:
   yüzden seçici `img~.art`'tır; diğerleri `.photo` sınıfını kullanır.
 - Fotoğraf üzerindeki kategori rozeti (`.evcat`) görselin altına yerleştirilir
   ve `.evpic::after` gradyanı ile okunabilirlik sağlanır.
+
+## Metin taşması (dar ekran)
+- Kaynak sitelerin metinleri zaman zaman çok uzun kesintisiz diziler içerir
+  (örn. yüzlerce tire `----…`, ayraç satırları, URL'ler). Bu diziler dar
+  ekranda yatay kaydırmaya yol açar ve okumayı bozar.
+- İki katmanlı korunma vardır: (1) `tools/clean_events.py` kaynak metni
+  temizler (uzun ayraç tekrarları kısalır), (2) CSS'te metin kaplarına
+  `overflow-wrap:anywhere` + `word-break:break-word` verilir. Uygulama
+  temizlenmemiş eski önbellek verisiyle açılsa bile metin sarılır.
+- Sarma kuralı olan kaplar: `.dprose` (Hakkında), `.drule p` (Kurallar),
+  `.castcard .cn/.cr` (Kadro), `.dmcell.addr b` (Adres). Yeni bir uzun-metin
+  kabı eklerken bu kuralı da eklemek gerekir.
+- `.sh-body` (detay sayfası gövdesi) `overflow-x:hidden` kullanır; böylece
+  kaçan bir öğe olsa bile sayfa sağa kaymaz. `.dtabs` ve `.dhero` bilinçli
+  olarak tam genişlikte/yatay kaydırmalıdır, kırpılmaz.
+- Adres hücresi (`.dmcell.addr`) artık kesilmez (`white-space:normal`) ve
+  yanında `data-act="copyaddr"` kopyala düğmesi bulunur; `copyText()` panoya
+  yazar, güvenli bağlam yoksa `execCommand` ile geri düşer.
+- Profil sayfasının altında veri tazeliği satırı (`#data-ver`,
+  `dataFreshLabel()`) etkinlik verisinin son güncellenme zamanını gösterir
+  (`S.realAt` = `GENC_ACTIVE.generated_at`).
 
 ## Ücretsiz alan adı ve barındırma notları (2026-11)
 - Uygulama adresten bağımsızdır: `REMOTE_BASE` `location.host`'tan türetilir

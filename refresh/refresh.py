@@ -140,6 +140,7 @@ def main() -> int:
     steps = [
         ("toplama", [sys.executable, "tools/collect_tickets.py", "--sehir", CITIES, "--limit", str(args.limit)]),
         ("zenginleştirme", [sys.executable, "tools/enrich_events.py"]),
+        ("metin temizleme", [sys.executable, "tools/clean_events.py"]),
         ("yayın yükü", [sys.executable, "tools/build_payload.py"]),
         ("gömme", [sys.executable, "tools/embed_data.py"]),
     ]
