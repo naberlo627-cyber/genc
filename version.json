@@ -1,6 +1,6 @@
 {
-  "version": "1.33",
-  "versionCode": 13300,
-  "notes": "Yenilikler: Ana ekran kısayolları gözden geçirildi — Ara, Biletlerim, Bildirimler, Hoşlandıklarım ve Profil artık tek dokunuşla açılıyor. Bildirimler kısayolu bilet hatırlatıcı ayarlarını, Hoşlandıklarım ise ilgi alanı seçimini doğrudan gösterir. Önceki sürümden: etkinlik sayfasında 'Haritada aç · yol tarifi' ve 'Takvime ekle', filtrelerde fiyat aralığı ile yeni tarih seçenekleri (bu hafta sonu, bu ay) ve Profil > Hesap'tan görünüm teması (Otomatik, Açık, Koyu).",
+  "version": "1.34",
+  "versionCode": 13400,
+  "notes": "Yenilikler: Uygulamanın logosu yenilendi — artık koyu zemin üzerine krem \"genç\" kelime markası ve aksan renkli \"ç\". Yeni logo uygulama içinde, web ve Android simgelerinde ve paylaşım kartında geçerli. Önceki sürümden: Ana ekran kısayolları (Ara, Biletlerim, Bildirimler, Hoşlandıklarım, Profil), etkinlik sayfasında 'Haritada aç · yol tarifi' ve 'Takvime ekle', filtrelerde fiyat aralığı ve hızlı tarih seçenekleri, Profil > Hesap'tan görünüm teması (Otomatik, Açık, Koyu).",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

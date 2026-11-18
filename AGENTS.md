@@ -83,17 +83,26 @@ PWA dosyaları + geliştirme sunucusu.
   adla yazar ve JSON döner: `{"ok":true,"files":[...],"url":"/yuklenenler/..."}`.
 - `yuklenenler/` — yüklenen fotoğraflar (sürüm kontrolüne girmez).
 - `tools/qr.js` — QR kaynak kodu (Genc.html'e gömülmeden önceki hali).
-- `tools/brand.py` — ortak marka yardımcıları. Palet üç renge iner: krem
-  `CREAM #F7F0E6` (zemin), mürekkep `INK #14100D` (metin), aksan
-  `ACCENT #E5402A` (monogram ve vurgular). `monogram_mask`, `draw_monogram`,
-  `flat`, `rounded`, `circle` burada tanımlıdır (maske
-  `tools/assets/gmono_mask.png`). Tüm simge üreticileri bu modülü kullanır.
-- `tools/assets/gmono_mask.png` — "G" monogramının yüksek çözünürlüklü alfa
-  maskesi. `Genc.html #gmono` ile aynı form (Archivo 800 "G"); ikon üreticileri
-  bu maskeyi kullanır. Monogram değişirse burası ve `#gmono` birlikte güncellenir.
-- `tools/generate_icons.py` — PWA simge üretici. İkon, krem zemin üzerine aksan
-  kırmızısı "G" monogramıdır; maskable sürümde monogram `scale=0.72` ile güvenli
-  alana çekilir.
+- `tools/brand.py` — ortak marka yardımcıları. Logo koyu zemin üzerine krem
+  harfler ve aksan renkli "ç" ile gelir; ikonlar bu yüzden koyu zemin
+  (`ICON_BG #161A1C`) üzerine krem glif (`ICON_FG #F7F0E6`) basar. Palet:
+  koyu `DARK #161A1C`, krem `CREAM #F7F0E6`, mürekkep `INK #14100D`, aksan
+  `ACCENT #E5402A`. `monogram_mask`, `draw_monogram`, `flat`, `blank`,
+  `rounded`, `circle` burada tanımlıdır (maske `tools/assets/gmono_mask.png`).
+  Tüm simge üreticileri bu modülü kullanır.
+- `tools/build_logo.py` — **logo vektörleştirici**. Kaynak görsel
+  (`tools/assets/logo_source.png`) koyu zemin üzerine krem "genç" kelime
+  markasıdır; betik potrace ile glif maskelerini yollara çevirir ve
+  `tools/assets/logo_paths.json` (kelime markası + "G" monogramı yolları),
+  `tools/assets/gmono_mask.png` (monogram maskesi) ile
+  `wordmark_main_mask.png` / `wordmark_accent_mask.png` (kelime markası
+  maskeleri) üretir. Kaynak ya da logo değişince: `python3
+  tools/build_logo.py`.
+- `tools/assets/logo_paths.json` — `Genc.html` `#logo` / `#gmono` ve paylaşım
+  kartının kullandığı yol verisi. Kaynaktan üretilir; elle düzenlenmez.
+- `tools/generate_icons.py` — PWA simge üretici. İkon, koyu zemin üzerine krem
+  "G" monogramıdır; maskable sürümde monogram `scale=0.9` ile güvenli alana
+  çekilir.
 - `tools/generate_shortcuts.py` — kısayol simgesi üretici (her kısayola kendi
   glifi; Android ve masaüstünde aynı ikon tekrar etmesin). Zemin krem, glifler
   mürekkeptir. **Tek kaynak:** hem web simgelerini (`icons/shortcut-<id>.png`)
@@ -102,10 +111,11 @@ PWA dosyaları + geliştirme sunucusu.
   ayrışmaz. Kısayol kimlikleri: `ara, biletlerim, bildirimler, hoslandiklarim,
   profil, hafta, bilet-al, yakin, videolar`.
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
-  kare, daire ve uyarlanabilir ön katman üretir; ön katman zemin + monogram
-  birlikte kremdir, monogram güvenli alan için `scale=0.6` ile küçültülür.
-  `res/values/colors.xml` içindeki `ic_launcher_background` ve `brand_bg` krem
-  (`#F7F0E6`) olmalıdır.
+  kare, daire ve uyarlanabilir ön katman üretir; ön katman şeffaf zemine krem
+  monogramdır (`brand.blank` + `scale=0.9`), zemin rengi
+  `res/values/colors.xml` içindeki `ic_launcher_background` (`#161A1C`,
+  koyu) ile gelir. `brand_bg` (uygulama pencere zemini) krem (`#F7F0E6`)
+  kalır.
 - `tools/collect_tickets.py` — **gerçek bilet toplayıcı**. Birden çok satıcıyı
   tarar, etkinlik adı/mekan/tarih/**fiyat** bilgisini toplar, aynı etkinliği
   satan kaynakları eşleştirip **en ucuzunu** işaretler. Çıktı: `data/tickets.json`.
@@ -349,13 +359,13 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   satıcı sayfası) geçmişe yazılır; geri tuşu önce katmanı kapatır, kök
   seviyede uygulamadan çıkar. Katmanı kod içinden kapatırken `closeTopLayer`
   çağrılır, yoksa fazladan geçmiş girdisi kalır.
-- Marka, ayrı bir kutu + simge değil, doğrudan **"Genç" kelime markasıdır**
-  (`#logo`, viewBox `0 0 2585.39 896.85`). Harfler Archivo 800'ün dış
-  çizgilerinden (fontTools ile) SVG `path`'e çevrilmiştir: "G","e","n"
-  `currentColor` (mürekkep), Türkçeye özgü **"ç"** ise aksan kırmızısıyla
-  (`var(--logo-accent)`) boyanır — ismin içine gömülü tek marka izi
-  (Amazon gülümsemesi / FedEx oku gibi). Uygulama ikonları için monogram
-  `#gmono` (44x44 "G").
+- Marka, ayrı bir kutu + simge değil, doğrudan **"genç" kelime markasıdır**
+  (`#logo`, viewBox `0 0 881 316`). Harfler potrace ile vektörleştirilmiştir
+  (kaynak: `tools/assets/logo_source.png` → `tools/assets/logo_paths.json`):
+  "G","e","n" `currentColor` (açık temada mürekkep, koyu temada krem), Türkçeye
+  özgü **"ç"** ise aksan rengiyle (`var(--logo-accent)`) boyanır — ismin içine
+  gömülü tek marka izi (Amazon gülümsemesi / FedEx oku gibi). Uygulama ikonları
+  için monogram `#gmono` (250x257 "G", koyu zemin üzerine krem).
 - Logoya basmak **Ana Sayfa**'ya döner (`#home-logo`, `#kesfet-logo`,
   `#web-logo`, `#feed-logo` → `goHome()`): üst katmanları kapatır, `home`
   sekmesine geçer, `#hscroll`'u başa kaydırır.

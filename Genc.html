@@ -27,21 +27,21 @@
   --brand:#E5402A;--on-brand:#FFFFFF;--sun:#F0A500;--coral:#E5402A;--coral-text:#C5321F;--mute:#6E655B;--line:#E6DCCF;--sw-off:#A79A8A;
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
   --grad:linear-gradient(135deg,#E5402A 0%,#C5321F 100%);
-  --logo-ink:#14100D;--logo-accent:#E5402A;--logo-fg:#FFFFFF;color-scheme:light;
+  --logo-accent:#E5402A;color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --ink:#F7F0E6;--on-ink:#14100D;--paper:#14100D;--card:#241F1A;
   --brand:#FF6A4D;--on-brand:#1A0F0A;--sun:#F0A500;--coral:#FF6A4D;--coral-text:#FF8A70;--mute:#B5A895;--line:#3A322A;--sw-off:#8C8071;
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
   --grad:linear-gradient(135deg,#FF6A4D 0%,#D93A20 100%);
-  --logo-ink:#F7F0E6;--logo-accent:#FF6A4D;--logo-fg:#FFFFFF;color-scheme:dark;
+  --logo-accent:#FF6A4D;color-scheme:dark;
 }}
 :root[data-theme="dark"]{
   --ink:#F7F0E6;--on-ink:#14100D;--paper:#14100D;--card:#241F1A;
   --brand:#FF6A4D;--on-brand:#1A0F0A;--sun:#F0A500;--coral:#FF6A4D;--coral-text:#FF8A70;--mute:#B5A895;--line:#3A322A;--sw-off:#8C8071;
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
   --grad:linear-gradient(135deg,#FF6A4D 0%,#D93A20 100%);
-  --logo-ink:#F7F0E6;--logo-accent:#FF6A4D;--logo-fg:#FFFFFF;color-scheme:dark;
+  --logo-accent:#FF6A4D;color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -915,13 +915,59 @@ svg.ic.f{fill:currentColor}
 <symbol id="i-bookmark" viewBox="0 0 24 24"><path d="M7 4h10v16l-5-3.6L7 20z"/></symbol>
 <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V4M8 8l4-4 4 4M5 12v7h14v-7"/></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-<symbol id="gmono" viewBox="0 0 44 44"><g transform="translate(7.417 34.561) scale(0.03656)"><path d="M388 12Q221.93505859375 12.0 135.293701171875 -75.945556640625Q48.65234375 -163.89111328125 48.65234375 -343.54345703125Q48.65234375 -462.9130859375 91.510986328125 -541.684814453125Q134.36962890625 -620.45654296875 215.858642578125 -659.771728515625Q297.34765625 -699.0869140625 412.23876953125 -699.0869140625Q481.49951171875 -699.0869140625 542.488525390625 -683.271728515625Q603.4775390625 -667.45654296875 650.1513671875 -635.86962890625Q696.8251953125 -604.28271484375 722.912109375 -556.65234375Q748.9990234375 -509.02197265625 748.9990234375 -444.93505859375H573.15283203125Q573.15283203125 -471.95703125 560.82666015625 -493.381103515625Q548.50048828125 -514.80517578125 527.076416015625 -529.587890625Q505.65234375 -544.37060546875 477.815185546875 -551.78369140625Q449.97802734375 -559.19677734375 418.9560546875 -559.19677734375Q372.6513671875 -559.19677734375 337.401123046875 -546.87060546875Q302.15087890625 -534.54443359375 278.99853515625 -509.663818359375Q255.84619140625 -484.783203125 244.248291015625 -448.93505859375Q232.650390625 -413.0869140625 232.650390625 -365.49951171875V-321.130859375Q232.650390625 -256.97802734375 252.661376953125 -213.945068359375Q272.67236328125 -170.912109375 313.1943359375 -149.401123046875Q353.71630859375 -127.89013671875 413.4775390625 -127.89013671875Q459.4345703125 -127.89013671875 495.78271484375 -141.814208984375Q532.130859375 -155.73828125 553.554931640625 -182.358154296875Q574.97900390625 -208.97802734375 574.97900390625 -245.93505859375V-251.3046875H390.216796875V-376.6953125H748.9990234375V0.0H644.58642578125L627.6083984375 -71.65234375Q597.06494140625 -43.826171875 561.4345703125 -25.141357421875Q525.80419921875 -6.45654296875 483.173828125 2.771728515625Q440.54345703125 12.0 388 12Z" fill="currentColor"/></g></symbol>
+<symbol id="gmono" viewBox="0 0 250 257"><g transform="translate(0,257) scale(0.1,-0.1)"><path d="M1165 2564 c-91 -14 -234 -47 -300 -69 -369 -123 -673 -429 -793
+-795 -50 -153 -65 -247 -65 -415 0 -188 23 -309 92 -485 48 -120 72 -163 152
+-275 148 -206 361 -361 619 -448 159 -54 261 -70 440 -71 176 0 279 16 417 66
+86 31 236 122 282 172 14 14 28 26 32 26 4 0 20 -49 35 -109 33 -129 6 -116
+249 -116 l170 0 3 683 2 682 -334 0 c-183 0 -348 3 -366 7 -30 5 -33 4 -26
+-13 25 -64 25 -202 0 -267 -4 -11 5 -13 44 -9 144 13 254 -112 223 -254 -41
+-184 -264 -347 -537 -395 -85 -15 -288 -6 -369 15 -137 38 -285 126 -386 232
+-83 88 -124 157 -163 274 -46 138 -60 253 -46 377 49 442 401 742 843 720 203
+-10 363 -76 498 -204 42 -40 89 -91 104 -113 15 -22 31 -40 35 -40 9 0 358
+200 398 228 l32 23 -51 74 c-106 154 -319 327 -484 392 -86 35 -198 69 -285
+88 -73 16 -397 29 -465 19z M1315 1590 c-102 -15 -218 -112 -250 -211 -24 -70 -17 -188 14 -247
+33 -65 87 -118 149 -149 49 -24 69 -28 142 -28 74 0 92 4 144 30 118 60 181
+171 174 305 -12 193 -180 329 -373 300z" fill="currentColor"/></g></symbol>
 <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z"/></symbol>
 <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
 <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/></symbol>
 <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v5.5c0 4.4-3 7.6-7 9.5-4-1.9-7-5.1-7-9.5V6z"/><path d="M9 12l2.2 2.2L15.5 10"/></symbol>
 
-<symbol id="logo" viewBox="0 0 2585.39 896.85"><g transform="translate(-48.652,699.087)"><path d="M388 12Q221.93505859375 12.0 135.293701171875 -75.945556640625Q48.65234375 -163.89111328125 48.65234375 -343.54345703125Q48.65234375 -462.9130859375 91.510986328125 -541.684814453125Q134.36962890625 -620.45654296875 215.858642578125 -659.771728515625Q297.34765625 -699.0869140625 412.23876953125 -699.0869140625Q481.49951171875 -699.0869140625 542.488525390625 -683.271728515625Q603.4775390625 -667.45654296875 650.1513671875 -635.86962890625Q696.8251953125 -604.28271484375 722.912109375 -556.65234375Q748.9990234375 -509.02197265625 748.9990234375 -444.93505859375H573.15283203125Q573.15283203125 -471.95703125 560.82666015625 -493.381103515625Q548.50048828125 -514.80517578125 527.076416015625 -529.587890625Q505.65234375 -544.37060546875 477.815185546875 -551.78369140625Q449.97802734375 -559.19677734375 418.9560546875 -559.19677734375Q372.6513671875 -559.19677734375 337.401123046875 -546.87060546875Q302.15087890625 -534.54443359375 278.99853515625 -509.663818359375Q255.84619140625 -484.783203125 244.248291015625 -448.93505859375Q232.650390625 -413.0869140625 232.650390625 -365.49951171875V-321.130859375Q232.650390625 -256.97802734375 252.661376953125 -213.945068359375Q272.67236328125 -170.912109375 313.1943359375 -149.401123046875Q353.71630859375 -127.89013671875 413.4775390625 -127.89013671875Q459.4345703125 -127.89013671875 495.78271484375 -141.814208984375Q532.130859375 -155.73828125 553.554931640625 -182.358154296875Q574.97900390625 -208.97802734375 574.97900390625 -245.93505859375V-251.3046875H390.216796875V-376.6953125H748.9990234375V0.0H644.58642578125L627.6083984375 -71.65234375Q597.06494140625 -43.826171875 561.4345703125 -25.141357421875Q525.80419921875 -6.45654296875 483.173828125 2.771728515625Q440.54345703125 12.0 388 12Z" transform="translate(0.0,0)" fill="currentColor"/><path d="M320.3466796875 12.0Q230.36865234375 12.0 167.031982421875 -17.5Q103.6953125 -47.0 70.532470703125 -108.0Q37.36962890625 -169.0 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.2607421875 -418.228271484375Q103.15185546875 -479.0 164.858154296875 -509.04345703125Q226.564453125 -539.0869140625 313.8251953125 -539.0869140625Q400.15087890625 -539.0869140625 459.802734375 -510.04345703125Q519.45458984375 -481.0 550.345703125 -420.9130859375Q581.23681640625 -360.826171875 581.23681640625 -266.28271484375V-231.36962890625H202.58544921875Q203.49853515625 -189.4345703125 215.139892578125 -160.010498046875Q226.78125 -130.58642578125 252.107421875 -115.716796875Q277.43359375 -100.84716796875 318.62939453125 -100.84716796875Q343.80322265625 -100.84716796875 362.988037109375 -106.84716796875Q382.1728515625 -112.84716796875 395.270751953125 -124.26025390625Q408.36865234375 -135.67333984375 414.966552734375 -151.9560546875Q421.564453125 -168.23876953125 421.564453125 -188.34765625H581.23681640625Q581.23681640625 -139.97802734375 563.465087890625 -102.4345703125Q545.693359375 -64.89111328125 511.747802734375 -39.532470703125Q477.80224609375 -14.173828125 429.552490234375 -1.0869140625Q381.302734375 12.0 320.3466796875 12.0ZM204.0419921875 -321.71728515625H414.02099609375Q414.02099609375 -348.19580078125 407.336181640625 -367.663330078125Q400.6513671875 -387.130859375 388.23828125 -400.228759765625Q375.8251953125 -413.32666015625 358.183837890625 -419.554931640625Q340.54248046875 -425.783203125 318.1728515625 -425.783203125Q282.43359375 -425.783203125 258.379150390625 -413.8701171875Q234.32470703125 -401.95703125 221.41162109375 -379.032958984375Q208.49853515625 -356.10888671875 204.0419921875 -321.71728515625Z" transform="translate(815.0,0)" fill="currentColor"/><path d="M62.28271484375 0.0V-527.0869140625H197.43359375L209.06396484375 -451.65234375H216.06396484375Q235.6943359375 -479.45654296875 262.096435546875 -499.04345703125Q288.49853515625 -518.63037109375 321.357177734375 -528.858642578125Q354.2158203125 -539.0869140625 391.12890625 -539.0869140625Q448.19384765625 -539.0869140625 487.78076171875 -518.097900390625Q527.36767578125 -497.10888671875 548.28076171875 -454.93505859375Q569.19384765625 -412.76123046875 569.19384765625 -347.93505859375V0.0H404.89111328125V-324.84814453125Q404.89111328125 -346.8701171875 399.47802734375 -362.65283203125Q394.06494140625 -378.435546875 384.010498046875 -389.120361328125Q373.9560546875 -399.80517578125 358.945068359375 -405.076904296875Q343.93408203125 -410.3486328125 324.6513671875 -410.3486328125Q295.9990234375 -410.3486328125 273.8466796875 -396.794189453125Q251.6943359375 -383.23974609375 238.91162109375 -360.402587890625Q226.12890625 -337.5654296875 226.12890625 -308.173828125V0.0Z" transform="translate(1434.0,0)" fill="currentColor"/><path d="M310.62939453125 12.0Q224.28173828125 12.0 163.26025390625 -18.04345703125Q102.23876953125 -48.0869140625 69.80419921875 -109.358642578125Q37.36962890625 -170.63037109375 37.36962890625 -263.54345703125Q37.36962890625 -357.45654296875 70.032470703125 -418.5Q102.6953125 -479.54345703125 163.716796875 -509.5869140625Q224.73828125 -539.63037109375 310.62939453125 -539.63037109375Q367.43359375 -539.63037109375 414.955078125 -526.63037109375Q462.4765625 -513.63037109375 497.682861328125 -486.858642578125Q532.88916015625 -460.0869140625 551.965087890625 -418.9130859375Q571.041015625 -377.7392578125 571.041015625 -321.3916015625H409.54248046875Q409.54248046875 -355.130859375 398.270751953125 -376.95703125Q386.9990234375 -398.783203125 364.770751953125 -409.65283203125Q342.54248046875 -420.5224609375 309.71630859375 -420.5224609375Q271.97705078125 -420.5224609375 248.422607421875 -404.511474609375Q224.8681640625 -388.50048828125 213.726806640625 -357.52197265625Q202.58544921875 -326.54345703125 202.58544921875 -281.49951171875V-244.58740234375Q202.58544921875 -200.0 213.99853515625 -169.06494140625Q225.41162109375 -138.1298828125 249.966064453125 -122.34716796875Q274.5205078125 -106.564453125 314.1728515625 -106.564453125Q347.62939453125 -106.564453125 370.12939453125 -117.43408203125Q392.62939453125 -128.3037109375 404.62939453125 -150.858154296875Q416.62939453125 -173.41259765625 416.62939453125 -206.7822265625H571.041015625Q571.041015625 -151.80419921875 551.965087890625 -110.358642578125Q532.88916015625 -68.9130859375 497.9111328125 -41.9130859375Q462.93310546875 -14.9130859375 415.183349609375 -1.45654296875Q367.43359375 12.0 310.62939453125 12.0ZM118.390625 197.76025390625Q88.49951171875 197.76025390625 55.249755859375 194.401611328125Q22.0 191.04296875 0.0 185.41259765625V132.06494140625H99.06494140625Q117.97802734375 132.06494140625 129.206298828125 128.15185546875Q140.4345703125 124.23876953125 140.4345703125 109.15185546875Q140.4345703125 95.521484375 132.206298828125 90.336669921875Q123.97802734375 85.15185546875 101.06494140625 85.15185546875H59.23876953125L76.49951171875 -26.216796875H164.28173828125L155.564453125 31.28271484375Q177.216796875 32.826171875 197.858154296875 41.4130859375Q218.49951171875 50.0 231.49951171875 66.445556640625Q244.49951171875 82.89111328125 244.49951171875 110.23876953125Q244.49951171875 136.869140625 231.771240234375 154.227783203125Q219.04296875 171.58642578125 199.58642578125 180.901611328125Q180.1298828125 190.216796875 158.445068359375 193.988525390625Q136.76025390625 197.76025390625 118.390625 197.76025390625Z" transform="translate(2063.0,0)" fill="var(--logo-accent)"/></g></symbol>
+<symbol id="logo" viewBox="0 0 881 316"><g transform="translate(0,316) scale(0.1,-0.1)"><path d="M1165 3154 c-91 -14 -234 -47 -300 -69 -369 -123 -673 -429 -793
+-795 -50 -153 -65 -247 -65 -415 0 -188 23 -309 92 -485 48 -120 72 -163 152
+-275 148 -206 361 -361 619 -448 159 -54 261 -70 440 -71 176 0 279 16 417 66
+86 31 236 122 282 172 14 14 28 26 32 26 4 0 20 -49 35 -109 33 -129 6 -116
+249 -116 l170 0 3 683 2 682 -334 0 c-183 0 -348 3 -366 7 -30 5 -33 4 -26
+-13 25 -64 25 -202 0 -267 -4 -11 5 -13 44 -9 144 13 254 -112 223 -254 -41
+-184 -264 -347 -537 -395 -85 -15 -288 -6 -369 15 -137 38 -285 126 -386 232
+-83 88 -124 157 -163 274 -46 138 -60 253 -46 377 49 442 401 742 843 720 203
+-10 363 -76 498 -204 42 -40 89 -91 104 -113 15 -22 31 -40 35 -40 9 0 358
+200 398 228 l32 23 -51 74 c-106 154 -319 327 -484 392 -86 35 -198 69 -285
+88 -73 16 -397 29 -465 19z M3525 2495 c-189 -34 -308 -89 -447 -204 -216 -180 -321 -398 -335
+-701 -6 -139 3 -213 43 -343 48 -156 95 -236 209 -355 149 -157 330 -248 568
+-287 363 -59 718 57 930 304 78 90 81 79 -46 164 -62 41 -142 91 -178 111
+l-65 36 -45 -46 c-91 -95 -207 -151 -344 -165 -171 -18 -314 26 -430 133 -58
+53 -120 160 -131 226 l-7 42 709 2 709 3 8 55 c11 70 -7 255 -34 363 -28 109
+-105 268 -163 339 -53 66 -169 167 -235 206 -71 41 -238 101 -331 117 -102 18
+-289 18 -385 0z m320 -401 c121 -31 226 -116 279 -227 19 -40 38 -82 41 -94
+l6 -23 -461 0 -461 0 7 23 c44 146 182 283 324 321 73 19 192 20 265 0z M5861 2500 c-150 -32 -246 -83 -353 -188 -49 -47 -90 -84 -92 -81 -2
+2 -16 57 -31 122 l-27 117 -214 0 -214 0 2 -917 3 -918 253 -1 252 -2 0 492
+c0 270 4 528 10 574 18 157 97 269 238 335 61 29 76 32 163 31 88 0 103 -3
+162 -32 77 -38 143 -106 172 -178 18 -46 20 -82 25 -634 l5 -585 253 -1 252
+-1 0 606 c0 506 -3 621 -16 696 -50 287 -218 476 -489 550 -71 19 -290 28
+-354 15z M1315 2180 c-102 -15 -218 -112 -250 -211 -24 -70 -17 -188 14 -247
+33 -65 87 -118 149 -149 49 -24 69 -28 142 -28 74 0 92 4 144 30 118 60 181
+171 174 305 -12 193 -180 329 -373 300z" fill="currentColor"/><path d="M7810 2504 c-102 -18 -153 -30 -208 -51 -175 -65 -323 -166 -418
+-287 -64 -81 -174 -280 -174 -316 0 -10 -7 -45 -15 -77 -9 -32 -18 -116 -22
+-188 -5 -112 -3 -144 17 -235 51 -241 173 -428 380 -582 78 -58 238 -126 363
+-152 15 -4 27 -12 27 -19 0 -6 -17 -39 -37 -72 -20 -33 -71 -125 -114 -205
+-42 -80 -95 -180 -119 -224 -24 -46 -38 -82 -33 -87 5 -5 110 -8 234 -7 l224
+3 55 100 c31 55 81 147 112 205 143 269 173 323 188 328 101 34 181 71 232
+105 96 63 216 190 266 280 44 78 47 102 15 114 -17 5 -326 153 -365 174 -25
+13 -24 14 -67 -50 -197 -290 -599 -288 -787 5 -52 82 -74 162 -74 277 0 226
+89 385 264 471 138 68 272 69 408 1 88 -44 102 -56 170 -152 45 -62 56 -73 75
+-68 32 8 392 185 399 196 3 5 -16 48 -43 95 -37 66 -70 108 -143 178 -123 117
+-231 176 -410 223 -53 13 -348 26 -400 17z" fill="var(--logo-accent)"/></g></symbol>
 
 <linearGradient id="ga1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF7A45"/><stop offset="1" stop-color="#B0125E"/></linearGradient>
 <linearGradient id="ga2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7CCBFF"/><stop offset="1" stop-color="#FFF1B0"/></linearGradient>
@@ -994,7 +1040,7 @@ svg.ic.f{fill:currentColor}
     <!-- adım 1: giriş / kayıt -->
     <div class="ostep pane" id="ob1">
       <div class="scroll">
-        <svg class="authlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg>
+        <svg class="authlogo" viewBox="0 0 881 316" role="img" aria-label="Genç"><use href="#logo"/></svg>
         <h2 class="authtitle disp" id="auth-title">Aramıza katıl</h2>
         <p class="authtext" id="auth-sub">Hesabını oluştur; çevrendeki konser, sinema ve etkinlikleri kaçırma.</p>
 
@@ -1045,7 +1091,7 @@ svg.ic.f{fill:currentColor}
     <!-- adım 3: hazır -->
     <div class="ostep pane" id="ob3" hidden>
       <div class="scroll" style="text-align:center">
-        <svg class="done-logo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg>
+        <svg class="done-logo" viewBox="0 0 881 316" role="img" aria-label="Genç"><use href="#logo"/></svg>
         <h2 class="ob-title disp" id="done-title" style="padding-top:12px">Hazırsın!</h2>
         <p class="ob-sub" id="done-sub" style="margin:0 auto"></p>
         <div class="likes done-chips" id="done-likes"></div>
@@ -1061,7 +1107,7 @@ svg.ic.f{fill:currentColor}
     <div class="pane" id="tab-home">
       <div class="scroll" id="hscroll">
         <div class="top">
-          <button class="logobtn" id="home-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
+          <button class="logobtn" id="home-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 881 316" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
           <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
         </div>
         <div class="locbar"><button class="loc" id="locbtn" type="button" aria-haspopup="dialog"><svg class="ic" style="color:var(--brand)"><use href="#i-pin"/></svg><span id="locname">Konum kapalı</span><svg class="ic" style="width:18px;height:18px"><use href="#i-chev-d"/></svg></button></div>
@@ -1075,7 +1121,7 @@ svg.ic.f{fill:currentColor}
     <div class="pane" id="tab-kesfet" hidden>
       <div class="scroll" id="kscroll">
         <div class="top">
-          <button class="logobtn" id="kesfet-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
+          <button class="logobtn" id="kesfet-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 881 316" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
           <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
         </div>
         <label class="search"><svg class="ic"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Mekan, etkinlik veya sinema ara" aria-label="Ara" autocomplete="off"></label>
@@ -1089,7 +1135,7 @@ svg.ic.f{fill:currentColor}
     <div class="pane" id="tab-salonlar" hidden>
       <div class="scroll" id="vscroll">
         <div class="top">
-          <button class="logobtn" id="salonlar-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
+          <button class="logobtn" id="salonlar-logo" type="button" aria-label="Ana sayfa"><svg class="brandlogo" viewBox="0 0 881 316" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
           <button class="avatar" type="button" data-tab="profil" aria-label="Profilim"><span class="ini">EY</span></button>
         </div>
         <div id="vlists"></div>
@@ -1102,7 +1148,7 @@ svg.ic.f{fill:currentColor}
       <div class="feed" id="feed" aria-label="Kısa videolar"></div>
       <div class="vadslot" id="vadslot"></div>
       <div class="vtop">
-        <div class="vbrand"><button class="logobtn" id="feed-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" role="img" aria-label="Genç"><use href="#logo"/></svg></button></div>
+        <div class="vbrand"><button class="logobtn" id="feed-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 881 316" role="img" aria-label="Genç"><use href="#logo"/></svg></button></div>
         <div class="vtabs" id="vtabs">
           <button type="button" data-vtab="ozel" aria-pressed="true">Sana özel</button>
           <button type="button" data-vtab="yakin" aria-pressed="false">Yakınında</button>
@@ -1144,7 +1190,7 @@ svg.ic.f{fill:currentColor}
     <div class="whead">
       <button class="x" id="web-close" type="button" aria-label="Kapat"><svg class="ic"><use href="#i-close"/></svg></button>
       <div class="ti"><strong id="web-title">Biletini seç</strong><small><svg class="ic"><use href="#i-shield"/></svg><span id="web-seller"></span></small></div>
-      <button class="logobtn" id="web-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 2585.39 896.85" style="width:74px" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
+      <button class="logobtn" id="web-logo" type="button" aria-label="Ana sayfaya dön"><svg class="brandlogo" viewBox="0 0 881 316" style="width:74px" role="img" aria-label="Genç"><use href="#logo"/></svg></button>
     </div>
     <div class="wbody" id="web-body"></div>
   </div>
@@ -1875,7 +1921,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.33';
+var APP_VERSION='1.34';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -3411,16 +3457,17 @@ function wkArt(art){return WK_ART[art]||['#E5402A','#8A1F14']}
 function wkGlyph(type){return WK_GLYPH[type]||'\u2726'}
 /* Paylaşım kartında uygulamanın kendi logosu kullanılır (referans alınır, kopyalanmaz):
    gömülü #logo simgesindeki yol verisi yeniden kullanılır. Kart zemini krem
-   olduğu için logo koyu mürekkep + kırmızı aksanla boyanır (currentColor ve
-   --logo-accent sırasıyla INK ve BRAND ile değiştirilir). */
+   olduğu için logo koyu mürekkep + kırmızı aksanla boyanır (currentColor INK,
+   --logo-accent ise BRAND ile değiştirilir). */
 var WK_LOGO=null,WK_LOGO_URL=null;
 function wkLogoURL(){
   if(WK_LOGO_URL!==null)return WK_LOGO_URL;
   var sym=document.getElementById('logo');
   if(!sym){WK_LOGO_URL='';return WK_LOGO_URL}
   var inner=sym.innerHTML
-    .replace(/var\(--logo-ink\)/g,'#14100D').replace(/var\(--logo-accent\)/g,'#E5402A');
-  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2585.39 896.85" color="#14100D">'+inner+'</svg>';
+    .replace(/var\(--logo-accent\)/g,'#E5402A');
+  var vb=sym.getAttribute("viewBox")||"0 0 881 316";
+  var svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="'+vb+'" color="#14100D">'+inner+'</svg>';
   WK_LOGO_URL='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
   return WK_LOGO_URL;
 }
@@ -3512,7 +3559,7 @@ function buildWeeklyCanvas(){
   wkFillRound(x,64,54,104,104,28,'rgba(20,16,13,.05)');
   if(WK_LOGO){
     x.save();wkRound(x,64,54,104,104,28);x.clip();
-    var lw=96,lh=lw*(896.85/2585.39);
+    var lw=96,lh=lw*((WK_LOGO.naturalHeight||316)/(WK_LOGO.naturalWidth||881));
     x.drawImage(WK_LOGO,68,54+(104-lh)/2,lw,lh);x.restore();
   }else{
     x.fillStyle=INK;x.textAlign='center';x.textBaseline='middle';

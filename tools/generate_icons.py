@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Genç PWA ikonlarını üretir (icons/ klasörüne PNG yazar).
 
-İkon: krem zemin üzerine aksan renkli "G" monogramı (bkz. tools/brand.py).
+İkon: koyu zemin üzerine krem "G" monogramı (bkz. tools/brand.py). Bu, yeni
+kelime markası logosunun kare sürümüdür (bkz. tools/assets/logo_source.png).
 """
 import os
 import sys
@@ -21,10 +22,10 @@ def save(img, name):
 def main():
     os.makedirs(OUT, exist_ok=True)
     for size in (192, 512):
-        save(brand.draw_monogram(brand.rounded(brand.flat(size, brand.CREAM))), f"icon-{size}.png")
-    save(brand.draw_monogram(brand.flat(512, brand.CREAM), scale=0.72), "maskable-512.png")
-    save(brand.draw_monogram(brand.rounded(brand.flat(180, brand.CREAM))), "apple-touch-icon.png")
-    save(brand.draw_monogram(brand.flat(32, brand.CREAM)), "favicon-32.png")
+        save(brand.draw_monogram(brand.rounded(brand.flat(size, brand.ICON_BG))), f"icon-{size}.png")
+    save(brand.draw_monogram(brand.flat(512, brand.ICON_BG), scale=0.9), "maskable-512.png")
+    save(brand.draw_monogram(brand.rounded(brand.flat(180, brand.ICON_BG))), "apple-touch-icon.png")
+    save(brand.draw_monogram(brand.flat(32, brand.ICON_BG)), "favicon-32.png")
 
 
 if __name__ == "__main__":

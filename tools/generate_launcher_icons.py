@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Genç Android başlatıcı (launcher) simgelerini üretir.
 
-Web simgeleriyle aynı krem zemin + aksan "G" işareti (tools/brand.py).
+Web simgeleriyle aynı koyu zemin + krem "G" işareti (tools/brand.py).
 Android yoğunluk klasörlerine yazar:
 
 - mipmap-<yoğunluk>/ic_launcher.png        : yuvarlatılmış kare (klasik)
@@ -37,12 +37,14 @@ def save(img, *parts):
 
 def main():
     for dens, (mip, fg) in DENSITIES.items():
-        save(brand.draw_monogram(brand.rounded(brand.flat(mip, brand.CREAM))),
+        save(brand.draw_monogram(brand.rounded(brand.flat(mip, brand.ICON_BG))),
              "mipmap-" + dens, "ic_launcher.png")
-        save(brand.draw_monogram(brand.circle(brand.flat(mip, brand.CREAM))),
+        save(brand.draw_monogram(brand.circle(brand.flat(mip, brand.ICON_BG))),
              "mipmap-" + dens, "ic_launcher_round.png")
-        # Uyarlanabilir simge: sistem maskeler, güvenli alana sığması için küçültülür.
-        save(brand.draw_monogram(brand.flat(fg, brand.CREAM), scale=0.6),
+        # Uyarlanabilir simge ön katmanı: şeffaf zemin üzerine krem glif.
+        # Arka plan rengi ic_launcher_background ile gelir; güvenli alana sığması
+        # için glif küçültülür (sistem maskesi kenarlardan kırpar).
+        save(brand.draw_monogram(brand.blank(fg), scale=0.9),
              "drawable-" + dens, "ic_launcher_foreground.png")
 
 
