@@ -532,13 +532,24 @@ Kaynak notları:
 - Toplama siteye saygılıdır: istekler paralel ama sınırlı (6 iş parçacığı),
   aralarda gecikme, `fetch` yeniden dener.
 
-## Tema (yalnızca sistem)
-- Uygulama yalnızca **telefonun temasını** izler; uygulama içi "Sistem / Açık /
-  Koyu" seçicisi kaldırıldı. Açık/koyu geçişi `prefers-color-scheme` ile
-  CSS'ten yapılır; `data-theme` özniteliği hiçbir zaman zorlanmaz
-  (`applyTheme()` yalnızca `theme-color` meta etiketini tazeler).
-- `isDark()` = `prefers-color-scheme: dark` eşleşmesi. Tema tercihi artık
-  `localStorage`'a yazılmaz.
+## Tema (tek tema: açık krem)
+- Uygulamanın **tek teması vardır: açık krem**. Koyu tema ve tema seçici
+  v1.37'de kaldırıldı; `prefers-color-scheme` ile tema değiştiren CSS yoktur.
+  `applyTheme()` yalnızca `theme-color` meta etiketini tazeler. `data-theme`
+  özniteliği hiçbir zaman zorlanmaz, tema `localStorage`'a yazılmaz.
+- **Karanlık mod tuzağı (web sitesi).** Telefon karanlık moddayken tarayıcılar
+  (Chrome/Android "siteler için karanlık tema", Chromium
+  `WebContentsForceDark`) krem sayfayı **otomatik ters çevirip koyu**
+  gösterebiliyordu. Uygulamada (WebView) bu özellik olmadığı için sorun yoktu.
+  Çözüm: `<meta name="color-scheme" content="only light">` + CSS'te
+  `:root{color-scheme:only light}`. `light` **yetmez** (tarayıcı çevirmeye
+  devam eder); `only light` dönüşümü kapatır. Doğrulama: `chromium
+  --force-dark-mode --enable-features=WebContentsForceDark
+  --blink-settings=forceDarkModeEnabled=true` ile açıp zemin renginin
+  `#F7F0E6` kaldığını kontrol et.
+- `.night` / `.dark-ui` sınıfları yalnızca **Videolar sekmesi** için geçicidir
+  (`setTab('videolar')` ekler/çıkarır): video akışı koyu zeminde oynar, alt
+  çubuk ve vurgular o sekmede koyu olur. Genel tema değildir.
 
 ## Reklam alanları (profil hariç)
 - Sponsor alanları gerçek bir reklam ağına bağlı **değildir**; yalnızca yerleşimi
