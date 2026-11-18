@@ -783,12 +783,10 @@ svg.ic.f{fill:currentColor}
 .livebar span{flex:1;min-width:0}
 .livebar strong{display:block;font-size:14.5px}
 .livebar small{display:block;color:var(--mute);font-size:12.5px;margin-top:2px;line-height:1.45}
-.livebar .lvnames b{color:var(--brand)}
 .livebig{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:16px;margin:0 20px 10px;padding:16px;box-shadow:inset 0 0 0 1.5px var(--line)}
 .livebig .ic{color:var(--brand);flex:none;width:30px;height:30px}
 .livebig strong{display:block;font-size:26px;font-weight:800;line-height:1.1}
 .livebig small{color:var(--mute);font-size:12.5px}
-.livechips{margin-top:2px}
 @media (max-width:380px){.nav button{font-size:10.5px}}
 
 /* ---------- giriş / kayıt ---------- */
@@ -1928,7 +1926,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.35';
+var APP_VERSION='1.36';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -2675,21 +2673,17 @@ function googleSignIn(){
 $('#gbtn').addEventListener('click',googleSignIn);
 
 /* ---------- aktif kullanıcı sayacı (pazarlama) ----------
-   Sayaç: abacus.jasoncameron.dev (anahtarsız, CORS açık, kalıcı).
-   İsim akışı: ntfy.sh (anahtarsız, CORS açık, son 12 saat).
+   Yalnızca anonim sayı sayılır; hiçbir kişisel veri (ad vb.) gönderilmez
+   veya gösterilmez. Sayaç: abacus.jasoncameron.dev (anahtarsız, CORS açık).
    Ağ hataları uygulamayı asla etkilemez: başarısız olursa sessizce atlanır. */
 var STATS_NS='genc-app-7f3a91';
 var STATS_KEY='uyeler';
 var STATS_BASE='https://abacus.jasoncameron.dev';
-var NAMES_TOPIC='genc-uyeler-7f3a91b2';
 var STATS_SEEN='genc.counted';
-var NAMES_SEEN='genc.namesent';
 var COUNT_CACHE='genc.countcache';
-var activeCache={ts:0,count:0,names:[]};
+var activeCache={ts:0,count:0};
 function statCounted(){try{return localStorage.getItem(STATS_SEEN)==='1'}catch(e){return false}}
 function markCounted(){try{localStorage.setItem(STATS_SEEN,'1')}catch(e){}}
-function namesSent(){try{return localStorage.getItem(NAMES_SEEN)==='1'}catch(e){return false}}
-function markNamesSent(){try{localStorage.setItem(NAMES_SEEN,'1')}catch(e){}}
 function cacheCount(n){try{localStorage.setItem(COUNT_CACHE,String(n))}catch(e){}}
 function cachedCount(){try{var v=parseInt(localStorage.getItem(COUNT_CACHE),10);return v>0?v:0}catch(e){return 0}}
 /* Sayaç servisi ara sıra 500 döndürür; birkaç deneme ile toparlanır. */
@@ -2702,7 +2696,7 @@ function getJSON(url,tries){
     return new Promise(function(res){setTimeout(res,700)}).then(function(){return getJSON(url,tries-1)});
   });
 }
-/* Kayıtlı ya da misafir, adı olan herkesi sayaca ve isim akışına ekler. */
+/* Adı olan herkesi (kayıtlı ya da misafir) anonim sayaca ekler. */
 function registerUser(name){
   if(!name||name.length<2)return;
   if(!statCounted()){
@@ -2710,12 +2704,8 @@ function registerUser(name){
       if(d&&typeof d.value==='number'){markCounted();cacheCount(d.value);activeCache.count=d.value;renderActiveUsers()}
     }).catch(function(){});
   }
-  if(!namesSent()){
-    fetch('https://ntfy.sh/'+NAMES_TOPIC,{method:'POST',body:name,cache:'no-store'})
-      .then(function(){markNamesSent()}).catch(function(){});
-  }
 }
-/* Sayaç ve isim akışını okur (en çok 3 dakikada bir tazelenir). */
+/* Anonim sayacı okur (en çok 3 dakikada bir tazelenir). */
 function loadActiveUsers(force){
   var now=Date.now();
   if(!force&&now-activeCache.ts<180000)return;
@@ -2724,25 +2714,9 @@ function loadActiveUsers(force){
   getJSON(STATS_BASE+'/get/'+STATS_NS+'/'+STATS_KEY,3).then(function(d){
     if(d&&typeof d.value==='number'){activeCache.count=d.value;cacheCount(d.value);renderActiveUsers()}
   }).catch(function(){});
-  fetch('https://ntfy.sh/'+NAMES_TOPIC+'/json?poll=1',{cache:'no-store'})
-    .then(function(r){return r.text()}).then(function(t){
-      var seen={},list=[];
-      t.split('\n').forEach(function(line){
-        if(!line.trim())return;
-        try{
-          var m=JSON.parse(line);
-          if(!m||m.event!=='message'||!m.message)return;
-          var n=String(m.message).trim().slice(0,24);
-          if(n.length<2)return;
-          var k=norm(n);
-          if(seen[k])return;seen[k]=1;list.push(n);
-        }catch(e){}
-      });
-      if(list.length){activeCache.names=list.slice(-24).reverse();renderActiveUsers()}
-    }).catch(function(){});
 }
-/* Sayaç servisi yanıt vermezse canlı isim akışı (son 12 saat) yedek olur. */
-function effectiveCount(){return activeCache.count>0?activeCache.count:activeCache.names.length}
+/* Sayaç yanıt vermezse elde sayı olmayabilir; o zaman bölüm gizlenir. */
+function effectiveCount(){return activeCache.count}
 /* Sayıyı Türkçe biçimde yazar: 1240 -> "1.240". */
 function userCountText(n){return (n||0).toLocaleString('tr-TR')}
 function renderActiveUsers(){
@@ -2750,9 +2724,7 @@ function renderActiveUsers(){
   var el=$('#livebar');
   if(el){
     if(n>0){
-      var names=activeCache.names;
-      var extra=names.length?'<span class="lvnames">'+names.slice(0,3).map(function(x){return '<b>'+esc(x)+'</b>'}).join(', ')+(names.length>3?' ve diğerleri':'')+'</span>':'';
-      el.innerHTML=ic('user')+'<span><strong>'+userCountText(n)+' kişi Genç’i kullanıyor</strong><small>Sen de aramızdasın'+(extra?': '+extra:'')+'.</small></span>';
+      el.innerHTML=ic('user')+'<span><strong>'+userCountText(n)+' kişi Genç’i kullanıyor</strong><small>Sen de aramızdasın.</small></span>';
       el.hidden=false;
     }else el.hidden=true;
   }
@@ -2761,9 +2733,6 @@ function renderActiveUsers(){
     if(n>0){
       var h='<div class="sec"><h2 class="disp">Aktif kullanıcılar</h2></div>';
       h+='<div class="livebig">'+ic('user')+'<span><strong>'+userCountText(n)+'</strong><small>kişi Genç’i kullanıyor</small></span></div>';
-      if(activeCache.names.length){
-        h+='<div class="likes livechips">'+activeCache.names.map(function(x){return '<span>'+esc(x)+'</span>'}).join('')+'</div>';
-      }
       pl.innerHTML=h;
     }else pl.innerHTML='';
   }

@@ -67,6 +67,11 @@ PWA dosyaları + geliştirme sunucusu.
   boşlukları tek boşluğa indirir; `realToEvent` ve `fixDistrict` girişte
   uygular. Aynı temizlik `tools/collect_tickets.py` içindeki `clean_text()`
   ile veri toplama sırasında da yapılır.
+- **Aktif kullanıcı sayacı ve gizlilik.** Profil'de yalnızca anonim sayı
+  gösterilir ("N kişi Genç'i kullanıyor"); kullanıcı adları hiçbir yerde
+  yayımlanmaz veya gösterilmez. Sayaç `abacus.jasoncameron.dev` üzerinde
+  tutulur, cihaz başına bir kez artırılır (`genc.counted`). Ağ hatası olursa
+  bölüm sessizce gizlenir.
 - **Çok şehir.** Konum seçimi tüm Türkiye'yi kapsar: 81 il ve tüm ilçeler
   `TR_CITIES` / `TR_CITY_DISTRICTS` / `TR_CITY_COORDS` içinde gömülüdür (kaynak:
   TÜİK/adres kayıtlarından derlenen açık veri; elle güncellenmez). `cityList()`
