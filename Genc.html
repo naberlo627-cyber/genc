@@ -117,6 +117,9 @@ svg.ic.f{fill:currentColor}
 .sw.sm{width:42px;height:25px;border-radius:13px}
 .sw.sm::after{width:19px;height:19px}
 .sw.sm[aria-checked="true"]::after{transform:translateX(17px)}
+.tchips{display:flex;gap:8px;padding:0 20px}
+.tchips button{flex:1;padding:10px 12px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-weight:700;font-size:14px;color:var(--ink);text-align:center}
+.tchips button.on{background:var(--grad);color:#fff;border-color:transparent}
 .nrow{display:flex;align-items:center;gap:12px;margin:8px 0;padding:13px 14px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line)}
 .nrow.off{opacity:.6}
 .nrow>svg{width:22px;height:22px;color:var(--brand);flex:none}
@@ -328,6 +331,9 @@ svg.ic.f{fill:currentColor}
 .dmcell small{display:block;color:var(--mute);font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
 .dmcell b{display:block;font-size:14.5px;font-weight:800;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .dmcell.wide{grid-column:1 / -1}
+.dmapcell{padding:0}
+.dmapcell button{display:flex;align-items:center;gap:9px;width:100%;padding:12px 13px;font-weight:800;font-size:14px;color:var(--brand)}
+.dmapcell .ic{width:20px;height:20px;flex:none}
 .dlive{grid-column:1 / -1;display:flex;align-items:center;gap:9px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:11px 13px;font-weight:700;font-size:14px}
 .dprice{display:flex;align-items:baseline;gap:10px;margin:16px 0 0}
 .dprice b{font-stretch:75%;font-weight:800;font-size:34px;line-height:1}
@@ -1860,15 +1866,16 @@ var S={
   photo:'',
   acctId:'',provider:'',
   filter:'Tümü',q:'',showAll:false,vtab:'ozel',tab:'home',adOff:false,
-  evCat:'Tümü',evVenue:'Tümü',evDate:'Tümü',evSort:'onerilen',evShow:12,
+  evCat:'Tümü',evVenue:'Tümü',evDate:'Tümü',evSort:'onerilen',evShow:12,evPrice:'Tümü',
   scrolls:{},
   recent:[],
   notify:{on:false,lead:60},
+  theme:'auto',
   version:''
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.31';
+var APP_VERSION='1.33';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -1961,7 +1968,7 @@ function getApk(){
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider,notify:S.notify}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider,notify:S.notify,theme:S.theme}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
@@ -1985,6 +1992,7 @@ function restore(){
   if(typeof d.tab==='string'&&d.tab)S.tab=d.tab;
   if(d.scrolls&&typeof d.scrolls==='object')S.scrolls=d.scrolls;
   if(d.notify&&typeof d.notify==='object'){S.notify.on=!!d.notify.on;S.notify.lead=+d.notify.lead||60}
+  if(d.theme==='light'||d.theme==='dark'||d.theme==='auto')S.theme=d.theme;
   S.loggedIn=!!d.loggedIn;
 }
 
@@ -2016,13 +2024,23 @@ function icsTime(e){
   return m?(('0'+m[1]).slice(-2)+m[2]+'00'):'200000';
 }
 function icsText(e){
-  var dt=e.date.replace(/-/g,'')+'T'+icsTime(e);
-  var end=e.date.replace(/-/g,'')+'T'+icsTime(e);
+  var t=icsTime(e),dt=e.date.replace(/-/g,'')+'T'+t;
+  var end=(e.end&&/^\d{4}-\d{2}-\d{2}$/.test(e.end)?e.end:e.date).replace(/-/g,'')+'T'+(e.endTime||icsEnd(t));
+  var loc=[e.venue,e.address||e.district,e.city].filter(Boolean).join(', ');
+  var desc=[e.when,'biletler '+priceLabel(e),e.url||''].filter(Boolean).join(' · ');
   return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Genc//Etkinlik//TR','BEGIN:VEVENT',
     'UID:genc-'+e.id+'@genc.app','DTSTAMP:'+new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z',
-    'DTSTART:'+dt,'DTEND:'+end,'SUMMARY:'+e.title,'LOCATION:'+e.venue+', '+e.district+', İzmir',
-    'DESCRIPTION:'+e.when+' · biletler '+priceLabel(e),'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    'DTSTART:'+dt,'DTEND:'+end,'SUMMARY:'+icsEsc(e.title),'LOCATION:'+icsEsc(loc),
+    'DESCRIPTION:'+icsEsc(desc),'END:VEVENT','END:VCALENDAR'].join('\r\n');
 }
+/* Süre bilgisi yoksa etkinlik 2 saat varsayılır; takvimde sıfır süreli görünmesin. */
+function icsEnd(hhmmss){
+  var h=+hhmmss.slice(0,2),m=+hhmmss.slice(2,4),tot=h*60+m+120;
+  if(tot>1439)return '235900';
+  return ('0'+Math.floor(tot/60)).slice(-2)+('0'+(tot%60)).slice(-2)+'00';
+}
+/* iCalendar metin alanlarında virgül, noktalı virgül ve satır sonu kaçırılır. */
+function icsEsc(s){return String(s||'').replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n')}
 function download(name,text,mime){
   try{
     var blob=new Blob([text],{type:(mime||'text/plain')+';charset=utf-8'});
@@ -2758,15 +2776,17 @@ function enterMain(){
   loadActiveUsers(true);
 }
 
-/* ---------- tema (yalnızca sistem teması) ---------- */
+/* ---------- tema (sistem + elle seçim) ---------- */
 var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
-function isDark(){return !!(mq&&mq.matches)}
+function isDark(){var t=S.theme||'auto';if(t==='dark')return true;if(t==='light')return false;return !!(mq&&mq.matches)}
 function paintChrome(){
   var c=(S.tab==='videolar'&&!$('#main').hidden)?'#14100D':(isDark()?'#14100D':'#F7F0E6');
   document.querySelector('meta[name=theme-color]').setAttribute('content',c);
 }
 function applyTheme(){
-  document.documentElement.removeAttribute('data-theme');
+  var t=S.theme||'auto';
+  if(t==='auto')document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme',t);
   paintChrome();
 }
 if(mq){if(mq.addEventListener)mq.addEventListener('change',paintChrome);else if(mq.addListener)mq.addListener(paintChrome)}
@@ -2997,7 +3017,7 @@ function weeklySectionHTML(week){
 var EV_SORTS=[['onerilen','Önerilen'],['tarih','Tarihe göre'],['fiyat','Fiyata göre (artan)'],['yeni','Yeni etkinlikler']];
 function evToday(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
 function evWeekEnd(){var d=new Date();d.setDate(d.getDate()+6);return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
-var EV_DATES=[['Tümü','Tüm tarihler'],['bugun','Bugün'],['yarin','Yarın'],['hafta','Bu hafta']];
+var EV_DATES=[['Tümü','Tüm tarihler'],['bugun','Bugün'],['yarin','Yarın'],['hafta','Bu hafta'],['haftasonu','Bu hafta sonu'],['ay','Bu ay']];
 function evDateMatch(e){
   var d=S.evDate;if(d==='Tümü')return true;
   var t=evToday(),y=new Date();y.setDate(y.getDate()+1);
@@ -3005,6 +3025,23 @@ function evDateMatch(e){
   if(d==='bugun')return e.date===t;
   if(d==='yarin')return e.date===yar;
   if(d==='hafta')return e.date>=t&&e.date<=evWeekEnd();
+  if(d==='haftasonu')return e.date>=t&&e.date<=evWeekendEnd()&&e.wd&&['Cmt','Paz'].indexOf(e.wd)>-1;
+  if(d==='ay')return e.date.slice(0,7)===t.slice(0,7);
+  return true;
+}
+/* Bu hafta sonu = bugünden itibaren ilk Pazar gününe kadar (Cmt/Paz). */
+function evWeekendEnd(){
+  var d=new Date(),add=(7-d.getDay())%7;d.setDate(d.getDate()+add);
+  return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+}
+var EV_PRICES=[['Tümü','Tüm fiyatlar'],['ucretsiz','Ücretsiz'],['0-500','500 ₺ altı'],['500-1000','500–1.000 ₺'],['1000+','1.000 ₺ üstü']];
+function evPriceMatch(e){
+  var f=S.evPrice;if(!f||f==='Tümü')return true;
+  var m=evMin(e);
+  if(f==='ucretsiz')return m<=0;
+  if(f==='0-500')return m>0&&m<=500;
+  if(f==='500-1000')return m>500&&m<=1000;
+  if(f==='1000+')return m>1000;
   return true;
 }
 function evMin(e){return Math.min.apply(null,e.prices.map(function(p){return p[1]}))}
@@ -3018,6 +3055,7 @@ function evFiltered(){
     if(S.evVenue!=='Tümü'&&e.venue!==S.evVenue)return false;
     if(S.district&&e.district!==S.district)return false;
     if(!evDateMatch(e))return false;
+    if(!evPriceMatch(e))return false;
     var q=norm(S.q).trim();
     if(q&&norm([e.title,e.venue,e.district,e.type].join(' ')).indexOf(q)<0)return false;
     return true;
@@ -3095,6 +3133,7 @@ function evFilterSheet(){
   var h='<div class="fsheet">';
   h+=row('Kategori',S.evCat,cats,'evcat');
   h+=row('Tarih',S.evDate,EV_DATES,'evdate');
+  h+=row('Fiyat',S.evPrice||'Tümü',EV_PRICES,'evprice');
   if(dists.length>1)h+=row('İlçe',S.district,dists,'evdistrict');
   h+=row('Sırala',S.evSort,EV_SORTS,'evsort');
   h+='<div class="fg"><h4>Mekan</h4><div class="fwrap">'+venues.map(function(it){
@@ -3206,6 +3245,18 @@ function sessionListHTML(e){
   }).join('');
   return h+'</div>';
 }
+/* Haritada açılacak sorgu: koordinat varsa onu, yoksa adres/mekan metnini kullanır. */
+function mapQuery(e){
+  if(!e)return '';
+  if(e.lat&&e.lng&&(Math.abs(e.lat)>0.001||Math.abs(e.lng)>0.001))return e.lat+','+e.lng;
+  var parts=[e.venue,e.district,e.city].filter(Boolean);
+  return parts.length?parts.join(', '):'';
+}
+function openMap(q){
+  if(!q)return;
+  var url='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+  window.open(url,'_blank','noopener');
+}
 function openDetail(id){
   var e=ALL[id];if(!e)return;
   var dist=(e.district&&e.district!==e.city)?e.district:(e.city||'');
@@ -3216,6 +3267,8 @@ function openDetail(id){
   cells+='<div class="dmcell wide">'+ic('pin')+'<span><small>Mekan</small><b>'+esc(e.venue)+'</b></span></div>';
   if(e.real&&e.address)cells+='<div class="dmcell wide">'+ic('compass')+'<span><small>Adres</small><b>'+esc(e.address)+'</b></span></div>';
   if(e.real)cells+=liveLine(e);
+  var mapQ=mapQuery(e);
+  if(mapQ)cells+='<div class="dmcell wide dmapcell"><button type="button" data-act="map" data-map="'+esc(mapQ)+'">'+ic('compass')+'Haritada aç · yol tarifi</button></div>';
   var meta='<div class="dmeta">'+cells+'</div>';
   var saved=(S.saved||[]).indexOf(e.id)>-1;
   var hero='<div class="dhero">'+photoFor(e)+'<svg class="art" aria-hidden="true"><use href="#'+e.art+'"/></svg><span class="scrim"></span>'+
@@ -3236,6 +3289,7 @@ function openDetail(id){
     if(e.real&&e.cheapest)note='En ucuz: '+esc(e.cheapest)+' · '+esc(srcs)+' karşılaştırıldı';
     body+='<div class="dprice"><b>'+esc(priceLabel(e))+'</b><small>'+note+'</small></div><div class="dacts">'+
      '<button class="btn" type="button" data-act="'+(e.real?'openbuy':'buy')+'">'+(e.real?'Bileti satın al':'Bilet al')+'</button>'+
+     '<button class="btn ghost" type="button" data-act="addevent">'+ic('calendar')+'Takvime ekle</button>'+
      (e.video?'<button class="btn ghost" type="button" data-act="watch">'+ic('play','f')+'Videoyu izle</button>':'')+
      '</div>';
   }
@@ -3760,6 +3814,11 @@ function addCal(id){
   var ok=download('genc-'+t.e.id+'.ics',icsText(t.e),'text/calendar');
   toast(ok?'Takvim dosyası indirildi.':'Takvim dosyası oluşturulamadı.');
 }
+function addCalEvent(e){
+  if(!e)return;
+  var ok=download('genc-'+e.id+'.ics',icsText(e),'text/calendar');
+  toast(ok?'Takvim dosyası indirildi.':'Takvim dosyası oluşturulamadı.');
+}
 function scanTicket(){
   openSheet('Bilet kodu sorgula','<div class="field"><label for="sc-code">Bilet kodu</label><input id="sc-code" type="text" placeholder="G-XXXXXX" autocapitalize="characters" autocomplete="off"></div><p class="hint" style="padding:0">Kod, biletin üzerindeki QR’ın altında yazar.</p><p class="err" id="sc-err" role="alert"></p><button class="cta" type="button" data-act="scango">Sorgula</button>',function(root){
     $('#sc-code',root).addEventListener('input',function(){this.value=this.value.toUpperCase()});
@@ -3916,6 +3975,10 @@ function editProfile(){
     return '<div class="cardrow" data-card="'+c.id+'"><button class="cmain" type="button" data-act="defcard" aria-label="Varsayılan yap: •••• '+c.last4+'"><span class="plastic" aria-hidden="true"></span><span class="txt"><strong>'+esc(c.brand||'Banka kartı')+'</strong><span>•••• '+c.last4+', son kullanma '+esc(c.exp)+'</span></span>'+(c.def?'<span class="def">Varsayılan</span>':'<span class="setdef">Varsayılan yap</span>')+'</button><button class="cdel" type="button" data-act="delcard" aria-label="Kartı sil: •••• '+c.last4+'">'+ic('close')+'</button></div>';
   }).join(''):'<div class="empty">Kayıtlı kartın yok.</div>';
   if(!window.GENC_APP)h+='<div class="installrow">'+ic('install')+'<span><strong>Android kurulum dosyası (APK)</strong><small>Genç’i telefonuna kur.</small></span><button type="button" data-act="getapk">İndir</button></div>';
+  h+='<div class="shsec"><h4 class="disp">Görünüm</h4></div>';
+  h+='<div class="tchips">'+[['auto','Otomatik'],['light','Açık'],['dark','Koyu']].map(function(t){
+    return '<button type="button" class="'+((S.theme||'auto')===t[0]?'on':'')+'" data-themeset="'+t[0]+'">'+t[1]+'</button>';
+  }).join('')+'</div>';
   h+='<button class="logout" type="button" data-act="logout">Çıkış yap</button>';
   h+='<p class="ver" id="app-ver">Genç sürüm '+APP_VERSION+(window.GENC_APP?' (uygulama)':' (tarayıcı)')+'</p>';
   openSheet('Hesap',h);
@@ -4049,6 +4112,8 @@ document.addEventListener('click',function(ev){
   if(evv){S.evVenue=evv.getAttribute('data-evvenue');S.evShow=12;refreshFilterSheet();return}
   var evdi=t.closest('[data-evdistrict]');
   if(evdi){S.district=evdi.getAttribute('data-evdistrict');S.evShow=12;refreshFilterSheet();return}
+  var evpr=t.closest('[data-evprice]');
+  if(evpr){S.evPrice=evpr.getAttribute('data-evprice');S.evShow=12;refreshFilterSheet();return}
   var evd=t.closest('[data-evdate]');
   if(evd){S.evDate=evd.getAttribute('data-evdate');S.evShow=12;refreshFilterSheet();return}
   var evs=t.closest('[data-evsort]');
@@ -4057,6 +4122,8 @@ document.addEventListener('click',function(ev){
   if(t.closest('[data-act="evcity"]')){evCitySheet();return}
   var evset=t.closest('[data-evsetcity]');
   if(evset){setCity(evset.getAttribute('data-evsetcity'));toast('İl: '+S.city);return}
+  var thset=t.closest('[data-themeset]');
+  if(thset){S.theme=thset.getAttribute('data-themeset');persist();applyTheme();editProfile();return}
   var sd=t.closest('[data-setdistrict]');
   if(sd){setDistrict(sd.getAttribute('data-setdistrict'));return}
   var rc=t.closest('[data-recent]');
@@ -4072,7 +4139,7 @@ document.addEventListener('click',function(ev){
   if(t.closest('[data-act="evmore"]')){S.evShow+=12;renderKesfet();return}
   var wk=t.closest('[data-wkday]');
   if(wk){WKSEL.d=wk.getAttribute('data-wkday');renderHome();var sec=$('#hlists');if(sec)sec.scrollIntoView({block:'nearest'});return}
-  if(t.closest('[data-act="evclear"]')){S.evCat='Tümü';S.evVenue='Tümü';S.district='';S.evDate='Tümü';S.evSort='onerilen';S.evShow=12;refreshFilterSheet();return}
+  if(t.closest('[data-act="evclear"]')){S.evCat='Tümü';S.evVenue='Tümü';S.district='';S.evDate='Tümü';S.evPrice='Tümü';S.evSort='onerilen';S.evShow=12;refreshFilterSheet();return}
   if(t.closest('[data-act="evapply"]')){closeSheet();renderKesfet();$('#kscroll').scrollTop=0;return}
   var cat=t.closest('[data-cat]');
   if(cat){
@@ -4130,6 +4197,8 @@ document.addEventListener('click',function(ev){
     case 'camsnap':camSnap();break;
     case 'camcancel':stopCam();closeSheet();break;
     case 'share':share(e||(tkid&&findTicket(tkid)&&findTicket(tkid).e));break;
+    case 'map':openMap(a.getAttribute('data-map'));break;
+    case 'addevent':addCalEvent(e);break;
     case 'save':
       if(e){
         var i=S.saved.indexOf(e.id);
@@ -4199,6 +4268,8 @@ function runShortcut(git){
   if(git==='yakin'){setTab('kesfet');if(!S.locOn)geoAsk();return}
   if(git==='ara'){setTab('kesfet');setTimeout(function(){var q=$('#q');if(q)q.focus()},120);return}
   if(git==='bilet-al'){var e=firstMissingEvent();if(e)openWeb(e);return}
+  if(git==='bildirimler'){setTab('profil');setTimeout(function(){notifySettings()},180);return}
+  if(git==='hoslandiklarim'){setTab('profil');setTimeout(function(){editLikes()},180);return}
   if(git==='hafta'){setTab('home');setTimeout(weeklyShareSheet,150);return}
   setTab('kesfet');
 }

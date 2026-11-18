@@ -104,6 +104,31 @@ def draw_spark(d):
     )
 
 
+def draw_bell(d):
+    """Bildirimler: çan."""
+    c = SIZE / 2
+    w = (SIZE - 2 * PAD) * 0.62
+    h = (SIZE - 2 * PAD) * 0.62
+    l, t = c - w / 2, c - h / 2
+    r, b = c + w / 2, c + h / 2
+    # Gövde: üstte yarım daire, yanlarda düz, altta düz taban.
+    d.pieslice([l, t, r, t + w], start=180, end=360, fill=brand.INK)
+    d.rectangle([l, t + w / 2, r, b - h * 0.18], fill=brand.INK)
+    # Taban kenarı ve tokmak.
+    d.rounded_rectangle([l - 8, b - h * 0.18 - 10, r + 8, b - h * 0.18 + 6], radius=8, fill=brand.INK)
+    d.ellipse([c - 13, b - h * 0.18 + 6, c + 13, b - h * 0.18 + 34], fill=brand.INK)
+
+
+def draw_heart(d):
+    """Hoşlandıklarım: kalp."""
+    c = SIZE / 2
+    r = (SIZE - 2 * PAD) * 0.30
+    top = c - r * 0.55
+    d.ellipse([c - 2 * r, top - r, c, top + r], fill=brand.INK)
+    d.ellipse([c, top - r, c + 2 * r, top + r], fill=brand.INK)
+    d.polygon([(c - 2 * r, top), (c + 2 * r, top), (c, c + r * 2.1)], fill=brand.INK)
+
+
 SHORTCUTS = {
     "shortcut-bilet-al": draw_ticket,
     "shortcut-videolar": draw_play,
@@ -112,6 +137,8 @@ SHORTCUTS = {
     "shortcut-yakin": draw_pin,
     "shortcut-profil": draw_user,
     "shortcut-hafta": draw_spark,
+    "shortcut-bildirimler": draw_bell,
+    "shortcut-hoslandiklarim": draw_heart,
 }
 
 
@@ -137,6 +164,8 @@ ANDROID_IDS = {
     "sc_biletlerim": "shortcut-biletlerim",
     "sc_profil": "shortcut-profil",
     "sc_videolar": "shortcut-videolar",
+    "sc_bildirimler": "shortcut-bildirimler",
+    "sc_hoslandiklarim": "shortcut-hoslandiklarim",
 }
 
 

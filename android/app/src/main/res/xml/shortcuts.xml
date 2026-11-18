@@ -1,42 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Statik kısayollar. Çoğu başlatıcı en fazla 4 kısayol gösterir (üst sınır ~5);
+  bu yüzden her uygulamada beklenen en değerli 5 tanesi sırayla tanımlanır:
+  Ara, Biletlerim, Bildirimler, Hoşlandıklarım, Profil. Alt menüde tek
+  dokunuşla açılan sekmeler bilinçli olarak kısayol değildir. Uygulamaya özgü
+  ek kısayollar (hafta, bilet-al, yakin) PWA manifestinde kalır.
+-->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <shortcut
-        android:shortcutId="hafta"
-        android:enabled="true"
-        android:icon="@drawable/sc_hafta"
-        android:shortcutShortLabel="@string/sc_hafta">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hafta" />
-    </shortcut>
-
-    <shortcut
-        android:shortcutId="bilet_al"
-        android:enabled="true"
-        android:icon="@drawable/sc_bilet_al"
-        android:shortcutShortLabel="@string/sc_bilet_al">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=bilet-al" />
-    </shortcut>
-
-    <shortcut
-        android:shortcutId="yakin"
-        android:enabled="true"
-        android:icon="@drawable/sc_yakin"
-        android:shortcutShortLabel="@string/sc_yakin">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=yakin" />
-    </shortcut>
-
 
     <shortcut
         android:shortcutId="ara"
@@ -60,6 +30,30 @@
             android:targetPackage="com.genc.app"
             android:targetClass="com.genc.app.MainActivity"
             android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=biletlerim" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="bildirimler"
+        android:enabled="true"
+        android:icon="@drawable/sc_bildirimler"
+        android:shortcutShortLabel="@string/sc_bildirimler">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=bildirimler" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="hoslandiklarim"
+        android:enabled="true"
+        android:icon="@drawable/sc_hoslandiklarim"
+        android:shortcutShortLabel="@string/sc_hoslandiklarim">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hoslandiklarim" />
     </shortcut>
 
     <shortcut

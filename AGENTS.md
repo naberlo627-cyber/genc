@@ -99,7 +99,8 @@ PWA dosyaları + geliştirme sunucusu.
   mürekkeptir. **Tek kaynak:** hem web simgelerini (`icons/shortcut-<id>.png`)
   hem Android yoğunluklarını (`res/drawable-<dpi>/sc_<id>.png`; mdpi 48 → xxxhdpi
   192) aynı çağrıda üretir; böylece ikonlar bir daha renk/tasarım açısından
-  ayrışmaz. Kısayol kimlikleri: `hafta, bilet-al, yakin, ara, biletlerim, profil`.
+  ayrışmaz. Kısayol kimlikleri: `ara, biletlerim, bildirimler, hoslandiklarim,
+  profil, hafta, bilet-al, yakin, videolar`.
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
   kare, daire ve uyarlanabilir ön katman üretir; ön katman zemin + monogram
   birlikte kremdir, monogram güvenli alan için `scale=0.6` ile küçültülür.
@@ -311,11 +312,21 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   alanına yazılır. Bir değişikliğin cihaza ulaşıp ulaşmadığını bu etiketle
   doğrulayın; etiket eskiyse kullanıcı önbellekteki eski derlemeyi görüyor.
 - Bilet QR yükü: `GENÇ|etkinlikId|kod|adet|tür|koltuklar` (EC seviyesi M).
-- Uygulama kısayolu derin bağlantıları: `?git=yakin|videolar|ara|biletlerim|profil|bilet-al|hafta`.
-  `git=hafta` ana sayfayı açar ve "Bu hafta ne var?" paylaşım görselini üretir.
-  `git` parametresi çalıştıktan sonra adres çubuğundan silinir (yenilemede tekrar
+- Uygulama kısayolu derin bağlantıları: `?git=yakin|videolar|ara|biletlerim|profil|bilet-al|hafta|bildirimler|hoslandiklarim`.
+  `git=hafta` ana sayfayı açar ve "Bu hafta ne var?" paylaşım görselini üretir;
+  `git=bildirimler` ve `git=hoslandiklarim` profil sekmesini açıp ilgili ayar
+  katmanını gösterir (kısayoldan tek dokunuşla erişim için). `git` parametresi
+  çalıştıktan sonra adres çubuğundan silinir (yenilemede tekrar
   tetiklenmesin). Kullanıcı giriş yapmamışsa kısayol `pendingShortcut` olarak
   saklanır ve onboarding bitince uygulanır.
+- Statik kısayol sayısı sınırlı: çoğu Android başlatıcısı en fazla 4 kısayol
+  gösterir (üst sınır ~5). Bu yüzden hem `manifest.json` hem
+  `res/xml/shortcuts.xml` aynı 5 kısayolu **aynı sırayla** tanımlar: `ara,
+  biletlerim, bildirimler, hoslandiklarim, profil`. Uygulamaya özgü ek
+  kısayollar (`hafta, bilet-al, yakin`) yalnızca PWA manifestinde kalır; yeni bir
+  kısayol eklerken listenin başına koyun ve `generate_shortcuts.py` içindeki
+  `SHORTCUTS`/`ANDROID_IDS` sözlüklerini, `strings.xml` etiketlerini ve
+  `sw.js` `ASSETS` listesini birlikte güncelleyin.
 - Paylaşılan bilet bağlantısı: `?bilet=KOD`.
 - Fotoğraf yükleme: avatara (profil fotoğrafı) dokununca açılan "Profil fotoğrafı"
   katmanı (`data-act="setphoto"` → `uploadSheet()`). Katman iki yol sunar:

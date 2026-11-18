@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Genç</string>
-    <string name="sc_bilet_al">Bilet al</string>
-    <string name="sc_hafta">Bu hafta ne var?</string>
-    <string name="sc_yakin">Çevremdekiler</string>
     <string name="sc_ara">Ara</string>
+    <string name="sc_bildirimler">Bildirimler</string>
+    <string name="sc_bilet_al">Bilet al</string>
     <string name="sc_biletlerim">Biletlerim</string>
+    <string name="sc_hafta">Bu hafta ne var?</string>
+    <string name="sc_hoslandiklarim">Hoşlandıklarım</string>
     <string name="sc_profil">Profilim</string>
+    <string name="sc_yakin">Çevremdekiler</string>
 </resources>

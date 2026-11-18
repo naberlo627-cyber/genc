@@ -42,45 +42,6 @@
   ],
   "shortcuts": [
     {
-      "name": "Bu hafta ne var?",
-      "short_name": "Bu hafta",
-      "description": "Haftanın etkinlik özetini paylaşılabilir görsel olarak hazırla",
-      "url": "./Genc.html?git=hafta",
-      "icons": [
-        {
-          "src": "icons/shortcut-hafta.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Bilet al",
-      "short_name": "Bilet al",
-      "description": "Yakındaki bir etkinlik için hemen bilet al",
-      "url": "./Genc.html?git=bilet-al",
-      "icons": [
-        {
-          "src": "icons/shortcut-bilet-al.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Çevremdekiler",
-      "short_name": "Çevrem",
-      "description": "Konumunu kullan, yakınındaki etkinlikleri gör",
-      "url": "./Genc.html?git=yakin",
-      "icons": [
-        {
-          "src": "icons/shortcut-yakin.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
       "name": "Etkinlik ara",
       "short_name": "Ara",
       "description": "Konser, sinema ve etkinlik ara",
@@ -101,6 +62,32 @@
       "icons": [
         {
           "src": "icons/shortcut-biletlerim.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Bildirimler",
+      "short_name": "Bildirimler",
+      "description": "Bilet hatırlatıcılarını ve bildirim ayarlarını aç",
+      "url": "./Genc.html?git=bildirimler",
+      "icons": [
+        {
+          "src": "icons/shortcut-bildirimler.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Hoşlandıklarım",
+      "short_name": "Hoşlandıklarım",
+      "description": "İlgi alanlarını seç, önerileri kişiselleştir",
+      "url": "./Genc.html?git=hoslandiklarim",
+      "icons": [
+        {
+          "src": "icons/shortcut-hoslandiklarim.png",
           "sizes": "192x192",
           "type": "image/png"
         }

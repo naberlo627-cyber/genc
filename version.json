@@ -1,6 +1,6 @@
 {
-  "version": "1.31",
-  "versionCode": 13100,
-  "notes": "Bildirimler geldi: bilet aldığın etkinlik yaklaşınca haber veriyoruz. Profil > Bildirimler'den açabilir, ne zaman önce hatırlatılacağını (15 dk–1 gün) seçebilirsin.",
+  "version": "1.33",
+  "versionCode": 13300,
+  "notes": "Yenilikler: Ana ekran kısayolları gözden geçirildi — Ara, Biletlerim, Bildirimler, Hoşlandıklarım ve Profil artık tek dokunuşla açılıyor. Bildirimler kısayolu bilet hatırlatıcı ayarlarını, Hoşlandıklarım ise ilgi alanı seçimini doğrudan gösterir. Önceki sürümden: etkinlik sayfasında 'Haritada aç · yol tarifi' ve 'Takvime ekle', filtrelerde fiyat aralığı ile yeni tarih seçenekleri (bu hafta sonu, bu ay) ve Profil > Hesap'tan görünüm teması (Otomatik, Açık, Koyu).",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
