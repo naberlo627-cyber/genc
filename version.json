@@ -1,6 +1,6 @@
 {
-  "version": "1.36",
-  "versionCode": 13600,
-  "notes": "Gizlilik: Profil'deki 'Aktif kullanıcılar' bölümü artık yalnızca anonim sayıyı gösterir; kullanıcı adları hiçbir yerde yayımlanmaz veya gösterilmez. Önceki sürümden: Keşfet ve Profil'deki tekrarlanan/boş bölümler kaldırıldı, 'Tükendi' rozeti tekilleştirildi, etkinlik başlık ve mekan adlarındaki görünmez karakterler temizlendi.",
+  "version": "1.37",
+  "versionCode": 13700,
+  "notes": "Görünüm: uygulama artık tek tema kullanıyor (açık). Koyu tema ve tema seçici kaldırıldı; cihaz koyu moddayken arayüz koyulaşmıyor. Ayrıca: Profil'deki 'Aktif kullanıcılar' bölümü yalnızca anonim sayıyı gösterir; kullanıcı adları hiçbir yerde yayımlanmaz.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Genc" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.Genc" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/brand_bg</item>
         <item name="android:statusBarColor">@color/brand_bg</item>
         <item name="android:navigationBarColor">@color/brand_bg</item>
+        <!-- Tek tema: açık. Cihaz koyu moddayken sistem/WebView koyulaştırmasın. -->
+        <item name="android:forceDarkAllowed">false</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 </resources>

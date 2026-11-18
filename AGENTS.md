@@ -373,10 +373,18 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   satıcı sayfası) geçmişe yazılır; geri tuşu önce katmanı kapatır, kök
   seviyede uygulamadan çıkar. Katmanı kod içinden kapatırken `closeTopLayer`
   çağrılır, yoksa fazladan geçmiş girdisi kalır.
+- **Tek tema: açık.** Uygulama yalnızca açık temayla çalışır; koyu tema ve
+  tema seçici (Otomatik/Açık/Koyu) kaldırılmıştır. `:root` değişkenleri açık
+  değerleri taşır, `prefers-color-scheme` ve `data-theme` kuralları yoktur.
+  Android tarafında `Theme.AppCompat.Light.NoActionBar` +
+  `forceDarkAllowed=false`, WebView'da `FORCE_DARK_OFF` /
+  `setAlgorithmicDarkeningAllowed(false)` ile cihaz koyu modu etkisiz kılınır.
+  Yalnızca video akışı sekmesi (kapalıyken) koyu zemin kullanır; o sekmede
+  çubuk `night` sınıfıyla koyulaşır.
 - Marka, ayrı bir kutu + simge değil, doğrudan **"genç" kelime markasıdır**
   (`#logo`, viewBox `0 0 881 316`). Harfler potrace ile vektörleştirilmiştir
   (kaynak: `tools/assets/logo_source.png` → `tools/assets/logo_paths.json`):
-  "G","e","n" `currentColor` (açık temada mürekkep, koyu temada krem), Türkçeye
+  "G","e","n" `currentColor` (açık zeminde mürekkep), Türkçeye
   özgü **"ç"** ise aksan rengiyle (`var(--logo-accent)`) boyanır — ismin içine
   gömülü tek marka izi (Amazon gülümsemesi / FedEx oku gibi). Uygulama ikonları
   için monogram `#gmono` (250x257 "G", koyu zemin üzerine krem).

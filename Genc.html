@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="light">
 <meta name="theme-color" content="#F7F0E6">
 <title>Genç</title>
 <!-- Google ile giriş için istemci kimliği. Boş bırakılırsa Google düğmesi bilgilendirme mesajı verir.
@@ -28,20 +28,6 @@
   --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
   --grad:linear-gradient(135deg,#E5402A 0%,#C5321F 100%);
   --logo-accent:#E5402A;color-scheme:light;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --ink:#F7F0E6;--on-ink:#14100D;--paper:#14100D;--card:#241F1A;
-  --brand:#FF6A4D;--on-brand:#1A0F0A;--sun:#F0A500;--coral:#FF6A4D;--coral-text:#FF8A70;--mute:#B5A895;--line:#3A322A;--sw-off:#8C8071;
-  --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
-  --grad:linear-gradient(135deg,#FF6A4D 0%,#D93A20 100%);
-  --logo-accent:#FF6A4D;color-scheme:dark;
-}}
-:root[data-theme="dark"]{
-  --ink:#F7F0E6;--on-ink:#14100D;--paper:#14100D;--card:#241F1A;
-  --brand:#FF6A4D;--on-brand:#1A0F0A;--sun:#F0A500;--coral:#FF6A4D;--coral-text:#FF8A70;--mute:#B5A895;--line:#3A322A;--sw-off:#8C8071;
-  --ad-bg:var(--card);--ad-line:var(--line);--ad-label-bg:var(--line);--ad-label-fg:var(--mute);--ad-cta:var(--brand);
-  --grad:linear-gradient(135deg,#FF6A4D 0%,#D93A20 100%);
-  --logo-accent:#FF6A4D;color-scheme:dark;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -117,9 +103,6 @@ svg.ic.f{fill:currentColor}
 .sw.sm{width:42px;height:25px;border-radius:13px}
 .sw.sm::after{width:19px;height:19px}
 .sw.sm[aria-checked="true"]::after{transform:translateX(17px)}
-.tchips{display:flex;gap:8px;padding:0 20px}
-.tchips button{flex:1;padding:10px 12px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-weight:700;font-size:14px;color:var(--ink);text-align:center}
-.tchips button.on{background:var(--grad);color:#fff;border-color:transparent}
 .nrow{display:flex;align-items:center;gap:12px;margin:8px 0;padding:13px 14px;border-radius:16px;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line)}
 .nrow.off{opacity:.6}
 .nrow>svg{width:22px;height:22px;color:var(--brand);flex:none}
@@ -1921,12 +1904,11 @@ var S={
   scrolls:{},
   recent:[],
   notify:{on:false,lead:60},
-  theme:'auto',
   version:''
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.36';
+var APP_VERSION='1.37';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -2019,7 +2001,7 @@ function getApk(){
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider,notify:S.notify,theme:S.theme}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider,notify:S.notify}))}catch(e){}
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
@@ -2043,7 +2025,6 @@ function restore(){
   if(typeof d.tab==='string'&&d.tab)S.tab=d.tab;
   if(d.scrolls&&typeof d.scrolls==='object')S.scrolls=d.scrolls;
   if(d.notify&&typeof d.notify==='object'){S.notify.on=!!d.notify.on;S.notify.lead=+d.notify.lead||60}
-  if(d.theme==='light'||d.theme==='dark'||d.theme==='auto')S.theme=d.theme;
   S.loggedIn=!!d.loggedIn;
 }
 
@@ -2804,20 +2785,14 @@ function enterMain(){
   loadActiveUsers(true);
 }
 
-/* ---------- tema (sistem + elle seçim) ---------- */
-var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
-function isDark(){var t=S.theme||'auto';if(t==='dark')return true;if(t==='light')return false;return !!(mq&&mq.matches)}
+/* ---------- görünüm ---------- */
+/* Uygulama tek tema kullanır: açık. Koyu tema desteği kaldırıldı; yalnızca
+   sekme çubuğu rengi (theme-color) güncel tutulur. */
 function paintChrome(){
-  var c=(S.tab==='videolar'&&!$('#main').hidden)?'#14100D':(isDark()?'#14100D':'#F7F0E6');
+  var c=(S.tab==='videolar'&&!$('#main').hidden)?'#14100D':'#F7F0E6';
   document.querySelector('meta[name=theme-color]').setAttribute('content',c);
 }
-function applyTheme(){
-  var t=S.theme||'auto';
-  if(t==='auto')document.documentElement.removeAttribute('data-theme');
-  else document.documentElement.setAttribute('data-theme',t);
-  paintChrome();
-}
-if(mq){if(mq.addEventListener)mq.addEventListener('change',paintChrome);else if(mq.addListener)mq.addListener(paintChrome)}
+function applyTheme(){paintChrome()}
 
 /* ---------- sekmeler ---------- */
 function goHome(){
@@ -2839,6 +2814,7 @@ function setTab(t,fromHistory){
     b.classList.toggle('on',on);
     if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');
   });
+  /* Video akışı koyu zeminde oynar; o sekmede çubuk ve vurgu koyu olur. */
   var night=(t==='videolar');
   $('#nav').classList.toggle('night',night);document.body.classList.toggle('night',night);
   $('#main').classList.toggle('dark-ui',night);
@@ -3995,10 +3971,6 @@ function editProfile(){
     return '<div class="cardrow" data-card="'+c.id+'"><button class="cmain" type="button" data-act="defcard" aria-label="Varsayılan yap: •••• '+c.last4+'"><span class="plastic" aria-hidden="true"></span><span class="txt"><strong>'+esc(c.brand||'Banka kartı')+'</strong><span>•••• '+c.last4+', son kullanma '+esc(c.exp)+'</span></span>'+(c.def?'<span class="def">Varsayılan</span>':'<span class="setdef">Varsayılan yap</span>')+'</button><button class="cdel" type="button" data-act="delcard" aria-label="Kartı sil: •••• '+c.last4+'">'+ic('close')+'</button></div>';
   }).join(''):'<div class="empty">Kayıtlı kartın yok.</div>';
   if(!window.GENC_APP)h+='<div class="installrow">'+ic('install')+'<span><strong>Android kurulum dosyası (APK)</strong><small>Genç’i telefonuna kur.</small></span><button type="button" data-act="getapk">İndir</button></div>';
-  h+='<div class="shsec"><h4 class="disp">Görünüm</h4></div>';
-  h+='<div class="tchips">'+[['auto','Otomatik'],['light','Açık'],['dark','Koyu']].map(function(t){
-    return '<button type="button" class="'+((S.theme||'auto')===t[0]?'on':'')+'" data-themeset="'+t[0]+'">'+t[1]+'</button>';
-  }).join('')+'</div>';
   h+='<button class="logout" type="button" data-act="logout">Çıkış yap</button>';
   h+='<p class="ver" id="app-ver">Genç sürüm '+APP_VERSION+(window.GENC_APP?' (uygulama)':' (tarayıcı)')+'</p>';
   openSheet('Hesap',h);
@@ -4142,8 +4114,6 @@ document.addEventListener('click',function(ev){
   if(t.closest('[data-act="evcity"]')){evCitySheet();return}
   var evset=t.closest('[data-evsetcity]');
   if(evset){setCity(evset.getAttribute('data-evsetcity'));toast('İl: '+S.city);return}
-  var thset=t.closest('[data-themeset]');
-  if(thset){S.theme=thset.getAttribute('data-themeset');persist();applyTheme();editProfile();return}
   var sd=t.closest('[data-setdistrict]');
   if(sd){setDistrict(sd.getAttribute('data-setdistrict'));return}
   var rc=t.closest('[data-recent]');

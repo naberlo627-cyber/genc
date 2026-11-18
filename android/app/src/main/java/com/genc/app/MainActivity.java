@@ -104,6 +104,13 @@ public class MainActivity extends AppCompatActivity {
         // Varlıklar APK içinde gömülü; WebView'ın eski sürümü önbellekten
         // göstermemesi için önbelleği kapat ve temizle.
         s.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        // Tek tema: açık. Cihaz koyu moddayken WebView içeriği koyulaştırmasın.
+        if (android.os.Build.VERSION.SDK_INT >= 29) {
+            s.setForceDark(WebSettings.FORCE_DARK_OFF);
+        }
+        if (android.os.Build.VERSION.SDK_INT >= 33) {
+            s.setAlgorithmicDarkeningAllowed(false);
+        }
         // Konum: WebView geolocation API'si varsayılan olarak kapalıdır.
         s.setGeolocationEnabled(true);
         web.clearCache(true);
