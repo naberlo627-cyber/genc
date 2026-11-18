@@ -615,9 +615,11 @@ Kaynak notları:
   (`.photo` / `img`) ve dekoratif SVG (`.art`). Fotoğraf yüklenirse SVG
   gizlenmelidir; yoksa SVG fotoğrafın üzerinde filigran gibi görünür.
 - Kural her konteynerde ayrı yazılır: `.poster .pic .photo~.art`,
-  `.wide .photo~.art`, `.dhero .photo~.art`, `.tk .tkpic .photo~.art` ve
-  `.evcard .evpic img~.art` (`display:none`). Yeni bir görsel konteyneri
-  eklerken bu kuralı da eklemek gerekir.
+  `.wide .photo~.art`, `.dhero .photo~.art`, `.tk .tkpic .photo~.art`,
+  `.wkfeat .photo~.art`, `.vcard .vpic .photo~.art`, `.wkrow .wp .photo~.art`
+  ve `.evcard .evpic img~.art` (`display:none`). Yeni bir görsel konteyneri
+  eklerken bu kuralı da eklemek gerekir; eksik kalırsa SVG fotoğrafın üzerine
+  filigran gibi biner ("Bu hafta"nın büyük kartında bir kez bu hata oluştu).
 - `evCard` görseli `<img>` etiketi kullanır (`onerror="this.remove()"`), bu
   yüzden seçici `img~.art`'tır; diğerleri `.photo` sınıfını kullanır.
 - Fotoğraf üzerindeki kategori rozeti (`.evcat`) görselin altına yerleştirilir

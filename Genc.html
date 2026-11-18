@@ -326,7 +326,7 @@ svg.ic.f{fill:currentColor}
 .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
 .poster .pic .photo,.wide .photo,.dhero .photo,.thumb .photo{z-index:0}
 .poster .pic .art,.wide .art,.dhero .art,.thumb .art{z-index:0}
-.poster .pic .photo~.art,.wide .photo~.art,.dhero .photo~.art{display:none}
+.poster .pic .photo~.art,.wide .photo~.art,.dhero .photo~.art,.wkfeat .photo~.art,.vcard .vpic .photo~.art{display:none}
 .livetag{position:absolute;left:8px;top:8px;background:rgba(229,64,42,.94);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:10px;z-index:3}
 .poster.soldout .pic{opacity:.55}
 .dline.live{display:flex;align-items:center;gap:8px;font-weight:700}
@@ -1908,7 +1908,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.37';
+var APP_VERSION='1.38';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
