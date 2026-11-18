@@ -1,6 +1,6 @@
 {
-  "version": "1.42",
-  "versionCode": 14200,
-  "notes": "Karanlık modda site artık krem/beyaz kalıyor (tarayıcının zorla karanlık teması kapatıldı). Profil sayfasından 'Bu hafta ne var?' kaldırıldı.",
+  "version": "1.43",
+  "versionCode": 14300,
+  "notes": "Konum seçimi kolaylaştı: il ve ilçe için arama kutusu, yanlarında etkinlik sayısı, mevcut il en başta. Aktif kullanıcı sayacı arayüzden kaldırıldı (sayaç arka planda çalışmaya devam ediyor).",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
