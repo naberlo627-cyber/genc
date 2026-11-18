@@ -69,11 +69,13 @@ PWA dosyaları + geliştirme sunucusu.
   boşlukları tek boşluğa indirir; `realToEvent` ve `fixDistrict` girişte
   uygular. Aynı temizlik `tools/collect_tickets.py` içindeki `clean_text()`
   ile veri toplama sırasında da yapılır.
-- **Aktif kullanıcı sayacı ve gizlilik.** Profil'de yalnızca anonim sayı
-  gösterilir ("N kişi Genç'i kullanıyor"); kullanıcı adları hiçbir yerde
-  yayımlanmaz veya gösterilmez. Sayaç `abacus.jasoncameron.dev` üzerinde
-  tutulur, cihaz başına bir kez artırılır (`genc.counted`). Ağ hatası olursa
-  bölüm sessizce gizlenir.
+- **Aktif kullanıcı sayacı ve gizlilik.** Sayaç arka planda çalışır ama
+  **arayüzde gösterilmez** (ana sayfa şeridi ve profil bölümü v1.43'te
+  kaldırıldı). `registerUser`/`loadActiveUsers`/`renderActiveUsers` ve
+  `abacus.jasoncameron.dev` sayacı korunur; `renderActiveUsers` artık yalnızca
+  artık kalmayan DOM hedeflerini arar, sayı `activeCache.count` içinde tutulur.
+  Kullanıcı adları hiçbir yerde yayımlanmaz veya gösterilmez. Cihaz başına bir
+  kez artırılır (`genc.counted`); ağ hatası olursa sessizce atlanır.
 - **Çok şehir.** Konum seçimi tüm Türkiye'yi kapsar: 81 il ve tüm ilçeler
   `TR_CITIES` / `TR_CITY_DISTRICTS` / `TR_CITY_COORDS` içinde gömülüdür (kaynak:
   TÜİK/adres kayıtlarından derlenen açık veri; elle güncellenmez). `cityList()`
@@ -82,8 +84,14 @@ PWA dosyaları + geliştirme sunucusu.
   (`nearestCity` konumdan tahmin eder, onboarding 2. adım ve `#locbtn` şehir
   sayfası ayarlar); Keşfet listesi seçili şehre göre süzülür. İstanbul
   Anadolu/Avrupa yakaları `İstanbul`'a normalize edilir. `districtsOf(city)`
-  önce verideki ilçeleri, sonra gömülü ilçe listesini birleştirir; `districtChips`
-  ilin tüm ilçelerini gösterir.
+  önce verideki ilçeleri, sonra gömülü ilçe listesini birleştirir.
+- **Konum seçim sayfası (`locSheetHTML`).** İl ve ilçe için arama kutusu
+  (`#ls-city-q` / `#ls-dist-q`, `bindPickerSearch` canlı süzer), çiplerde
+  etkinlik sayısı (`.cnt`), mevcut il en başta (`cityChips`), seçili çip `.on`.
+  `districtChips(q)`/`cityChips(q)` isteğe bağlı arama metni alır. İl seçince
+  (`setCity(city,keepSheet=true)`) sayfa kapanmaz, ilçe listesi yeni ile göre
+  tazelenir; şehir değiştir sayfası (`evCitySheet`) da arama kutusu kullanır.
+  Tıklama işleyicisi `#ls-cities` içindeki seçimi algılayıp `keepSheet` geçirir.
 - `manifest.json` — PWA manifest'i; `shortcuts` dizisi ana ekran kısayollarını
   tanımlar (`?git=...` derin bağlantıları).
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler
