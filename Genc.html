@@ -1752,14 +1752,30 @@ function applyRealData(payload){
    Ağ hatası hiçbir durumda uygulamayı durdurmaz: sessizce yedek veri kalır. */
 var DATA_CACHE='genc.data';
 /* Taze veri kaynağı: her gün Actions'ın güncellediği kopya. Site hangi adresten
-   açılırsa açılsın (pages.dev, github.io, APK) en yeni veri buradan çekilir;
-   böylece veri tazeliği yayın (deploy) adımından bağımsızdır. Aynı adresteysek
-   ikinci istek yapılmaz. CORS her iki tarafta da açıktır. */
-var DATA_MIRROR='https://naberlo627-cyber.github.io/genc/data/events.json';
+   açılırsa açılsın (pages.dev, surge, APK) en yeni veri bu adreslerden çekilir;
+   böylece veri tazeliği yayın (deploy) adımından bağımsızdır. Birden çok ayna
+   tutulur çünkü biri (ör. GitHub Pages özel alan adı) yanlış yapılandırılırsa
+   uygulama yine de taze veriye ulaşır. CORS tüm adreslerde açıktır. */
+var DATA_MIRRORS=[
+  'https://genc.pages.dev/data/events.json',
+  'https://genc.surge.sh/data/events.json',
+  'https://naberlo627-cyber.github.io/genc/data/events.json'
+];
 /* Sürüm bilgisi de uzaktan okunur. APK içinde REMOTE_BASE appassets'e düşer ve
    orada gömülü (hep aynı) version.json vardır; o yüzden güncelleme hiç görünmezdi.
    Aynı adresteysek kendi version.json'umuz kullanılır. */
-var VERSION_MIRROR='https://naberlo627-cyber.github.io/genc/version.json';
+var VERSION_MIRRORS=[
+  'https://genc.pages.dev/version.json',
+  'https://genc.surge.sh/version.json',
+  'https://naberlo627-cyber.github.io/genc/version.json'
+];
+/* Kendi adresimizle aynı olan aynaları at, yinelenenleri tekilleştir. */
+function mirrorUrls(list,own){
+  var out=[];
+  if(own&&!/^https:\/\/appassets\./.test(own))out.push(own);
+  list.forEach(function(u){if(u!==own&&out.indexOf(u)<0)out.push(u)});
+  return out;
+}
 function dataUrl(){return absUrl('data/events.json')}
 function cachedData(){
   try{var raw=localStorage.getItem(DATA_CACHE);if(!raw)return null;
@@ -1772,9 +1788,7 @@ function loadRemoteData(){
   if(!window.fetch)return;
   var own=dataUrl();
   /* APK içinde (appassets) gömülü data/ yoktur; boşuna istek atmayalım. */
-  var urls=[];
-  if(!/^https:\/\/appassets\./.test(own))urls.push(own);
-  if(DATA_MIRROR!==own)urls.push(DATA_MIRROR);
+  var urls=mirrorUrls(DATA_MIRRORS,own);
   if(!urls.length)return;
   /* İki kaynaktan en yeni veriyi seç: kendi adresimiz ve günlük güncellenen ayna. */
   Promise.all(urls.map(function(u){
@@ -1915,7 +1929,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.39';
+var APP_VERSION='1.40';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -1963,11 +1977,9 @@ function cmpVer(a,b){
 function checkUpdate(){
   if(!window.fetch)return;
   var own=updateUrl();
-  var urls=[];
   /* APK içinde gömülü version.json hep aynı kalır; uzak kaynağı da sor. */
-  if(!/^https:\/\/appassets\./.test(own))urls.push(own);
-  if(VERSION_MIRROR!==own)urls.push(VERSION_MIRROR);
-  if(!urls.length)urls.push(VERSION_MIRROR);
+  var urls=mirrorUrls(VERSION_MIRRORS,own);
+  if(!urls.length)urls.push(VERSION_MIRRORS[0]);
   Promise.all(urls.map(function(u){
     return fetch(u,{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).catch(function(){return null});
   })).then(function(res){

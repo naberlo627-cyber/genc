@@ -274,9 +274,18 @@ npx wrangler pages deploy dist --project-name=genc --branch=master --commit-dirt
 
 `wrangler.jsonc` Pages için `pages_build_output_dir: ./dist` tanımlar.
 
-Veri taze kalır çünkü uygulama açılışta **iki kaynaktan** (kendi adresi + GitHub
-aynası) veriyi çeker ve en yenisini seçer; günlük veri için yeniden yayın
-gerekmez. Yalnızca kod/HTML değişince yukarıdaki komutla yayınlanır.
+Veri taze kalır çünkü uygulama açılışta **birden çok kaynaktan** (kendi adresi +
+`DATA_MIRRORS` ayna listesi: pages.dev, surge, github.io) veriyi çeker ve en
+yenisini seçer; günlük veri için yeniden yayın gerekmez. Ayna listesi bilinçli
+olarak çokludur: biri yanlış yapılandırılırsa uygulama yine taze veriye ulaşır.
+Yalnızca kod/HTML değişince yukarıdaki komutla yayınlanır.
+
+**Dikkat (yaşanmış hata):** Depo kökündeki `CNAME` dosyası GitHub Pages'in özel
+alan adını belirler. Bir kez `gencapp.surge.sh` (ölü) yazıldığı için
+`naberlo627-cyber.github.io/genc/…` 404'e yönleniyordu ve APK'daki veri aynası
+sessizce kırılmıştı. Bu dosya artık **yoktur** (Pages özel alan adı da
+kaldırıldı). Surge kendi CNAME'ini yalnızca `dist/` içinde üretir
+(`tools/deploy_surge.sh`); depo kökünde CNAME **bulunmamalıdır**.
 
 `_headers` dosyası önbellek politikasını verir: `Genc.html`, `sw.js`,
 `version.json`, `data/events.json` tazelenir; `icons/`, `img/` önbellekte kalır.
