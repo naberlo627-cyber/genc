@@ -10,4 +10,17 @@
     <string name="sc_profil">Profilim</string>
     <string name="sc_salonlar">Salonlar</string>
     <string name="sc_yakin">Çevremdekiler</string>
+    <string name="sc_kaydedilenler">Kaydedilenler</string>
+    <string name="sc_kaydedilenler_long">Kaydedilen etkinlikler</string>
+    <string name="sc_ayarlar">Ayarlar</string>
+    <string name="sc_ayarlar_long">Uygulama ayarları</string>
+    <string name="sc_ara_long">Etkinlik ara</string>
+    <string name="sc_biletlerim_long">Aldığın biletler</string>
+    <string name="sc_yakin_long">Yakınımdaki etkinlikler</string>
+    <string name="sc_hafta_long">Bu hafta ne var?</string>
+    <string name="sc_salonlar_long">Salonların programı</string>
+    <string name="sc_bildirimler_long">Bildirim ayarları</string>
+    <string name="sc_profil_long">Profilim</string>
+    <string name="sc_hoslandiklarim_long">Hoşlandığın kategoriler</string>
+    <string name="sc_bilet_al_long">Sana yakın etkinliğe bilet al</string>
 </resources>

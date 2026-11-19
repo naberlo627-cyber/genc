@@ -3,6 +3,7 @@
 
 Her kısayol kendi glifini alır; Android ve masaüstü aynı ikonla tekrar etmez.
 """
+import math
 import os
 import sys
 
@@ -154,6 +155,31 @@ def draw_history(d):
     d.rounded_rectangle([c - 6, c - 6, c + r * 0.52, c + 8], radius=7, fill=brand.INK)
 
 
+def draw_bookmark(d):
+    """Kaydedilenler: kitap ayracı."""
+    c = SIZE / 2
+    w = (SIZE - 2 * PAD) * 0.56
+    h = (SIZE - 2 * PAD) * 0.80
+    l, t, r, b = c - w / 2, c - h / 2, c + w / 2, c + h / 2
+    notch = h * 0.24
+    d.polygon([(l, t), (r, t), (r, b), (c, b - notch), (l, b)], fill=brand.INK)
+
+
+def draw_gear(d):
+    """Ayarlar: dişli çark."""
+    c = SIZE / 2
+    r = (SIZE - 2 * PAD) * 0.36
+    teeth = 8
+    for i in range(teeth):
+        a = math.radians(i * 360 / teeth)
+        tw, th = r * 0.30, r * 1.28
+        x, y = c + math.cos(a) * th * 0.72, c + math.sin(a) * th * 0.72
+        d.regular_polygon((x, y, tw), 4, rotation=i * 45, fill=brand.INK)
+    d.ellipse([c - r, c - r, c + r, c + r], fill=brand.INK)
+    hr = r * 0.42
+    d.ellipse([c - hr, c - hr, c + hr, c + hr], fill=brand.CREAM)
+
+
 SHORTCUTS = {
     "shortcut-son": draw_history,
     "shortcut-bilet-al": draw_ticket,
@@ -166,6 +192,8 @@ SHORTCUTS = {
     "shortcut-bildirimler": draw_bell,
     "shortcut-hoslandiklarim": draw_heart,
     "shortcut-salonlar": draw_venue,
+    "shortcut-kaydedilenler": draw_bookmark,
+    "shortcut-ayarlar": draw_gear,
 }
 
 
@@ -195,6 +223,8 @@ ANDROID_IDS = {
     "sc_videolar": "shortcut-videolar",
     "sc_bildirimler": "shortcut-bildirimler",
     "sc_hoslandiklarim": "shortcut-hoslandiklarim",
+    "sc_kaydedilenler": "shortcut-kaydedilenler",
+    "sc_ayarlar": "shortcut-ayarlar",
 }
 
 

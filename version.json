@@ -1,6 +1,6 @@
 {
-  "version": "1.52",
-  "versionCode": 15200,
-  "notes": "Profil fotoğrafı düzeltildi: fotoğraf artık ayrı kaydediliyor, telefonun depolama alanı dolsa bile kaybolmuyor; yer yoksa uyarı gösteriliyor. Eski sürümün kullanılmayan etkinlik önbelleği (~1,5 MB) temizlendi, il önbellekleri en çok kullanılan 3 il ile sınırlandı. Uzun basma kısayolları doğrulandı: Ara, Biletlerim, Yakınımda, Bu hafta, Salonlar, Bildirimler, Profil, Hoşlandıklarım. Adres kopyalama yerinde.",
+  "version": "1.53",
+  "versionCode": 15300,
+  "notes": "Kısayollar tamamlandı: Kaydedilenler ve Ayarlar eklendi (artık 11 kısayol). Salon sayfasında adres ve tek dokunuşla kopyalama var; haritada aç düğmesi eklendi. Adres kutusu detay ve salon sayfalarında tam genişlikte, düzgün yükseklikte.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

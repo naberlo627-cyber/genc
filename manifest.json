@@ -157,6 +157,32 @@
           "type": "image/png"
         }
       ]
+    },
+    {
+      "name": "Kaydedilenler",
+      "short_name": "Kaydedilenler",
+      "description": "Yer imine aldığın etkinlikleri gör",
+      "url": "./Genc.html?git=kaydedilenler",
+      "icons": [
+        {
+          "src": "icons/shortcut-kaydedilenler.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Ayarlar",
+      "short_name": "Ayarlar",
+      "description": "Bildirim, konum ve veri ayarlarını aç",
+      "url": "./Genc.html?git=ayarlar",
+      "icons": [
+        {
+          "src": "icons/shortcut-ayarlar.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }
