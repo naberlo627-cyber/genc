@@ -668,25 +668,33 @@ svg.ic.f{fill:currentColor}
 .fsheet .fwrap button.on{background:var(--grad);color:#fff;border-color:transparent}
 .fsheet .frow{display:flex;gap:10px}
 .fsheet .frow .cta{flex:1}
-/* ---- konum seçimi: ferah tek liste (İl / İlçe sekmeli) ---- */
-.lpick{display:flex;flex-direction:column;gap:14px;padding-bottom:4px}
-.lnow{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:14px 16px;box-shadow:inset 0 0 0 1.5px var(--line)}
-.lnow .ic{color:var(--brand);width:20px;height:20px;flex:none}
-.lnow .lt{flex:1;min-width:0;font-size:16px;font-weight:800;line-height:1.3}
-.lnow small{display:block;font-weight:500;font-size:13px;color:var(--mute);margin-top:2px}
-.lseg{display:flex;gap:8px}
-.lseg button{flex:1;min-width:0;padding:11px 12px;border-radius:15px;border:0;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);text-align:left;line-height:1.25}
-.lseg button .k{display:block;font-size:11.5px;font-weight:800;color:var(--mute);text-transform:uppercase;letter-spacing:.07em}
-.lseg button .v{display:block;font-size:15.5px;font-weight:800;color:var(--ink);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lseg button.on{background:rgba(229,64,42,.08);box-shadow:inset 0 0 0 2px var(--brand)}
-.lseg button.on .v{color:var(--brand)}
-.lseg button.on .k{color:var(--brand)}
+/* ---- konum seçimi: adım adım (tek ekranda tek karar) ---- */
+.lstep{display:flex;flex-direction:column;gap:14px;padding-bottom:4px}
+/* büyük seçim kartları: "Konumumu kullan" / "İl seç" */
+.lbig{display:flex;align-items:center;gap:14px;width:100%;padding:18px 18px;border-radius:18px;border:0;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);text-align:left}
+.lbig .ic{width:24px;height:24px;color:var(--brand);flex:none}
+.lbig .bt{flex:1;min-width:0}
+.lbig b{display:block;font-size:16.5px;font-weight:800;color:var(--ink);line-height:1.3}
+.lbig small{display:block;font-size:13.5px;font-weight:500;color:var(--mute);margin-top:3px;line-height:1.4}
+.lbig .chev{width:20px;height:20px;color:var(--mute);flex:none}
+.lbig:active{background:rgba(0,0,0,.04)}
+.lbig.pri{background:var(--grad);box-shadow:none}
+.lbig.pri .ic,.lbig.pri .chev{color:#fff}
+.lbig.pri b{color:#fff}
+.lbig.pri small{color:rgba(255,255,255,.85)}
+/* "şu an" özeti */
+.lsum{display:flex;align-items:center;gap:12px;padding:0 2px}
+.lsum .ic{width:20px;height:20px;color:var(--brand);flex:none}
+.lsum span{flex:1;min-width:0;font-size:15px;font-weight:700;color:var(--ink)}
+.lsum span small{display:block;font-size:13px;font-weight:500;color:var(--mute);margin-top:2px}
+.lsum button{flex:none;border:0;background:none;color:var(--brand);font-size:14px;font-weight:800;padding:6px 2px}
+.lsec{font-size:12px;font-weight:800;color:var(--mute);text-transform:uppercase;letter-spacing:.07em;padding:0 2px}
 .lsearch{position:relative;display:flex;align-items:center}
 .lsearch svg{position:absolute;left:14px;width:19px;height:19px;color:var(--mute);pointer-events:none}
 .lsearch input{width:100%;height:50px;border-radius:15px;border:0;background:var(--card);padding:0 15px 0 42px;font-size:16px;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
 .lsearch input::placeholder{color:var(--mute);opacity:1}
 .lsearch input:focus{outline:0;box-shadow:0 0 0 3px var(--brand)}
-.llist{background:var(--card);border-radius:16px;box-shadow:inset 0 0 0 1.5px var(--line);max-height:48vh;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.llist{background:var(--card);border-radius:16px;box-shadow:inset 0 0 0 1.5px var(--line);overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
 .llist .lrow{display:flex;align-items:center;gap:12px;width:100%;padding:15px 16px;background:none;border:0;border-bottom:1px solid var(--line);font-size:16px;font-weight:600;color:var(--ink);text-align:left;line-height:1.3}
 .llist .lrow:last-child{border-bottom:0}
 .llist .lrow .nm{flex:1;min-width:0}
@@ -1188,7 +1196,7 @@ c0 270 4 528 10 574 18 157 97 269 238 335 61 29 76 32 163 31 88 0 103 -3
   <!-- alt sayfa -->
   <div class="ov" id="sheet" hidden>
     <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title">
-      <div class="sh-head"><h3 class="disp" id="sh-title"></h3><button class="x" id="sh-close" type="button" aria-label="Kapat"><svg class="ic"><use href="#i-close"/></svg></button></div>
+      <div class="sh-head"><button class="x" id="sh-back" type="button" aria-label="Geri" hidden><svg class="ic"><use href="#i-back"/></svg></button><h3 class="disp" id="sh-title"></h3><button class="x" id="sh-close" type="button" aria-label="Kapat"><svg class="ic"><use href="#i-close"/></svg></button></div>
       <div class="sh-body" id="sh-body"></div>
     </div>
   </div>
@@ -1858,11 +1866,9 @@ function setCity(city,keepSheet){
   if(S.tab==='salonlar')renderVenues();
   if(S.tab==='profil')renderProfile();
   if(keepSheet){
-    /* Konum sayfası açıkken il seçilirse: sayfa kapanmaz, il seçimi işaretlenir
-       ve ilçe sekmesine geçilir ki kullanıcı hemen ilçesini seçebilsin. */
-    LPICK.mode='district';
-    var q=$('#ls-q');if(q)q.value='';
-    paintRows('');renderLocSheet();
+    /* Konum sayfası açıkken il seçildi: ilçe adımına geç ki ekranda tek karar
+       kalsın; sayfa kapanmaz. */
+    locGoStep('district');
     return;
   }
   if(!$('#sheet').hidden)closeSheet();
@@ -1987,7 +1993,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.44';
+var APP_VERSION='1.45';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -2457,6 +2463,9 @@ var lastFocus=null,sheetT,camStream=null;
 function openSheet(title,body,mount){
   lastFocus=document.activeElement;
   $('#sh-title').textContent=title;$('#sh-body').innerHTML=body;
+  /* Geri butonu yalnızca adımlı sayfalarda görünür; her açılışta sıfırlanır. */
+  $('#sh-back').hidden=true;
+  delete $('#sheet').dataset.loc;
   var ov=$('#sheet');clearTimeout(sheetT);ov.hidden=false;
   requestAnimationFrame(function(){ov.classList.add('open')});
   if(mount)mount($('#sh-body'));
@@ -3296,70 +3305,87 @@ $('#q').addEventListener('input',function(){S.q=this.value;renderBrowse()});
 $('#q').addEventListener('change',function(){rememberSearch(this.value)});
 $('#q').addEventListener('keydown',function(ev){if(ev.key==='Enter'){ev.preventDefault();this.blur();rememberSearch(this.value)}});
 $('#locbtn').addEventListener('click',function(){openLocSheet()});
-/* Konum seçimi: tek liste, iki sekme (İl / İlçe). Kullanıcı önce ili seçer;
-   ilçe sekmesi o ilin ilçelerini gösterir. Çip yığını yerine dokunması kolay
-   satırlar kullanılır; her satırda etkinlik sayısı görünür. */
-var LPICK={mode:'city'};
+/* ---------- konum seçimi: adım adım ----------
+   Her ekranda tek karar var: önce "Konumumu kullan" ya da "İl seç",
+   sonra il listesi, sonra ilçe listesi. Hepsi tek ekrana doldurulmaz.
+   LPICK.step: 'start' | 'city' | 'district' */
+var LPICK={step:'start'};
 function openLocSheet(){
-  LPICK.mode='city';
+  LPICK.step='start';
   openSheet('Konum', locSheetHTML(), function(root){
-    $('#ls-sw',root).addEventListener('click',function(){
-      if(S.locOn){S.locOn=false;persist();$('#ls-sw').setAttribute('aria-checked','false');renderLocSheet();renderBrowse();return}
-      geoAsk(function(ok){if(ok)closeSheet()});
-    });
-    var seg=document.querySelectorAll('#ls-seg button');
-    [].forEach.call(seg,function(b){
-      b.addEventListener('click',function(){setPickerMode(b.getAttribute('data-mode'))});
-    });
-    var q=$('#ls-q',root);
-    if(q)q.addEventListener('input',function(){paintRows(this.value)});
-    paintRows('');renderLocSheet();
+    bindLocSheet(root);
   });
-}
-function setPickerMode(m){
-  LPICK.mode=m;
-  var q=$('#ls-q');
-  if(q){q.value='';q.placeholder=m==='city'?'İl ara':'İlçe ara'}
-  paintRows('');renderLocSheet();
+  $('#sheet').dataset.loc='1';
 }
 function locSheetHTML(){
-  return '<div class="lpick">'+
-    '<div class="lnow">'+ic('pin')+'<span class="lt" id="ls-now"></span>'+
-      '<button class="sw" id="ls-sw" type="button" role="switch" aria-checked="'+(S.locOn?'true':'false')+'" aria-label="Konumu kullan"></button></div>'+
-    '<button class="cta" type="button" data-act="geoloc">Konumumu kullan</button>'+
-    '<div class="lseg" id="ls-seg">'+
-      '<button type="button" data-mode="city"><span class="k">İl</span><span class="v" id="ls-seg-city"></span></button>'+
-      '<button type="button" data-mode="district"><span class="k">İlçe</span><span class="v" id="ls-seg-dist"></span></button>'+
-    '</div>'+
-    '<div class="lsearch">'+ic('search')+'<input type="search" id="ls-q" placeholder="İl ara" autocomplete="off" enterkeyhint="search"></div>'+
-    '<div class="llist" id="ls-rows"></div>'+
-    '<p class="lhint">Konumunu açmazsan seçtiğin ildeki etkinlikler gösterilir; ilçe seçersen yalnızca o ilçedekiler. Konumun yalnızca mesafe hesaplamak için cihazında kullanılır, sunucuya gönderilmez.</p>'+
+  if(LPICK.step==='city')return locCityStepHTML();
+  if(LPICK.step==='district')return locDistrictStepHTML();
+  return locStartStepHTML();
+}
+/* 1. adım: konumu kullan ya da il seç. */
+function locStartStepHTML(){
+  return '<div class="lstep">'+
+    '<div class="lsum">'+ic('pin')+'<span id="ls-now"></span></div>'+
+    '<button class="lbig pri" type="button" data-act="geoloc">'+ic('compass')+
+      '<span class="bt"><b>Konumumu kullan</b><small>Yakınındaki etkinlikler önce gösterilir</small></span>'+
+      ic('chev-r','chev')+'</button>'+
+    '<button class="lbig" type="button" data-act="loc-city-step">'+ic('pin')+
+      '<span class="bt"><b>İl seç</b><small>Listeden il ve ilçe seçerek daralt</small></span>'+
+      ic('chev-r','chev')+'</button>'+
+    (S.loc.geo?'<button class="lbig" type="button" data-act="loc-off">'+ic('close')+
+      '<span class="bt"><b>Konumu kapat</b><small>Seçtiğin il ve ilçe kullanılsın</small></span></button>':'')+
+    '<p class="lhint">Konumun yalnızca mesafe hesaplamak için cihazında kullanılır, sunucuya gönderilmez.</p>'+
   '</div>';
 }
-/* Sekme durumu, "şu an" satırı ve seçili değerler tazelenir. */
-function renderLocSheet(){
+/* 2. adım: il listesi (arama + tek liste). */
+function locCityStepHTML(){
+  return '<div class="lstep">'+
+    '<div class="lsearch">'+ic('search')+'<input type="search" id="ls-q" placeholder="İl ara" autocomplete="off" enterkeyhint="search"></div>'+
+    '<div class="llist" id="ls-rows" style="max-height:58vh">'+cityRows('')+'</div>'+
+    '<p class="lhint">İl seçtikten sonra ilçe listesi açılır; istersen "Tüm ilçeler" ile il genelinde kalabilirsin.</p>'+
+  '</div>';
+}
+/* 3. adım: ilçe listesi (seçili ilin ilçeleri). */
+function locDistrictStepHTML(){
+  return '<div class="lstep">'+
+    '<div class="lsearch">'+ic('search')+'<input type="search" id="ls-q" placeholder="İlçe ara" autocomplete="off" enterkeyhint="search"></div>'+
+    '<div class="llist" id="ls-rows" style="max-height:58vh">'+districtRows('')+'</div>'+
+    '<p class="lhint">İlçe seçersen yalnızca o ilçedeki etkinlikler gösterilir.</p>'+
+  '</div>';
+}
+function bindLocSheet(root){
+  var q=$('#ls-q',root);
+  if(q)q.addEventListener('input',function(){paintRows(this.value)});
+  paintSummary();
+}
+/* Başlık, geri butonu ve özet satırı adıma göre ayarlanır. */
+function paintSummary(){
+  var titles={start:'Konum',city:'İl seç',district:'İlçe seç'};
+  $('#sh-title').textContent=titles[LPICK.step]||'Konum';
+  var back=$('#sh-back');
+  back.hidden=LPICK.step==='start';
   var now=$('#ls-now');
   if(now){
-    now.innerHTML=esc(S.city)+(S.district?' · '+esc(S.district):'')+
-      '<small>'+(S.locOn&&S.loc.geo?'Konumun kullanılıyor, yakındakiler önce':'Etkinlikler bu bölgeden gösterilir')+'</small>';
+    var bolge=S.city+(S.district?' · '+S.district:'');
+    now.innerHTML=esc(bolge)+
+      '<small>'+(S.loc.geo?'Konumun kullanılıyor, yakındakiler önce':'Seçtiğin bölgedeki etkinlikler gösteriliyor')+'</small>';
   }
-  var sc=$('#ls-seg-city'),sd=$('#ls-seg-dist');
-  if(sc)sc.textContent=S.city||'Seç';
-  if(sd)sd.textContent=S.district||'Tümü';
-  var seg=document.querySelectorAll('#ls-seg button');
-  [].forEach.call(seg,function(b){
-    var on=b.getAttribute('data-mode')===LPICK.mode;
-    b.classList.toggle('on',on);
-    b.setAttribute('aria-pressed',on?'true':'false');
-  });
-  var q=$('#ls-q');
-  if(q)q.placeholder=LPICK.mode==='city'?'İl ara':'İlçe ara';
 }
 function paintRows(q){
   var b=$('#ls-rows');if(!b)return;
-  b.innerHTML=LPICK.mode==='city'?cityRows(q):districtRows(q);
+  b.innerHTML=LPICK.step==='city'?cityRows(q):districtRows(q);
   b.scrollTop=0;
 }
+/* Adım değiştirir; sayfa yeniden kurulur ki ekranda tek karar kalsın. */
+function locGoStep(step){
+  LPICK.step=step;
+  $('#sh-body').innerHTML=locSheetHTML();
+  bindLocSheet($('#sh-body'));
+}
+$('#sh-back').addEventListener('click',function(){
+  if(LPICK.step==='district')locGoStep('city');
+  else if(LPICK.step==='city')locGoStep('start');
+});
 /* İl satırları: arama metnine göre süzülür; etkinliği olan iller başta. */
 function cityRows(q){
   var needle=norm(q||'');
@@ -4312,9 +4338,9 @@ document.addEventListener('click',function(ev){
   if(t.closest('[data-act="evcity"]')){evCitySheet();return}
   var evset=t.closest('[data-evsetcity]');
   if(evset){
-    /* Konum sayfasındaki il listesinden seçim yapıldıysa sayfa kapanmaz;
-       ilçe sekmesine geçilir. Şehir değiştir sayfasında ise kapanır. */
-    var inLoc=!!t.closest('#ls-rows');
+    /* İl seçildi: konum sayfasındaysa ilçe adımına geç (tek ekranda tek karar),
+       şehir değiştir sayfasındaysa kapat. */
+    var inLoc=!!t.closest('#ls-rows')&&$('#sheet').dataset.loc==='1';
     setCity(evset.getAttribute('data-evsetcity'),inLoc);
     if(!inLoc)toast('İl: '+S.city);
     return;
@@ -4352,6 +4378,19 @@ document.addEventListener('click',function(ev){
   var ven=t.closest('[data-venue]');
   if(ven){S.q=ven.getAttribute('data-venue');$('#q').value=S.q;setChip('Tümü');renderBrowse();setTab('kesfet');$('#kscroll').scrollTop=0;return}
   if(t.closest('[data-act="geoloc"]')){geoAsk(function(ok){if(ok)closeSheet()});return}
+  if(t.closest('[data-act="loc-city-step"]')){locGoStep('city');return}
+  if(t.closest('[data-act="loc-off"]')){
+    /* GPS konumu bırakılır; seçili il/ilçe merkezi referans olur. */
+    S.locOn=false;
+    var cc=TR_CITY_COORDS[S.city]||IZMIR;
+    S.loc={d:S.city,lat:cc[0],lng:cc[1]};
+    persist();
+    renderBrowse();
+    if(S.tab==='salonlar')renderVenues();
+    locGoStep('start');
+    toast('Konum kapatıldı, seçtiğin il kullanılıyor.');
+    return;
+  }
   var tab=t.closest('[data-tab]');
   if(tab){
     var tb=tab.getAttribute('data-tab');

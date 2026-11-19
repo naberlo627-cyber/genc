@@ -85,23 +85,28 @@ PWA dosyaları + geliştirme sunucusu.
   sayfası ayarlar); Keşfet listesi seçili şehre göre süzülür. İstanbul
   Anadolu/Avrupa yakaları `İstanbul`'a normalize edilir. `districtsOf(city)`
   önce verideki ilçeleri, sonra gömülü ilçe listesini birleştirir.
-- **Konum seçim sayfası (`locSheetHTML`).** Tek ferah liste + iki sekme:
-  İl / İlçe (`#ls-seg`, `LPICK.mode`, `setPickerMode`). Sekme butonlarında
-  seçili değer yazar (`#ls-seg-city` / `#ls-seg-dist`); tek arama kutusu
-  (`#ls-q`) aktif sekmeye göre süzer. Satırlar `.lrow` — 56px yüksek, 16px
-  yazı, sağda etkinlik sayısı (`.n`) ve seçili olanda onay simgesi; il/ilçe
-  listesi tek sütun ve `max-height:48vh` ile kayar (`#ls-rows`). Etkinliği olan
-  il/ilçe başta, sonra alfabetik (`cityRows` / `districtRows`). İl seçince
-  (`setCity(city,keepSheet=true)`) sayfa kapanmaz, otomatik ilçe sekmesine
-  geçer; ilçe seçince (`setDistrict`) sayfa kapanır ve `toast` bilgi verir.
-  Tıklama işleyicisi `#ls-rows` içindeki il seçimini algılayıp `keepSheet`
-  geçirir. Şehir değiştir sayfası (`evCitySheet`) de aynı `cityRows`'u kullanır.
+- **Konum seçim sayfası (`locSheetHTML`) — adım adım.** Her ekranda tek karar
+  var, hepsi tek sayfaya doldurulmaz. `LPICK.step` üç değer alır:
+  `start` (özet + "Konumumu kullan" + "İl seç"), `city` (81 il listesi),
+  `district` (seçili ilin ilçeleri). Başlık adıma göre "Konum / İl seç /
+  İlçe seç" olur; `#sh-back` yalnızca `city` ve `district` adımlarında görünür
+  (`locGoStep`). Her adımda tek arama kutusu (`#ls-q`) aktif listeyi süzer.
+  Satırlar `.lrow`: 56px yüksek, 16px yazı, sağda etkinlik sayısı (`.n`),
+  seçilide onay simgesi; liste `.llist` içinde `max-height:58vh` ile kayar.
+  Etkinliği olan il/ilçe başta, sonra alfabetik (`cityRows` / `districtRows`).
+  İl seçince (`setCity(city,keepSheet=true)`) sayfa kapanmaz, ilçe adımına
+  geçer; ilçe seçince (`setDistrict`) kapanır ve `toast` bilgi verir. Sayfanın
+  konum sayfası olduğu `#sheet` üzerindeki `data-loc="1"` ile işaretlenir;
+  `openSheet` her açılışta bunu temizler. Şehir değiştir sayfası
+  (`evCitySheet`) aynı `cityRows`'u tek adım olarak kullanır.
 - **İlçe süzgeci.** `S.district` seçili ilçeyi tutar; `matches()` ilçeyi de
   denetler, böylece Ana Sayfa ve Keşfet listeleri ilçeye göre süzülür
   (`evFiltered()` ayrıca kendi süzgecini uygular). Konum şeridi
   (`#locname`) `locCityLabel()` ile "İlçe · İl" gösterir (aynı ad iki kez
   yazılmaz). Konum cihazdan alınmadıysa `setDistrict` referans noktasını
   ilçenin etkinlik merkezine taşır, böylece mesafe etiketleri anlamlı kalır.
+  "Konumu kapat" (`data-act="loc-off"`) yalnızca GPS alınmışsa görünür; GPS
+  bırakılır ve seçili il merkezi referans olur.
 - `manifest.json` — PWA manifest'i; `shortcuts` dizisi ana ekran kısayollarını
   tanımlar (`?git=...` derin bağlantıları).
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler
