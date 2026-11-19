@@ -1,6 +1,6 @@
 {
-  "version": "1.53",
-  "versionCode": 15300,
-  "notes": "Kısayollar tamamlandı: Kaydedilenler ve Ayarlar eklendi (artık 11 kısayol). Salon sayfasında adres ve tek dokunuşla kopyalama var; haritada aç düğmesi eklendi. Adres kutusu detay ve salon sayfalarında tam genişlikte, düzgün yükseklikte.",
+  "version": "1.54",
+  "versionCode": 15400,
+  "notes": "Etkinlikler artık kendi kendine tazeleniyor: uygulama öne geldiğinde ve 3 saatte bir veri sessizce yenilenir. 'Etkinlikleri şimdi yenile' sayfayı yeniden yüklemez; yerinde günceller. Kısayollar 11 tane (Kaydedilenler, Ayarlar eklendi). Salon sayfasında adres ve kopyalama var.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

@@ -2339,7 +2339,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.53';
+var APP_VERSION='1.54';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -4967,9 +4967,18 @@ document.addEventListener('click',function(ev){
       }else toast('Kopyalama bu tarayıcıda desteklenmiyor.');
       break;
     case 'refreshdata':
-      /* Kullanıcıya gerçek bir yenileme sunulur: sayfa veriyi yeniden çeker. */
+      /* Sayfa yenilemek yerine yalnızca veri çekilir: APK'da location.reload()
+         uygulamayı baştan başlatıyor ve kullanıcı açtığı yeri kaybediyordu. */
       toast('Etkinlikler yenileniyor…');
-      setTimeout(function(){location.reload()},400);
+      lastDataSync=0;
+      var oncekiVeri=(GENC_ACTIVE&&GENC_ACTIVE.generated_at)||'';
+      fetchCityData(S.city).then(function(d){
+        if(!d||!d.events||!d.events.length){toast('Şu an yenilenemedi, bağlantını kontrol et.');return}
+        rememberData(S.city,d);
+        var degisti=!!d.generated_at&&d.generated_at!==oncekiVeri;
+        if(applyRealData(d))renderAll();
+        toast(degisti?'Etkinlikler güncellendi.':'Etkinlikler zaten güncel.');
+      }).catch(function(){toast('Şu an yenilenemedi, bağlantını kontrol et.');});
       break;
     case 'notifytoggle':toggleNotifyAll();break;
     case 'setlead':setNotifyLead(+a.getAttribute('data-lead'));break;
@@ -5101,6 +5110,28 @@ function applyDeepLink(){
   return false;
 }
 
+/* Veri tazeleme: sunucu verisi günde iki kez yenilenir (veri-yenileme.yml).
+   Uygulama günlerce açık kalabildiği için (PWA/APK arka planda durur) yalnızca
+   açılışta çekmek yetmiyor: kullanıcı eski listeyi görüyordu. Öne gelince ve
+   en az DATA_TTL_MS geçtiyse seçili il sessizce tazelenir. */
+var DATA_TTL_MS=3*60*60*1000;
+var lastDataSync=0;
+function dataSyncDue(){
+  if(!navigator.onLine)return false;
+  return Date.now()-lastDataSync>DATA_TTL_MS;
+}
+function syncDataIfStale(){
+  if(!dataSyncDue())return;
+  lastDataSync=Date.now();
+  loadCityIndex();
+  loadCity(S.city,true);
+}
+document.addEventListener('visibilitychange',function(){
+  if(!document.hidden)syncDataIfStale();
+});
+window.addEventListener('online',syncDataIfStale);
+/* Aralık: uygulama önde açıkken de tazelensin (3 saatte bir). */
+setInterval(syncDataIfStale,DATA_TTL_MS);
 /* ---------- çevrimdışı destek ---------- */
 if('serviceWorker' in navigator){
   window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
@@ -5152,6 +5183,7 @@ applyRealData();
 renderAll();
 loadCityIndex();
 loadCity(S.city);
+lastDataSync=Date.now();
 /* Açılışta bir kez yeni sürüm var mı diye sor (ağ yoksa sessizce geç). */
 setTimeout(checkUpdate,1500);
 /* Canlı durumu çek ve dakikada bir tazele (hata olsa da uygulama çalışır). */
