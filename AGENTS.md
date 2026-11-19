@@ -905,3 +905,31 @@ cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
 - `build_payload.py` il dosyalarını `data/tickets.json`'dan yeniden ürettiği
   için düzeltme hem il dosyalarına hem kaynağa yazılır.
 - Doğrulama: `data/cities/*.json` içinde geçersiz ilçe adı 0 olmalı.
+
+### Depolama kotası (localStorage)
+- Android WebView'de localStorage kotası 2 MB'a kadar düşebilir. Etkinlik
+  önbellekleri (`genc.data:<il>`) il başına 0,4–1,5 MB tuttuğu için kota
+  kolayca dolar.
+- Bu yüzden **profil fotoğrafı ayrı anahtarda** (`genc.photo`) tutulur ve
+  `savePhoto()` ile yazılır. Fotoğraf `genc.v1` durum kaydının içine
+  konmamalıdır: kota dolduğunda `persist()` sessizce başarısız olur, kullanıcı
+  "güncellendi" mesajı görür ama fotoğraf kaybolur (v1.51'e kadar olan hata).
+- `pruneDataCache()` açılışta ve her veri yazımında çalışır: kullanılmayan
+  `genc.data` anahtarını siler, il önbelleklerini `CACHE_KEEP` (3) ile sınırlar.
+- `savePhoto()` sırayla dener: doğrudan yaz → `pruneDataCache()` → tüm veri
+  önbelleklerini boşalt. Hepsi başarısızsa `false` döner ve kullanıcıya
+  "yer kalmadı" uyarısı gösterilir. **Sessiz kayıp kabul edilmez.**
+- Doğrulama: gerçek dosya seçici ile fotoğraf yükle, sayfayı yenile,
+  `localStorage.getItem('genc.photo')` dolu kalmalı.
+
+### Kısayollar (manifest + Android)
+- 9 kısayol: `ara, biletlerim, yakin, hafta, salonlar, bildirimler, profil,
+  hoslandiklarim, bilet-al`. Hepsi `?git=<ad>` ile açılır; `runShortcut()`
+  yönlendirir. Kısayollar **yalnızca giriş yapılmışsa** çalışır (giriş
+  ekranında bekler), bu yüzden test ederken oturum storage state ile önceden
+  kurulmalı.
+- PWA ikonları `icons/shortcut-*.png`, Android ikonları
+  `res/drawable-*/sc_*.png` + `res/values/strings.xml` (`sc_*`) ve
+  `res/xml/shortcuts.xml`. Yeni kısayol eklerken üçü de güncellenmeli.
+- Etkinlik detayında "Adresi kopyala" düğmesi vardır
+  (`data-act="copyaddr"`, yalnızca `e.real && e.address` dolu ise görünür).
