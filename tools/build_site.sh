@@ -13,9 +13,18 @@ mkdir -p "$OUT"
 for f in Genc.html index.html manifest.json sw.js version.json _headers; do
   [ -f "$ROOT/$f" ] && cp "$ROOT/$f" "$OUT/"
 done
-for d in data icons img; do
+for d in icons img; do
   [ -d "$ROOT/$d" ] && cp -r "$ROOT/$d" "$OUT/"
 done
+# Veri: uygulama il başına data/cities/<il>.json ve data/index.json okur.
+# data/tickets.json (27 MB) yalnızca veri boru hattının ara dosyasıdır; yayına
+# girmez çünkü Cloudflare Pages tek dosya için 25 MiB sınırı koyuyor.
+mkdir -p "$OUT/data"
+for f in "$ROOT"/data/*.json; do
+  case "$(basename "$f")" in tickets.json|events.json) continue;; esac
+  cp "$f" "$OUT/data/"
+done
+[ -d "$ROOT/data/cities" ] && cp -r "$ROOT/data/cities" "$OUT/data/"
 # APK da yayına girer: bazı ağlarda GitHub indirme sunucusu engelli olduğundan
 # uygulama kurulum dosyası site üzerinden de erişilebilir kalmalı.
 if [ -f "$ROOT/indir/Genc.apk" ]; then
