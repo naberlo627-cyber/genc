@@ -1897,6 +1897,28 @@ function cachedData(city){
 }
 function rememberData(city,d){
   try{localStorage.setItem(cacheKey(city),JSON.stringify(d))}catch(e){}
+  pruneDataCache();
+}
+/* Kota temizliği: eski sürümün tek dosyalık "genc.data" anahtarı artık
+   kullanılmıyor ama silinmediği için kalıcı olarak yer kaplıyordu (İstanbul
+   önbelleği tek başına ~1,5 MB). Ayrıca il önbellekleri sınırsız birikiyordu;
+   en çok kullanılan birkaç il dışındakiler atılır. Bu temizlik yapılmazsa
+   fotoğraf kaydı gibi yazmalar sessizce kota hatasına düşüyordu. */
+var CACHE_KEEP=3;
+function pruneDataCache(){
+  try{
+    localStorage.removeItem(DATA_CACHE);
+    var keys=[],i,k;
+    for(i=0;i<localStorage.length;i++){
+      k=localStorage.key(i);
+      if(k&&k.indexOf(DATA_CACHE+':')===0)keys.push(k);
+    }
+    if(keys.length<=CACHE_KEEP)return;
+    /* Son kullanılan il önce yazılır (kendi anahtarı en son eklenir). */
+    var cur=cacheKey(S.city);
+    keys.sort(function(a,b){return a===cur?-1:b===cur?1:0});
+    keys.slice(CACHE_KEEP).forEach(function(x){localStorage.removeItem(x)});
+  }catch(e){}
 }
 /* Bir ilin verisini getirir: ilk başarılı yanıt kazanır. Kendi adresimiz
    önce denenir; aynalar yalnızca o başarısız olursa devreye girer (böylece
@@ -2301,7 +2323,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.51';
+var APP_VERSION='1.52';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -2391,14 +2413,42 @@ function getApk(){
 
 /* ---------- kalıcılık (uygulama kapanınca veriler kalır) ---------- */
 var STORE='genc.v1';
+/* Fotoğraf ayrı anahtarda tutulur: durum kaydı (genc.v1) etkinlik önbelleğiyle
+   birlikte kota sınırına dayanabiliyor ve o durumda tüm kayıt sessizce
+   düşüyordu. Ayrı anahtar, fotoğrafın durum kaydından bağımsız yazılmasını
+   sağlar. */
+var PHOTO_KEY='genc.photo';
+function savePhoto(data){
+  try{localStorage.setItem(PHOTO_KEY,data);return true}catch(e){}
+  /* Kota doldu: sırayla daha agresif temizlik. Fotoğraf kullanıcının kendi
+     seçimi, etkinlik önbelleği ise ağdan yeniden gelir; önce önbellek gider. */
+  pruneDataCache();
+  try{localStorage.setItem(PHOTO_KEY,data);return true}catch(e){}
+  try{
+    var keys=[],i,k;
+    for(i=0;i<localStorage.length;i++){
+      k=localStorage.key(i);
+      if(k&&k.indexOf(DATA_CACHE)===0)keys.push(k);
+    }
+    keys.forEach(function(x){localStorage.removeItem(x)});
+  }catch(e){}
+  try{localStorage.setItem(PHOTO_KEY,data);return true}catch(e){}
+  return false;
+}
+function loadPhoto(){
+  try{return localStorage.getItem(PHOTO_KEY)||''}catch(e){return ''}
+}
 function persist(){
-  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,photo:S.photo,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider,notify:S.notify}))}catch(e){}
+  try{localStorage.setItem(STORE,JSON.stringify({name:S.name,email:S.email,phone:S.phone,guest:S.guest,likes:S.likes,loc:S.loc.d,locLat:S.loc.lat,locLng:S.loc.lng,locGeo:!!S.loc.geo,locOn:S.locOn,city:S.city,district:S.district,cards:S.cards,tickets:S.tickets,saved:S.saved,loggedIn:S.loggedIn,recent:S.recent,version:S.version,tab:S.tab,scrolls:S.scrolls,acctId:S.acctId,provider:S.provider,notify:S.notify}))}
+  catch(e){return false}
+  return true;
 }
 function restore(){
   var d;try{d=JSON.parse(localStorage.getItem(STORE)||'null')}catch(e){d=null}
   if(!d)return;
   ['name','email','phone'].forEach(function(k){if(typeof d[k]==='string')S[k]=d[k]});
-  if(typeof d.photo==='string')S.photo=d.photo;
+  if(typeof d.photo==='string'&&d.photo)S.photo=d.photo;
+  var savedPhoto=loadPhoto();if(savedPhoto)S.photo=savedPhoto;
   if(typeof d.version==='string')S.version=d.version;
   if(typeof d.acctId==='string')S.acctId=d.acctId;
   if(typeof d.provider==='string')S.provider=d.provider;
@@ -2962,7 +3012,7 @@ function doLogin(email,pass){
 function applyAccount(a,isNew){
   S.acctId=a.id;S.provider=a.provider||'email';S.guest=false;
   S.name=a.name||S.name;S.email=a.email||S.email;
-  if(a.photo)S.photo=a.photo;
+  if(a.photo){S.photo=a.photo;savePhoto(a.photo)}
   persist();
   registerUser(S.name);
   if(isNew){
@@ -4493,12 +4543,19 @@ function upSend(files,makeAvatar){
     if(f.size>10*1024*1024){if(er)er.textContent='“'+f.name+'” 10 MB sınırını aşıyor.';upRow(f.name,'err');return}
     var row=upRow(f.name,'wait');
     cropSquare(f).then(function(data){
-      row.className='up-ok';$('.us',row).textContent='hazır';
       if(makeAvatar||(!made&&i===0)){
-        made=true;S.photo=data;persist();paintAvatars();
+        made=true;
+        if(!savePhoto(data)){
+          row.className='up-err';$('.us',row).textContent='yer yok';
+          if(er)er.textContent='Telefonda yer kalmadı. Uygulamayı kapatıp yeniden aç, sonra tekrar dene.';
+          return;
+        }
+        S.photo=data;persist();paintAvatars();
         toast('Profil fotoğrafın güncellendi.');
         closeSheet();
+        return;
       }
+      row.className='up-ok';$('.us',row).textContent='hazır';
     }).catch(function(){
       row.className='up-err';$('.us',row).textContent='hata';
       if(er)er.textContent='Fotoğraf açılamadı. Başka bir fotoğraf dene.';
@@ -4923,6 +4980,7 @@ document.addEventListener('click',function(ev){
       $('#main').hidden=true;$('#onb').hidden=false;setTab('home');$('#main').hidden=true;
       S.name='';S.email='';S.phone='';S.loggedIn=false;S.photo='';S.acctId='';S.provider='';S.guest=false;
       try{localStorage.removeItem(STORE)}catch(x){}
+      try{localStorage.removeItem(PHOTO_KEY)}catch(x){}
       $('#in-name').value='';$('#in-mail').value='';$('#in-pass').value='';
       $('#li-mail').value='';$('#li-pass').value='';
       setAuthMode('signup');
@@ -5060,7 +5118,7 @@ window.gencShortcut=function(git,eid){
 try{Object.defineProperty(window,'GENC_APP',{configurable:true,
   get:function(){return _gencApp},
   set:function(v){_gencApp=!!v;if(v)applyAppMode();}})}catch(e){}
-restore();applyTheme();applyAppMode();
+restore();pruneDataCache();applyTheme();applyAppMode();
 /* Önce seçili ilin yerel önbelleği (anında açılış), sonra gömülü yedek;
    ağ gelince yalnızca o ilin dosyası tazelenir. */
 applyRealData(cachedData(S.city));

@@ -1,6 +1,6 @@
 {
-  "version": "1.51",
-  "versionCode": 15100,
-  "notes": "İlçe adları düzeltildi: kaynak sitelerin semt ya da başka ilin ilçesi yazdığı 2.964 kayıt doğru ilçeye taşındı (ör. İstanbul'da Çeşme, Kozyatağı, Koşuyolu, Eyüp). Artık her il yalnızca kendi resmî ilçeleriyle listeleniyor: 81 il, 973 ilçe, geçersiz ad 0. Salonlar sekmesi 81 ilin tamamını açıyor. Etkinlik sayısı rozetleri kaldırıldı. Profil fotoğrafı cihazda kırpılıp anında kaydediliyor.",
+  "version": "1.52",
+  "versionCode": 15200,
+  "notes": "Profil fotoğrafı düzeltildi: fotoğraf artık ayrı kaydediliyor, telefonun depolama alanı dolsa bile kaybolmuyor; yer yoksa uyarı gösteriliyor. Eski sürümün kullanılmayan etkinlik önbelleği (~1,5 MB) temizlendi, il önbellekleri en çok kullanılan 3 il ile sınırlandı. Uzun basma kısayolları doğrulandı: Ara, Biletlerim, Yakınımda, Bu hafta, Salonlar, Bildirimler, Profil, Hoşlandıklarım. Adres kopyalama yerinde.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
