@@ -1,6 +1,6 @@
 {
-  "version": "1.55",
-  "versionCode": 15500,
-  "notes": "Listelerdeki etkinlik sayıları kaldırıldı; il ve salon adları yalın görünüyor. Geçmiş etkinlikler yayına hiç girmiyor. Profil fotoğrafı cihazda kaydediliyor.",
+  "version": "1.56",
+  "versionCode": 15600,
+  "notes": "Kısayollar yenilendi: artık 13 kısayol var (Paylaş ve Yardım eklendi) ve Android ile web aynı sırayı gösteriyor. Kısayol ikonları çevrimdışı da yükleniyor.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

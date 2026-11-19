@@ -55,6 +55,45 @@
       ]
     },
     {
+      "name": "Biletlerim",
+      "short_name": "Biletlerim",
+      "description": "Aldığın biletleri göster",
+      "url": "./Genc.html?git=biletlerim",
+      "icons": [
+        {
+          "src": "icons/shortcut-biletlerim.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Yakınımdaki etkinlikler",
+      "short_name": "Yakınımda",
+      "description": "Bulunduğun yere en yakın etkinlikler",
+      "url": "./Genc.html?git=yakin",
+      "icons": [
+        {
+          "src": "icons/shortcut-yakin.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Bu hafta ne var?",
+      "short_name": "Bu hafta",
+      "description": "Bu haftanın etkinliklerini paylaş",
+      "url": "./Genc.html?git=hafta",
+      "icons": [
+        {
+          "src": "icons/shortcut-hafta.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
       "name": "Salonlar",
       "short_name": "Salonlar",
       "description": "İl ve ilçe seç, salonların programını gör",
@@ -68,35 +107,9 @@
       ]
     },
     {
-      "name": "Bu hafta ne var?",
-      "short_name": "Bu hafta",
-      "description": "Bu haftanın öne çıkan etkinliklerini gör",
-      "url": "./Genc.html?git=hafta",
-      "icons": [
-        {
-          "src": "icons/shortcut-hafta.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Yakınımdaki etkinlikler",
-      "short_name": "Yakınımda",
-      "description": "Konumuna en yakın etkinlikleri bul",
-      "url": "./Genc.html?git=yakin",
-      "icons": [
-        {
-          "src": "icons/shortcut-yakin.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
       "name": "Bilet al",
       "short_name": "Bilet al",
-      "description": "Sana en yakın etkinlik için bilet al",
+      "description": "Sana en yakın etkinliğin biletini al",
       "url": "./Genc.html?git=bilet-al",
       "icons": [
         {
@@ -107,22 +120,9 @@
       ]
     },
     {
-      "name": "Biletlerim",
-      "short_name": "Biletlerim",
-      "description": "Aldığın biletleri profilinde göster",
-      "url": "./Genc.html?git=biletlerim",
-      "icons": [
-        {
-          "src": "icons/shortcut-biletlerim.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
       "name": "Bildirimler",
       "short_name": "Bildirimler",
-      "description": "Bilet hatırlatıcılarını ve bildirim ayarlarını aç",
+      "description": "Hangi etkinlikler için haber verilsin",
       "url": "./Genc.html?git=bildirimler",
       "icons": [
         {
@@ -135,7 +135,7 @@
     {
       "name": "Hoşlandıklarım",
       "short_name": "Hoşlandıklarım",
-      "description": "İlgi alanlarını seç, önerileri kişiselleştir",
+      "description": "Sevdiğin kategorileri seç",
       "url": "./Genc.html?git=hoslandiklarim",
       "icons": [
         {
@@ -146,22 +146,9 @@
       ]
     },
     {
-      "name": "Profilim",
-      "short_name": "Profil",
-      "description": "Profilini, kartlarını ve tercihlerini yönet",
-      "url": "./Genc.html?git=profil",
-      "icons": [
-        {
-          "src": "icons/shortcut-profil.png",
-          "sizes": "192x192",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
       "name": "Kaydedilenler",
       "short_name": "Kaydedilenler",
-      "description": "Yer imine aldığın etkinlikleri gör",
+      "description": "Yer imine eklediğin etkinlikler",
       "url": "./Genc.html?git=kaydedilenler",
       "icons": [
         {
@@ -172,13 +159,52 @@
       ]
     },
     {
+      "name": "Profilim",
+      "short_name": "Profil",
+      "description": "Profilini ve biletlerini gör",
+      "url": "./Genc.html?git=profil",
+      "icons": [
+        {
+          "src": "icons/shortcut-profil.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
       "name": "Ayarlar",
       "short_name": "Ayarlar",
-      "description": "Bildirim, konum ve veri ayarlarını aç",
+      "description": "Konum, bildirim ve görünüm ayarları",
       "url": "./Genc.html?git=ayarlar",
       "icons": [
         {
           "src": "icons/shortcut-ayarlar.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Genç’i paylaş",
+      "short_name": "Paylaş",
+      "description": "Uygulama bağlantısını arkadaşlarınla paylaş",
+      "url": "./Genc.html?git=paylas",
+      "icons": [
+        {
+          "src": "icons/shortcut-paylas.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Yardım",
+      "short_name": "Yardım",
+      "description": "Bilet, fiyat ve hatırlatıcı sorularının yanıtları",
+      "url": "./Genc.html?git=yardim",
+      "icons": [
+        {
+          "src": "icons/shortcut-yardim.png",
           "sizes": "192x192",
           "type": "image/png"
         }

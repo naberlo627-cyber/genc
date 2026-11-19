@@ -2341,7 +2341,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.55';
+var APP_VERSION='1.56';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -5097,6 +5097,8 @@ function runShortcut(git){
     return true;
   }
   if(git==='ayarlar'){setTab('profil');setTimeout(settingsSheet,180);return true}
+  if(git==='paylas'){setTab('profil');setTimeout(shareAppSheet,180);return true}
+  if(git==='yardim'){setTab('profil');setTimeout(helpSheet,180);return true}
   return false;
 }
 function applyDeepLink(){

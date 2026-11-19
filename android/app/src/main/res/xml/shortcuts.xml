@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Uzun basma kısayolları. Başlatıcılar en fazla 4-5 kısayol gösterdiği için
-  sıra önemlidir: en çok kullanılanlar (ara, biletlerim, yakin, hafta) başta
-  durur; liste kırpılsa bile bunlar görünür. Alt menüde tek dokunuşla açılan
-  sekmeler (Ana Sayfa, Keşfet) bilinçli olarak kısayol değildir. Son bakılan
-  etkinlik için dinamik kısayol Java tarafında (MainActivity) eklenir ve
-  setRank(0) ile listenin başına geçer.
+  UZUN BASMA KISAYOLLARI — ELLE DÜZENLEMEYİN.
+
+  Bu dosya tools/kisayollar.py tarafından üretilir. Statik kısayollarda
+  sıra DOKÜMAN SIRASIDIR (XML'de android:rank yok); çoğu başlatıcı en
+  fazla 4-5 kısayol gösterdiği için ilk satırlar en çok kullanılanlardır.
+  Değişiklik için o betikteki KISAYOLLAR listesini düzenleyip betiği
+  yeniden çalıştırın.
+
+  Son bakılan etkinlik için dinamik kısayol Java tarafında
+  (MainActivity.installDynamicShortcut) eklenir ve rank 0 alır.
 -->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -14,7 +18,8 @@
         android:enabled="true"
         android:icon="@drawable/sc_ara"
         android:shortcutShortLabel="@string/sc_ara"
-        android:shortcutLongLabel="@string/sc_ara_long">
+        android:shortcutLongLabel="@string/sc_ara_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
@@ -27,7 +32,8 @@
         android:enabled="true"
         android:icon="@drawable/sc_biletlerim"
         android:shortcutShortLabel="@string/sc_biletlerim"
-        android:shortcutLongLabel="@string/sc_biletlerim_long">
+        android:shortcutLongLabel="@string/sc_biletlerim_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
@@ -40,7 +46,8 @@
         android:enabled="true"
         android:icon="@drawable/sc_yakin"
         android:shortcutShortLabel="@string/sc_yakin"
-        android:shortcutLongLabel="@string/sc_yakin_long">
+        android:shortcutLongLabel="@string/sc_yakin_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
@@ -53,7 +60,8 @@
         android:enabled="true"
         android:icon="@drawable/sc_hafta"
         android:shortcutShortLabel="@string/sc_hafta"
-        android:shortcutLongLabel="@string/sc_hafta_long">
+        android:shortcutLongLabel="@string/sc_hafta_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
@@ -66,7 +74,8 @@
         android:enabled="true"
         android:icon="@drawable/sc_salonlar"
         android:shortcutShortLabel="@string/sc_salonlar"
-        android:shortcutLongLabel="@string/sc_salonlar_long">
+        android:shortcutLongLabel="@string/sc_salonlar_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
@@ -75,50 +84,12 @@
     </shortcut>
 
     <shortcut
-        android:shortcutId="bildirimler"
-        android:enabled="true"
-        android:icon="@drawable/sc_bildirimler"
-        android:shortcutShortLabel="@string/sc_bildirimler"
-        android:shortcutLongLabel="@string/sc_bildirimler_long">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=bildirimler" />
-    </shortcut>
-
-    <shortcut
-        android:shortcutId="profil"
-        android:enabled="true"
-        android:icon="@drawable/sc_profil"
-        android:shortcutShortLabel="@string/sc_profil"
-        android:shortcutLongLabel="@string/sc_profil_long">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=profil" />
-    </shortcut>
-
-    <shortcut
-        android:shortcutId="hoslandiklarim"
-        android:enabled="true"
-        android:icon="@drawable/sc_hoslandiklarim"
-        android:shortcutShortLabel="@string/sc_hoslandiklarim"
-        android:shortcutLongLabel="@string/sc_hoslandiklarim_long">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hoslandiklarim" />
-    </shortcut>
-
-    <shortcut
         android:shortcutId="bilet_al"
         android:enabled="true"
         android:icon="@drawable/sc_bilet_al"
         android:shortcutShortLabel="@string/sc_bilet_al"
-        android:shortcutLongLabel="@string/sc_bilet_al_long">
+        android:shortcutLongLabel="@string/sc_bilet_al_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
@@ -127,11 +98,40 @@
     </shortcut>
 
     <shortcut
+        android:shortcutId="bildirimler"
+        android:enabled="true"
+        android:icon="@drawable/sc_bildirimler"
+        android:shortcutShortLabel="@string/sc_bildirimler"
+        android:shortcutLongLabel="@string/sc_bildirimler_long"
+        >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=bildirimler" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="hoslandiklarim"
+        android:enabled="true"
+        android:icon="@drawable/sc_hoslandiklarim"
+        android:shortcutShortLabel="@string/sc_hoslandiklarim"
+        android:shortcutLongLabel="@string/sc_hoslandiklarim_long"
+        >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hoslandiklarim" />
+    </shortcut>
+
+    <shortcut
         android:shortcutId="kaydedilenler"
         android:enabled="true"
         android:icon="@drawable/sc_kaydedilenler"
         android:shortcutShortLabel="@string/sc_kaydedilenler"
-        android:shortcutLongLabel="@string/sc_kaydedilenler_long">
+        android:shortcutLongLabel="@string/sc_kaydedilenler_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
@@ -140,16 +140,59 @@
     </shortcut>
 
     <shortcut
+        android:shortcutId="profil"
+        android:enabled="true"
+        android:icon="@drawable/sc_profil"
+        android:shortcutShortLabel="@string/sc_profil"
+        android:shortcutLongLabel="@string/sc_profil_long"
+        >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=profil" />
+    </shortcut>
+
+    <shortcut
         android:shortcutId="ayarlar"
         android:enabled="true"
         android:icon="@drawable/sc_ayarlar"
         android:shortcutShortLabel="@string/sc_ayarlar"
-        android:shortcutLongLabel="@string/sc_ayarlar_long">
+        android:shortcutLongLabel="@string/sc_ayarlar_long"
+        >
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.genc.app"
             android:targetClass="com.genc.app.MainActivity"
             android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=ayarlar" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="paylas"
+        android:enabled="true"
+        android:icon="@drawable/sc_paylas"
+        android:shortcutShortLabel="@string/sc_paylas"
+        android:shortcutLongLabel="@string/sc_paylas_long"
+        >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=paylas" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="yardim"
+        android:enabled="true"
+        android:icon="@drawable/sc_yardim"
+        android:shortcutShortLabel="@string/sc_yardim"
+        android:shortcutLongLabel="@string/sc_yardim_long"
+        >
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=yardim" />
     </shortcut>
 
 </shortcuts>

@@ -180,6 +180,34 @@ def draw_gear(d):
     d.ellipse([c - hr, c - hr, c + hr, c + hr], fill=brand.CREAM)
 
 
+def draw_share(d):
+    """Paylaş: iki düğüm arasında bağ; klasik paylaşım glifi."""
+    c = SIZE / 2
+    r = (SIZE - 2 * PAD) * 0.15
+    w = 12
+    sag = (c + r * 2.6, c - r * 2.2)
+    sol = (c - r * 2.6, c)
+    alt = (c + r * 2.6, c + r * 2.2)
+    d.line([sol, sag], fill=brand.INK, width=w)
+    d.line([sol, alt], fill=brand.INK, width=w)
+    for x, y in (sag, sol, alt):
+        d.ellipse([x - r, y - r, x + r, y + r], fill=brand.INK)
+
+
+def draw_help(d):
+    """Yardım: soru işareti."""
+    c = SIZE / 2
+    r = (SIZE - 2 * PAD) * 0.34
+    w = 13
+    # Üst kanca: sağdan başlayıp sola dönen yay.
+    d.arc([c - r, c - r * 1.45, c + r, c + r * 0.25], start=180, end=20, fill=brand.INK, width=w)
+    d.line([(c + r * 0.30, c + r * 0.25), (c + r * 0.30, c + r * 0.45)], fill=brand.INK, width=w)
+    d.line([(c + r * 0.30, c + r * 0.45), (c, c + r * 0.62)], fill=brand.INK, width=w)
+    d.line([(c, c + r * 0.62), (c, c + r * 0.90)], fill=brand.INK, width=w)
+    nr = w * 0.62
+    d.ellipse([c - nr, c + r * 1.30 - nr, c + nr, c + r * 1.30 + nr], fill=brand.INK)
+
+
 SHORTCUTS = {
     "shortcut-son": draw_history,
     "shortcut-bilet-al": draw_ticket,
@@ -194,6 +222,8 @@ SHORTCUTS = {
     "shortcut-salonlar": draw_venue,
     "shortcut-kaydedilenler": draw_bookmark,
     "shortcut-ayarlar": draw_gear,
+    "shortcut-paylas": draw_share,
+    "shortcut-yardim": draw_help,
 }
 
 
@@ -225,6 +255,8 @@ ANDROID_IDS = {
     "sc_hoslandiklarim": "shortcut-hoslandiklarim",
     "sc_kaydedilenler": "shortcut-kaydedilenler",
     "sc_ayarlar": "shortcut-ayarlar",
+    "sc_paylas": "shortcut-paylas",
+    "sc_yardim": "shortcut-yardim",
 }
 
 

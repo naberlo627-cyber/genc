@@ -122,8 +122,8 @@ PWA dosyaları + geliştirme sunucusu.
   ilçenin etkinlik merkezine taşır, böylece mesafe etiketleri anlamlı kalır.
   "Konumu kapat" (`data-act="loc-off"`) yalnızca GPS alınmışsa görünür; GPS
   bırakılır ve seçili il merkezi referans olur.
-- `manifest.json` — PWA manifest'i; `shortcuts` dizisi ana ekran kısayollarını
-  tanımlar (`?git=...` derin bağlantıları).
+- `manifest.json` — PWA manifest'i. `shortcuts` dizisi **elle yazılmaz**;
+  `tools/kisayollar.py` üretir (bkz. "Kısayollar" bölümü).
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler
   anında görünür), simgeler önbellek öncelikli.
 - `icons/` — Pillow ile üretilen PNG simgeler.
@@ -162,8 +162,9 @@ PWA dosyaları + geliştirme sunucusu.
   mürekkeptir. **Tek kaynak:** hem web simgelerini (`icons/shortcut-<id>.png`)
   hem Android yoğunluklarını (`res/drawable-<dpi>/sc_<id>.png`; mdpi 48 → xxxhdpi
   192) aynı çağrıda üretir; böylece ikonlar bir daha renk/tasarım açısından
-  ayrışmaz. Kısayol kimlikleri: `ara, biletlerim, bildirimler, hoslandiklarim,
-  profil, hafta, bilet-al, yakin, videolar`.
+  ayrışmaz. Kısayol listesi `tools/kisayollar.py` içindedir; bu betik yalnızca
+  çizimleri üretir (`shortcut-videolar` ve `shortcut-son` yedek gliflerdir:
+  videolar bölümü `VIDEO_ON=false` iken kapalı, `sc_son` dinamik kısayol içindir).
 - `tools/generate_launcher_icons.py` — Android başlatıcı simgeleri. Yuvarlak
   kare, daire ve uyarlanabilir ön katman üretir; ön katman şeffaf zemine krem
   monogramdır (`brand.blank` + `scale=0.9`), zemin rengi
@@ -400,13 +401,10 @@ Gerekli araçlar: OpenJDK 21 (`apt-get install openjdk-21-jdk-headless`), Gradle
   tetiklenmesin). Kullanıcı giriş yapmamışsa kısayol `pendingShortcut` olarak
   saklanır ve onboarding bitince uygulanır.
 - Statik kısayol sayısı sınırlı: çoğu Android başlatıcısı en fazla 4 kısayol
-  gösterir (üst sınır ~5). Bu yüzden hem `manifest.json` hem
-  `res/xml/shortcuts.xml` aynı 5 kısayolu **aynı sırayla** tanımlar: `ara,
-  biletlerim, bildirimler, hoslandiklarim, profil`. Uygulamaya özgü ek
-  kısayollar (`hafta, bilet-al, yakin`) yalnızca PWA manifestinde kalır; yeni bir
-  kısayol eklerken listenin başına koyun ve `generate_shortcuts.py` içindeki
-  `SHORTCUTS`/`ANDROID_IDS` sözlüklerini, `strings.xml` etiketlerini ve
-  `sw.js` `ASSETS` listesini birlikte güncelleyin.
+  gösterir (üst sınır ~5). Bu yüzden **manifest.json ve shortcuts.xml aynı
+  listeyi aynı sırayla** taşır ve sıra tek yerden (`tools/kisayollar.py`)
+  üretilir; ayrışma olmaz. Yeni kısayol eklerken listeye girin, betiği
+  çalıştırın; `strings.xml` ve `sw.js` kendiliğinden güncellenir.
 - Paylaşılan bilet bağlantısı: `?bilet=KOD`.
 - Fotoğraf yükleme: avatara (profil fotoğrafı) dokununca açılan "Profil fotoğrafı"
   katmanı (`data-act="setphoto"` → `uploadSheet()`). Katman iki yol sunar:
@@ -930,16 +928,28 @@ cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
   `localStorage.getItem('genc.photo')` dolu kalmalı.
 
 ### Kısayollar (manifest + Android)
-- 11 kısayol: `ara, biletlerim, yakin, hafta, salonlar, bildirimler, profil,
-  hoslandiklarim, bilet-al, kaydedilenler, ayarlar`. Hepsi `?git=<ad>` ile
-  açılır; `runShortcut()` yönlendirir. Kısayollar **yalnızca giriş yapılmışsa**
-  çalışır (giriş ekranında bekler), bu yüzden test ederken oturum storage state
-  ile önceden kurulmalı.
-- PWA ikonları `icons/shortcut-*.png` (`tools/generate_shortcuts.py` üretir),
-  Android ikonları `res/drawable-*/sc_*.png` + `res/values/strings.xml`
-  (`sc_*`, `sc_*_long`) ve `res/xml/shortcuts.xml`. Yeni kısayol eklerken
-  üçü de güncellenmeli. Her kısayolda `shortcutShortLabel` **ve**
-  `shortcutLongLabel` bulunur; bazı başlatıcılar uzun etiketi gösterir.
+- 13 kısayol, sırasıyla: `ara, biletlerim, yakin, hafta, salonlar, bilet-al,
+  bildirimler, hoslandiklarim, kaydedilenler, profil, ayarlar, paylas, yardim`.
+  Hepsi `?git=<ad>` ile açılır; `runShortcut()` yönlendirir. Kısayollar
+  **yalnızca giriş yapılmışsa** çalışır (giriş ekranında bekler), bu yüzden
+  test ederken oturum storage state ile önceden kurulmalı.
+- **Tek kaynak `tools/kisayollar.py`.** Şu üç dosya bu betikten üretilir ve
+  elle düzenlenmez: `manifest.json` (`shortcuts`), `res/xml/shortcuts.xml`,
+  `res/values/strings.xml` (`sc_*` / `sc_*_long`). Betik ayrıca `sw.js`
+  `ASSETS` listesine kısayol ikonlarını yazar (çevrimdışı kalsınlar).
+  Yeni kısayol: `KISAYOLLAR` listesine giriş ekle → `python3
+  tools/kisayollar.py` → `tools/generate_shortcuts.py` ile glifi üret →
+  `runShortcut()` içine dal ekle. Sonra `python3 tools/kisayollar.py --denetle`.
+- Android kimliği alt çizgi (`bilet_al`), web kimliği tire (`bilet-al`) kullanır;
+  `runShortcut()` baştaki `replace(/_/g,'-')` ile ikisini eşitler.
+- Statik kısayollarda **gösterim sırası = XML doküman sırası**; `android:rank`
+  diye bir öznitelik yoktur (aapt2 reddeder). Çoğu başlatıcı en fazla 4-5
+  kısayol gösterdiği için listenin başı en çok kullanılanlardır. `sc_son`
+  dinamik kısayolu Java tarafında `setRank(0)` ile listenin başına geçer.
+- İkonlar: web `icons/shortcut-*.png` (192 px), Android
+  `res/drawable-<dpi>/sc_*.png` (48→192) — ikisi de
+  `tools/generate_shortcuts.py` üretir. Her kısayolda `shortcutShortLabel`
+  **ve** `shortcutLongLabel` bulunur; bazı başlatıcılar uzun etiketi gösterir.
 - Etkinlik detayında "Adresi kopyala" düğmesi vardır
   (`data-act="copyaddr"`, yalnızca `e.real && e.address` dolu ise görünür).
   Salon ekranı (`openVenue`) da aynı düğmeyi ve "Haritada aç" bağlantısını

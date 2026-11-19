@@ -1,5 +1,5 @@
 /* Genç - çevrimdışı desteği ve hızlı açılış için servis çalışanı. */
-var CACHE = "genc-v68";
+var CACHE = "genc-v69";
 var ASSETS = [
   "./",
   "./Genc.html",
@@ -9,15 +9,19 @@ var ASSETS = [
   "./icons/maskable-512.png",
   "./icons/apple-touch-icon.png",
   "./icons/favicon-32.png",
-  "./icons/shortcut-bilet-al.png",
-  "./icons/shortcut-hafta.png",
-  "./icons/shortcut-yakin.png",
-  "./icons/shortcut-videolar.png",
   "./icons/shortcut-ara.png",
   "./icons/shortcut-biletlerim.png",
+  "./icons/shortcut-yakin.png",
+  "./icons/shortcut-hafta.png",
+  "./icons/shortcut-salonlar.png",
+  "./icons/shortcut-bilet-al.png",
   "./icons/shortcut-bildirimler.png",
   "./icons/shortcut-hoslandiklarim.png",
+  "./icons/shortcut-kaydedilenler.png",
   "./icons/shortcut-profil.png",
+  "./icons/shortcut-ayarlar.png",
+  "./icons/shortcut-paylas.png",
+  "./icons/shortcut-yardim.png",
   "./img/cat-konser.jpg",
   "./img/cat-sinema.jpg",
   "./img/cat-tiyatro.jpg",
