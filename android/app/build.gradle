@@ -10,8 +10,8 @@ android {
         applicationId "com.genc.app"
         minSdk 23
         targetSdk 34
-        versionCode 15400
-        versionName "1.54"
+        versionCode 15500
+        versionName "1.55"
     }
 
     signingConfigs {
