@@ -9,6 +9,7 @@ Kullanım: python3 tools/embed_data.py
 """
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -48,19 +49,21 @@ KEEP_FIELDS = ("id", "type", "art", "title", "venue", "city", "image", "venue_im
 
 
 def _slim(payload: dict) -> dict:
+    bugun = date.today().isoformat()
     events = [
         {k: ev[k] for k in KEEP_FIELDS if k in ev}
         for ev in payload.get("events", [])
-        if ev.get("city") == DEFAULT_CITY
+        if ev.get("city") == DEFAULT_CITY and (ev.get("date") or "") >= bugun
     ]
-    return {**payload, "city": DEFAULT_CITY, "events": events}
+    return {**payload, "city": DEFAULT_CITY, "count": len(events),
+            "cities": [DEFAULT_CITY], "events": events}
 
 
 def main() -> None:
     if DATA.exists():
         payload = json.loads(DATA.read_text(encoding="utf-8"))
-        n = payload.get("count", 0)
         payload = _slim(payload)
+        n = payload["count"]
     else:
         payload, n = None, 0
     venues = json.loads(VENUES.read_text(encoding="utf-8")).get("photos", {}) if VENUES.exists() else {}

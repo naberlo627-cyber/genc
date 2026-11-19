@@ -53,6 +53,11 @@ LOG_DIR = ROOT / "refresh" / "logs"
 # Boş = tüm iller (kaynaklar 81 ili de tarar).
 CITIES = ""
 
+# Bir turda kabul edilebilir en büyük veri kaybı. Kaynak siteler kısmi yanıt
+# verdiğinde (sayfalama erken biter, tek il döner) tur 9.522 kaydı 439'a
+# düşürebiliyordu; bu eşik yeni veriyi reddedip önceki yayını korur.
+MAX_LOSS = 0.25
+
 
 def log(msg: str) -> None:
     stamp = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -122,6 +127,31 @@ def count_events(path: Path) -> int:
         return 0
 
 
+def count_cities(path: Path) -> int:
+    try:
+        return len(json.loads(path.read_text(encoding="utf-8")).get("cities", []))
+    except Exception:
+        return 0
+
+
+def too_much_loss(before: int, after: int, before_cities: int, after_cities: int) -> str:
+    """Toplama önceki veriye göre büyük ölçüde azaldıysa nedenini döner.
+
+    Kaynak siteler zaman zaman kısmi yanıt veriyor: sayfalama erken bitiyor,
+    tek il dönüyor ya da istekler yarıda kesiliyor. Böyle bir turda yayına
+    geçmek 9.522 kaydı 439'a düşürüyordu. Veri kaybı eşiğin üstündeyse yeni
+    veri reddedilir ve önceki yayın olduğu gibi kalır.
+    """
+    if before <= 0:
+        return ""
+    kayip = 1 - (after / before)
+    if kayip > MAX_LOSS and after < before:
+        return f"etkinlik {before} → {after} (%{kayip*100:.0f} kayıp)"
+    if before_cities > 0 and after_cities < before_cities * (1 - MAX_LOSS):
+        return f"il {before_cities} → {after_cities}"
+    return ""
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--limit", type=int, default=0, help="kaynak başına detay sınırı (0 = sınırsız)")
@@ -132,7 +162,8 @@ def main() -> int:
 
     started = time.time()
     before = count_events(EVENTS)
-    log(f"yenileme başladı (limit={args.limit}, önceki={before} etkinlik)")
+    before_cities = count_cities(TICKETS)
+    log(f"yenileme başladı (limit={args.limit}, önceki={before} etkinlik, {before_cities} il)")
 
     try:
         acquire_lock()
@@ -151,6 +182,10 @@ def main() -> int:
         # başka ilin ilçesini yazabiliyor ve kayıt yanlış süzgece düşüyordu.
         ("ilçe düzeltme", [sys.executable, "tools/fix_districts.py"]),
         ("yayın yükü", [sys.executable, "tools/build_payload.py"]),
+        # Yayına giden kopya denetlenir: sayılar, tekrarlar ve en ucuz seçim
+        # uygulamanın okuyacağı dosyalarda doğru mu? Burada durmak, bozuk
+        # verinin yayına çıkmasını engeller.
+        ("yayın denetimi", [sys.executable, "tools/yayin_denetimi.py"]),
         ("gömme", [sys.executable, "tools/embed_data.py"]),
         # Denetim son adımdır: yayın zaten hazır. Kaynak bozulmuşsa yalnızca
         # durum dosyasına yazılır, akış durdurulmaz (eski veri korunur).
@@ -161,6 +196,10 @@ def main() -> int:
         if args.dry_run:
             log("deneme (dry-run): adımlar çalıştırılmadı, durum dosyasına yazılmadı")
             return 0
+
+        # Toplama öncesi veri bir yedeğe alınır: tur kısmi dönerse bu kopya
+        # geri yazılır, böylece yayın hiç bozulmaz.
+        yedek = TICKETS.read_bytes() if TICKETS.exists() else b""
 
         for name, cmd in steps:
             t0 = time.time()
@@ -177,7 +216,42 @@ def main() -> int:
                 return 1
             log(f"✓ {name} ({dt}s): {tail}")
 
+            # Toplama biter bitmez kayıp denetimi: sonraki adımlar bu veriyi
+            # yayına hazırlayacağı için karar burada verilmeli.
+            if name == "toplama":
+                simdi = count_events(TICKETS)
+                simdi_il = count_cities(TICKETS)
+                sorun = too_much_loss(before, simdi, before_cities, simdi_il)
+                if sorun:
+                    # Tur kısmi döndü (sayfalama erken bitti, tek il geldi).
+                    # Reddetmek veriyi güncellemeden bırakıyordu; bunun yerine
+                    # önceki veriyle birleştirilir: eksik kalan kayıtlar korunur,
+                    # yalnızca bu turda görülen yenilikler eklenir.
+                    if yedek:
+                        yedek_yol = TICKETS.parent / ".onceki-tur.json"
+                        yedek_yol.write_bytes(yedek)
+                        ok2, tail2 = run([sys.executable, "tools/birlestir.py",
+                                          "--onceki", str(yedek_yol)], args.timeout)
+                        try:
+                            yedek_yol.unlink()
+                        except OSError:
+                            pass
+                        if not ok2:
+                            TICKETS.write_bytes(yedek)
+                            log(f"✗ toplama reddedildi ({sorun}); birleştirme de "
+                                f"başarısız: {tail2} · önceki veri geri yüklendi")
+                            write_status(last_run={
+                                "started": started, "ok": False,
+                                "step": "toplama denetimi", "error": sorun,
+                                "events": before,
+                                "duration": round(time.time() - started, 1)})
+                            return 1
+                        log(f"! kısmi tur ({sorun}); önceki veriyle birleştirildi: {tail2}")
+                    else:
+                        log(f"! kısmi tur ({sorun}); önceki veri yok, olduğu gibi sürüyor")
+
         after = count_events(TICKETS)
+        after_cities = count_cities(TICKETS)
         if after < args.min_events:
             log(f"✗ yayınlanan veri çok az ({after} < {args.min_events}); önceki veri korunuyor")
             write_status(last_run={"started": started, "ok": False, "step": "doğrulama",

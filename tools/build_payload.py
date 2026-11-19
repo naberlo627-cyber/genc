@@ -15,6 +15,7 @@ Kullanım: python3 tools/build_payload.py
 from __future__ import annotations
 
 import json
+from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -71,6 +72,11 @@ def _slug(city: str) -> str:
     return "".join(ch if ch.isalnum() else "-" for ch in name).strip("-")
 
 
+def _upcoming(ev: dict) -> bool:
+    """Kayıt bugün ya da sonrasında mı? Tarihi okunamayan kayıt sayılmaz."""
+    return (ev.get("date") or "") >= date.today().isoformat()
+
+
 def main() -> None:
     if not SRC.exists():
         raise SystemExit(f"kaynak veri yok: {SRC}")
@@ -89,6 +95,12 @@ def main() -> None:
         old.unlink()
     by_city: dict[str, list] = {}
     for ev in events:
+        # Geçmiş etkinlikler yayına hiç girmez: bilet satın alınamaz, listede
+        # görünmez ve il dosyalarının %36'sını boşa şişiriyordu (İstanbul
+        # dosyası 4,7 MB). Uygulama "geçmiş" durumunu kendisi hesaplıyor,
+        # dolayısıyla bu kayıtları göndermenin bir yararı yok.
+        if not _upcoming(ev):
+            continue
         by_city.setdefault(ev.get("city") or "", []).append(ev)
     index = []
     for city, items in sorted(by_city.items(), key=lambda kv: -len(kv[1])):
@@ -99,18 +111,23 @@ def main() -> None:
         index.append({"city": city, "slug": slug, "count": len(items)})
     # Kaynak dökümü dizine yazılır: uygulama "N satıcı karşılaştırıldı"
     # bilgisini buradan kurar, ayrıca kaynak kaynak sayı gösterir.
+    yayinlanan = sum(len(v) for v in by_city.values())
     kaynak_sayilari: dict[str, int] = {}
-    for ev in events:
-        for kaynak in (ev.get("sources") or [ev.get("source", "")]):
-            if kaynak:
-                kaynak_sayilari[kaynak] = kaynak_sayilari.get(kaynak, 0) + 1
+    for items in by_city.values():
+        for ev in items:
+            for kaynak in (ev.get("sources") or [ev.get("source", "")]):
+                if kaynak:
+                    kaynak_sayilari[kaynak] = kaynak_sayilari.get(kaynak, 0) + 1
     INDEX.write_text(_dump({
         "generated_at": payload.get("generated_at"),
-        "total": len(events),
+        # Sayı yalnızca yayına giren kayıtları anlatır; geçmiş etkinlikler
+        # dosyalara hiç yazılmadığı için toplam da onları içermez.
+        "total": yayinlanan,
         "sources": dict(sorted(kaynak_sayilari.items(), key=lambda kv: -kv[1])),
         "cities": index,
     }), encoding="utf-8")
-    print(f"✓ {len(index)} il dosyası → {CITY_DIR} · dizin → {INDEX}")
+    print(f"✓ {len(index)} il dosyası · {yayinlanan} yaklaşan etkinlik "
+          f"(geçmiş {len(events) - yayinlanan} kayıt yayına alınmadı) → {INDEX}")
 
 
 if __name__ == "__main__":

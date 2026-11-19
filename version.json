@@ -1,6 +1,6 @@
 {
-  "version": "1.54",
-  "versionCode": 15400,
-  "notes": "Etkinlikler artık kendi kendine tazeleniyor: uygulama öne geldiğinde ve 3 saatte bir veri sessizce yenilenir. 'Etkinlikleri şimdi yenile' sayfayı yeniden yüklemez; yerinde günceller. Kısayollar 11 tane (Kaydedilenler, Ayarlar eklendi). Salon sayfasında adres ve kopyalama var.",
+  "version": "1.55",
+  "versionCode": 15500,
+  "notes": "Listelerdeki etkinlik sayıları kaldırıldı; il ve salon adları yalın görünüyor. Geçmiş etkinlikler yayına hiç girmiyor. Profil fotoğrafı cihazda kaydediliyor.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
