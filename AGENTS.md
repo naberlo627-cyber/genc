@@ -923,13 +923,21 @@ cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
   `localStorage.getItem('genc.photo')` dolu kalmalı.
 
 ### Kısayollar (manifest + Android)
-- 9 kısayol: `ara, biletlerim, yakin, hafta, salonlar, bildirimler, profil,
-  hoslandiklarim, bilet-al`. Hepsi `?git=<ad>` ile açılır; `runShortcut()`
-  yönlendirir. Kısayollar **yalnızca giriş yapılmışsa** çalışır (giriş
-  ekranında bekler), bu yüzden test ederken oturum storage state ile önceden
-  kurulmalı.
-- PWA ikonları `icons/shortcut-*.png`, Android ikonları
-  `res/drawable-*/sc_*.png` + `res/values/strings.xml` (`sc_*`) ve
-  `res/xml/shortcuts.xml`. Yeni kısayol eklerken üçü de güncellenmeli.
+- 11 kısayol: `ara, biletlerim, yakin, hafta, salonlar, bildirimler, profil,
+  hoslandiklarim, bilet-al, kaydedilenler, ayarlar`. Hepsi `?git=<ad>` ile
+  açılır; `runShortcut()` yönlendirir. Kısayollar **yalnızca giriş yapılmışsa**
+  çalışır (giriş ekranında bekler), bu yüzden test ederken oturum storage state
+  ile önceden kurulmalı.
+- PWA ikonları `icons/shortcut-*.png` (`tools/generate_shortcuts.py` üretir),
+  Android ikonları `res/drawable-*/sc_*.png` + `res/values/strings.xml`
+  (`sc_*`, `sc_*_long`) ve `res/xml/shortcuts.xml`. Yeni kısayol eklerken
+  üçü de güncellenmeli. Her kısayolda `shortcutShortLabel` **ve**
+  `shortcutLongLabel` bulunur; bazı başlatıcılar uzun etiketi gösterir.
 - Etkinlik detayında "Adresi kopyala" düğmesi vardır
   (`data-act="copyaddr"`, yalnızca `e.real && e.address` dolu ise görünür).
+  Salon ekranı (`openVenue`) da aynı düğmeyi ve "Haritada aç" bağlantısını
+  gösterir; adres salonun etkinlik kayıtlarından alınır.
+- **Sınıf çakışması uyarısı:** `.wide` poster kartı sınıfıdır
+  (`height:176px; display:block`). Tam genişlik gereken `dmcell` için
+  `.dfull` kullanılır. `dmcell wide` yazılırsa kutu 176px yüksekliğinde ve
+  yarım genişlikte görünür (v1.52'deki hata).
