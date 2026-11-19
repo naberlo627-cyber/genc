@@ -85,13 +85,23 @@ PWA dosyaları + geliştirme sunucusu.
   sayfası ayarlar); Keşfet listesi seçili şehre göre süzülür. İstanbul
   Anadolu/Avrupa yakaları `İstanbul`'a normalize edilir. `districtsOf(city)`
   önce verideki ilçeleri, sonra gömülü ilçe listesini birleştirir.
-- **Konum seçim sayfası (`locSheetHTML`).** İl ve ilçe için arama kutusu
-  (`#ls-city-q` / `#ls-dist-q`, `bindPickerSearch` canlı süzer), çiplerde
-  etkinlik sayısı (`.cnt`), mevcut il en başta (`cityChips`), seçili çip `.on`.
-  `districtChips(q)`/`cityChips(q)` isteğe bağlı arama metni alır. İl seçince
-  (`setCity(city,keepSheet=true)`) sayfa kapanmaz, ilçe listesi yeni ile göre
-  tazelenir; şehir değiştir sayfası (`evCitySheet`) da arama kutusu kullanır.
-  Tıklama işleyicisi `#ls-cities` içindeki seçimi algılayıp `keepSheet` geçirir.
+- **Konum seçim sayfası (`locSheetHTML`).** Tek ferah liste + iki sekme:
+  İl / İlçe (`#ls-seg`, `LPICK.mode`, `setPickerMode`). Sekme butonlarında
+  seçili değer yazar (`#ls-seg-city` / `#ls-seg-dist`); tek arama kutusu
+  (`#ls-q`) aktif sekmeye göre süzer. Satırlar `.lrow` — 56px yüksek, 16px
+  yazı, sağda etkinlik sayısı (`.n`) ve seçili olanda onay simgesi; il/ilçe
+  listesi tek sütun ve `max-height:48vh` ile kayar (`#ls-rows`). Etkinliği olan
+  il/ilçe başta, sonra alfabetik (`cityRows` / `districtRows`). İl seçince
+  (`setCity(city,keepSheet=true)`) sayfa kapanmaz, otomatik ilçe sekmesine
+  geçer; ilçe seçince (`setDistrict`) sayfa kapanır ve `toast` bilgi verir.
+  Tıklama işleyicisi `#ls-rows` içindeki il seçimini algılayıp `keepSheet`
+  geçirir. Şehir değiştir sayfası (`evCitySheet`) de aynı `cityRows`'u kullanır.
+- **İlçe süzgeci.** `S.district` seçili ilçeyi tutar; `matches()` ilçeyi de
+  denetler, böylece Ana Sayfa ve Keşfet listeleri ilçeye göre süzülür
+  (`evFiltered()` ayrıca kendi süzgecini uygular). Konum şeridi
+  (`#locname`) `locCityLabel()` ile "İlçe · İl" gösterir (aynı ad iki kez
+  yazılmaz). Konum cihazdan alınmadıysa `setDistrict` referans noktasını
+  ilçenin etkinlik merkezine taşır, böylece mesafe etiketleri anlamlı kalır.
 - `manifest.json` — PWA manifest'i; `shortcuts` dizisi ana ekran kısayollarını
   tanımlar (`?git=...` derin bağlantıları).
 - `sw.js` — servis çalışanı. Uygulama sayfası **ağ öncelikli** (düzenlemeler

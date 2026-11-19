@@ -1,6 +1,6 @@
 {
-  "version": "1.43",
-  "versionCode": 14300,
-  "notes": "Konum seçimi kolaylaştı: il ve ilçe için arama kutusu, yanlarında etkinlik sayısı, mevcut il en başta. Aktif kullanıcı sayacı arayüzden kaldırıldı (sayaç arka planda çalışmaya devam ediyor).",
+  "version": "1.44",
+  "versionCode": 14400,
+  "notes": "Konum seçimi yeniden tasarlandı: İl/İlçe sekmeli, tek ferah liste; büyük dokunma alanları, arama kutusu, satırlarda etkinlik sayısı. İlçe seçimi artık ana sayfa ve Keşfet listesini gerçekten süzüyor; konum şeridi seçilen ilçeyi gösteriyor ve mesafeler ilçeye göre hesaplanıyor.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
