@@ -1,6 +1,6 @@
 {
-  "version": "1.49",
-  "versionCode": 14900,
-  "notes": "Ayarlar, Yardım ve Paylaş ekranları eklendi. Etkinlikler artık birden çok bilet sitesinden toplanıp tek kayıtta birleştiriliyor; aynı etkinlik iki kez listelenmiyor ve en ucuz fiyat gösteriliyor. Detay sayfasında kaynak kaynak fiyat karşılaştırması var. Veri günde iki kez otomatik yenileniyor, her yenilemede kaynak sağlığı ve tekrar denetimi çalışıyor.",
+  "version": "1.50",
+  "versionCode": 15000,
+  "notes": "Salonlar sekmesi düzeltildi: artık 81 ilin tamamı açılıyor ve seçilen ilin tüm ilçeleri listeleniyor (Adıyaman'da 9 ilçe). Şehir ve ilçe listelerindeki etkinlik sayısı rozetleri kaldırıldı. Profil fotoğrafı yükleme düzeltildi: fotoğraf sunucuya gitmeden cihazda kırpılıp anında kaydediliyor, 'yükleniyor' beklemesi kalktı.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

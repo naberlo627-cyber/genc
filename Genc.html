@@ -2034,13 +2034,43 @@ function venueByName(name){
   var l=venuesList(),i;for(i=0;i<l.length;i++)if(l[i].name===name)return l[i];
   l=venuesList(true);for(i=0;i<l.length;i++)if(l[i].name===name)return l[i];return null;
 }
+/* Salonlar sekmesi il il gezilir; ALL_EVENTS yalnızca seçili ili taşıdığı için
+   gezilen illerin verisi ayrıca önbelleğe alınır (il -> realToEvent listesi). */
+var VENUE_DATA={};
+/* İl verisini (gerekirse ağdan) getirir; hazır olunca cb çağrılır. */
+function ensureCityVenues(city,cb){
+  if(VENUE_DATA[city]||(city===S.city&&ALL_EVENTS.length)){cb();return}
+  var hit=cachedData(city);
+  if(hit){
+    VENUE_DATA[city]=hit.events.map(realToEvent);
+    cb();return
+  }
+  fetchCityData(city).then(function(d){
+    if(!d||!d.events||!d.events.length){cb(false);return}
+    rememberData(city,d);
+    VENUE_DATA[city]=d.events.map(realToEvent);
+    cb(true);
+  }).catch(function(){cb(false)});
+}
 /* Salon listesi. Varsayılan olarak seçili ilin salonlarını verir; `all` ile
-   tüm iller gelir (Salonlar sekmesi 81 ili gezerken buna ihtiyaç duyar). */
+   yüklenmiş tüm iller gelir (Salonlar sekmesi il il gezdiği için önce
+   ensureCityVenues ile o ilin verisi getirilir). */
 function venuesList(all){
   var map={};
-  (all?ALL_EVENTS:EVENTS).forEach(function(e){
+  var src;
+  if(all){
+    src=[];
+    Object.keys(VENUE_DATA).forEach(function(c){src=src.concat(VENUE_DATA[c])});
+    if(!VENUE_DATA[S.city])src=src.concat(ALL_EVENTS);
+  }else{
+    src=(VENUE_DATA[S.city]||ALL_EVENTS);
+  }
+  src.forEach(function(e){
     var v=e.venue||'Diğer';
-    (map[v]||(map[v]={name:v,city:e.city||'',district:e.district||'',img:VENUE_PHOTOS[v]||e.img||e.venueImg||'',items:[]})).items.push(e);
+    /* Anahtar il + salon adı: aynı adlı salonlar farklı illerde ayrı kalsın,
+       yoksa "Diğer" gibi ortak adlar tek gruba düşüp ilçeler kayboluyor. */
+    var key=(e.city||'')+'|'+v;
+    (map[key]||(map[key]={name:v,city:e.city||'',district:e.district||'',img:VENUE_PHOTOS[v]||e.img||e.venueImg||'',items:[]})).items.push(e);
   });
   return Object.keys(map).map(function(k){
     var g=map[k];
@@ -2084,56 +2114,67 @@ function nearbyVenuesHTML(){
   }).join('')+'</div>';
 }
 /* ---------- Salonlar sekmesi ----------
-   Tüm 81 il listelenir; salonu olan iller başta ve sayısıyla görünür. İl seçilince
-   o ilin ilçeleri, ilçe seçilince o ilçenin salonları gelir. Veri gömülü olduğu
-   için çevrimdışı da çalışır. Her adımda tek liste: karışık ızgara yok. */
-var VPICK={step:'city',city:'',district:''};
+   Tüm 81 il listelenir. İl seçilince o ilin ilçeleri, ilçe seçilince o ilçenin
+   salonları gelir. Her adımda tek liste: karışık ızgara yok. */
+var VPICK={step:'city',city:'',district:'',loading:false};
 var VSTEP_TITLE={'city':'İl seç','district':'İlçe seç','venue':'Salonlar'};
 
 /* Bir ilin tüm salonları (ilçe bilgisiyle birlikte). */
 function venuesInCity(city){
   return venuesList(true).filter(function(g){return (g.city||'')===city});
 }
-/* İlçeye göre gruplanmış salon sayıları. İlçesi yazılmamış salonlar için
-   "İlçe belirtilmemiş" grubu en sonda yer alır; aksi hâlde bu salonlar
-   hiçbir ilçe listesinde görünmez. */
+/* İlçe listesi: ilin TÜM ilçeleri gösterilir (TR_CITY_DISTRICTS), salonu olan
+   ilçeler başta ve salon sayısıyla. Salonu olmayan ilçe de listede kalır, aksi
+   hâlde Adıyaman gibi illerde 9 ilçenin yalnızca 2'si görünüyordu.
+   İlçesi yazılmamış salonlar "İlçe belirtilmemiş" grubunda en sonda yer alır. */
 var NO_DISTRICT='İlçe belirtilmemiş';
 function districtsWithVenues(city){
   var m={};
   venuesInCity(city).forEach(function(g){
-    var d=g.district||NO_DISTRICT;
+    /* Kaynaklarda ilçe alanına il adı da yazılıyor (ör. "İstanbul");
+       bunları ilçe gibi saymayalım. */
+    var d=(!g.district||g.district===city)?NO_DISTRICT:g.district;
     (m[d]||(m[d]=[])).push(g);
   });
-  var out=Object.keys(m).filter(function(d){return d!==NO_DISTRICT}).sort(function(a,b){return a.localeCompare(b,'tr')});
+  var all=(TR_CITY_DISTRICTS[city]||[]).slice();
+  Object.keys(m).forEach(function(d){if(d!==NO_DISTRICT&&all.indexOf(d)<0)all.push(d)});
+  var withVenue=all.filter(function(d){return m[d]});
+  var without=all.filter(function(d){return !m[d]}).sort(function(a,b){return a.localeCompare(b,'tr')});
+  var out=withVenue.concat(without);
   if(m[NO_DISTRICT])out.push(NO_DISTRICT);
   return out.map(function(d){
-    return {name:d,venues:m[d],count:m[d].length,shows:m[d].reduce(function(s,g){return s+g.count},0)};
+    var list=m[d]||[];
+    return {name:d,venues:list,count:list.length,shows:list.reduce(function(s,g){return s+g.count},0)};
   });
 }
 function venuesInDistrict(city,district){
-  return venuesInCity(city).filter(function(g){return (g.district||NO_DISTRICT)===district});
+  return venuesInCity(city).filter(function(g){
+    var d=(!g.district||g.district===city)?NO_DISTRICT:g.district;
+    return d===district;
+  });
 }
 function vpickRows(){
   if(VPICK.step==='city'){
+    /* Salonlar sekmesi 81 ili gezer: ALL_EVENTS yalnızca seçili ili taşıdığı
+       için salon sayısı burada bilinemez. Hiçbir il kapatılmaz; seçilince o
+       ilin verisi indirilip ilçeleri listelenir. */
     return cityList().map(function(c){
-      var n=venuesInCity(c).length;
-      return {key:c,name:c,count:n,sub:n?'':'henüz salon yok',off:!n};
+      return {key:c,name:c,count:0,sub:'',off:false};
     });
   }
   if(VPICK.step==='district'){
     return districtsWithVenues(VPICK.city).map(function(d){
-      return {key:d.name,name:d.name,count:d.count,sub:d.shows+' gösteri',off:false};
+      return {key:d.name,name:d.name,count:0,sub:d.shows?d.shows+' gösteri':'salon yok',off:false};
     });
   }
   return venuesInDistrict(VPICK.city,VPICK.district).map(function(g){
-    return {key:g.name,name:g.name,count:g.count,sub:g.days.length+' gün',off:false};
+    return {key:g.name,name:g.name,count:0,sub:g.days.length+' gün',off:false};
   });
 }
 function vpickRowHTML(r){
   var act=VPICK.step==='city'?'vpick-city':(VPICK.step==='district'?'vpick-dist':'vopen');
   return '<button class="lrow" type="button" data-'+act+'="'+esc(r.key)+'"'+(r.off?' data-off="1"':'')+'>'+
     '<span class="nm">'+esc(r.name)+(r.sub?'<small style="display:block;font-size:12.5px;font-weight:500;color:var(--mute);margin-top:2px">'+esc(r.sub)+'</small>':'')+'</span>'+
-    (r.count?'<span class="n">'+r.count+'</span>':'')+
     (r.off?'':'<svg class="ic"><use href="#i-chev-r"/></svg>')+'</button>';
 }
 function vpickRowsHTML(rows){return rows.map(vpickRowHTML).join('')}
@@ -2147,6 +2188,10 @@ function vpickHTML(){
       (VPICK.step==='venue'?' · '+esc(VPICK.district):'')+
       '<small>'+(VPICK.step==='venue'?rows.length+' salon':'İlçe seç')+'</small></span>'+
       '<button type="button" data-act="vpick-back">Geri</button></div>';
+  }
+  if(VPICK.loading){
+    h+='<p class="lhint">'+esc(VPICK.city)+' salonları yükleniyor…</p></div>';
+    return h;
   }
   if(VPICK.step!=='venue'||rows.length>6){
     h+='<div class="lsearch">'+ic('search')+'<input id="vp-q" type="search" placeholder="'+
@@ -2194,12 +2239,24 @@ function bindVpick(){
     box.innerHTML=vpickRowsHTML(rows);
   });
 }
-/* Adım geçişleri: geri butonu ve satır dokunuşları buradan geçer. */
+/* Adım geçişleri: geri butonu ve satır dokunuşları buradan geçer.
+   İl seçildiğinde o ilin verisi yoksa indirilir; bu sırada "yükleniyor"
+   satırı gösterilir ki ekran boş kalmasın. */
 function vpickGo(step,city,district){
   VPICK.step=step;
   if(city!=null)VPICK.city=city;
   if(district!=null)VPICK.district=district;
   VPICK.q='';
+  if(step==='district'&&VPICK.city&&!VENUE_DATA[VPICK.city]&&VPICK.city!==S.city){
+    VPICK.loading=true;
+    renderVenues();
+    ensureCityVenues(VPICK.city,function(){
+      VPICK.loading=false;
+      renderVenues();
+      var sc=$('#vscroll');if(sc)sc.scrollTop=0;
+    });
+    return;
+  }
   renderVenues();
   var sc=$('#vscroll');if(sc)sc.scrollTop=0;
 }
@@ -2244,7 +2301,7 @@ var S={
 };
 /* Sürüm etiketi: ekrandaki uygulamanın hangi derleme olduğunu doğrulamak için.
    Ayarlar > Hesap sayfasının altında küçük yazı olarak görünür. */
-var APP_VERSION='1.49';
+var APP_VERSION='1.50';
 /* Videolar bölümü geçici olarak kapalı. Yeniden açmak için true yap. */
 var VIDEO_ON=false;
 /* Güncelleme denetimi: version.json ve indir/Genc.apk geliştirme sunucusunda
@@ -3695,12 +3752,9 @@ function cityRows(q){
   if(!needle&&S.city)all=[S.city].concat(all.filter(function(c){return c!==S.city}));
   var cities=all.filter(function(c){return !needle||norm(c).indexOf(needle)>-1});
   if(!cities.length)return '<div class="lempty">Eşleşen il yok.</div>';
-  var counts={};ALL_EVENTS.forEach(function(e){if(e.city)counts[e.city]=(counts[e.city]||0)+1});
-  Object.keys(CITY_COUNTS).forEach(function(c){counts[c]=CITY_COUNTS[c]});
   return cities.map(function(c){
-    var n=counts[c]||0;
     return '<button type="button" class="lrow'+(S.city===c?' on':'')+'" data-evsetcity="'+esc(c)+'">'+
-      '<span class="nm">'+esc(c)+'</span>'+(n?'<span class="n">'+n+'</span>':'')+ic('check')+'</button>';
+      '<span class="nm">'+esc(c)+'</span>'+ic('check')+'</button>';
   }).join('');
 }
 /* İlçe satırları: "Tüm ilçeler" en üstte; etkinliği olan ilçeler başta. */
@@ -3719,9 +3773,8 @@ function districtRows(q){
     '<span class="nm">Tüm ilçeler</span>'+ic('check')+'</button>';
   if(!list.length)return top+'<div class="lempty">Eşleşen ilçe yok.</div>';
   return top+list.map(function(d){
-    var n=counts[d]||0;
     return '<button type="button" class="lrow'+(S.district===d?' on':'')+'" data-setdistrict="'+esc(d)+'">'+
-      '<span class="nm">'+esc(d)+'</span>'+(n?'<span class="n">'+n+'</span>':'')+ic('check')+'</button>';
+      '<span class="nm">'+esc(d)+'</span>'+ic('check')+'</button>';
   }).join('');
 }
 /* İlçe seçimi: süzgeci uygular ve sayfayı kapatır. Konum cihazdan
@@ -4428,8 +4481,9 @@ function cropSquare(file){
     img.src=url;
   });
 }
-/* makeAvatar: yüklenen fotoğrafı profil fotoğrafı yapar.
-   Uygulama içinde (APK) fotoğraf sunucuya gönderilmez; kırpılıp cihazda saklanır. */
+/* makeAvatar: seçilen fotoğrafı profil fotoğrafı yapar.
+   Fotoğraf hiçbir sunucuya gönderilmez: cihazda kareye kırpılır, 512 px'e
+   küçültülür ve yerel olarak saklanır. Böylece yükleme beklemesi olmaz. */
 function upSend(files,makeAvatar){
   if(!files||!files.length)return;
   var er=$('#up-err');if(er)er.textContent='';
@@ -4438,29 +4492,16 @@ function upSend(files,makeAvatar){
     if(f.type.indexOf('image/')!==0){if(er)er.textContent='Yalnızca fotoğraf yükleyebilirsin.';return}
     if(f.size>10*1024*1024){if(er)er.textContent='“'+f.name+'” 10 MB sınırını aşıyor.';upRow(f.name,'err');return}
     var row=upRow(f.name,'wait');
-    if(window.GENC_APP){
-      cropSquare(f).then(function(data){
-        row.className='up-ok';$('.us',row).textContent='hazır';
-        if((makeAvatar||(!made&&i===0))){made=true;S.photo=data;persist();paintAvatars();toast('Profil fotoğrafın güncellendi.')}
-      }).catch(function(){row.className='up-err';$('.us',row).textContent='hata';if(er)er.textContent='Fotoğraf açılamadı.'});
-      return;
-    }
-    var fd=new FormData();fd.append('file',f,f.name);
-    fetch('upload',{method:'POST',body:fd}).then(function(r){
-      if(!r.ok)throw 0;
-      return r.json().catch(function(){return {}});
-    }).then(function(d){
-      row.className='up-ok';$('.us',row).textContent='yüklendi';
-      if(d&&d.url){
-        var a=document.createElement('a');a.href=d.url;a.textContent='gör';a.setAttribute('download','');row.appendChild(a);
-        if((makeAvatar||!made)&&(f.type.indexOf('image/')===0)){
-          made=true;S.photo=d.url;persist();paintAvatars();
-          toast('Profil fotoğrafın güncellendi.');
-        }
+    cropSquare(f).then(function(data){
+      row.className='up-ok';$('.us',row).textContent='hazır';
+      if(makeAvatar||(!made&&i===0)){
+        made=true;S.photo=data;persist();paintAvatars();
+        toast('Profil fotoğrafın güncellendi.');
+        closeSheet();
       }
     }).catch(function(){
       row.className='up-err';$('.us',row).textContent='hata';
-      if(er)er.textContent='Sunucuya ulaşılamadı. Fotoğraf yüklenemedi.';
+      if(er)er.textContent='Fotoğraf açılamadı. Başka bir fotoğraf dene.';
     });
   });
 }
@@ -4761,9 +4802,7 @@ document.addEventListener('click',function(ev){
   if(vopen){openVenue(vopen.getAttribute('data-vopen'));return}
   var vcity=t.closest('[data-vpick-city]');
   if(vcity){
-    var cn=vcity.getAttribute('data-vpick-city');
-    if(vcity.getAttribute('data-off')||!venuesInCity(cn).length){toast(cn+' için henüz salon yok.');return}
-    vpickGo('district',cn,'');return
+    vpickGo('district',vcity.getAttribute('data-vpick-city'),'');return
   }
   var vdist=t.closest('[data-vpick-dist]');
   if(vdist){vpickGo('venue',null,vdist.getAttribute('data-vpick-dist'));return}
