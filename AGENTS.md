@@ -53,6 +53,21 @@ PWA dosyaları + geliştirme sunucusu.
   `gather` alanlarını öne alır, kalanı en yakın mekanlarla tamamlar; karta dokunmak
   o mekanın etkinliklerini Keşfet'te arar (`data-venue`). Ana Sayfa bu şeridi
   göstermez.
+- **Salonlar sekmesinde il/ilçe gezinme.** `ALL_EVENTS` yalnızca seçili ili taşır,
+  bu yüzden başka bir il seçildiğinde `ensureCityVenues(city,cb)` o ilin dosyasını
+  (gerekirse ağdan) getirip `VENUE_DATA[city]` önbelleğine koyar; `vpickGo` bu
+  sırada `VPICK.loading` ile "yükleniyor" satırı gösterir. Hiçbir il kapalı
+  değildir (`off:false`), çünkü salon sayısı önceden bilinemez.
+  `venuesList` gruplama anahtarı **il + salon adı**dır (`city|venue`); yalnızca
+  salon adıyla gruplanınca "Diğer" gibi ortak adlar iller arasında birleşip
+  ilçeleri yutuyordu. `districtsWithVenues(city)` ilin **tüm** ilçelerini
+  `TR_CITY_DISTRICTS`'ten alır (salonlular önce, boşlar alfabetik, en sonda
+  "İlçe belirtilmemiş"); ilçe alanına il adı yazılmış kayıtlar da bu son gruba
+  düşer. Şehir/ilçe satırlarında etkinlik sayısı rozeti **yoktur**.
+- **Profil fotoğrafı.** `upSend` fotoğrafı hiçbir sunucuya göndermez:
+  `cropSquare` ile cihazda kareye kırpıp 512 px'e küçültür, `S.photo`'ya data URL
+  olarak yazar. `fetch('upload')` kaldırıldı; sunucuda böyle bir uç olmadığı için
+  istek asılı kalıp "yükleniyor…" saatlerce duruyordu.
 - **Sekme ve kaydırma kalıcılığı.** `S.tab` ve `S.scrolls` (sekme başına
   kaydırma konumu) `persist()`/`restore()` ile saklanır; uygulama yeniden
   açıldığında son sekme ve konum geri yüklenir (`restoreScroll`). Kaydırma
@@ -854,7 +869,7 @@ cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
 - `sw.js` `notificationclick` işler: uygulama açıksa pencereyi odaklar ve
   `postMessage({type:'notify-open',ticket})` gönderir (uygulama ilgili biletin QR
   ekranını açar); kapalıysa `Genc.html?bilet=<id>` ile açar.
-- Bildirim değişikliklerinde `CACHE` adını yükseltmeyi unutma (şu an `genc-v42`).
+- Bildirim değişikliklerinde `CACHE` adını yükseltmeyi unutma (şu an `genc-v63`).
 
 ### Android (APK)
 - Tarayıcı bildirimi sayfa kapalıyken her zaman garanti değildir; APK'da native
