@@ -1972,6 +1972,12 @@ function paintSourceLine(){
 function rebuildCity(){
   var city=S.city||(ALL_EVENTS[0]&&ALL_EVENTS[0].city)||'İzmir';
   var pool=ALL_EVENTS.filter(function(e){return !e.city||e.city===city});
+  /* Geçmiş tarihli kayıtlar akışta görünmemeli; gerçek veride "past" alanı
+     gelmiyordu, bu yüzden Ekim'de biten etkinlikler "bu hafta" listesinde
+     kalıyor ve bilet kısayolu onları seçiyordu. */
+  var bugun=new Date();bugun.setHours(0,0,0,0);
+  var bugunISO=bugun.getFullYear()+'-'+('0'+(bugun.getMonth()+1)).slice(-2)+'-'+('0'+bugun.getDate()).slice(-2);
+  pool.forEach(function(e){e.past=!!(e.date&&e.date<bugunISO)});
   var list=foldEvents(pool);
   EVENTS=list.filter(function(e){return !e.past});
   EVENTS.forEach(function(e,i){if(i<4)e.feat=true});
@@ -4917,8 +4923,27 @@ function lastViewedEvent(){
   }catch(x){}
   return null;
 }
+/* Bileti alınmamış, konumu en yakın etkinlik. Gömülü demo listesi yalnızca
+   kendi ilinde geçerli; başka il seçiliyken oradan seçim yapılırsa kısayol
+   yanlış şehirde bir etkinlik açıyordu. */
 function firstMissingEvent(){
-  return EVENTS.filter(function(e){return !S.tickets.some(function(t){return t.e.id===e.id})}).sort(function(a,b){return kmTo(a)-kmTo(b)})[0]||EVENTS[0];
+  var alinan={};S.tickets.forEach(function(t){if(t&&t.e)alinan[t.e.id]=1});
+  function enYakin(list){
+    return list.filter(function(e){return !alinan[e.id]})
+      .sort(function(a,b){return kmTo(a)-kmTo(b)})[0]||null;
+  }
+  var city=S.city;
+  var bulunan=enYakin(EVENTS.filter(function(e){return e.real&&(!city||e.city===city)}));
+  if(bulunan)return bulunan;
+  if(city&&city!==GENC_DATA_CITY)return null;
+  return enYakin(EVENTS)||EVENTS[0]||null;
+}
+/* İl verisi ağdan gelmeden liste boş olabilir; kısayol birkaç kez bekler. */
+function biletAlShortcut(tryNo){
+  var e=firstMissingEvent();
+  if(e){openWeb(e);return}
+  if(tryNo<12)setTimeout(function(){biletAlShortcut(tryNo+1)},250);
+  else toast('Bilet alınacak etkinlik bulunamadı.');
 }
 function runShortcut(git){
   if(git==='videolar'){setTab('videolar');return true}
@@ -4926,7 +4951,7 @@ function runShortcut(git){
   if(git==='biletlerim'){setTab('biletler');return true}
   if(git==='yakin'){setTab('kesfet');if(!S.locOn)geoAsk();return true}
   if(git==='ara'){setTab('kesfet');setTimeout(function(){var q=$('#q');if(q)q.focus()},120);return true}
-  if(git==='bilet-al'){var e=firstMissingEvent();if(e)openWeb(e);return true}
+  if(git==='bilet-al'){biletAlShortcut(0);return true}
   if(git==='bildirimler'){setTab('profil');setTimeout(function(){notifySettings()},180);return true}
   if(git==='hoslandiklarim'){setTab('profil');setTimeout(function(){editLikes()},180);return true}
   if(git==='salonlar'){VPICK={step:'city',city:'',district:'',q:''};setTab('salonlar');return true}

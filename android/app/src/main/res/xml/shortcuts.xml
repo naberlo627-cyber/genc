@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Statik kısayollar. Başlatıcılar en fazla 4-5 kısayol gösterir; bu yüzden en
-  değerli beş tanesi sırayla tanımlanır: Ara, Salonlar, Biletlerim, Bildirimler,
-  Profil. Alt menüde tek dokunuşla açılan sekmeler (Ana Sayfa, Keşfet) bilinçli
-  olarak kısayol değildir. Uygulamaya özgü ek kısayollar (hafta, bilet-al, yakin,
-  videolar, hoşlandıklarım) PWA manifestinde kalır. Son bakılan etkinlik için
-  dinamik kısayol Java tarafında eklenir. Android statik kısayollarda sıra
-  numarası kabul etmez; dinamik kısayolun öne geçmesi için statikler burada
-  tanımlı sırayla gösterilir, dinamik kısayol ise setDynamicShortcuts ile
-  ayrı listelenir.
+  Uzun basma kısayolları. Başlatıcılar en fazla 4-5 kısayol gösterdiği için
+  sıra önemlidir: en çok kullanılanlar (ara, biletlerim, yakin, hafta) başta
+  durur; liste kırpılsa bile bunlar görünür. Alt menüde tek dokunuşla açılan
+  sekmeler (Ana Sayfa, Keşfet) bilinçli olarak kısayol değildir. Son bakılan
+  etkinlik için dinamik kısayol Java tarafında (MainActivity) eklenir ve
+  setRank(0) ile listenin başına geçer.
 -->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -25,18 +22,6 @@
     </shortcut>
 
     <shortcut
-        android:shortcutId="salonlar"
-        android:enabled="true"
-        android:icon="@drawable/sc_salonlar"
-        android:shortcutShortLabel="@string/sc_salonlar">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=salonlar" />
-    </shortcut>
-
-    <shortcut
         android:shortcutId="biletlerim"
         android:enabled="true"
         android:icon="@drawable/sc_biletlerim"
@@ -46,6 +31,42 @@
             android:targetPackage="com.genc.app"
             android:targetClass="com.genc.app.MainActivity"
             android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=biletlerim" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="yakin"
+        android:enabled="true"
+        android:icon="@drawable/sc_yakin"
+        android:shortcutShortLabel="@string/sc_yakin">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=yakin" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="hafta"
+        android:enabled="true"
+        android:icon="@drawable/sc_hafta"
+        android:shortcutShortLabel="@string/sc_hafta">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hafta" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="salonlar"
+        android:enabled="true"
+        android:icon="@drawable/sc_salonlar"
+        android:shortcutShortLabel="@string/sc_salonlar">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=salonlar" />
     </shortcut>
 
     <shortcut
@@ -82,5 +103,17 @@
             android:targetPackage="com.genc.app"
             android:targetClass="com.genc.app.MainActivity"
             android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hoslandiklarim" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="bilet_al"
+        android:enabled="true"
+        android:icon="@drawable/sc_bilet_al"
+        android:shortcutShortLabel="@string/sc_bilet_al">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=bilet_al" />
     </shortcut>
 </shortcuts>
