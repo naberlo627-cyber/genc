@@ -263,10 +263,17 @@ sunucunuz gerekmez, çökmez:
     ağlarda engelli** olabiliyor, bkz. aşağıdaki `.dev` notu)
 - **Depo:** https://github.com/naberlo627-cyber/genc (açık/public — ücretsiz barındırma için zorunlu)
 - **Kaynak:** `master` dalı, kök dizin. `Genc.html` + `data/events.json` buradan sunulur.
-- **Veri yenileme:** her gün 04:30 TRT'de Actions çalışır, `data/events.json`'u
-  günceller ve commit atar. Uygulama açılışta **iki kaynaktan** (kendi adresi +
-  GitHub aynası) veriyi çeker ve `generated_at`'i yeni olanı seçer. Böylece
-  Pages kopyası eski kalsa bile etkinlik verisi her gün tazedir.
+- **Veri yenileme:** her gün 01:30 ve 13:30 UTC'de (04:30 / 16:30 TRT)
+  Actions çalışır, il veri dosyalarını günceller ve commit atar. Uygulama
+  açılışta **iki kaynaktan** (kendi adresi + GitHub aynası) veriyi çeker ve
+  `generated_at`'i yeni olanı seçer.
+- **İstemci tazeleme (`syncDataIfStale`):** uygulama günlerce açık kalabildiği
+  için yalnızca açılışta çekmek yetmez. `visibilitychange` (öne gelme),
+  `online` ve 3 saatlik `setInterval` ile seçili il tazelenir; `DATA_TTL_MS`
+  dolmadıkça istek atılmaz. Açılışta `lastDataSync=Date.now()` kurulur.
+- **"Etkinlikleri şimdi yenile"** `location.reload()` **çağırmamalıdır**: APK'da
+  uygulamayı baştan başlatır ve kullanıcının yerini kaybettirir. Yalnızca
+  `fetchCityData` + `applyRealData` + `renderAll` yapılır.
 - **APK:** GitHub Releases'ten sunulur (statik barındırma ikili dosya tutmaz):
   https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk
 
