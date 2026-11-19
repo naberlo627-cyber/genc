@@ -3,6 +3,9 @@
 Türkçe mobil etkinlik uygulaması. Tek dosyalık HTML uygulaması (`Genc.html`) +
 PWA dosyaları + geliştirme sunucusu.
 
+> **Önce `DURUM.md` oku.** Projenin nerede bırakıldığını (sürüm, commit,
+> kapatılan işler, açık konular) orada yazar. Bu dosya teknik kuralları tutar.
+
 ## Yapı
 
 - `Genc.html` — uygulamanın tamamı (HTML + CSS + JS tek dosyada). QR kodu
