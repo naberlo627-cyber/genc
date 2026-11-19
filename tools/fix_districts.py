@@ -16,7 +16,8 @@ Düzeltme sırası (ilk eşleşen kazanır):
   7. çözülemezse ilçe boşaltılır: kayıt il genelinde görünür, ilçe süzgecinde
      yanlış yere düşmez
 
-`data/events.json` ve uygulamaya gömülü `GENC_DATA` birlikte güncellenir.
+`data/cities/*.json` dosyaları yerinde güncellenir; gömülü veri için
+ardından `tools/embed_data.py` çalıştırılır.
 Tekrar çalıştırılabilir: ikinci çalıştırmada değişiklik yapmaz.
 
 Kullanım: python3 tools/fix_districts.py [--dry-run]
@@ -31,7 +32,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-EVENTS = ROOT / "data" / "events.json"
+CITY_DIR = ROOT / "data" / "cities"
 SOURCE = ROOT / "data" / "tickets.json"
 APP = ROOT / "Genc.html"
 
@@ -91,9 +92,16 @@ def load_districts() -> dict[str, list[str]]:
     return json.loads(re.sub(r",\s*([}\]])", r"\1", m.group(1)))
 
 
-def load_events() -> list[dict]:
-    raw = json.loads(EVENTS.read_text(encoding="utf-8"))
-    return raw if isinstance(raw, list) else raw["events"]
+def load_city_files() -> list[tuple[Path, dict, list[dict]]]:
+    """data/cities/*.json dosyalarını (yol, üst nesne, etkinlikler) olarak döner."""
+    out = []
+    for path in sorted(CITY_DIR.glob("*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        events = payload.get("events") if isinstance(payload, dict) else payload
+        if not events:
+            continue
+        out.append((path, payload, events))
+    return out
 
 
 def main() -> None:
@@ -101,7 +109,8 @@ def main() -> None:
 
     dry = "--dry-run" in sys.argv
     districts = load_districts()
-    events = load_events()
+    files = load_city_files()
+    events = [e for _, _, evs in files for e in evs]
 
     valid = {c: {norm(d): d for d in ds} for c, ds in districts.items()}
     by_venue: dict[tuple[str, str], Counter] = defaultdict(Counter)
@@ -135,9 +144,30 @@ def main() -> None:
             return SEMT[(city, cur)], "semt"
 
         addr = norm(e.get("address"))
-        hits = [real for k, real in valid[city].items() if len(k) >= MIN_ILCE_LEN and k in addr]
-        if hits:
-            return hits[0], "adres"
+        # "Zeytinburnu/", "Kadıköy/İst", "Maltepe - İstanbul" gibi kalıplar güçlü
+        # işarettir; "Gölbaşı Caddesi" ise sokak adıdır ve ilçe sayılmaz.
+        STREET = ("caddesi", "cadde", "cad.", "cad ", "sokak", "sok.", "sok ", "bulvarı",
+                  "bulvar", "mahallesi", "mah.", "mah ", "sitesi", "plaza")
+        strong = None
+        weak = None
+        for key, real in valid[city].items():
+            if len(key) < MIN_ILCE_LEN:
+                continue
+            pos = addr.find(key)
+            if pos < 0:
+                continue
+            tail = addr[pos + len(key):][:16].lstrip()
+            if tail.startswith("/") or tail.startswith("-") or tail.startswith("–"):
+                strong = real
+                break
+            if any(tail.startswith(s) for s in STREET):
+                continue
+            if weak is None:
+                weak = real
+        if strong:
+            return strong, "adres"
+        if weak:
+            return weak, "adres"
 
         venue = norm(e["venue"])
         hits = [real for k, real in valid[city].items() if len(k) >= MIN_ILCE_LEN and k in venue]
@@ -168,6 +198,7 @@ def main() -> None:
         if norm(new) != norm(old) or new != old:
             changed.append((e["city"], e["venue"], old, new))
             e["district"] = new
+            e["_dist_changed"] = True
 
     print(f"toplam {len(events)} kayıt")
     for k in ("gecerli", "mekan", "semt", "adres", "mekan-adi", "koordinat", "bos", "bilinmeyen-il"):
@@ -180,18 +211,27 @@ def main() -> None:
         print("(dry-run: dosyalar yazılmadı)")
         return
 
-    payload = json.loads(EVENTS.read_text(encoding="utf-8"))
-    if isinstance(payload, list):
-        EVENTS.write_text(json.dumps(events, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    else:
-        payload["events"] = events
-        EVENTS.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"yazıldı: {EVENTS.relative_to(ROOT)}")
+    # Her il dosyası kendi kayıtlarını taşır; düzeltilen ilçe yerinde yazılır.
+    written = 0
+    for path, payload, evs in files:
+        if not any(e.get("_dist_changed") for e in evs):
+            continue
+        for e in evs:
+            e.pop("_dist_changed", None)
+        if isinstance(payload, dict):
+            payload["events"] = evs
+            out = payload
+        else:
+            out = evs
+        path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        written += 1
+    print(f"yazıldı: {written} il dosyası")
 
-    # Kaynak veri de düzeltilir; aksi hâlde build_payload.py eski ilçeleri geri yazar.
+    # Yayın yükü il dosyalarını tickets.json'dan yeniden üretir; kaynak
+    # düzeltilmezse bir sonraki yenilemede eski ilçeler geri gelirdi.
     if SOURCE.exists():
         src_payload = json.loads(SOURCE.read_text(encoding="utf-8"))
-        fixed = {(e["id"]): e.get("district") or "" for e in events}
+        fixed = {e["id"]: e.get("district") or "" for e in events}
         touched = 0
         for e in src_payload.get("events", []):
             new_d = fixed.get(e.get("id"))
@@ -202,15 +242,6 @@ def main() -> None:
             SOURCE.write_text(json.dumps(src_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             print(f"kaynak güncellendi: {SOURCE.relative_to(ROOT)} ({touched} kayıt)")
 
-    src = APP.read_text(encoding="utf-8")
-    m = re.search(r"(var GENC_DATA\s*=\s*)(\{.*?\})(;\s*\n)", src, re.S)
-    if not m:
-        raise SystemExit("GENC_DATA bulunamadı")
-    data = json.loads(m.group(2))
-    data["events"] = events
-    src = src[: m.start(2)] + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + src[m.end(2) :]
-    APP.write_text(src, encoding="utf-8")
-    print(f"gömüldü: {APP.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":

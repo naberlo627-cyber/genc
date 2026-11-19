@@ -147,6 +147,9 @@ def main() -> int:
         ("tekrar denetimi", [sys.executable, "tools/tekrar_denetimi.py"]),
         ("zenginleştirme", [sys.executable, "tools/enrich_events.py"]),
         ("metin temizleme", [sys.executable, "tools/clean_events.py"]),
+        # İlçe adları yayın yükünden önce doğrulanır: kaynak siteler semt ya da
+        # başka ilin ilçesini yazabiliyor ve kayıt yanlış süzgece düşüyordu.
+        ("ilçe düzeltme", [sys.executable, "tools/fix_districts.py"]),
         ("yayın yükü", [sys.executable, "tools/build_payload.py"]),
         ("gömme", [sys.executable, "tools/embed_data.py"]),
         # Denetim son adımdır: yayın zaten hazır. Kaynak bozulmuşsa yalnızca

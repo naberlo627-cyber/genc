@@ -869,7 +869,7 @@ cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
 - `sw.js` `notificationclick` işler: uygulama açıksa pencereyi odaklar ve
   `postMessage({type:'notify-open',ticket})` gönderir (uygulama ilgili biletin QR
   ekranını açar); kapalıysa `Genc.html?bilet=<id>` ile açar.
-- Bildirim değişikliklerinde `CACHE` adını yükseltmeyi unutma (şu an `genc-v63`).
+- Bildirim değişikliklerinde `CACHE` adını yükseltmeyi unutma (şu an `genc-v64`).
 
 ### Android (APK)
 - Tarayıcı bildirimi sayfa kapalıyken her zaman garanti değildir; APK'da native
@@ -889,3 +889,19 @@ cihaz üzerinde çalışır ve durum biletin kendisinde tutulur.
 - Bildirim küçük simgesi `res/drawable/ic_notify.xml`; kanal `genc_bilet`.
 - Derleme: `android/setup-toolchain.sh` (JDK 21 + SDK 34 + Gradle 8.7), sonra
   `android/build-apk.sh` → `indir/Genc.apk`.
+
+### İlçe verisi (district)
+- Her il yalnızca **kendi** resmî ilçeleriyle listelenir. `Genc.html` içindeki
+  `TR_CITY_DISTRICTS` (81 il / 973 ilçe) tek doğruluk kaynağıdır.
+- `tools/collect_tickets.py` bu tabloyu `KNOWN_DISTRICTS` olarak taşır ve
+  `district_of()` yalnızca o ilin ilçelerini arar. Daha önce sabit bir İzmir
+  listesi tüm illere uygulanıyordu; "Çeşme" İstanbul'daki "Kazlıçeşme" sokak
+  adında eşleşip yanlış ilçe yazıyordu.
+- `tools/fix_districts.py` mevcut veriyi temizler ve `refresh/refresh.py`
+  hattında yayın yükünden **önce** çalışır. Çözüm sırası: geçerli → aynı mekânın
+  diğer kayıtları → semt sözlüğü → adresteki "X/İl" kalıbı → mekân adı →
+  koordinata en yakın ilçe → boş. Adreste ilçe adı "Caddesi/Sokak" ile
+  geliyorsa ilçe sayılmaz (sokak adıdır).
+- `build_payload.py` il dosyalarını `data/tickets.json`'dan yeniden ürettiği
+  için düzeltme hem il dosyalarına hem kaynağa yazılır.
+- Doğrulama: `data/cities/*.json` içinde geçersiz ilçe adı 0 olmalı.

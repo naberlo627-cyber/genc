@@ -1,6 +1,6 @@
 {
-  "version": "1.50",
-  "versionCode": 15000,
-  "notes": "Salonlar sekmesi düzeltildi: artık 81 ilin tamamı açılıyor ve seçilen ilin tüm ilçeleri listeleniyor (Adıyaman'da 9 ilçe). Şehir ve ilçe listelerindeki etkinlik sayısı rozetleri kaldırıldı. Profil fotoğrafı yükleme düzeltildi: fotoğraf sunucuya gitmeden cihazda kırpılıp anında kaydediliyor, 'yükleniyor' beklemesi kalktı.",
+  "version": "1.51",
+  "versionCode": 15100,
+  "notes": "İlçe adları düzeltildi: kaynak sitelerin semt ya da başka ilin ilçesi yazdığı 2.964 kayıt doğru ilçeye taşındı (ör. İstanbul'da Çeşme, Kozyatağı, Koşuyolu, Eyüp). Artık her il yalnızca kendi resmî ilçeleriyle listeleniyor: 81 il, 973 ilçe, geçersiz ad 0. Salonlar sekmesi 81 ilin tamamını açıyor. Etkinlik sayısı rozetleri kaldırıldı. Profil fotoğrafı cihazda kırpılıp anında kaydediliyor.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }
