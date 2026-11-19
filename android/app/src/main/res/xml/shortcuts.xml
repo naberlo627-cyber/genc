@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Statik kısayollar. Çoğu başlatıcı en fazla 4 kısayol gösterir (üst sınır ~5);
-  bu yüzden her uygulamada beklenen en değerli 5 tanesi sırayla tanımlanır:
-  Ara, Biletlerim, Bildirimler, Hoşlandıklarım, Profil. Alt menüde tek
-  dokunuşla açılan sekmeler bilinçli olarak kısayol değildir. Uygulamaya özgü
-  ek kısayollar (hafta, bilet-al, yakin) PWA manifestinde kalır.
+  Statik kısayollar. Başlatıcılar en fazla 4-5 kısayol gösterir; bu yüzden en
+  değerli beş tanesi sırayla tanımlanır: Ara, Salonlar, Biletlerim, Bildirimler,
+  Profil. Alt menüde tek dokunuşla açılan sekmeler (Ana Sayfa, Keşfet) bilinçli
+  olarak kısayol değildir. Uygulamaya özgü ek kısayollar (hafta, bilet-al, yakin,
+  videolar, hoşlandıklarım) PWA manifestinde kalır. Son bakılan etkinlik için
+  dinamik kısayol Java tarafında eklenir. Android statik kısayollarda sıra
+  numarası kabul etmez; dinamik kısayolun öne geçmesi için statikler burada
+  tanımlı sırayla gösterilir, dinamik kısayol ise setDynamicShortcuts ile
+  ayrı listelenir.
 -->
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -18,6 +22,18 @@
             android:targetPackage="com.genc.app"
             android:targetClass="com.genc.app.MainActivity"
             android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=ara" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="salonlar"
+        android:enabled="true"
+        android:icon="@drawable/sc_salonlar"
+        android:shortcutShortLabel="@string/sc_salonlar">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=salonlar" />
     </shortcut>
 
     <shortcut
@@ -45,18 +61,6 @@
     </shortcut>
 
     <shortcut
-        android:shortcutId="hoslandiklarim"
-        android:enabled="true"
-        android:icon="@drawable/sc_hoslandiklarim"
-        android:shortcutShortLabel="@string/sc_hoslandiklarim">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="com.genc.app"
-            android:targetClass="com.genc.app.MainActivity"
-            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hoslandiklarim" />
-    </shortcut>
-
-    <shortcut
         android:shortcutId="profil"
         android:enabled="true"
         android:icon="@drawable/sc_profil"
@@ -66,5 +70,17 @@
             android:targetPackage="com.genc.app"
             android:targetClass="com.genc.app.MainActivity"
             android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=profil" />
+    </shortcut>
+
+    <shortcut
+        android:shortcutId="hoslandiklarim"
+        android:enabled="true"
+        android:icon="@drawable/sc_hoslandiklarim"
+        android:shortcutShortLabel="@string/sc_hoslandiklarim">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.genc.app"
+            android:targetClass="com.genc.app.MainActivity"
+            android:data="https://appassets.androidplatform.net/assets/www/Genc.html?git=hoslandiklarim" />
     </shortcut>
 </shortcuts>

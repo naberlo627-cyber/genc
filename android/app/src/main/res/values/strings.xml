@@ -8,5 +8,6 @@
     <string name="sc_hafta">Bu hafta ne var?</string>
     <string name="sc_hoslandiklarim">Hoşlandıklarım</string>
     <string name="sc_profil">Profilim</string>
+    <string name="sc_salonlar">Salonlar</string>
     <string name="sc_yakin">Çevremdekiler</string>
 </resources>

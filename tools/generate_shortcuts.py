@@ -129,7 +129,33 @@ def draw_heart(d):
     d.polygon([(c - 2 * r, top), (c + 2 * r, top), (c, c + r * 2.1)], fill=brand.INK)
 
 
+def draw_venue(d):
+    """Salonlar: sahne perdesi ve koltuk sırası."""
+    c = SIZE / 2
+    w = (SIZE - 2 * PAD) * 0.86
+    h = (SIZE - 2 * PAD) * 0.46
+    l, t, r, b = c - w / 2, c - h / 2 - 14, c + w / 2, c + h / 2 - 14
+    d.pieslice([l, t, r, t + h * 0.9], start=180, end=360, fill=brand.INK)
+    d.rectangle([l, t + h * 0.45, r, b], fill=brand.INK)
+    seat_y = b + 20
+    for i in (-1, 0, 1):
+        sx = c + i * 40
+        d.rounded_rectangle([sx - 14, seat_y, sx + 14, seat_y + 26], radius=9, fill=brand.INK)
+
+
+def draw_history(d):
+    """Son baktığın etkinlik: saat kadranı ve akrep."""
+    c = SIZE / 2
+    r = (SIZE - 2 * PAD) * 0.42
+    ring = (SIZE - 2 * PAD) * 0.13
+    d.ellipse([c - r, c - r, c + r, c + r], fill=brand.INK)
+    d.ellipse([c - r + ring, c - r + ring, c + r - ring, c + r - ring], fill=brand.CREAM)
+    d.rounded_rectangle([c - 9, c - r * 0.62, c + 9, c + 14], radius=8, fill=brand.INK)
+    d.rounded_rectangle([c - 6, c - 6, c + r * 0.52, c + 8], radius=7, fill=brand.INK)
+
+
 SHORTCUTS = {
+    "shortcut-son": draw_history,
     "shortcut-bilet-al": draw_ticket,
     "shortcut-videolar": draw_play,
     "shortcut-ara": draw_search,
@@ -139,6 +165,7 @@ SHORTCUTS = {
     "shortcut-hafta": draw_spark,
     "shortcut-bildirimler": draw_bell,
     "shortcut-hoslandiklarim": draw_heart,
+    "shortcut-salonlar": draw_venue,
 }
 
 
@@ -157,10 +184,12 @@ ANDROID_DENSITIES = {
 }
 # Android kısayol kimliği (shortcuts.xml) -> üretici adı.
 ANDROID_IDS = {
+    "sc_son": "shortcut-son",
     "sc_hafta": "shortcut-hafta",
     "sc_bilet_al": "shortcut-bilet-al",
     "sc_yakin": "shortcut-yakin",
     "sc_ara": "shortcut-ara",
+    "sc_salonlar": "shortcut-salonlar",
     "sc_biletlerim": "shortcut-biletlerim",
     "sc_profil": "shortcut-profil",
     "sc_videolar": "shortcut-videolar",

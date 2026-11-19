@@ -1,6 +1,6 @@
 {
-  "version": "1.45",
-  "versionCode": 14500,
-  "notes": "Konum seçimi adım adım yeniden yazıldı: önce 'Konumumu kullan' ya da 'İl seç', sonra il listesi, sonra ilçe listesi. Her ekranda tek karar var, tek ekrana doldurulmuyor. Geri butonuyla adımlar arasında dönülüyor, arama kutusu aktif adıma göre süzüyor.",
+  "version": "1.49",
+  "versionCode": 14900,
+  "notes": "Ayarlar, Yardım ve Paylaş ekranları eklendi. Etkinlikler artık birden çok bilet sitesinden toplanıp tek kayıtta birleştiriliyor; aynı etkinlik iki kez listelenmiyor ve en ucuz fiyat gösteriliyor. Detay sayfasında kaynak kaynak fiyat karşılaştırması var. Veri günde iki kez otomatik yenileniyor, her yenilemede kaynak sağlığı ve tekrar denetimi çalışıyor.",
   "apk": "https://github.com/naberlo627-cyber/genc/releases/latest/download/Genc.apk"
 }

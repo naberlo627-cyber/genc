@@ -7,13 +7,15 @@ hazır hâle getirir ve sonucu raporlar. Başka hiçbir iş yapmaz.
 Ne yapar (sırayla):
   1. Toplama   : tools/collect_tickets.py  → data/tickets.json
   2. Zenginleştirme: tools/enrich_events.py → açıklama/kadro/kural alanları
-  3. Yayın yükü: tools/build_payload.py    → data/events.json (uygulamanın indirdiği dosya)
+  3. Yayın yükü: tools/build_payload.py    → data/cities/*.json + data/index.json
   4. Gömme     : tools/embed_data.py       → Genc.html içine yedek veri (APK için)
   5. Durum     : data/refresh_status.json (son çalışma, süre, sayı, hata)
 
+Uygulama açılışta yalnızca seçili ilin dosyasını (data/cities/<il>.json) çeker;
+tüm illeri tek dosyada indirmez.
+
 Kapsam dışı: APK sürümü (version.json) ve önbellek sürümü (sw.js) artırmaz.
-Uygulama veriyi her açılışta data/events.json'dan çektiği için yenileme bunlara
-dokunmaz; APK sürümü yalnızca gerçek bir uygulama derlemesiyle artırılır.
+APK sürümü yalnızca gerçek bir uygulama derlemesiyle artırılır.
 
 Tasarım ilkeleri:
   * Asla çökmez: her adım hataya dayanıklıdır, hata olsa da çalışma kaydı yazılır
@@ -27,7 +29,7 @@ Tasarım ilkeleri:
 Kullanım:
     python3 refresh/refresh.py                 # tam yenileme
     python3 refresh/refresh.py --dry-run       # toplamadan sadece akışı denetle
-    python3 refresh/refresh.py --limit 120     # kaynak başına detay sınırı
+    python3 refresh/refresh.py --limit 120     # kaynak başına detay sınırı (0 = sınırsız)
     python3 refresh/refresh.py --min-events 50 # yayın için en az etkinlik sayısı
 """
 from __future__ import annotations
@@ -48,7 +50,8 @@ STATUS = DATA / "refresh_status.json"
 LOCK = ROOT / "refresh" / ".lock"
 LOG_DIR = ROOT / "refresh" / "logs"
 
-CITIES = "İzmir,Ankara,İstanbul,Bursa,Antalya"
+# Boş = tüm iller (kaynaklar 81 ili de tarar).
+CITIES = ""
 
 
 def log(msg: str) -> None:
@@ -121,7 +124,7 @@ def count_events(path: Path) -> int:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--limit", type=int, default=200, help="kaynak başına detay sınırı")
+    ap.add_argument("--limit", type=int, default=0, help="kaynak başına detay sınırı (0 = sınırsız)")
     ap.add_argument("--min-events", type=int, default=80, help="yayın için en az etkinlik sayısı")
     ap.add_argument("--dry-run", action="store_true", help="toplamadan akışı denetle")
     ap.add_argument("--timeout", type=int, default=1800, help="adım başına zaman aşımı (sn)")
@@ -139,10 +142,16 @@ def main() -> int:
 
     steps = [
         ("toplama", [sys.executable, "tools/collect_tickets.py", "--sehir", CITIES, "--limit", str(args.limit)]),
+        # Tekrar denetimi toplamadan hemen sonra: birleştirme bozulduysa
+        # zenginleştirmeye/zengin veriye hiç geçilmez.
+        ("tekrar denetimi", [sys.executable, "tools/tekrar_denetimi.py"]),
         ("zenginleştirme", [sys.executable, "tools/enrich_events.py"]),
         ("metin temizleme", [sys.executable, "tools/clean_events.py"]),
         ("yayın yükü", [sys.executable, "tools/build_payload.py"]),
         ("gömme", [sys.executable, "tools/embed_data.py"]),
+        # Denetim son adımdır: yayın zaten hazır. Kaynak bozulmuşsa yalnızca
+        # durum dosyasına yazılır, akış durdurulmaz (eski veri korunur).
+        ("kaynak denetimi", [sys.executable, "tools/kaynak_denetimi.py"]),
     ]
 
     try:
@@ -154,6 +163,9 @@ def main() -> int:
             t0 = time.time()
             ok, tail = run(cmd, args.timeout)
             dt = round(time.time() - t0, 1)
+            if not ok and name == "kaynak denetimi":
+                log(f"! {name}: kaynak sorunları bildirildi ({dt}s): {tail}")
+                continue
             if not ok:
                 log(f"✗ {name} başarısız ({dt}s): {tail}")
                 write_status(last_run={"started": started, "ok": False, "step": name,

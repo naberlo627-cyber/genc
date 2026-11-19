@@ -18,3 +18,7 @@ indir/
 
 # Statik yayın paketi (tools/build_site.sh üretir)
 dist/
+
+# Tüm illeri tek dosyada tutan ara çıktı (25 MB). Uygulama il bazlı
+# data/cities/*.json indirir; bu dosya yalnızca araçlar için üretilir.
+data/events.json

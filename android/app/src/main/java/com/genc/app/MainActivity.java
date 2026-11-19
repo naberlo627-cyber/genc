@@ -4,6 +4,9 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -92,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
         web.addJavascriptInterface(new UpdateBridge(), "GencUpdate");
         // Bildirim köprüsü: bilet hatırlatıcılarını native alarmlara bağlar.
         web.addJavascriptInterface(new NotifyBridge(), "GENC_NOTIFY");
+        // Kısayol köprüsü: son bakılan etkinlik için dinamik kısayol kurar.
+        web.addJavascriptInterface(new ShortcutBridge(), "GENC_SHORTCUT");
+        restoreLastShortcut();
+        installDynamicShortcut();
 
         WebSettings s = web.getSettings();
         s.setJavaScriptEnabled(true);
@@ -188,6 +195,86 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(() -> Toast.makeText(MainActivity.this,
                     "Güncelleme indiriliyor…", Toast.LENGTH_SHORT).show());
             new Thread(() -> downloadAndInstall(url)).start();
+        }
+    }
+
+    /* --- kısayol köprüsü ---
+       Launcher uzun basınca "Son baktığın" kısayolu çıkar. Sayfa, kullanıcının
+       açtığı son etkinliğin kimliğini ve başlığını iletir; kısayol ?git=etkinlik
+       &eid=<id> adresine gider. Kısayol desteklenmiyorsa sessizce geçilir. */
+    private static final String SHORTCUT_LAST = "son-baktigin";
+    private static final String PREFS_SHORTCUT = "genc_shortcut";
+    private String lastShortcutId = "";
+    private String lastShortcutTitle = "";
+
+    private class ShortcutBridge {
+        @JavascriptInterface
+        public void setLast(String id, String title) {
+            if (id == null || id.isEmpty()) return;
+            lastShortcutId = id;
+            lastShortcutTitle = title == null ? "" : title;
+            runOnUiThread(MainActivity.this::installDynamicShortcut);
+        }
+
+        @JavascriptInterface
+        public void clear() {
+            lastShortcutId = "";
+            lastShortcutTitle = "";
+            runOnUiThread(MainActivity.this::removeDynamicShortcut);
+        }
+    }
+
+    private ShortcutManager shortcuts() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N_MR1) return null;
+        return getSystemService(ShortcutManager.class);
+    }
+
+    /* Son bakılan etkinlik diskte saklanır ki uygulama yeniden açıldığında
+       kısayol kaybolmasın. */
+    private void restoreLastShortcut() {
+        android.content.SharedPreferences p = getSharedPreferences(PREFS_SHORTCUT, MODE_PRIVATE);
+        lastShortcutId = p.getString("id", "");
+        lastShortcutTitle = p.getString("title", "");
+    }
+
+    private void persistLastShortcut() {
+        getSharedPreferences(PREFS_SHORTCUT, MODE_PRIVATE).edit()
+                .putString("id", lastShortcutId)
+                .putString("title", lastShortcutTitle)
+                .apply();
+    }
+
+    private void installDynamicShortcut() {
+        ShortcutManager sm = shortcuts();
+        if (sm == null || lastShortcutId.isEmpty()) return;
+        persistLastShortcut();
+        if (sm.getMaxShortcutCountPerActivity() <= 0) return;
+        String label = lastShortcutTitle.isEmpty() ? "Son baktığın" : lastShortcutTitle;
+        if (label.length() > 24) label = label.substring(0, 23) + "…";
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(BASE + "?git=etkinlik&eid="
+                + Uri.encode(lastShortcutId)), this, MainActivity.class);
+        i.setAction(Intent.ACTION_VIEW);
+        ShortcutInfo info = new ShortcutInfo.Builder(this, SHORTCUT_LAST)
+                .setShortLabel(label)
+                .setLongLabel(label)
+                .setIcon(Icon.createWithResource(this, R.drawable.sc_son))
+                .setIntent(i)
+                .setRank(0)
+                .build();
+        try {
+            sm.setDynamicShortcuts(java.util.Collections.singletonList(info));
+        } catch (Exception ignored) {
+            // Bazı başlatıcılar dinamik kısayolu reddeder; uygulama çalışmaya devam eder.
+        }
+    }
+
+    private void removeDynamicShortcut() {
+        ShortcutManager sm = shortcuts();
+        if (sm == null) return;
+        getSharedPreferences(PREFS_SHORTCUT, MODE_PRIVATE).edit().clear().apply();
+        try {
+            sm.removeDynamicShortcuts(java.util.Collections.singletonList(SHORTCUT_LAST));
+        } catch (Exception ignored) {
         }
     }
 
@@ -304,10 +391,33 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        // Uygulama açıkken kısayola dokunulursa ilgili görünüme git.
-        if (intent != null && intent.getData() != null) {
+        // Uygulama açıkken kısayola dokunulursa sayfayı yeniden yükleme;
+        // durumu koruyup ilgili görünümü JS kancasıyla aç.
+        if (intent == null || intent.getData() == null) return;
+        String git = intent.getData().getQueryParameter("git");
+        String eid = intent.getData().getQueryParameter("eid");
+        if (git == null) {
             web.loadUrl(intent.getData().toString());
+            return;
         }
+        String js = "window.gencShortcut&&window.gencShortcut("
+                + jsStr(git) + "," + jsStr(eid == null ? "" : eid) + ")";
+        web.evaluateJavascript(js, null);
+    }
+
+    /* JS dizesi için güvenli tırnaklama; kısayol parametreleri dışarıdan gelir. */
+    private static String jsStr(String v) {
+        StringBuilder b = new StringBuilder("'");
+        for (char c : v.toCharArray()) {
+            switch (c) {
+                case '\\': b.append("\\\\"); break;
+                case '\'': b.append("\\'"); break;
+                case '\n': b.append("\\n"); break;
+                case '\r': b.append("\\r"); break;
+                default: b.append(c);
+            }
+        }
+        return b.append("'").toString();
     }
 
     @Override

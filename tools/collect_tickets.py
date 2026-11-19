@@ -19,13 +19,16 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import datetime
 import hashlib
+import html as html_lib
 import json
 import os
 import re
 import time
 import unicodedata
 import urllib.error
+import urllib.parse
 import urllib.request
 from pathlib import Path
 
@@ -98,6 +101,8 @@ def sane_coords(lat, lng, district: str) -> tuple[float | None, float | None]:
 
 MON = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"]
 WD = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"]
+MONTHS_TR_FULL = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
+                  "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
 
 
 def fetch(url: str, tries: int = 3) -> str:
@@ -180,8 +185,21 @@ def _availability(offers) -> str:
     return ""
 
 
+_TR_FOLD = str.maketrans({
+    "ı": "i", "İ": "i", "I": "i", "ş": "s", "Ş": "s", "ğ": "g", "Ğ": "g",
+    "ü": "u", "Ü": "u", "ö": "o", "Ö": "o", "ç": "c", "Ç": "c",
+    "â": "a", "Â": "a", "î": "i", "Î": "i", "û": "u", "Û": "u",
+})
+
+
 def norm(text: str) -> str:
-    text = unicodedata.normalize("NFKD", text or "")
+    """Arama/eşleştirme için Türkçe harfleri ASCII karşılığına indirger.
+
+    NFKD tek başına yetmez: "ı" ve "ğ" ayrışmadığı için "Kadıköy" -> "kad koy"
+    gibi bozuk sonuç verir. Bu yüzden önce harf çevirisi yapılır.
+    """
+    text = (text or "").translate(_TR_FOLD)
+    text = unicodedata.normalize("NFKD", text)
     text = "".join(c for c in text if not unicodedata.combining(c))
     return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
 
@@ -383,21 +401,65 @@ def parse_events(html_text: str, source: str, url: str, genre: str) -> list[dict
     return events
 
 
+BILETINIAL_API = "https://biletinial.com/List/GetMoreItems"
+# organizerUrl -> uygulamanın tür adı. Site bu yolu kategori kimliği olarak kullanır.
+BILETINIAL_CATS = [
+    ("muzik", "Konser"),
+    ("tiyatro", "Tiyatro"),
+    ("opera-bale", "Opera ve bale"),
+    ("sinema", "Sinema"),
+    ("stand-up", "Stand-up"),
+    ("spor", "Spor"),
+    ("cocuk", "Çocuk etkinlikleri"),
+]
+BILETINIAL_MAX_PAGES = 30
+
+
+def _biletinial_slug(city: str) -> str:
+    """İl adını sitenin cityUrl biçimine çevirir (ı->i, ş->s, ğ->g ...)."""
+    table = {"ı": "i", "İ": "i", "ş": "s", "Ş": "s", "ğ": "g", "Ğ": "g",
+             "ü": "u", "Ü": "u", "ö": "o", "Ö": "o", "ç": "c", "Ç": "c"}
+    return "".join(table.get(ch, ch) for ch in city).lower().replace(" ", "")
+
+
+def _biletinial_page(city_url: str, cat: str, page: int) -> list[dict]:
+    params = urllib.parse.urlencode({
+        "region": "tr-tr", "cityId": "", "cityUrl": city_url, "order": 0,
+        "isKids": "false", "isCampaign": "false", "isForeign": "false",
+        "organizerUrl": cat, "page": page,
+    })
+    return _get_json(f"{BILETINIAL_API}?{params}").get("items") or []
+
+
+def _biletinial_city(city: str) -> list[tuple[str, str]]:
+    """Bir ilin tüm kategorilerindeki etkinlikleri (detay linki, tür) olarak toplar."""
+    city_url = _biletinial_slug(city)
+    out: list[tuple[str, str]] = []
+    seen: set[str] = set()
+    for cat, genre in BILETINIAL_CATS:
+        for page in range(1, BILETINIAL_MAX_PAGES + 1):
+            try:
+                items = _biletinial_page(city_url, cat, page)
+            except Exception:
+                break
+            fresh = [i for i in items if i.get("seoUrl") and i["seoUrl"] not in seen]
+            if not fresh:
+                break
+            for item in fresh:
+                seen.add(item["seoUrl"])
+                out.append((f"https://biletinial.com/tr-tr/{cat}/{item['seoUrl']}", genre))
+    return out
+
+
 def collect_biletinial(limit: int) -> list[dict]:
     targets: list[tuple[str, str]] = []
-    seen: set[str] = set()
-    for listing, genre in BIletnial_LISTS:
-        try:
-            html_text = fetch(listing)
-        except Exception as exc:
-            print(f"  ! liste alınamadı: {listing} ({exc})")
-            continue
-        for link in list_links(html_text):
-            if link not in seen:
-                seen.add(link)
-                targets.append((link, genre))
-    print(f"  Biletinial: {len(targets)} etkinlik bağlantısı")
-    targets = targets[:limit]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as pool:
+        for links in pool.map(_biletinial_city, TR_CITIES):
+            targets.extend(links)
+    cities = len({link for link, _ in targets})
+    print(f"  Biletinial: {len(targets)} etkinlik bağlantısı ({cities} il)")
+    if limit:
+        targets = targets[:limit]
 
     def one(item: tuple[str, str]) -> list[dict]:
         link, genre = item
@@ -518,18 +580,13 @@ def collect_passo(limit: int) -> list[dict]:
     except Exception as exc:
         print(f"  ! Passo listesi alınamadı: {exc}")
         return []
-    cands = [
-        e for e in listing.get("valueList", [])
-        if e.get("seoUrl") and "zmir" in norm(e.get("venueName", "") + e.get("seoTitle", ""))
-    ]
-    print(f"  Passo: {len(cands)} İzmir adayı (toplam {listing.get('totalItemCount')})")
+    cands = [e for e in listing.get("valueList", []) if e.get("seoUrl") and e.get("id")]
+    print(f"  Passo: {len(cands)} aday (toplam {listing.get('totalItemCount')})")
     events: list[dict] = []
-    for e in cands[:limit]:
+    for e in (cands[:limit] if limit else cands):
         try:
             v = _get_json(f"{PASSO_API}/geteventdetails/{e['seoUrl']}/{e['id']}/118").get("value") or {}
         except Exception:
-            continue
-        if norm(v.get("venueCity", "")) != "izmir":
             continue
         cats = [c for c in (v.get("categories") or []) if c.get("price") is not None]
         price = v.get("lowPrice")
@@ -579,15 +636,26 @@ def collect_passo(limit: int) -> list[dict]:
     return events
 
 
-# Biletino şehir listeleme sayfaları. Detay sayfaları halka açık JSON-LD
-# (schema.org Event + Offer) taşır; fiyat `offers.price` alanındadır.
-BILETINO_CITY_LISTS = [
-    "https://biletino.com/tr/city/istanbul/",
-    "https://biletino.com/tr/city/ankara/",
-    "https://biletino.com/tr/city/izmir/",
-    "https://biletino.com/tr/city/antalya/",
-    "https://biletino.com/tr/city/bursa/",
+# Türkiye'nin 81 ili. Biletino'nun arama ucu il adını `city` parametresiyle
+# kabul eder; her il için tüm sayfalar gezilir.
+TR_CITIES = [
+    "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Aksaray", "Amasya", "Ankara",
+    "Antalya", "Ardahan", "Artvin", "Aydın", "Balıkesir", "Bartın", "Batman",
+    "Bayburt", "Bilecik", "Bingöl", "Bitlis", "Bolu", "Burdur", "Bursa",
+    "Çanakkale", "Çankırı", "Çorum", "Denizli", "Diyarbakır", "Düzce", "Edirne",
+    "Elazığ", "Erzincan", "Erzurum", "Eskişehir", "Gaziantep", "Giresun",
+    "Gümüşhane", "Hakkâri", "Hatay", "Iğdır", "Isparta", "İstanbul", "İzmir",
+    "Kahramanmaraş", "Karabük", "Karaman", "Kars", "Kastamonu", "Kayseri",
+    "Kırıkkale", "Kırklareli", "Kırşehir", "Kilis", "Kocaeli", "Konya",
+    "Kütahya", "Malatya", "Manisa", "Mardin", "Muğla", "Muş", "Nevşehir",
+    "Niğde", "Ordu", "Osmaniye", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop",
+    "Sivas", "Şanlıurfa", "Şırnak", "Tekirdağ", "Tokat", "Trabzon", "Tunceli",
+    "Uşak", "Van", "Yalova", "Yozgat", "Zonguldak",
 ]
+
+BILETINO_SEARCH = "https://biletino.com/tr/search/"
+BILETINO_PAGE = 24
+BILETINO_MAX_PAGES = 12
 
 
 def biletino_type(schema_type: str, name: str, desc: str) -> str:
@@ -624,16 +692,34 @@ def biletino_type(schema_type: str, name: str, desc: str) -> str:
     return "Konser"
 
 
+# Kaynakların kullandığı kısa/alternatif il adları.
+CITY_ALIASES = {
+    "afyon": "Afyonkarahisar",
+    "afyonkarahisar": "Afyonkarahisar",
+    "icel": "Mersin",
+    "i̇stanbul": "İstanbul",
+    "kibris": "Kıbrıs",
+    "kktc": "Kıbrıs",
+    "maras": "Kahramanmaraş",
+    "urfa": "Şanlıurfa",
+    "antep": "Gaziantep",
+}
+
+
 def norm_city(city: str) -> str:
     """Kaynakların şehir adını uygulamanın il adına indirger.
 
     Biletinial İstanbul'u "İstanbul Avrupa"/"İstanbul Anadolu" diye ikiye
-    böler; uygulama İstanbul'u tek il olarak kullanır.
+    böler; uygulama İstanbul'u tek il olarak kullanır. Bazı kaynaklar ilin
+    eski/kısa adını yazar ("Afyon", "İçel", "Urfa").
     """
     c = (city or "").strip()
-    if c.startswith("İstanbul"):
+    if not c:
+        return ""
+    if c.startswith("İstanbul") or c.startswith("Istanbul"):
         return "İstanbul"
-    return c
+    key = norm(c).replace(" ", "")
+    return CITY_ALIASES.get(key, c)
 
 
 def parse_biletino_event(html_text: str, url: str) -> list[dict]:
@@ -712,19 +798,52 @@ def parse_biletino_event(html_text: str, url: str) -> list[dict]:
     return out
 
 
-def collect_biletino(limit: int) -> list[dict]:
-    """Biletino: halka açık JSON-LD (schema.org Event + Offer). Fiyat `offers.price`."""
-    targets: dict[str, str] = {}
-    for listing in BILETINO_CITY_LISTS:
+def _biletino_page(city: str, start: int) -> set[str]:
+    """Tek sayfa sonucundaki etkinlik bağlantılarını döndürür."""
+    params = urllib.parse.urlencode({
+        "city": city,
+        "ajax": "true",
+        "autochange": "true",
+        "start": start,
+        "count": BILETINO_PAGE,
+        "loadmore": "true" if start else "false",
+    })
+    html_text = fetch(f"{BILETINO_SEARCH}?{params}")
+    return set(re.findall(r'href="(/tr/e-[^"]+?)"', html_text))
+
+
+def _biletino_city_links(city: str) -> list[str]:
+    """Bir ilin tüm etkinlik bağlantılarını sayfa sayfa toplar."""
+    seen: set[str] = set()
+    for page in range(BILETINO_MAX_PAGES):
         try:
-            html_text = fetch(listing)
+            found = _biletino_page(city, page * BILETINO_PAGE)
         except Exception as exc:
-            print(f"  ! Biletino liste alınamadı: {listing} ({exc})")
-            continue
-        for path in sorted(set(re.findall(r'href="(/tr/e-[^"]+?)"', html_text))):
+            if page == 0:
+                print(f"  ! Biletino il alınamadı: {city} ({exc})")
+            break
+        fresh = found - seen
+        if not fresh:
+            break
+        seen |= found
+    return sorted(seen)
+
+
+def collect_biletino(limit: int) -> list[dict]:
+    """Biletino: 81 ilin tamamı, halka açık JSON-LD (schema.org Event + Offer)."""
+    by_city: dict[str, list[str]] = {}
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+        for city, links in zip(TR_CITIES, pool.map(_biletino_city_links, TR_CITIES)):
+            if links:
+                by_city[city] = links
+    targets: dict[str, str] = {}
+    for city in sorted(by_city):
+        for path in by_city[city]:
             targets.setdefault("https://biletino.com" + path, "")
-    print(f"  Biletino: {len(targets)} etkinlik bağlantısı")
-    items = list(targets.keys())[:limit]
+    print(f"  Biletino: {len(by_city)} il, {len(targets)} etkinlik bağlantısı")
+    items = list(targets.keys())
+    if limit:
+        items = items[:limit]
 
     def one(link: str) -> list[dict]:
         try:
@@ -741,24 +860,358 @@ def collect_biletino(limit: int) -> list[dict]:
     return events
 
 
+# --- Biletimgo -------------------------------------------------------------
+# Site sunucu tarafında şehir sayfalarını kart listesiyle verir; her kartta
+# başlık, mekan, tarih ve görsel bulunur (fiyat yalnızca JS ile yüklenir, bu
+# yüzden alınmaz). Şehir sayfası adresi: /sehir-etkinlikleri/<slug>
+BILETIMGO_BASE = "https://www.biletimgo.com"
+BILETIMGO_SITEMAP = BILETIMGO_BASE + "/sitemap.xml"
+
+
+def _biletimgo_slug(city: str) -> str:
+    table = {"ı": "i", "İ": "i", "ş": "s", "Ş": "s", "ğ": "g", "Ğ": "g",
+             "ü": "u", "Ü": "u", "ö": "o", "Ö": "o", "ç": "c", "Ç": "c",
+             "â": "a", "Â": "a", "î": "i", "Î": "i", "û": "u", "Û": "u"}
+    name = "".join(table.get(ch, ch) for ch in city).lower()
+    return "".join(ch if ch.isalnum() else "-" for ch in name).strip("-")
+
+
+_MONTHS_TR = {"Ocak": 1, "Şubat": 2, "Mart": 3, "Nisan": 4, "Mayıs": 5,
+              "Haziran": 6, "Temmuz": 7, "Ağustos": 8, "Eylül": 9, "Ekim": 10,
+              "Kasım": 11, "Aralık": 12}
+
+
+def _biletimgo_city_page(city: str) -> list[dict]:
+    """Bir ilin etkinlik kartlarını ayrıştırır."""
+    url = f"{BILETIMGO_BASE}/sehir-etkinlikleri/{_biletimgo_slug(city)}"
+    try:
+        html_text = fetch(url)
+    except Exception as exc:
+        print(f"  ! Biletimgo {city}: {exc}")
+        return []
+    out: list[dict] = []
+    # Her kart: <li data-etkinlikadi="..."> ... tarih ... <a href="../../etkinlik/slug-id">
+    for block in re.findall(r'<li[^>]*data-etkinlikadi="([^"]*)"(.*?)</li>', html_text, re.S):
+        title_raw, body = block
+        link = re.search(r'href="[^"]*?(/etkinlik/[^"]+|\.\./\.\./etkinlik/[^"]+)"', body)
+        if not link:
+            continue
+        href = link.group(1).replace("../../", "/")
+        title = clean_text(html_lib.unescape(html_lib.unescape(title_raw)))
+        venue = re.search(r'<span>([^<]+)</span>', body)
+        venue_name = clean_text(html_lib.unescape(html_lib.unescape(venue.group(1)))) if venue else ""
+        day = re.search(r'<span class="day">(\d{1,2})</span>', body)
+        month = re.search(r'<span class="month">([^<]+)</span>', body)
+        year = re.search(r'<span class="year">(\d{4})</span>', body)
+        date = ""
+        if day and month and year and month.group(1) in _MONTHS_TR:
+            date = f"{year.group(1)}-{_MONTHS_TR[month.group(1)]:02d}-{int(day.group(1)):02d}"
+        img = re.search(r'data-src="([^"]+)"', body)
+        image = ""
+        if img:
+            image = img.group(1).replace("../../", BILETIMGO_BASE + "/")
+        if not title:
+            continue
+        # Kart görünümünde saat yok; gün adı tarihten türetilir ki arayüzde
+        # "undefined" görünmesin (diğer kaynaklar bu alanı dolduruyor).
+        wd, when = "", ""
+        if date:
+            try:
+                gun = datetime.date.fromisoformat(date)
+                wd = WD[gun.weekday()]
+                when = f"{wd} {gun.day} {MONTHS_TR_FULL[gun.month - 1]}"
+            except ValueError:
+                pass
+        tur = _tur(title)
+        out.append({
+            "id": f"{slug(title)[:40]}-{date}-{hashlib.sha1(norm(venue_name).encode()).hexdigest()[:5]}",
+            "type": tur,
+            "art": ART_BY_TYPE.get(tur, "art-festival"),
+            "title": title,
+            "venue": venue_name,
+            "city": city,
+            "district": "",
+            "date": date,
+            "start": f"{date}T00:00:00" if date else "",
+            "when": when,
+            "wd": wd,
+            "image": image,
+            "price": None,
+            "source": "Biletimgo",
+            "url": BILETIMGO_BASE + href,
+        })
+    # Fiyat yalnızca detay sayfasında yazılı; kart sayısı kadar istek atıldığı
+    # için il içinde paralel çekilir, yoksa toplama saatler sürer.
+    if out:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as pool:
+            fiyatlar = list(pool.map(
+                lambda e: _biletimgo_fiyat(e["url"][len(BILETIMGO_BASE):]), out))
+        for kayit, fiyat in zip(out, fiyatlar):
+            kayit["price"] = fiyat
+    return out
+
+
+def _biletimgo_fiyat(href: str) -> float | None:
+    """Etkinlik detay sayfasından en düşük bilet fiyatını okur.
+
+    Kart görünümünde fiyat yok; detay sayfasındaki "biletfiyatg"
+    alanları (Tek kişi / Çift kişilik) tek tek okunup en düşüğü alınır.
+    """
+    try:
+        html_text = fetch(BILETIMGO_BASE + href)
+    except Exception:
+        return None
+    fiyatlar = []
+    for ham in re.findall(r'biletfiyatg">\s*([\d.,]+)', html_text):
+        try:
+            fiyatlar.append(float(ham.replace(".", "").replace(",", ".")))
+        except ValueError:
+            continue
+    return min(fiyatlar) if fiyatlar else None
+
+
+def collect_biletimgo(limit: int) -> list[dict]:
+    """Biletimgo: 81 ilin şehir sayfaları; kart düzeyinde başlık/mekan/tarih."""
+    events: list[dict] = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+        for city, found in zip(TR_CITIES, pool.map(_biletimgo_city_page, TR_CITIES)):
+            if found:
+                events.extend(found)
+    print(f"  Biletimgo: {len(events)} kart")
+    if limit:
+        events = events[:limit]
+    return events
+
+
+
 # Yeni kaynak eklemek için: (ad, toplayıcı fonksiyonu)
 SOURCES = [
     ("Biletinial", collect_biletinial),
     ("Passo", collect_passo),
     ("Biletino", collect_biletino),
+    ("Biletimgo", collect_biletimgo),
 ]
 
 
 def key_of(ev: dict) -> str:
-    """Aynı etkinliği farklı kaynaklarda eşleştirmek için anahtar."""
-    return f"{norm(ev['title'])}|{norm(ev['venue'])}|{ev.get('date','')}"
+    """Aynı etkinliği farklı kaynaklarda eşleştirmek için anahtar.
+
+    Kaynaklar aynı etkinliği farklı yazımla verir ("Kadıköy" / "Kadikoy",
+    "Tiyatro Şamata" / "Tiyatro Samata - İnteraktif"). Bu yüzden anahtar
+    başlık+mekan+tarih üzerinden normalize edilmiş sözcük kümesiyle kurulur.
+    """
+    return f"{_title_key(ev['title'])}|{_venue_key(ev.get('venue',''))}|{ev.get('date','')}"
+
+
+_STOP = {"the", "ve", "ile", "bir", "de", "da", "in", "icin", "gosteri",
+         "gosterimi", "etkinligi", "gecesi", "ozel", "turkiye", "istanbul"}
+
+
+def _tokens(text: str) -> set[str]:
+    words = [w for w in norm(text).split() if len(w) > 2 and w not in _STOP]
+    return set(words)
+
+
+def _title_key(title: str) -> str:
+    """Başlığın ayırt edici sözcükleri; sıralamadan bağımsız."""
+    words = sorted(_tokens(title))
+    return " ".join(words[:8]) if words else norm(title)
+
+
+# Mekan adlarında ayırt ediciliği olmayan sözcükler. Kaynaklar aynı salonu
+# "Atilla Koç Kültür Merkezi" / "Atilla KM" gibi yazıyor; bu sözcükler
+# eşleştirmede gürültü üretiyor, ayırt edici adlar (kişi/yer adları) kalıyor.
+_VENUE_STOP = frozenset("""
+salon salonu sahne sahnesi merkez merkezi kultur kültür sanat tiyatro tiyatrosu
+gosteri gösteri performans kongre fuaye alan arena hall center centre km akm
+k.m. km. amfi amfitiyatro oditoryum stage theatre theater oditoryumu
+""".split())
+
+
+def _venue_core(venue: str) -> set[str]:
+    """Mekan adının ayırt edici sözcükleri (genel sözcükler ve il adı atılır)."""
+    return {t for t in _tokens(venue) if t not in _VENUE_STOP}
+
+
+def _venue_key(venue: str) -> str:
+    """Mekan adı: ilçe/şube ekleri farklı yazılabildiği için ilk 2 sözcük."""
+    words = norm(venue).split()
+    return " ".join(words[:2]) if words else ""
+
+
+def _similar(a: set[str], b: set[str]) -> float:
+    """Jaccard benzerliği (0-1)."""
+    if not a or not b:
+        return 0.0
+    return len(a & b) / len(a | b)
+
+
+def _ayni_etkinlik(t1: set[str], v1: set[str], vk1: str, m1: str,
+                   t2: set[str], v2: set[str], vk2: str, m2: str) -> bool:
+    """İki kaydın aynı etkinliğin farklı sayfaları olup olmadığına karar verir.
+
+    Çağıran taraf zaten aynı il ve aynı gün olduğunu doğrulamıştır. Kalan iş
+    başlık ve mekanı karşılaştırmaktır; ikisi de kaynaklar arasında farklı
+    yazılıyor:
+
+      * Başlıkta il adı geçebilir ("Her Şey Biraz Yalan | Aydın"); il zaten
+        eşleştiği için başlıktan çıkarılır, yoksa benzerlik şişer/eksilir.
+      * Mekan adları kısaltılır ("Atilla KM" / "Atilla Koç Kültür Merkezi").
+        Bu yüzden genel sözcükler atılıp ayırt edici adlar karşılaştırılır.
+    """
+    if _similar(t1, t2) < 0.6:
+        return False
+    if _similar(v1, v2) >= 0.5:
+        return True
+    if vk1 and vk1 == vk2:
+        return True
+    if _mekan_onek(m1, m2):
+        return True
+    c1, c2 = _venue_core_cached(v1), _venue_core_cached(v2)
+    if c1 & c2:
+        # Başlıklar neredeyse aynı ve mekanlar en az bir ayırt edici ad
+        # paylaşıyor: aynı sayfanın iki yazımı.
+        if _similar(t1, t2) >= 0.9:
+            return True
+    return _similar(t1, t2) >= 0.9 and len(t1) >= 3 and len(t2) >= 3
+
+
+def _mekan_onek(ham1: str, ham2: str) -> bool:
+    """Bitişik/ayrık yazım farkını yakalar: "Skaffpsm" ~ "Skaff PSM Alsancak".
+
+    Adlar boşluklar atılarak karşılaştırılır; kısa olan uzunun başıysa aynı
+    salonun iki yazımı sayılır. En az 6 karakter şartı, "sanat"/"sahne" gibi
+    kısa ortak parçaların yanlış eşleşme üretmesini engeller.
+    """
+    a = "".join(norm(ham1).split())
+    b = "".join(norm(ham2).split())
+    if len(a) < 6 or len(b) < 6:
+        return False
+    kisa, uzun = (a, b) if len(a) <= len(b) else (b, a)
+    return uzun.startswith(kisa)
+
+
+_VENUE_CORE_CACHE: dict[frozenset[str], set[str]] = {}
+
+
+def _venue_core_cached(tokens: set[str]) -> set[str]:
+    """_venue_core'un önbellekli hâli: aynı sözcük kümesi çok kez soruluyor."""
+    key = frozenset(tokens)
+    hit = _VENUE_CORE_CACHE.get(key)
+    if hit is None:
+        hit = {t for t in tokens if t not in _VENUE_STOP}
+        _VENUE_CORE_CACHE[key] = hit
+    return hit
+
+
+TUR_IPUCLARI = (
+    ("Stand-up", ("stand up", "standup", "stand-up", "açık mikrofon", "komedi")),
+    ("Tiyatro", ("tiyatro", "oyun", "sahne", "müzikal", "danslı")),
+    ("Sinema", ("sinema", "film", "gösterim")),
+    ("Konser", ("konser", "live", "party", "parti", "dj", "gece", "festival")),
+    ("Sergi", ("sergi", "expo", "workshop", "atölye")),
+    ("Spor", ("maç", "turnuva", "koşu", "spor")),
+    ("Çocuk etkinlikleri", ("çocuk", "bebek", "masal")),
+)
+
+
+def _tur(title: str) -> str:
+    """Başlıktan etkinlik türü tahmini.
+
+    Biletimgo kartlarında tür alanı yok; arayüz tür rozetini ve kart
+    illüstrasyonunu bu alandan kuruyor, boş kalınca "undefined" çıkıyordu.
+    """
+    kucuk = norm(title)
+    for tur, kelimeler in TUR_IPUCLARI:
+        if any(k in kucuk for k in kelimeler):
+            return tur
+    return "Etkinlik"
+
+
+def _unique_ids(events: list[dict]) -> None:
+    """Çakışan kimlikleri ayırır.
+
+    Kimlik başlığın ilk 40 karakterinden türetiliyor; aynı gün aynı mekanda
+    yapılan iki farklı atölye (başlıkları uzun ortak önekle başlıyorsa) aynı
+    kimliği alıyordu. Arayüz kimliği anahtar olarak kullandığı için biri
+    diğerinin üzerine yazılıyor, kart yanlış etkinliği açıyordu.
+    """
+    seen: dict[str, int] = {}
+    for ev in events:
+        eid = ev.get("id") or ""
+        if eid not in seen:
+            seen[eid] = 1
+            continue
+        seen[eid] += 1
+        tam = norm(f"{ev.get('title','')}|{ev.get('venue','')}")
+        ev["id"] = f"{eid}-{hashlib.sha1(tam.encode()).hexdigest()[:4]}"
+
+
+def _fill_when(ev: dict) -> None:
+    """Tarihi olup gün adı/saat metni olmayan kayıtları tamamlar.
+
+    Biletimgo kart görünümünde saat yazmıyor; arayüz "Tarih: undefined"
+    göstermesin diye gün adı tarihten türetilir.
+    """
+    if ev.get("when") and ev.get("wd"):
+        return
+    tarih = ev.get("date") or ""
+    try:
+        gun = datetime.date.fromisoformat(tarih[:10])
+    except ValueError:
+        return
+    ev.setdefault("wd", "")
+    ev["wd"] = ev["wd"] or WD[gun.weekday()]
+    ev["when"] = ev.get("when") or f"{ev['wd']} {gun.day} {MONTHS_TR_FULL[gun.month - 1]}"
 
 
 def dedupe_and_cheapest(events: list[dict]) -> list[dict]:
-    """Aynı etkinlik+tarih+mekan kayıtlarını birleştirir, en ucuzu işaretler."""
+    """Aynı etkinliği (başlık+mekan+tarih) tek kayda indirger, en ucuzunu seçer.
+
+    Katı anahtar eşleşmesi yetmediği için iki aşamalı çalışır: önce tam
+    anahtar, sonra aynı tarihte benzer başlık VE benzer mekan (Jaccard ≥ 0.6)
+    olan kayıtlar birleştirilir. Aynı etkinliğin farklı seansları (farklı
+    tarih) ayrı kalır.
+    """
+    for ev in events:
+        _fill_when(ev)
     groups: dict[str, list[dict]] = {}
     for ev in events:
         groups.setdefault(key_of(ev), []).append(ev)
+
+    # İkinci aşama: benzer başlık+mekan gruplarını birleştir. Yalnızca aynı
+    # tarih VE aynı ildeki gruplar karşılaştırılır; tüm çiftleri denemek
+    # 13.000 kayıtta karesel maliyet yaratırdı. İl şart: aynı turne etkinliği
+    # farklı illerde aynı gün oynayabilir, bunlar ayrı kayıt olmalı.
+    buckets: dict[tuple[str, str], list[str]] = {}
+    for k in groups:
+        ev = groups[k][0]
+        buckets.setdefault((ev.get("date", ""), norm(ev.get("city", ""))), []).append(k)
+    for (date, _il), bucket in buckets.items():
+        if date == "" or len(bucket) < 2:
+            continue
+        # İl adı başlıktan çıkarılır: aynı ilde olduğumuz zaten kesin, ad
+        # yalnızca benzerliği bozuyor ("... | Aydın").
+        il_tok = set(norm(_il).split())
+        sig = {k: (_tokens(groups[k][0]["title"]) - il_tok,
+                   _tokens(groups[k][0].get("venue", "")),
+                   _venue_key(groups[k][0].get("venue", "")),
+                   groups[k][0].get("venue", ""))
+               for k in bucket}
+        dead: set[str] = set()
+        for i, ki in enumerate(bucket):
+            if ki in dead:
+                continue
+            ti, vi, vki, mi = sig[ki]
+            for kj in bucket[i + 1:]:
+                if kj in dead:
+                    continue
+                tj, vj, vkj, mj = sig[kj]
+                if not _ayni_etkinlik(ti, vi, vki, mi, tj, vj, vkj, mj):
+                    continue
+                groups[ki].extend(groups.pop(kj))
+                dead.add(kj)
+
     result = []
     for group in groups.values():
         priced = [e for e in group if e.get("price") is not None]
@@ -771,27 +1224,66 @@ def dedupe_and_cheapest(events: list[dict]) -> list[dict]:
         for field in ("description", "cast", "genres", "genre_label", "age", "rules", "organizer", "runtime"):
             if not entry.get(field):
                 entry[field] = next((e[field] for e in group if e.get(field)), entry.get(field) or ([] if field in ("cast", "genres", "rules") else (0 if field == "runtime" else "")))
-        entry["sources"] = sorted({e["source"] for e in group})
-        entry["price_by_source"] = {
-            e["source"]: e["price"] for e in group if e.get("price") is not None
-        }
-        entry["cheapest_source"] = cheapest["source"] if len(entry["sources"]) > 1 else None
+        # Girdideki kayıtlar daha önce birleştirilmiş olabilir (yeniden
+        # birleştirme çağrıları); onların kaynak listesi ve fiyat dökümü de
+        # korunur, yoksa ikinci geçişte çok kaynaklı bilgi silinirdi.
+        kaynaklar: set[str] = set()
+        by_source: dict[str, float] = {}
+        for e in group:
+            kaynaklar.update(e.get("sources") or ([e["source"]] if e.get("source") else []))
+            for kaynak, fiyat in (e.get("price_by_source") or {}).items():
+                if fiyat is None:
+                    continue
+                if kaynak not in by_source or fiyat < by_source[kaynak]:
+                    by_source[kaynak] = fiyat
+            # Aynı kaynaktan birden çok kayıt birleşebilir (ör. aynı etkinliğin
+            # farklı sayfası); sözlükte sonuncusu öncekini ezmemeli, en düşük
+            # fiyat kalmalı. Aksi hâlde seçilen fiyat dökümde görünmüyordu.
+            fiyat = e.get("price")
+            if fiyat is not None and e.get("source"):
+                if e["source"] not in by_source or fiyat < by_source[e["source"]]:
+                    by_source[e["source"]] = fiyat
+        entry["sources"] = sorted(kaynaklar)
+        entry["price_by_source"] = by_source
+        if len(entry["sources"]) > 1 and by_source:
+            entry["cheapest_source"] = min(by_source, key=by_source.get)
+        else:
+            entry["cheapest_source"] = None
         result.append(entry)
+    _unique_ids(result)
     result.sort(key=lambda e: (e.get("date") or "", e.get("price") or 0))
     return result
 
 
+def _tara(name: str, collector, limit: int) -> list[dict]:
+    """Tek bir kaynağı tarar. Paralel çağrılır; hatası çağırana bırakılır."""
+    print(f"→ {name} taranıyor…")
+    return collector(limit)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--sehir", default="İzmir", help="şehir filtresi (virgülle birden çok: 'İzmir,Ankara'; boş = tümü)")
-    ap.add_argument("--limit", type=int, default=200, help="kaynak başına detay sınırı")
+    ap.add_argument("--sehir", default="", help="şehir filtresi (virgülle birden çok: 'İzmir,Ankara'; boş = tümü)")
+    ap.add_argument("--limit", type=int, default=0, help="kaynak başına detay sınırı (0 = sınırsız)")
     args = ap.parse_args()
 
     wanted = [s.strip() for s in args.sehir.split(",") if s.strip()]
+    # Kaynaklar birbirinden bağımsız; sırayla taramak toplam süreyi dörde
+    # katlıyordu. Her kaynak kendi işçi havuzunu kurduğu için burada paralellik
+    # güvenli: aynı adrese eşzamanlı istek sayısı kaynak başına sınırlı kalır.
     all_events: list[dict] = []
-    for name, collector in SOURCES:
-        print(f"→ {name} taranıyor…")
-        all_events.extend(collector(args.limit))
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(SOURCES)) as pool:
+        isler = {pool.submit(_tara, name, collector, args.limit): name
+                 for name, collector in SOURCES}
+        for is_ in concurrent.futures.as_completed(isler):
+            ad = isler[is_]
+            try:
+                bulunan = is_.result()
+            except Exception as hata:
+                print(f"  ! {ad} taranamadı: {hata}")
+                continue
+            print(f"  ✓ {ad}: {len(bulunan)} etkinlik")
+            all_events.extend(bulunan)
 
     if wanted:
         needles = [norm(s) for s in wanted]

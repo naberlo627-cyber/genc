@@ -1,0 +1,54 @@
+{
+ "denetlendi": "2026-11-19T10:41:44+0000",
+ "kaynaklar": {
+  "Biletinial": {
+   "erisim": {
+    "ok": true,
+    "kod": 200,
+    "ms": 1262,
+    "boyut": 200000
+   },
+   "sayi": 4567,
+   "onceki_sayi": 4588,
+   "il_sayisi": 70,
+   "sorun": []
+  },
+  "Passo": {
+   "erisim": {
+    "ok": true,
+    "kod": 200,
+    "ms": 252,
+    "boyut": 63792
+   },
+   "sayi": 828,
+   "onceki_sayi": 830,
+   "il_sayisi": 40,
+   "sorun": []
+  },
+  "Biletino": {
+   "erisim": {
+    "ok": true,
+    "kod": 200,
+    "ms": 828,
+    "boyut": 200000
+   },
+   "sayi": 3703,
+   "onceki_sayi": 3916,
+   "il_sayisi": 68,
+   "sorun": []
+  },
+  "Biletimgo": {
+   "erisim": {
+    "ok": true,
+    "kod": 200,
+    "ms": 878,
+    "boyut": 200000
+   },
+   "sayi": 742,
+   "onceki_sayi": 0,
+   "il_sayisi": 41,
+   "sorun": []
+  }
+ },
+ "sorunlar": []
+}

@@ -11,8 +11,11 @@ name: Veri yenileme
 
 on:
   schedule:
-    # Her gün 01:30 UTC = 04:30 TRT (kaynak sitelerin sakin olduğu saat).
+    # Günde iki kez: 01:30 UTC (04:30 TRT) ve 13:30 UTC (16:30 TRT).
+    # Tek seferlik gece çalışması yeni etkinlikleri bir gün geciktiriyordu;
+    # öğleden sonraki tur aynı gün yayına alınmalarını sağlar.
     - cron: "30 1 * * *"
+    - cron: "30 13 * * *"
   workflow_dispatch: {}   # elle tetikleme (Actions sekmesinden "Run workflow")
 
 # Aynı anda iki yenileme çalışmasın.
@@ -66,5 +69,11 @@ jobs:
           if [ -f data/refresh_status.json ]; then
             echo '```json' >> "$GITHUB_STEP_SUMMARY"
             cat data/refresh_status.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+          if [ -f data/kaynak_durumu.json ]; then
+            echo "### Kaynak sağlığı" >> "$GITHUB_STEP_SUMMARY"
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat data/kaynak_durumu.json >> "$GITHUB_STEP_SUMMARY"
             echo '```' >> "$GITHUB_STEP_SUMMARY"
           fi

@@ -35,10 +35,32 @@ def _replace(html: str, name: str, literal: str) -> tuple[str, int]:
     )
 
 
+# Gömülü kopya yalnızca çevrimdışı/ilk açılış yedeğidir: uygulama açılışta
+# seçili ilin dosyasını ağdan çeker (data/cities/<il>.json). Yedeğe yalnızca
+# varsayılan ilin kayıtları, uygulamanın kullandığı alanlarla gömülür; aksi
+# halde HTML 9 bin etkinlikle ~20 MB olur ve açılış yavaşlar.
+DEFAULT_CITY = "İzmir"
+KEEP_FIELDS = ("id", "type", "art", "title", "venue", "city", "image", "venue_image",
+               "district", "address", "lat", "lng", "start", "date", "when", "wd",
+               "price", "price_label", "currency", "availability", "source", "url",
+               # Çevrimdışı yedekte de kaynak karşılaştırması görünsün.
+               "sources", "price_by_source", "cheapest_source")
+
+
+def _slim(payload: dict) -> dict:
+    events = [
+        {k: ev[k] for k in KEEP_FIELDS if k in ev}
+        for ev in payload.get("events", [])
+        if ev.get("city") == DEFAULT_CITY
+    ]
+    return {**payload, "city": DEFAULT_CITY, "events": events}
+
+
 def main() -> None:
     if DATA.exists():
         payload = json.loads(DATA.read_text(encoding="utf-8"))
         n = payload.get("count", 0)
+        payload = _slim(payload)
     else:
         payload, n = None, 0
     venues = json.loads(VENUES.read_text(encoding="utf-8")).get("photos", {}) if VENUES.exists() else {}
@@ -49,7 +71,9 @@ def main() -> None:
     if c1 != 1 or c2 != 1:
         raise SystemExit("GENC_DATA / VENUE_PHOTOS satırı bulunamadı (uygulama güncel mi?)")
     HTML.write_text(html, encoding="utf-8")
-    print(f"✓ GENC_DATA gömüldü: {n} gerçek etkinlik · {len(venues)} salon fotoğrafı")
+    embedded = len(payload["events"]) if payload else 0
+    print(f"✓ GENC_DATA gömüldü: {DEFAULT_CITY} için {embedded} etkinlik "
+          f"(toplam {n}) · {len(venues)} salon fotoğrafı")
 
 
 if __name__ == "__main__":
