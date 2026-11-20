@@ -1,8 +1,8 @@
 {
  "last_run": {
-  "started": 1795124555.9201183,
+  "started": 1795164245.728345,
   "ok": true,
-  "events": 9497,
+  "events": 10200,
   "cities": [
    "Adana",
    "Adıyaman",
@@ -17,6 +17,7 @@
    "Balıkesir",
    "Bartın",
    "Batman",
+   "Bayburt",
    "Bilecik",
    "Bolu",
    "Burdur",
@@ -83,9 +84,9 @@
    "Şanlıurfa",
    "Şırnak"
   ],
-  "duration": 646.4
+  "duration": 713.7
  },
- "updated_at": "2026-11-19T21:53:22+0000",
- "last_success": "2026-11-19T21:53:22+0000",
- "last_success_events": 9497
+ "updated_at": "2026-11-20T08:55:59+0000",
+ "last_success": "2026-11-20T08:55:59+0000",
+ "last_success_events": 10200
 }
