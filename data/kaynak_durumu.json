@@ -1,15 +1,15 @@
 {
- "denetlendi": "2026-11-20T21:36:58+0000",
+ "denetlendi": "2026-11-21T08:41:28+0000",
  "kaynaklar": {
   "Biletinial": {
    "erisim": {
     "ok": true,
     "kod": 200,
-    "ms": 1055,
+    "ms": 3498,
     "boyut": 200000
    },
-   "sayi": 5266,
-   "onceki_sayi": 5222,
+   "sayi": 5256,
+   "onceki_sayi": 5266,
    "il_sayisi": 73,
    "sorun": []
   },
@@ -17,23 +17,23 @@
    "erisim": {
     "ok": true,
     "kod": 200,
-    "ms": 274,
+    "ms": 387,
     "boyut": 63792
    },
-   "sayi": 919,
-   "onceki_sayi": 877,
-   "il_sayisi": 40,
+   "sayi": 909,
+   "onceki_sayi": 919,
+   "il_sayisi": 41,
    "sorun": []
   },
   "Biletino": {
    "erisim": {
     "ok": true,
     "kod": 200,
-    "ms": 321,
+    "ms": 1936,
     "boyut": 200000
    },
-   "sayi": 3703,
-   "onceki_sayi": 3699,
+   "sayi": 3707,
+   "onceki_sayi": 3703,
    "il_sayisi": 69,
    "sorun": []
   },
@@ -41,11 +41,11 @@
    "erisim": {
     "ok": true,
     "kod": 200,
-    "ms": 385,
+    "ms": 523,
     "boyut": 200000
    },
-   "sayi": 723,
-   "onceki_sayi": 741,
+   "sayi": 702,
+   "onceki_sayi": 723,
    "il_sayisi": 40,
    "sorun": []
   }
