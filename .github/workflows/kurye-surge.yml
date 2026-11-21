@@ -1,0 +1,34 @@
+name: Kurye yayini (Surge)
+
+# sezer-abi-kurye deposunu Surge'a yukler. SURGE_TOKEN bu depoda tanimli.
+on:
+  workflow_dispatch: {}
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  surge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kurye deposunu al
+        uses: actions/checkout@v4
+        with:
+          repository: naberlo627-cyber/sezer-abi-kurye
+          path: kurye
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Yayin paketini hazirla
+        run: bash kurye/tools/build_site.sh
+
+      - name: Surge'a yukle
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -f kurye/dist/index.html
+          cd kurye/dist
+          printf '%s\n' sezerabikurye.surge.sh > CNAME
+          npx --yes surge . sezerabikurye.surge.sh --token "$SURGE_TOKEN"
