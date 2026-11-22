@@ -1,8 +1,8 @@
 {
  "last_run": {
-  "started": 1795291914.2608118,
+  "started": 1795335506.495848,
   "ok": true,
-  "events": 10047,
+  "events": 10014,
   "cities": [
    "Adana",
    "Adıyaman",
@@ -83,9 +83,9 @@
    "Şanlıurfa",
    "Şırnak"
   ],
-  "duration": 660.2
+  "duration": 645.0
  },
- "updated_at": "2026-11-21T20:22:54+0000",
- "last_success": "2026-11-21T20:22:54+0000",
- "last_success_events": 10047
+ "updated_at": "2026-11-22T08:29:11+0000",
+ "last_success": "2026-11-22T08:29:11+0000",
+ "last_success_events": 10014
 }
